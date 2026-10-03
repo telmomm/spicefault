@@ -118,7 +118,7 @@ class FaultSet(Sequence):
         tolerances = {
             (v.component.lower(), v.parameter.lower()): v
             for v in variations.variations
-            if isinstance(v, ToleranceVariation)
+            if isinstance(v, ToleranceVariation) and v.relative
         }
         rows = []
         for fault in self._faults:

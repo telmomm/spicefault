@@ -13,6 +13,8 @@ from spicefault import (
     SimulationStatus,
     Simulator,
 )
+from spicefault.experiments import sample_stream
+from spicefault.experiments.seeding import text_key
 from spicefault.faults import InsertSeries, SetParameter
 from spicefault.variation import ToleranceVariation
 
@@ -155,8 +157,68 @@ class TestRun:
     def test_frame_has_definitions_status_and_parameters(self):
         frame = experiment().run().to_frame()
         assert list(frame.columns) == [
-            "sample_id", "fault_index", "fault_id", "replica", "condition", "status", "message",
-            "p_R1_value", "p_R2_value",
+            "sample_id", "fault_index", "fault_id", "replica", "condition", "seed_key", "status",
+            "message", "p_R1_value", "p_R2_value",
         ]
+        assert frame["seed_key"].tolist()[:4] == ["0/0", "0/0", "0/0", "0/1"]
         assert frame["sample_id"].is_unique and (frame["status"] == "SUCCESS").all()
         assert np.isfinite(frame[["p_R1_value", "p_R2_value"]].to_numpy()).all()
+
+
+# --- seeding schemes ----------------------------------------------------------------
+
+EXTRA = Fault("short", [SetParameter("R2", "value", "scale", 1e-4)], fault_id="R2:short")
+
+
+def drawn(e: Experiment) -> dict:
+    """(fault, replica) -> realised parameters, under the first operating condition."""
+    return {
+        (e.fault_id(s), s.replica): e.realise(s).parameters
+        for s in e.plan()
+        if s.condition_index == 0
+    }
+
+
+def test_positional_seeding_depends_on_the_place_in_the_fault_list():
+    base, reordered = drawn(experiment()), drawn(experiment(faults=[DRIFT, OPEN]))
+    assert base["healthy", 0] == reordered["healthy", 0]
+    assert base["R2:open", 0] == reordered["R1:parametric:+0.2", 0]  # same place, same draw
+    assert base["R2:open", 0] != reordered["R2:open", 0]
+
+
+def test_content_seeding_gives_a_fault_the_same_samples_in_any_experiment():
+    base = drawn(experiment(seeding="content"))
+    other = drawn(experiment(seeding="content", faults=[EXTRA, DRIFT, OPEN]))
+    for key in base:
+        assert base[key] == other[key], key
+    assert len({tuple(v.items()) for v in other.values()}) == len(other)  # all different
+    assert base != drawn(experiment(seeding="content", seed=43))
+    e = experiment(seeding="content")
+    key = e.seed_key(e.plan()[-1])
+    assert key == (text_key("R1:parametric:+0.2"), 1) and key[0] == 17579223753909923183
+
+
+def test_common_seeding_applies_every_fault_to_the_same_circuits():
+    e = experiment(seeding="common", healthy_samples=None)
+    values = drawn(e)
+    for replica in range(2):
+        assert (
+            values["healthy", replica]
+            == values["R2:open", replica]
+            == values["R1:parametric:+0.2", replica]
+        )
+    assert values["healthy", 0] != values["healthy", 1]
+    assert e.metadata()["seeding"] == "common"
+
+
+def test_unknown_seeding_scheme():
+    with pytest.raises(ValueError, match="unknown seeding scheme"):
+        experiment(seeding="random")
+
+
+def test_a_sample_is_rebuilt_from_its_seed_key():
+    """Traceability: seed and key are enough to redraw one sample alone."""
+    e = experiment(seeding="content")
+    realised = e.realise(e.plan()[10])
+    again = e.variations.sample(sample_stream(e.seed, *realised.seed_key), CIRCUIT.netlist())
+    assert again.values == realised.parameters

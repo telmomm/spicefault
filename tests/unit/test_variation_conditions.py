@@ -23,12 +23,13 @@ def test_a_stream_defines_the_drawn_circuit():
     a = VARIATIONS.sample(sample_stream(7, 1, 2), Netlist(TEXT))
     assert a == VARIATIONS.sample(sample_stream(7, 1, 2), Netlist(TEXT))
     assert a != VARIATIONS.sample(sample_stream(7, 1, 3), Netlist(TEXT))
-    assert list(a) == [("R1", "value"), ("C1", "value"), ("XU1", "aol")]
+    assert list(a.values) == [("R1", "value"), ("C1", "value"), ("XU1", "aol")]
+    assert a.labels == {}
 
 
 def test_drawn_values_stay_within_tolerance_and_are_written():
     net = Netlist(TEXT)
-    draws = [VARIATIONS.sample(sample_stream(0, r), net) for r in range(500)]
+    draws = [VARIATIONS.sample(sample_stream(0, r), net).values for r in range(500)]
     for key, nominal, tol in ((("R1", "value"), 1e4, 0.01), (("XU1", "aol"), 2e5, 0.5)):
         values = np.array([d[key] for d in draws])
         assert abs(values / nominal - 1).max() <= tol
@@ -44,10 +45,11 @@ def test_variation_definitions_are_checked():
         VariationSet([ToleranceVariation("R1", 0.01), ToleranceVariation("r1", 0.05)])
     with pytest.raises(ValueError, match="unknown tolerance distribution"):
         ToleranceVariation("R1", 0.01, "triangular")
-    assert len(VariationSet()) == 0 and VariationSet().sample(sample_stream(0), Netlist(TEXT)) == {}
+    assert len(VariationSet()) == 0
+    assert VariationSet().sample(sample_stream(0), Netlist(TEXT)).values == {}
     assert VARIATIONS.metadata()[1] == {
         "type": "tolerance", "component": "C1", "parameter": "value", "tolerance": 0.05,
-        "distribution": "truncnorm",
+        "distribution": "truncnorm", "relative": True,
     }
 
 

@@ -26,7 +26,13 @@ from spicefault.faults import (
 )
 from spicefault.netlist import Netlist
 from spicefault.simulation import SimulationError, run_deck
-from spicefault.variation import ToleranceVariation
+from spicefault.variation import (
+    Draw,
+    JointVariation,
+    ToleranceVariation,
+    log_uniform_factor,
+    unit_deviation,
+)
 
 
 def to_fault(fault: Fault, healthy: CircuitInstance, cfg: dict) -> spicefault.Fault | None:
@@ -137,7 +143,7 @@ def fault_rules(cfg: dict) -> list[FaultRule]:
     ]
 
 
-def variations(cfg: dict) -> VariationSet:
+def passive_variations(cfg: dict) -> VariationSet:
     """Tolerances of the passives, as `ecgfd.sampling` draws them."""
     distribution = cfg["tolerances"]["distribution"]
     return VariationSet(
@@ -146,6 +152,87 @@ def variations(cfg: dict) -> VariationSet:
             for p in get_circuit(cfg).passives
         ]
     )
+
+
+def variations(cfg: dict) -> VariationSet:
+    """The healthy population of the ECG study: `ecgfd.sampling.sample_instance`.
+
+    Same quantities, drawn in the same order from the same stream: passives, discrete
+    op-amps, instrumentation amplifier, then the electrodes.
+    """
+    distribution = cfg["tolerances"]["distribution"]
+    circuit = get_circuit(cfg)
+    found = list(passive_variations(cfg))
+
+    ocfg = cfg["opamp"]
+    for u in circuit.opamps:
+        name = f"X{u.name}"
+        found += [
+            ToleranceVariation(name, float(ocfg["vos_max"]), distribution, "vos", relative=False),
+            ToleranceVariation(name, float(ocfg["aol_rel"]), distribution, "aol"),
+        ]
+
+    for u in circuit.inas:
+        found.append(_ina_variation(f"X{u.name}", u.name, cfg))
+    found.append(_electrode_variation(cfg))
+    return VariationSet(found)
+
+
+def _ina_variation(element: str, designator: str, cfg: dict) -> JointVariation:
+    """Offset, rejection and gain error of the INA. The rejection is drawn in dB with a
+    random sign, and reaches the netlist as one signed ratio.
+    """
+    icfg, distribution = cfg["ina"], cfg["tolerances"]["distribution"]
+
+    def sampler(rng, netlist):
+        vos = float(icfg["vos_max"]) * unit_deviation(rng, distribution)
+        cmrr_db = float(icfg["cmrr_db"]) + float(icfg["cmrr_db_tol"]) * unit_deviation(
+            rng, distribution
+        )
+        # the common-mode error of a real part can have either polarity
+        sign = 1.0 if rng.uniform() < 0.5 else -1.0
+        gain_error = float(icfg["gain_error_max"]) * unit_deviation(rng, distribution)
+        return Draw(
+            {
+                (element, "vos"): vos,
+                (element, "cmrr"): sign * 10 ** (cmrr_db / 20),
+                (element, "gerr"): gain_error,
+            },
+            {f"p_{designator}_cmrr_db": cmrr_db, f"p_{designator}_cmrr_sign": sign},
+        )
+
+    targets = ((element, "vos"), (element, "cmrr"), (element, "gerr"))
+    return JointVariation(f"ina {designator}", targets, sampler, "INA333 behavioural model")
+
+
+def _electrode_variation(cfg: dict) -> JointVariation:
+    """Family, then electrode type, then the parameters of each electrode around the
+    medians of that type: the three electrodes are of one type but not identical.
+    """
+    ecfg = cfg["electrodes"]
+
+    def sampler(rng, netlist):
+        names = list(ecfg["mix"])
+        family = str(rng.choice(names, p=[float(ecfg["mix"][n]) for n in names]))
+        kind = str(rng.choice(list(ecfg["families"][family])))
+        medians = ecfg["families"][family][kind]
+        values = {}
+        for name in ELECTRODES:
+            for key, element in (("rs", "Rs"), ("rd", "Rd"), ("cd", "Cd")):
+                values[f"{element}_{name}", "value"] = float(medians[key]) * log_uniform_factor(
+                    rng, ecfg["spread"]
+                )
+            values[f"Vhc_{name}", "dc"] = float(ecfg["nominal"]["ehc"]) + float(
+                ecfg["ehc_abs"]
+            ) * rng.uniform(-1, 1)
+        return Draw(values, {"electrode_type": family, "electrode_kind": kind})
+
+    targets = tuple(
+        (f"{element}_{name}", parameter)
+        for name in ELECTRODES
+        for element, parameter in (("Rs", "value"), ("Rd", "value"), ("Cd", "value"), ("Vhc", "dc"))
+    )
+    return JointVariation("electrodes", targets, sampler, "skin-electrode interfaces")
 
 
 def inject(net: Netlist, fault: Fault, healthy: CircuitInstance, cfg: dict) -> Netlist:

@@ -41,14 +41,19 @@ The baseline timing must therefore be measured again under the protocol of §4 a
 
 L1 is a property of the framework and must hold exactly. L2 and L3 depend on the simulator; the framework's role is to measure and report the differences.
 
-Seeding. The baseline derives each stream from `SeedSequence(master, spawn_key=(condition_index, replica))`. This makes results independent of execution order, but the stream of a condition depends on its position in the catalogue, so adding or reordering faults changes the samples of the others. `spicefault` needs two schemes:
+Seeding. The baseline derives each stream from `SeedSequence(master, spawn_key=(condition_index, replica))`. This makes results independent of execution order, but the stream of a condition depends on its position in the catalogue, so adding or reordering faults changes the samples of the others. `Experiment` therefore has three schemes (`spicefault.experiments.seeding`):
 
-- **positional**, identical to the baseline, required for Phase 1 and Phase 9 equivalence;
-- **content-addressed**, where the key is derived from the fault identifier, so that a condition has the same samples in any campaign that contains it.
+| Scheme | Key of the stream | Use |
+|---|---|---|
+| `positional` | (fault index, replica) | Identical to the baseline; required for Phase 1 and Phase 9 equivalence |
+| `content` | (hash of the fault identifier, replica) | A condition has the same samples in any experiment that contains it. Recommended for new studies |
+| `common` | (replica) | Common random numbers: every fault, and the healthy case, on the same drawn circuits |
 
-Independently, the stream may be keyed by replica only, to give all fault conditions the same draws (common random numbers).
+The operating condition is never part of the key: one drawn circuit is simulated under every operating condition, so comparisons between operating conditions are always paired.
 
-As implemented in `Experiment` (Phase 2), the key is (fault index, replica) and does not include the operating condition. One drawn circuit is therefore simulated under every operating condition, which makes comparisons between operating conditions paired; fault conditions still have independent draws, as in the baseline.
+With `common`, comparisons between fault conditions are paired as well, which lowers the variance of differences between conditions. The price is that the conditions are no longer independent samples, and confidence intervals that assume independence between two conditions do not apply to their difference; a paired analysis must be used instead.
+
+Tolerance levels (Experiment E) are compared on the same circuits by construction: `VariationSet.scaled` multiplies every spread and uses the same random numbers, so each sample at one tolerance level is the same circuit, with proportionally smaller deviations, at another.
 
 ## 3. Numerical tolerances
 

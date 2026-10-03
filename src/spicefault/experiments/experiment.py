@@ -17,7 +17,7 @@ from ..conditions import OperatingCondition
 from ..faults import Fault
 from ..simulation import SimulationConfig, SimulationResult, Simulator
 from ..variation import VariationSet
-from .seeding import sample_stream
+from .seeding import SCHEMES, sample_stream, seed_key
 
 
 @dataclass(frozen=True)
@@ -36,14 +36,20 @@ class Realisation:
 
     netlist: str
     parameters: dict[tuple[str, str], float]
+    labels: dict[str, object]
+    seed_key: tuple[int, ...]
 
 
 @dataclass(frozen=True)
 class SampleResult:
+    """A simulated sample. Its draws come from `sample_stream(seed, *seed_key)`."""
+
     sample: Sample
     fault_id: str
     condition: str
+    seed_key: tuple[int, ...]
     parameters: dict[tuple[str, str], float]
+    labels: dict[str, object]
     result: SimulationResult
 
 
@@ -71,8 +77,10 @@ class ExperimentResult:
                 "fault_id": s.fault_id,
                 "replica": s.sample.replica,
                 "condition": s.condition,
+                "seed_key": "/".join(map(str, s.seed_key)),
                 "status": s.result.status.value,
                 "message": s.result.message,
+                **s.labels,
             }
             row.update({f"p_{c}_{p}": value for (c, p), value in s.parameters.items()})
             rows.append(row)
@@ -88,9 +96,11 @@ class Experiment:
 
     Each fault is simulated `samples` times and the fault-free circuit
     `healthy_samples` times (`samples` by default), under every operating condition.
-    The values of a sample are drawn from a stream that depends only on
-    (seed, fault index, replica). The result therefore does not depend on the number
-    of workers, and one drawn circuit is observed under all the conditions.
+    The values of a sample are drawn from a stream that depends only on the seed and
+    on the key of the sample, which `seeding` defines (see `seeding.seed_key`): by
+    default (fault index, replica). The result therefore does not depend on the number
+    of workers. The operating condition is never part of the key, so one drawn circuit
+    is observed under all the conditions.
     """
 
     circuit: Circuit
@@ -102,8 +112,11 @@ class Experiment:
     samples: int = 1
     healthy_samples: int | None = None
     seed: int = 0
+    seeding: str = "positional"
 
     def __post_init__(self):
+        if self.seeding not in SCHEMES:
+            raise ValueError(f"unknown seeding scheme {self.seeding!r}; expected one of {SCHEMES}")
         if isinstance(self.conditions, OperatingCondition):
             self.conditions = (self.conditions,)
         if not isinstance(self.variations, VariationSet):
@@ -124,6 +137,13 @@ class Experiment:
     def fault(self, sample: Sample) -> Fault | None:
         return self.faults[sample.fault_index - 1] if sample.fault_index else None
 
+    def fault_id(self, sample: Sample) -> str:
+        fault = self.fault(sample)
+        return fault.fault_id if fault else HEALTHY_ID
+
+    def seed_key(self, sample: Sample) -> tuple[int, ...]:
+        return seed_key(self.seeding, sample.fault_index, self.fault_id(sample), sample.replica)
+
     def plan(self) -> list[Sample]:
         """Every sample, in a fixed order: by fault (healthy first), replica and condition."""
         n_healthy = self.samples if self.healthy_samples is None else self.healthy_samples
@@ -137,14 +157,14 @@ class Experiment:
     def realise(self, sample: Sample) -> Realisation:
         """Draw the circuit, inject the fault, then set the operating condition."""
         netlist = self.circuit.netlist()
-        rng = sample_stream(self.seed, sample.fault_index, sample.replica)
-        parameters = self.variations.sample(rng, netlist)
-        self.variations.apply(netlist, parameters)
+        key = self.seed_key(sample)
+        draw = self.variations.sample(sample_stream(self.seed, *key), netlist)
+        self.variations.apply(netlist, draw.values)
         fault = self.fault(sample)
         if fault is not None:
             fault.apply(netlist)
         self.conditions[sample.condition_index].apply(netlist)
-        return Realisation(str(netlist), parameters)
+        return Realisation(str(netlist), draw.values, draw.labels, key)
 
     def metadata(self) -> dict:
         """Everything needed to regenerate the samples, as JSON-serialisable data."""
@@ -154,6 +174,7 @@ class Experiment:
             **self.simulator.metadata(),
             **self.circuit.metadata(),
             "seed": self.seed,
+            "seeding": self.seeding,
             "samples": self.samples,
             "healthy_samples": n_healthy,
             "simulation": self.config.metadata(),
@@ -166,12 +187,13 @@ class Experiment:
 
     def run_sample(self, sample: Sample) -> SampleResult:
         realised = self.realise(sample)
-        fault = self.fault(sample)
         return SampleResult(
             sample=sample,
-            fault_id=fault.fault_id if fault else HEALTHY_ID,
+            fault_id=self.fault_id(sample),
             condition=self.conditions[sample.condition_index].name,
+            seed_key=realised.seed_key,
             parameters=realised.parameters,
+            labels=realised.labels,
             result=self.simulator.run(realised.netlist, self.config),
         )
 

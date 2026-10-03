@@ -4,7 +4,7 @@ import pytest
 from ecgfd.circuit import build_netlist, get_circuit, nominal_instance
 from ecgfd.faults import fault_catalogue
 
-from ecg_adapter import fault_rules, variations
+from ecg_adapter import fault_rules, passive_variations
 from spicefault import Circuit
 from spicefault.faults import FaultUniverse
 
@@ -52,8 +52,8 @@ def test_coverage_matrix(cfg, study):
 def test_small_parametric_faults_overlap_the_tolerance_band(cfg, study):
     """Capacitors have 5 % tolerance, and the smallest parametric faults are +-5 % and +-10 %."""
     _, circuit, universe = study
-    report = universe.faults.tolerance_overlap(variations(cfg), circuit)
-    n_passives = len(variations(cfg))
+    report = universe.faults.tolerance_overlap(passive_variations(cfg), circuit)
+    n_passives = len(passive_variations(cfg))
     assert len(report) == n_passives * len(cfg["faults"]["parametric"])
     inside = report[report["inside_fraction"] > 0]
     capacitors = [p.name for p in get_circuit(cfg).passives if p.kind == "C"]

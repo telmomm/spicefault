@@ -190,4 +190,4 @@ Each implemented metric needs: the definition above in its documentation, unit t
 1. **Rename `failure_rate()` to `failure_probability()`.** Recommended.
 2. **Default false-alarm rate** $\alpha$ (proposed 0.01) and miss level $\beta$ (proposed 0.1).
 3. **Default separation threshold** $\tau = 3$, as in the ECG study.
-4. **Common or independent random numbers** as the default. Independent is needed for Phase 1 equivalence; common is statistically better for Experiments E and F.
+4. **Common or independent random numbers** for comparisons between fault conditions. Both are implemented (`seeding="common"` against `"positional"` or `"content"`); independent is the default and is needed for Phase 1 equivalence. Still to decide: which one Experiments E to G use. Operating conditions and tolerance levels are always compared on the same circuits.
