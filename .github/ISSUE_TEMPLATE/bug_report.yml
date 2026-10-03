@@ -1,0 +1,49 @@
+name: Bug report
+description: Something does not work as documented
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce it
+      description: A script and a netlist small enough to run. Paste them here.
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Error message or output
+      description: >
+        The full traceback. If a simulation was recorded as failed, the status and the
+        message stored with the sample.
+      render: text
+  - type: input
+    id: version
+    attributes:
+      label: spicefault version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: ngspice
+    attributes:
+      label: ngspice version
+      description: Output of `ngspice --version`.
+      placeholder: "ngspice-44.2"
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Python version and operating system
+      placeholder: "Python 3.12, macOS 15"
+    validations:
+      required: true

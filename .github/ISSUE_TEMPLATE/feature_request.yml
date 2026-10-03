@@ -1,0 +1,24 @@
+name: Feature request
+description: A fault type, a variation, a measurement, a metric, a backend, or anything else
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What you are trying to do
+      description: The study or circuit that needs it, and what is in the way today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you propose
+      description: >
+        For a fault type, the physical defect it models and how it changes the netlist.
+        For a metric, its definition and how it is estimated.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered

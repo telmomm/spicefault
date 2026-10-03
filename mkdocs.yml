@@ -1,0 +1,106 @@
+site_name: spicefault
+site_description: Reproducible SPICE-based fault injection and reliability assessment of electronic circuits
+site_url: https://spicefault.readthedocs.io
+repo_url: https://github.com/telmomm/spicefault
+repo_name: telmomm/spicefault
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - toc.follow
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Light mode
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Guide:
+      - Concepts: guide/concepts.md
+      - Faults: guide/faults.md
+      - Normal variation: guide/variation.md
+      - Experiments and campaigns: guide/experiments.md
+      - Datasets: guide/datasets.md
+      - Reliability analysis: guide/reliability.md
+  - Examples:
+      - examples/index.md
+      - Quickstart: examples/quickstart.md
+      - Faults and coverage: examples/faults.md
+      - A fault campaign: examples/campaign.md
+      - The dataset: examples/dataset.md
+      - Reliability analysis: examples/reliability.md
+      - Operating conditions: examples/conditions.md
+      - Custom variation and measurement: examples/custom.md
+  - API reference:
+      - Circuit: api/circuit.md
+      - Faults: api/faults.md
+      - Variation: api/variation.md
+      - Operating conditions: api/conditions.md
+      - Simulation: api/simulation.md
+      - Experiments: api/experiments.md
+      - Measurements: api/measurements.md
+      - Dataset: api/dataset.md
+      - Reliability: api/reliability.md
+  - Definitions:
+      - Fault model: FAULT_MODEL.md
+      - Reliability metrics: RELIABILITY_METRICS.md
+  - Project:
+      - Scientific scope: SCIENTIFIC_SCOPE.md
+      - Experiment plan: EXPERIMENT_PLAN.md
+      - Related work: RELATED_WORK.md
+      - Comparison with other tools: COMPARISON.md
+      - Running the long campaigns: RUNBOOK.md
+      - Releasing: releasing.md
+
+# the stored results of the literature search are data, not pages
+exclude_docs: |
+  literature/
+  snippets/
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.snippets:
+      base_path: ["."]
+      check_paths: true
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: false
+            show_root_heading: true
+            show_root_full_path: true
+            heading_level: 2
+            members_order: source
+            docstring_style: google
+            filters: ["!^_"]
+
+# the project documents link to files of the repository that are not pages
+validation:
+  links:
+    not_found: info
+    unrecognized_links: info
+    anchors: info

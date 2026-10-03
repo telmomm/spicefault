@@ -4,10 +4,29 @@ build-backend = "hatchling.build"
 
 [project]
 name = "spicefault"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Reproducible SPICE-based fault injection and reliability assessment of electronic circuits"
 readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "telmomm" }]
+keywords = [
+    "SPICE", "ngspice", "fault injection", "reliability", "analog circuits",
+    "Monte Carlo", "fault diagnosis", "testability",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+]
 dependencies = [
     "numpy>=1.26",
     "pandas>=2.1",
@@ -15,7 +34,33 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.5"]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.5", "build>=1.2", "twine>=5"]
+docs = ["mkdocs>=1.6", "mkdocs-material>=9.5", "mkdocstrings[python]>=0.25"]
+
+[project.urls]
+Homepage = "https://github.com/telmomm/spicefault"
+Documentation = "https://spicefault.readthedocs.io"
+Repository = "https://github.com/telmomm/spicefault"
+Issues = "https://github.com/telmomm/spicefault/issues"
+Changelog = "https://github.com/telmomm/spicefault/blob/main/CHANGELOG.md"
+
+[tool.hatch.version]
+path = "src/spicefault/__init__.py"
+
+# the source distribution carries the library and its tests, not the research material
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/spicefault",
+    "tests/unit",
+    "tests/conftest.py",
+    "examples/*.py",
+    "examples/filter",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "pyproject.toml",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/spicefault"]
@@ -27,6 +72,13 @@ markers = [
     "ecgfd: equivalence test against the ECG baseline (needs the ecgfd package)",
     "baseline_data: test needs the ECG baseline dataset data/v1",
 ]
+
+[tool.coverage.run]
+source = ["spicefault"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
 
 [tool.ruff]
 line-length = 100

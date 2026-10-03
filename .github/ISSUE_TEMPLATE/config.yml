@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://spicefault.readthedocs.io
+    about: Guides, examples and the API reference.
+  - name: Question
+    url: https://github.com/telmomm/spicefault/discussions
+    about: Ask how to do something. Discussions must be enabled in the repository settings.

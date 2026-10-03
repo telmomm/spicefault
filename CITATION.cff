@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "spicefault: reproducible SPICE-based fault injection and reliability assessment of electronic circuits"
+type: software
+authors:
+  - name: "telmomm"
+repository-code: "https://github.com/telmomm/spicefault"
+url: "https://spicefault.readthedocs.io"
+license: MIT
+version: 0.1.0
+date-released: "2026-10-03"
+keywords:
+  - SPICE
+  - ngspice
+  - fault injection
+  - reliability
+  - analog circuits
+  - Monte Carlo

@@ -1,0 +1,3 @@
+#!/bin/bash
+# install the library itself, from the repository Binder has cloned
+pip install -e .
