@@ -20,11 +20,15 @@ jobs:
         with:
           python-version: "3.12"
 
+      # without the simulator most tests are skipped and the coverage means nothing
+      - name: Install ngspice
+        run: sudo apt-get update && sudo apt-get install -y ngspice
+
       - name: Install dependencies
         run: python -m pip install -e ".[dev]"
 
       - name: Run tests with coverage
-        run: pytest --cov=rfmeasurement --cov-report=xml --cov-report=term
+        run: pytest tests/unit tests/examples --cov=spicefault --cov-report=xml --cov-report=term
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v8

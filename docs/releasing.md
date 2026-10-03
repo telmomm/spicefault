@@ -56,8 +56,8 @@ which always points to the latest version, goes in the badge of the README and i
 
 **SonarCloud.** Create the project on [sonarcloud.io](https://sonarcloud.io), set its
 keys in `sonar-project.properties`, and add the `SONAR_TOKEN` secret to the repository.
-Turn off its automatic analysis, since the analysis runs from CI with coverage. Without
-the secret the job is skipped.
+Turn off its automatic analysis, since the analysis runs from the `sonarcloud.yml`
+workflow, which also measures the coverage.
 
 **Binder.** Nothing to set up: the `binder/` folder tells mybinder.org how to build
 the environment, with ngspice.

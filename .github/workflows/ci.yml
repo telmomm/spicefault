@@ -47,12 +47,7 @@ jobs:
       - run: pip install -e ".[dev]"
       # the library and its examples; the tests that compare with the project the
       # library was extracted from are skipped, since they need that project
-      - run: pytest tests/unit tests/examples --cov=spicefault --cov-report=xml --cov-report=term
-      - uses: actions/upload-artifact@v4
-        if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
-        with:
-          name: coverage
-          path: coverage.xml
+      - run: pytest tests/unit tests/examples --cov=spicefault --cov-report=term
 
   studies:
     # the validation circuits and the benchmarks, at tiny size: slower, once is enough
@@ -88,21 +83,3 @@ jobs:
       - run: pip install build twine
       - run: python -m build
       - run: twine check dist/*
-
-  sonarcloud:
-    # needs the SONAR_TOKEN secret and a project on sonarcloud.io; skipped without it
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
-    env:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/download-artifact@v4
-        if: env.SONAR_TOKEN != ''
-        with:
-          name: coverage
-      - uses: SonarSource/sonarqube-scan-action@v5
-        if: env.SONAR_TOKEN != ''
