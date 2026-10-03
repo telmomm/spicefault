@@ -6,16 +6,33 @@ electrodes); the generic parts come from spicefault.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import ecgfd.dataset
 import ecgfd.simulate
 import ecgfd.specs
 import ecgfd.spice
-from ecgfd.circuit import ELECTRODES, CircuitInstance, get_circuit, nominal_instance
-from ecgfd.faults import Fault
+from ecgfd.circuit import (
+    ELECTRODES,
+    CircuitInstance,
+    Stimulus,
+    build_netlist,
+    get_circuit,
+    nominal_instance,
+)
+from ecgfd.faults import Fault, fault_catalogue
 from ecgfd.sampling import passive_tolerance
 
 import spicefault
-from spicefault import OperatingCondition, VariationSet
+from spicefault import (
+    Circuit,
+    Experiment,
+    Measurement,
+    OperatingCondition,
+    SimulationConfig,
+    VariationSet,
+    Waveform,
+)
 from spicefault.faults import (
     CompositeFault,
     FaultRule,
@@ -178,13 +195,24 @@ def variations(cfg: dict) -> VariationSet:
     return VariationSet(found)
 
 
-def _ina_variation(element: str, designator: str, cfg: dict) -> JointVariation:
+@dataclass(frozen=True)
+class InaSampler:
     """Offset, rejection and gain error of the INA. The rejection is drawn in dB with a
     random sign, and reaches the netlist as one signed ratio.
-    """
-    icfg, distribution = cfg["ina"], cfg["tolerances"]["distribution"]
 
-    def sampler(rng, netlist):
+    The samplers are classes at module level, not closures, so that worker processes
+    can receive them.
+    """
+
+    element: str
+    designator: str
+    cfg: dict
+
+    def targets(self):
+        return ((self.element, "vos"), (self.element, "cmrr"), (self.element, "gerr"))
+
+    def __call__(self, rng, netlist):
+        icfg, distribution = self.cfg["ina"], self.cfg["tolerances"]["distribution"]
         vos = float(icfg["vos_max"]) * unit_deviation(rng, distribution)
         cmrr_db = float(icfg["cmrr_db"]) + float(icfg["cmrr_db_tol"]) * unit_deviation(
             rng, distribution
@@ -193,25 +221,37 @@ def _ina_variation(element: str, designator: str, cfg: dict) -> JointVariation:
         sign = 1.0 if rng.uniform() < 0.5 else -1.0
         gain_error = float(icfg["gain_error_max"]) * unit_deviation(rng, distribution)
         return Draw(
-            {
-                (element, "vos"): vos,
-                (element, "cmrr"): sign * 10 ** (cmrr_db / 20),
-                (element, "gerr"): gain_error,
-            },
-            {f"p_{designator}_cmrr_db": cmrr_db, f"p_{designator}_cmrr_sign": sign},
+            dict(zip(self.targets(), (vos, sign * 10 ** (cmrr_db / 20), gain_error), strict=True)),
+            {f"p_{self.designator}_cmrr_db": cmrr_db, f"p_{self.designator}_cmrr_sign": sign},
         )
 
-    targets = ((element, "vos"), (element, "cmrr"), (element, "gerr"))
-    return JointVariation(f"ina {designator}", targets, sampler, "INA333 behavioural model")
+
+def _ina_variation(element: str, designator: str, cfg: dict) -> JointVariation:
+    sampler = InaSampler(element, designator, cfg)
+    return JointVariation(
+        f"ina {designator}", sampler.targets(), sampler, "INA333 behavioural model"
+    )
 
 
-def _electrode_variation(cfg: dict) -> JointVariation:
+@dataclass(frozen=True)
+class ElectrodeSampler:
     """Family, then electrode type, then the parameters of each electrode around the
     medians of that type: the three electrodes are of one type but not identical.
     """
-    ecfg = cfg["electrodes"]
 
-    def sampler(rng, netlist):
+    cfg: dict
+
+    def targets(self):
+        return tuple(
+            (f"{element}_{name}", parameter)
+            for name in ELECTRODES
+            for element, parameter in (
+                ("Rs", "value"), ("Rd", "value"), ("Cd", "value"), ("Vhc", "dc"),
+            )
+        )  # fmt: skip
+
+    def __call__(self, rng, netlist):
+        ecfg = self.cfg["electrodes"]
         names = list(ecfg["mix"])
         family = str(rng.choice(names, p=[float(ecfg["mix"][n]) for n in names]))
         kind = str(rng.choice(list(ecfg["families"][family])))
@@ -227,12 +267,10 @@ def _electrode_variation(cfg: dict) -> JointVariation:
             ) * rng.uniform(-1, 1)
         return Draw(values, {"electrode_type": family, "electrode_kind": kind})
 
-    targets = tuple(
-        (f"{element}_{name}", parameter)
-        for name in ELECTRODES
-        for element, parameter in (("Rs", "value"), ("Rd", "value"), ("Cd", "value"), ("Vhc", "dc"))
-    )
-    return JointVariation("electrodes", targets, sampler, "skin-electrode interfaces")
+
+def _electrode_variation(cfg: dict) -> JointVariation:
+    sampler = ElectrodeSampler(cfg)
+    return JointVariation("electrodes", sampler.targets(), sampler, "skin-electrode interfaces")
 
 
 def inject(net: Netlist, fault: Fault, healthy: CircuitInstance, cfg: dict) -> Netlist:
@@ -275,3 +313,55 @@ def bench_condition(cfg: dict) -> OperatingCondition:
     settings["Cbody", "value"] = float(source["c_shunt"])
     settings["Riso", "value"] = 1.0
     return OperatingCondition("bench", settings=settings)
+
+
+def service_experiment(cfg: dict) -> Experiment:
+    """The self-test measurements of the ECG dataset as one spicefault experiment.
+
+    It covers the first of the two ngspice runs of each case of `ecgfd`: operating
+    point, three frequency responses (calibration source, common-mode source, lead-off
+    current) and the response to the calibration pulse, in service. The specification
+    tests on the bench are a second run and are not part of it.
+    """
+    mcfg = cfg["measurement"]
+    pulse, sweep, fs = mcfg["pulse"], mcfg["ac"]["sweep"], float(mcfg["pulse"]["fs"])
+    stim = Stimulus(
+        cal_amplitude=pulse["amplitude"],
+        cal_delay=pulse["delay"],
+        cal_width=pulse["width"],
+        cal_edge=pulse["edge"],
+    )
+    nominal = nominal_instance(cfg)
+    # `build_netlist` always writes a control block; the experiment brings its own
+    text = build_netlist(nominal, cfg, [], stim).replace(".control\nset noaskquit\n.endc\n", "")
+    circuit = Circuit(text, cfg["circuit"])
+
+    ac = f"ac dec {sweep['points_per_decade']} {sweep['fstart']} {sweep['fstop']}"
+    analyses = ["op"]
+    for source in ("vcal", "vcmt", "ilo"):
+        analyses += [f"alter @{source}[acmag]=1", ac, f"alter @{source}[acmag]=0"]
+    analyses.append(f"tran {1 / fs} {pulse['duration']} 0 {0.25 / fs}")
+    nodes = list(mcfg["dc_nodes"])
+
+    measurements = [Measurement.value(f"v({n})", name=f"dc_{n}") for n in nodes]
+    for f in mcfg["ac"]["freqs"]:  # plots 1 and 2: differential and common-mode responses
+        measurements += [
+            Measurement.magnitude("v(out)", f, analysis=1, name=f"acd_mag_{f:g}"),
+            Measurement.phase("v(out)", f, analysis=1, name=f"acd_ph_{f:g}"),
+            Measurement.magnitude("v(out)", f, analysis=2, name=f"acc_mag_{f:g}"),
+        ]
+    for f in mcfg["lead_off"]["freqs"]:  # plot 3: response to the lead-off current
+        measurements.append(Measurement.magnitude("v(out)", f, analysis=3, name=f"zlo_mag_{f:g}"))
+
+    catalogue = fault_catalogue(cfg)
+    return Experiment(
+        circuit,
+        config=SimulationConfig(analyses, outputs=[f"v({n})" for n in nodes]),
+        faults=[to_fault(f, nominal, cfg) for f in catalogue],
+        variations=variations(cfg),
+        samples=int(cfg["dataset"]["n_per_fault"]),
+        healthy_samples=int(cfg["dataset"]["n_healthy"]),
+        seed=int(cfg["seed"]),
+        measurements=measurements,
+        waveform=Waveform("v(out)", fs, float(pulse["duration"])),
+    )

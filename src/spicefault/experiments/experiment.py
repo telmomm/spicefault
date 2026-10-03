@@ -4,6 +4,7 @@ simulated as one deterministic set of samples.
 
 from __future__ import annotations
 
+import pickle
 from collections import Counter
 from collections.abc import Sequence
 from concurrent.futures import ProcessPoolExecutor
@@ -14,7 +15,8 @@ import pandas as pd
 from .. import __version__
 from ..circuit import Circuit
 from ..conditions import OperatingCondition
-from ..faults import Fault
+from ..faults import Fault, FaultSet
+from ..measurements import Measurement, Waveform
 from ..simulation import SimulationConfig, SimulationResult, Simulator
 from ..variation import VariationSet
 from .seeding import SCHEMES, sample_stream, seed_key
@@ -51,6 +53,7 @@ class SampleResult:
     parameters: dict[tuple[str, str], float]
     labels: dict[str, object]
     result: SimulationResult
+    measurements: dict[str, float] = field(default_factory=dict)
 
 
 @dataclass
@@ -83,6 +86,7 @@ class ExperimentResult:
                 **s.labels,
             }
             row.update({f"p_{c}_{p}": value for (c, p), value in s.parameters.items()})
+            row.update(s.measurements)
             rows.append(row)
         return pd.DataFrame(rows)
 
@@ -113,6 +117,8 @@ class Experiment:
     healthy_samples: int | None = None
     seed: int = 0
     seeding: str = "positional"
+    measurements: Sequence[Measurement] = ()
+    waveform: Waveform | None = None
 
     def __post_init__(self):
         if self.seeding not in SCHEMES:
@@ -122,11 +128,13 @@ class Experiment:
         if not isinstance(self.variations, VariationSet):
             self.variations = VariationSet(self.variations)
         self.faults, self.conditions = tuple(self.faults), tuple(self.conditions)
+        self.measurements = tuple(self.measurements)
         if not self.conditions:
             raise ValueError("an experiment needs at least one operating condition")
         for label, names in (
             ("fault", [HEALTHY_ID, *(f.fault_id for f in self.faults)]),
             ("operating condition", [c.name for c in self.conditions]),
+            ("measurement", [m.name for m in self.measurements]),
         ):
             repeated = [name for name, n in Counter(names).items() if n > 1]
             if repeated:
@@ -166,6 +174,11 @@ class Experiment:
         self.conditions[sample.condition_index].apply(netlist)
         return Realisation(str(netlist), draw.values, draw.labels, key)
 
+    def faults_overlapping_tolerance(self) -> int:
+        """How many parametric fault conditions lie partly inside the tolerance band."""
+        report = FaultSet(self.faults).tolerance_overlap(self.variations, self.circuit)
+        return int((report["inside_fraction"] > 0).sum())
+
     def metadata(self) -> dict:
         """Everything needed to regenerate the samples, as JSON-serialisable data."""
         n_healthy = self.samples if self.healthy_samples is None else self.healthy_samples
@@ -181,12 +194,31 @@ class Experiment:
             "faults": [f.metadata() for f in self.faults],
             "variations": self.variations.metadata(),
             "conditions": [c.metadata() for c in self.conditions],
+            "measurements": [m.metadata() for m in self.measurements],
+            "waveform": None if self.waveform is None else self.waveform.metadata(),
         }
 
     # --- execution --------------------------------------------------------------------
 
+    def check_picklable(self) -> None:
+        """Worker processes receive a copy of the experiment, so it must be picklable."""
+        try:
+            pickle.dumps(self)
+        except Exception as exc:
+            raise TypeError(
+                "the experiment cannot be sent to worker processes. Functions given to "
+                "custom or joint variations, custom measurements and custom backends must "
+                "be defined at module level (not lambdas or functions defined inside another "
+                f"function), or run with workers=1. Cause: {type(exc).__name__}: {exc}"
+            ) from exc
+
+    def measure(self, result: SimulationResult) -> dict[str, float]:
+        """The measurements of a successful simulation, by name."""
+        return {m.name: m(result) for m in self.measurements}
+
     def run_sample(self, sample: Sample) -> SampleResult:
         realised = self.realise(sample)
+        result = self.simulator.run(realised.netlist, self.config)
         return SampleResult(
             sample=sample,
             fault_id=self.fault_id(sample),
@@ -194,7 +226,8 @@ class Experiment:
             seed_key=realised.seed_key,
             parameters=realised.parameters,
             labels=realised.labels,
-            result=self.simulator.run(realised.netlist, self.config),
+            result=result,
+            measurements=self.measure(result) if result.ok else {},
         )
 
     def run(self, workers: int = 1) -> ExperimentResult:
@@ -206,6 +239,7 @@ class Experiment:
         if workers == 1:
             results = [self.run_sample(sample) for sample in plan]
         else:
+            self.check_picklable()
             with ProcessPoolExecutor(
                 max_workers=workers, initializer=_init_worker, initargs=(self,)
             ) as pool:

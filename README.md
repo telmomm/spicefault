@@ -24,7 +24,8 @@ sample can be traced and regenerated.
 | 2. Core abstractions | Done: `Circuit`, `Fault`, `VariationSet`, `OperatingCondition`, `Simulator`, `SimulationResult`, `Experiment` |
 | 3. Fault framework | Done: `OpenCircuit`, `ShortCircuit`, `LeakageFault`, `ParametricFault`, `CompositeFault`, `FaultSeverity`, `FaultSet`, `FaultUniverse` |
 | 4. Uncertainty framework | Done: tolerance, normal, log-normal, uniform, log-uniform, fixed, custom and joint variations; three seeding schemes |
-| 5. Experiment engine (campaigns written to disk, resumable) | Not started |
+| 5. Experiment engine | Done: `FaultCampaign` (to disk, in chunks, resumable, every simulation accounted for) and the `Measurement` API |
+| 6. Reliability analysis (detectability, sensitivity, robustness, separability) | Not started |
 
 The first application is the ECG front-end study
 ([ecg-frontend-fault-diagnosis](https://github.com/telmomm/ecg-frontend-fault-diagnosis)),
@@ -37,14 +38,10 @@ whose generic code was extracted into this package.
 | `spicefault.variation` | Distributions of the healthy population and `VariationSet`, which draws them in a fixed order |
 | `spicefault.conditions` | `OperatingCondition`: settings and temperature, applied after the fault |
 | `spicefault.simulation` | `Simulator`, `SimulationConfig`, `SimulationResult` with an explicit status; ngspice backend, batch runner and raw-file reader |
-| `spicefault.experiments` | `Experiment`; per-sample random streams and seeding schemes; parallel, chunked and resumable execution of a campaign |
+| `spicefault.experiments` | `Experiment` (in memory) and `FaultCampaign` (to disk, resumable); per-sample random streams and seeding schemes |
 | `spicefault.netlist` | Netlist as text and the three fault-injection primitives |
-| `spicefault.measurements` | Interpolation of frequency responses, resampling of transients, ADC quantisation |
+| `spicefault.measurements` | `Measurement` and `Waveform`: what is read from each simulation; ADC quantisation |
 | `spicefault.dataset` | Dataset directory: `samples.parquet`, `waveforms.npy`, `manifest.json` |
-
-`Experiment.run` keeps its results in memory. Writing them to a dataset in chunks,
-with resumption, is done today by the lower-level `run_campaign`; joining the two
-belongs to the experiment engine (phase 5).
 
 ## Setup
 
@@ -185,6 +182,76 @@ number of workers or on the order of execution.
 
 Each sample records its key (`seed_key`), from which it can be drawn again alone.
 
+### Measurements
+
+A measurement is a named number read from one simulation. Time-domain statistics are
+weighted by time, because a SPICE transient has a variable time step and the plain
+average of its points is not the average of the signal.
+
+| Measurement | Definition |
+|---|---|
+| `value`, `final`, `at_time` | First point (the DC value of an operating point), last point, interpolated point |
+| `mean`, `rms`, `variance` | (1/T)∫x dt, √((1/T)∫x² dt), (1/T)∫(x − mean)² dt, over the run or a window |
+| `peak`, `minimum`, `peak_to_peak` | Largest, smallest, and their difference |
+| `magnitude`, `phase` | \|H(f)\| (optionally in dB) and its phase in degrees, interpolated over log-frequency |
+| `custom` | Any function of one plot |
+
+`Waveform` stores a transient vector resampled on a uniform grid, one row per sample.
+
+### Fault campaign
+
+`FaultCampaign` takes the same definitions as `Experiment` and writes the results to
+a dataset folder. A long campaign can be interrupted and launched again: it continues
+after the last complete chunk.
+
+```python
+from spicefault import Circuit, FaultCampaign, Measurement, SimulationConfig, Waveform
+from spicefault.faults import FaultUniverse, open_rule, parametric_rule, short_rule
+from spicefault.variation import tolerances
+
+circuit = Circuit.from_netlist("examples/filter/rc_lowpass.cir")
+universe = FaultUniverse(
+    circuit, [open_rule(), short_rule(), parametric_rule([-0.5, -0.2, 0.2, 0.5])]
+)
+
+campaign = FaultCampaign(
+    circuit,
+    universe.selected(),
+    out_dir="data/rc_lowpass",
+    samples_per_fault=200,
+    healthy_samples=2000,
+    variations=tolerances(circuit, {"R": 0.01, "C": 0.05}),
+    config=SimulationConfig(("op", "ac dec 20 1 1e5", "tran 10u 10m"), outputs=("v(out)",)),
+    measurements=[
+        Measurement.value("v(out)", name="dc"),
+        Measurement.magnitude("v(out)", 1e3, name="gain_1k", db=True),
+        Measurement.peak("v(out)", name="peak"),
+    ],
+    waveform=Waveform("v(out)", fs=10e3, duration=10e-3),
+    seed=42,
+)
+
+if __name__ == "__main__":             # needed on macOS and Windows: workers are processes
+    print(campaign.validate())         # definitions against the circuit, before running
+    campaign.run(workers=8)            # resumes if it was interrupted
+    print(campaign.status())           # total, completed, failed, pending
+    print(campaign.summary())          # per fault: samples, success rate, each status
+    samples, waveforms, manifest = campaign.load()
+```
+
+What the engine guarantees:
+
+- the dataset is the same for any number of workers and any chunk size (only the
+  `elapsed_s` column differs);
+- a simulation that fails, an output that cannot be measured and a fault that cannot
+  be injected are rows with a status and a message; none of them stops the run;
+- a partial run is never mixed with a campaign whose definitions differ;
+- the manifest holds the complete definition of the experiment, the simulator and
+  package versions, the number of workers, and whether the run was resumed.
+
+Functions passed to custom or joint variations and to custom measurements must be
+defined at module level, so that worker processes can receive them.
+
 ## Equivalence with the ECG baseline
 
 `tests/regression/` compares this package with `ecgfd`, the code it was extracted
@@ -203,6 +270,7 @@ pytest tests/regression
 | `test_ecg_injection.py` | Netlist of every fault condition of both ECG circuits, in service and on the test bench, built by `ecgfd` and by `Fault` plus `OperatingCondition` | Identical text |
 | `test_ecg_universe.py` | Fault universe generated from rules against the fault catalogue of `ecgfd`: 293 and 307 conditions | Same conditions, identical netlists |
 | `test_ecg_experiment.py` | Self-test measurement of faulty circuits through `Circuit`, `Fault` and `Simulator` | Identical vectors |
+| `test_ecg_service_dataset.py` | The self-test half of `data/v1` (features and waveforms) regenerated with spicefault objects only | Tolerances of docs/EXPERIMENT_PLAN.md §3; no difference found |
 | `test_ecg_campaign.py` | A reduced campaign run by both engines, with 1 and with several workers | Identical tables and waveforms |
 | `test_ecg_baseline_data.py` | Cases regenerated here against the published dataset `data/v1` | Tolerances of docs/EXPERIMENT_PLAN.md §3 |
 

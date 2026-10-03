@@ -18,6 +18,9 @@ import numpy as np
 
 from .ngspice import RAW_NAME, Plot, SimulationError, execute, ngspice_version
 
+# commands of ngspice that run an analysis and leave a plot to save
+_ANALYSIS_COMMANDS = ("op", "ac", "tran", "dc", "noise", "tf", "sens", "pz", "disto")
+
 
 class SimulationStatus(str, Enum):
     SUCCESS = "SUCCESS"
@@ -32,9 +35,10 @@ class SimulationConfig:
     """What to simulate and how.
 
     `analyses` are ngspice analysis commands (`"op"`, `"ac dec 20 1 1e5"`,
-    `"tran 1u 10m"`), run in order; the vectors in `outputs` are saved after each one.
-    Leave `analyses` empty for a netlist that brings its own `.control` block writing
-    to `out.raw`.
+    `"tran 1u 10m"`), run in order; the vectors in `outputs` are saved after each one,
+    giving one plot per analysis. Any other command in the list, such as
+    `"alter @vin[acmag]=1"`, is run in its place and saves nothing. Leave `analyses`
+    empty for a netlist that brings its own `.control` block writing to `out.raw`.
     """
 
     analyses: tuple[str, ...] = ()
@@ -45,6 +49,10 @@ class SimulationConfig:
     def __post_init__(self):
         object.__setattr__(self, "analyses", tuple(self.analyses))
         object.__setattr__(self, "outputs", tuple(self.outputs))
+
+    def plots(self) -> list[str]:
+        """The analysis command behind each expected plot, in order."""
+        return [a for a in self.analyses if a.split()[0].lower() in _ANALYSIS_COMMANDS]
 
     def metadata(self) -> dict:
         return {
@@ -116,8 +124,9 @@ def build_deck(netlist: str, config: SimulationConfig) -> str:
         lines.pop()
     lines += [".control", "set noaskquit", "set appendwrite"]
     write = f"write {RAW_NAME} " + " ".join(config.outputs)
-    for analysis in config.analyses:
-        lines += [analysis, write]
+    saved = config.plots()
+    for command in config.analyses:
+        lines += [command, write] if command in saved else [command]
     return "\n".join([*lines, ".endc", ".end", ""])
 
 
@@ -167,7 +176,7 @@ class NgspiceBackend:
             return "ngspice produced no output"
         if config.analyses:
             # a failed analysis leaves the previous plot current, and `write` saves it again
-            expected = [_PLOT_NAMES.get(a.split()[0].lower(), "") for a in config.analyses]
+            expected = [_PLOT_NAMES.get(a.split()[0].lower(), "") for a in config.plots()]
             names = [p.name for p in plots]
             if len(names) != len(expected) or not all(map(str.startswith, names, expected)):
                 return f"expected plots {expected}, got {names}"

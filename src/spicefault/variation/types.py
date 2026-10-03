@@ -17,6 +17,11 @@ from .base import Draw, Target, Variation, VariationSet
 from .distributions import DISTRIBUTIONS, log_uniform_factor, unit_deviation
 
 
+def _callable_name(function) -> str:
+    """Name of a function, or of the class of a callable object."""
+    return getattr(function, "__qualname__", type(function).__qualname__)
+
+
 def _centre(given: float | None, nominal: float) -> float:
     return nominal if given is None else given
 
@@ -218,7 +223,7 @@ class CustomVariation(Variation):
         return {
             "type": "custom",
             **self._where(),
-            "sampler": getattr(self.sampler, "__qualname__", repr(self.sampler)),
+            "sampler": _callable_name(self.sampler),
             "description": self.description,
         }
 
@@ -263,7 +268,7 @@ class JointVariation(Variation):
             "type": "joint",
             "name": self.name,
             "parameters": [{"component": c, "parameter": p} for c, p in self.parameters],
-            "sampler": getattr(self.sampler, "__qualname__", repr(self.sampler)),
+            "sampler": _callable_name(self.sampler),
             "description": self.description,
         }
 
