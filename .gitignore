@@ -22,3 +22,10 @@ examples/**/output/
 
 # Datasets of the campaigns (large; regenerated with docs/RUNBOOK.md)
 data/
+
+# Built documentation
+site/
+
+# Coverage
+.coverage
+coverage.xml

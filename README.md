@@ -2,7 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/spicefault)](https://pypi.org/project/spicefault/)
 [![Python](https://img.shields.io/pypi/pyversions/spicefault)](https://pypi.org/project/spicefault/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/telmomm/spicefault/blob/main/LICENSE)
 [![CI](https://github.com/telmomm/spicefault/actions/workflows/ci.yml/badge.svg)](https://github.com/telmomm/spicefault/actions/workflows/ci.yml)
 [![Documentation](https://readthedocs.org/projects/spicefault/badge/?version=latest)](https://spicefault.readthedocs.io/en/latest/)
 [![Quality gate](https://sonarcloud.io/api/project_badges/measure?project=telmomm_spicefault&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=telmomm_spicefault)
@@ -28,8 +28,8 @@ explicitly, simulated as one experiment, and recorded so that every sample can b
 traced and simulated again.
 
 **[Documentation](https://spicefault.readthedocs.io)** ·
-**[Examples](examples/)** ·
-**[Changelog](CHANGELOG.md)**
+**[Examples](https://github.com/telmomm/spicefault/tree/main/examples/)** ·
+**[Changelog](https://github.com/telmomm/spicefault/blob/main/CHANGELOG.md)**
 
 ## Install
 
@@ -114,7 +114,7 @@ analysis.ambiguity()                          # faults that cannot be told apart
 
 ## Examples
 
-Runnable scripts in [examples/](examples/), the same ones shown in the documentation:
+Runnable scripts in [examples/](https://github.com/telmomm/spicefault/tree/main/examples/), the same ones shown in the documentation:
 
 | Script | What it shows |
 |---|---|
@@ -148,14 +148,14 @@ badge above.
 
 The library is the instrument of a research project on reproducible fault-injection
 experiments. Its definitions and plan are part of the documentation:
-[fault model](docs/FAULT_MODEL.md),
-[reliability metrics](docs/RELIABILITY_METRICS.md),
-[scientific scope](docs/SCIENTIFIC_SCOPE.md),
-[experiment plan](docs/EXPERIMENT_PLAN.md),
-[related work](docs/RELATED_WORK.md) and
-[comparison with other tools](docs/COMPARISON.md).
-The circuits it is validated on are in [validation/](validation/), the benchmarks in
-[benchmarks/](benchmarks/README.md), and the results obtained so far in `results/`.
+[fault model](https://github.com/telmomm/spicefault/blob/main/docs/FAULT_MODEL.md),
+[reliability metrics](https://github.com/telmomm/spicefault/blob/main/docs/RELIABILITY_METRICS.md),
+[scientific scope](https://github.com/telmomm/spicefault/blob/main/docs/SCIENTIFIC_SCOPE.md),
+[experiment plan](https://github.com/telmomm/spicefault/blob/main/docs/EXPERIMENT_PLAN.md),
+[related work](https://github.com/telmomm/spicefault/blob/main/docs/RELATED_WORK.md) and
+[comparison with other tools](https://github.com/telmomm/spicefault/blob/main/docs/COMPARISON.md).
+The circuits it is validated on are in [validation/](https://github.com/telmomm/spicefault/tree/main/validation/), the benchmarks in
+[benchmarks/](https://github.com/telmomm/spicefault/blob/main/benchmarks/README.md), and the results obtained so far in `results/`.
 
 It was extracted from the simulation code of a study on self-diagnosis of ECG analog
 front-ends
@@ -164,14 +164,14 @@ which uses it. Nothing in it is specific to that study.
 
 ## Contributing
 
-Bug reports and contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) and
-the [code of conduct](CODE_OF_CONDUCT.md).
+Bug reports and contributions are welcome: see [CONTRIBUTING.md](https://github.com/telmomm/spicefault/blob/main/CONTRIBUTING.md) and
+the [code of conduct](https://github.com/telmomm/spicefault/blob/main/CODE_OF_CONDUCT.md).
 
 ## Citing
 
 If you use `spicefault` in your work, please cite it. The citation data are in
-[CITATION.cff](CITATION.cff); GitHub shows them under "Cite this repository".
+[CITATION.cff](https://github.com/telmomm/spicefault/blob/main/CITATION.cff); GitHub shows them under "Cite this repository".
 
 ## Licence
 
-[MIT](LICENSE).
+[MIT](https://github.com/telmomm/spicefault/blob/main/LICENSE).
