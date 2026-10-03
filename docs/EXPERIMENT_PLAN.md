@@ -46,7 +46,9 @@ Seeding. The baseline derives each stream from `SeedSequence(master, spawn_key=(
 - **positional**, identical to the baseline, required for Phase 1 and Phase 9 equivalence;
 - **content-addressed**, where the key is derived from the fault identifier, so that a condition has the same samples in any campaign that contains it.
 
-Independently, the stream may be keyed by replica only, to give all conditions the same draws (common random numbers).
+Independently, the stream may be keyed by replica only, to give all fault conditions the same draws (common random numbers).
+
+As implemented in `Experiment` (Phase 2), the key is (fault index, replica) and does not include the operating condition. One drawn circuit is therefore simulated under every operating condition, which makes comparisons between operating conditions paired; fault conditions still have independent draws, as in the baseline.
 
 ## 3. Numerical tolerances
 

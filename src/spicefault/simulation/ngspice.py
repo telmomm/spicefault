@@ -77,16 +77,16 @@ def parse_raw(path: str | Path) -> list[Plot]:
     return plots
 
 
-def run_deck(
+def execute(
     netlist: str,
     timeout: float = 120.0,
     spiceinit: str | None = None,
     raw_name: str = RAW_NAME,
-) -> list[Plot]:
-    """Run a deck whose control block writes to `raw_name`; return the plots in order.
+) -> tuple[list[Plot] | None, str]:
+    """Run a deck; return (plots, or None if no raw file was written; ngspice's messages).
 
-    `spiceinit` holds start-up commands (e.g. a compatibility mode for vendor models),
-    which ngspice only accepts from an initialisation file.
+    Raises `subprocess.TimeoutExpired` after `timeout` seconds and `SimulationError`
+    if ngspice is not installed.
     """
     exe = ngspice_path()
     if exe is None:
@@ -99,18 +99,27 @@ def run_deck(
         else:
             (Path(tmp) / ".spiceinit").write_text(spiceinit + "\n")
             command = [exe, "-b", deck.name]
-        try:
-            proc = subprocess.run(
-                command,
-                cwd=tmp,
-                capture_output=True,
-                text=True,
-                timeout=timeout,
-            )
-        except subprocess.TimeoutExpired as exc:
-            raise SimulationError(f"ngspice timed out after {timeout} s") from exc
+        proc = subprocess.run(command, cwd=tmp, capture_output=True, text=True, timeout=timeout)
         raw = Path(tmp) / raw_name
-        if not raw.exists():
-            tail = (proc.stdout + proc.stderr)[-2000:]
-            raise SimulationError(f"ngspice produced no output:\n{tail}")
-        return parse_raw(raw)
+        return (parse_raw(raw) if raw.exists() else None), proc.stdout + proc.stderr
+
+
+def run_deck(
+    netlist: str,
+    timeout: float = 120.0,
+    spiceinit: str | None = None,
+    raw_name: str = RAW_NAME,
+) -> list[Plot]:
+    """Run a deck whose control block writes to `raw_name`; return the plots in order.
+
+    `spiceinit` holds start-up commands (e.g. a compatibility mode for vendor models),
+    which ngspice only accepts from an initialisation file. Failures raise
+    `SimulationError`; `NgspiceBackend` reports them as a status instead.
+    """
+    try:
+        plots, log = execute(netlist, timeout, spiceinit, raw_name)
+    except subprocess.TimeoutExpired as exc:
+        raise SimulationError(f"ngspice timed out after {timeout} s") from exc
+    if plots is None:
+        raise SimulationError(f"ngspice produced no output:\n{log[-2000:]}")
+    return plots

@@ -12,8 +12,8 @@ touch stays byte for byte as it was written. Only top-level elements can be
 addressed: lines inside `.subckt` definitions and `.control` blocks are skipped.
 
 Limitations: instance parameters must be written `name=value` without spaces, and
-terminals are known for two-terminal elements (R, C, L, V, I, D) and for subcircuit
-instances (X) only.
+the terminals of an element are known only for the types in `_TERMINALS` and for
+subcircuit instances (X).
 """
 
 from __future__ import annotations
@@ -22,7 +22,11 @@ import re
 
 RULES = ("absolute", "relative", "scale", "divide")
 
-_TWO_TERMINAL = "rclvid"
+# number of terminals a fault can act on; for controlled sources, the output pair
+_TERMINALS = {
+    "r": 2, "c": 2, "l": 2, "v": 2, "i": 2, "d": 2, "b": 2,
+    "e": 2, "g": 2, "f": 2, "h": 2, "q": 3, "j": 3, "m": 4,
+}  # fmt: skip
 _SUFFIX = {
     "t": 1e12,
     "g": 1e9,
@@ -128,8 +132,8 @@ class Netlist:
     def _terminals(self, component: str) -> list[tuple[int, int, int]]:
         _, spans = self._tokens(component)
         kind = component[0].lower()
-        if kind in _TWO_TERMINAL:
-            return spans[1:3]
+        if kind in _TERMINALS:
+            return spans[1 : 1 + _TERMINALS[kind]]
         if kind == "x":
             first_param = next(
                 (k for k, s in enumerate(spans) if "=" in self._text(s)), len(spans)
@@ -144,10 +148,18 @@ class Netlist:
     def _parameter(self, component: str, parameter: str) -> tuple[tuple[int, int, int], str]:
         """(span of the value text, value text) of a parameter of a component."""
         _, spans = self._tokens(component)
+        kind = component[0].lower()
         if parameter == "value":
-            if component[0].lower() not in "rcl":
+            if kind not in "rcl":
                 raise NotImplementedError(f"{component!r} has no positional value")
             return spans[3], self._text(spans[3])
+        if parameter == "dc" and kind in "vi":
+            # `V1 a b dc 5 ...` or the bare form `V1 a b 5`
+            texts = [self._text(s).lower() for s in spans]
+            k = texts.index("dc") + 1 if "dc" in texts else 3
+            if k >= len(spans):
+                raise KeyError(f"{component!r} has no DC value")
+            return spans[k], self._text(spans[k])
         prefix = parameter.lower() + "="
         for line, a, b in spans:
             token = self.lines[line][a:b]
@@ -157,6 +169,29 @@ class Netlist:
 
     def value(self, component: str, parameter: str = "value") -> float:
         return parse_value(self._parameter(component, parameter)[1])
+
+    def parameters(self, component: str) -> dict[str, float]:
+        """Numeric parameters of a component: `value`, `dc` and its `name=value` pairs."""
+        _, spans = self._tokens(component)
+        names = ["value", "dc"] + [
+            self._text(s).partition("=")[0] for s in spans if "=" in self._text(s)
+        ]
+        found = {}
+        for name in names:
+            try:
+                found[name] = self.value(component, name)
+            except (KeyError, ValueError, NotImplementedError, IndexError):
+                pass  # absent, or an expression instead of a number
+        return found
+
+    def add_directive(self, line: str) -> None:
+        """Add a line such as `.options temp=85` before the control block or `.end`."""
+        heads = [text.strip().lower() for text in self.lines]
+        at = next(
+            (i for i, h in enumerate(heads) if i and (h.startswith(".control") or h == ".end")),
+            len(self.lines),
+        )
+        self.lines.insert(at, line)
 
     # --- primitives -----------------------------------------------------------------
 

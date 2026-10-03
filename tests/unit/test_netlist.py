@@ -104,6 +104,27 @@ def test_insert_parallel_goes_after_the_whole_element():
 
 
 def test_unsupported_element_type():
-    net = Netlist("t\nQ1 c b e npn\n.end\n")
+    net = Netlist("t\nQ1 c b e npn\nK1 L1 L2 0.9\n.end\n")
+    assert net.nodes("Q1") == ["c", "b", "e"]
     with pytest.raises(NotImplementedError):
-        net.nodes("Q1")
+        net.nodes("K1")
+
+
+def test_parameters_and_source_values():
+    net = Netlist(DECK + "V2 a 0 3.3\nI1 a 0 ac 1\n")
+    assert net.parameters("R1") == {"value": 1e4}
+    assert net.parameters("XU1") == {"aol": 2e5, "vos": 0.0, "gbw": 1e6}
+    assert net.parameters("Vcc") == {"dc": 5.0} and net.parameters("V2") == {"dc": 3.3}
+    assert net.parameters("I1") == {}
+    net.set_parameter("Vcc", "dc", "absolute", 3.0)
+    net.set_parameter("V2", "dc", "relative", -0.1)
+    assert "Vcc vcc 0 dc 3.0\n" in str(net) and net.value("V2", "dc") == 3.3 * (1.0 - 0.1)
+
+
+def test_add_directive_goes_before_the_control_block():
+    net = Netlist(DECK)
+    net.add_directive(".options temp=85")
+    assert "\n.options temp=85\n.control\n" in str(net)
+    bare = Netlist("t\nR1 a 0 1k\n.end\n")
+    bare.add_directive(".options temp=85")
+    assert str(bare) == "t\nR1 a 0 1k\n.options temp=85\n.end\n"
