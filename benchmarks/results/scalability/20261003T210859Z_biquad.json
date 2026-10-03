@@ -1,0 +1,294 @@
+{
+  "benchmark": "scalability",
+  "environment": {
+    "date": "2026-10-03T20:55:04+00:00",
+    "host": "MacBook-Air-de-Telmo.local",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "cpu": {
+      "model": "Apple M2",
+      "logical_cores": 8,
+      "physical_cores": 8,
+      "performance_cores": 4,
+      "efficiency_cores": 4
+    },
+    "python": "3.12.9",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "spicefault_version": "0.1.0",
+    "spicefault_commit": "c95b912f6527de5d8e540286e61f80d6b853b905",
+    "uncommitted_changes": true,
+    "simulator": "ngspice-44.2",
+    "load_average_1min_at_start": 23.109375
+  },
+  "protocol": {
+    "workload": "biquad",
+    "n_samples": 2000,
+    "workers": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "repetitions": 5,
+    "chunk": 500,
+    "warm_up": "one discarded run of each implementation"
+  },
+  "runs": [
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 0,
+      "wall_s": 52.63151079101954,
+      "sims_per_s": 38.000049208947615,
+      "bytes_written": 2941176
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 0,
+      "wall_s": 43.665650208014995,
+      "sims_per_s": 45.80259289561415,
+      "bytes_written": 2941467
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 0,
+      "wall_s": 34.102094624977326,
+      "sims_per_s": 58.647423919091004,
+      "bytes_written": 2941698
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 0,
+      "wall_s": 38.083456957974704,
+      "sims_per_s": 52.51624090236899,
+      "bytes_written": 2942054
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 1,
+      "wall_s": 91.63728116700076,
+      "sims_per_s": 21.825178295667442,
+      "bytes_written": 2941586
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 1,
+      "wall_s": 44.620953125006054,
+      "sims_per_s": 44.821991910324726,
+      "bytes_written": 2941591
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 1,
+      "wall_s": 22.595342291984707,
+      "sims_per_s": 88.51381732373508,
+      "bytes_written": 2941515
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 1,
+      "wall_s": 16.378934125008527,
+      "sims_per_s": 122.10806788374936,
+      "bytes_written": 2941677
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 2,
+      "wall_s": 72.25281708402326,
+      "sims_per_s": 27.680581612121603,
+      "bytes_written": 2941356
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 2,
+      "wall_s": 44.58851712499745,
+      "sims_per_s": 44.8545977520017,
+      "bytes_written": 2941568
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 2,
+      "wall_s": 27.939153083018027,
+      "sims_per_s": 71.58413120316234,
+      "bytes_written": 2941691
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 2,
+      "wall_s": 17.53580079099629,
+      "sims_per_s": 114.05239052595161,
+      "bytes_written": 2941730
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 3,
+      "wall_s": 77.70290137501433,
+      "sims_per_s": 25.739064624465975,
+      "bytes_written": 2941493
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 3,
+      "wall_s": 44.60445775001426,
+      "sims_per_s": 44.83856773260203,
+      "bytes_written": 2941538
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 3,
+      "wall_s": 24.252390333014773,
+      "sims_per_s": 82.46609808507826,
+      "bytes_written": 2941524
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 3,
+      "wall_s": 16.109211333008716,
+      "sims_per_s": 124.1525707656391,
+      "bytes_written": 2941621
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 4,
+      "wall_s": 70.65965454198886,
+      "sims_per_s": 28.3046954158475,
+      "bytes_written": 2941375
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 4,
+      "wall_s": 34.98277295799926,
+      "sims_per_s": 57.170996776076734,
+      "bytes_written": 2941302
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 4,
+      "wall_s": 21.973385249992134,
+      "sims_per_s": 91.01920242356448,
+      "bytes_written": 2941532
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 4,
+      "wall_s": 15.946452000003774,
+      "sims_per_s": 125.41974854340808,
+      "bytes_written": 2941631
+    }
+  ],
+  "summary": {
+    "spicefault": {
+      "1": {
+        "wall_s": {
+          "median": 72.25281708402326,
+          "min": 52.63151079101954,
+          "max": 91.63728116700076,
+          "n": 5
+        },
+        "sims_per_s": {
+          "median": 27.680581612121603,
+          "min": 21.825178295667442,
+          "max": 38.000049208947615,
+          "n": 5
+        },
+        "speedup": 1.0,
+        "efficiency": 1.0
+      },
+      "2": {
+        "wall_s": {
+          "median": 44.58851712499745,
+          "min": 34.98277295799926,
+          "max": 44.620953125006054,
+          "n": 5
+        },
+        "sims_per_s": {
+          "median": 44.8545977520017,
+          "min": 44.821991910324726,
+          "max": 57.170996776076734,
+          "n": 5
+        },
+        "speedup": 1.6204355233764098,
+        "efficiency": 0.8102177616882049
+      },
+      "4": {
+        "wall_s": {
+          "median": 24.252390333014773,
+          "min": 21.973385249992134,
+          "max": 34.102094624977326,
+          "n": 5
+        },
+        "sims_per_s": {
+          "median": 82.46609808507826,
+          "min": 58.647423919091004,
+          "max": 91.01920242356448,
+          "n": 5
+        },
+        "speedup": 2.97920395028714,
+        "efficiency": 0.744800987571785
+      },
+      "8": {
+        "wall_s": {
+          "median": 16.378934125008527,
+          "min": 15.946452000003774,
+          "max": 38.083456957974704,
+          "n": 5
+        },
+        "sims_per_s": {
+          "median": 122.10806788374936,
+          "min": 52.51624090236899,
+          "max": 125.41974854340808,
+          "n": 5
+        },
+        "speedup": 4.411325946644019,
+        "efficiency": 0.5514157433305024
+      }
+    }
+  },
+  "bytes_written": 2941631,
+  "bytes_per_sample": 1470.8155,
+  "phase_breakdown": {
+    "n_samples": 100,
+    "ms_per_sample": {
+      "netlist_generation": 0.5692324807750992,
+      "simulator_process": 30.780372109729797,
+      "output_parsing": 0.6862266891403124,
+      "measurement": 0.9874129205127247,
+      "storage": 0.06950790993869305
+    },
+    "fraction": {
+      "netlist_generation": 0.01720112243555065,
+      "simulator_process": 0.9301242763770826,
+      "output_parsing": 0.020736464796197597,
+      "measurement": 0.029837739612217508,
+      "storage": 0.0021003967789516706
+    }
+  },
+  "resume_overhead": {
+    "seconds": 0.06542962501407601,
+    "simulations_repeated": 0,
+    "max_lost_on_interruption": 500
+  },
+  "peak_memory": {
+    "parent_mb": 97.1,
+    "largest_child_mb": 93.4
+  }
+}
