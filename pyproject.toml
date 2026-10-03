@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "spicefault"
+version = "0.1.0"
+description = "Reproducible SPICE-based fault injection and reliability assessment of electronic circuits"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "pyarrow>=15",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/spicefault"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "ngspice: test needs the ngspice executable",
+    "ecgfd: equivalence test against the ECG baseline (needs the ecgfd package)",
+    "baseline_data: test needs the ECG baseline dataset data/v1",
+]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["spicefault", "ecg_adapter"]

@@ -12,7 +12,7 @@ A **fault** is a triple (type, location, parameters) that defines an injection o
 
 | Primitive | Effect |
 |---|---|
-| `set_parameter(component, parameter, rule)` | Replace a parameter value. `rule` is `absolute(v)`: $x \leftarrow v$; `relative(δ)`: $x \leftarrow x_\theta (1 + δ)$; or `scale(k)`: $x \leftarrow k\,x_\theta$ |
+| `set_parameter(component, parameter, rule)` | Replace a parameter value. `rule` is `absolute(v)`: $x \leftarrow v$; `relative(δ)`: $x \leftarrow x_\theta (1 + δ)$; `scale(k)`: $x \leftarrow k\,x_\theta$; or `divide(k)`: $x \leftarrow x_\theta / k$ |
 | `insert_series(component, terminal, R)` | Disconnect the terminal from its node and reconnect it through a resistance $R$ |
 | `insert_parallel(component, terminal_a, terminal_b, R)` | Add a resistance $R$ between the nodes of two terminals |
 
@@ -20,7 +20,8 @@ Consequences:
 
 - Every fault can be audited by listing its primitives, and two faults are identical if their primitive lists are.
 - The topology of the circuit is never edited by free text.
-- $x_\theta$ is the realised value after normal variation. `relative` and `scale` compound with the Monte Carlo draw; `absolute` overwrites it. Both behaviours exist in the ECG code and both must be available (§6).
+- $x_\theta$ is the realised value after normal variation. `relative`, `scale` and `divide` compound with the Monte Carlo draw; `absolute` overwrites it. Both behaviours exist in the ECG code and both must be available (§6).
+- `divide(k)` is not redundant with `scale(1/k)`: the two can differ in the last bit in floating point, and exact equivalence with existing results needs the operation that was actually used.
 
 ## 2. Order of operations
 
@@ -96,7 +97,9 @@ Phase 1 must reproduce the ECG results unchanged, so every `ecgfd` fault kind ne
 | `ina_cmrr` | `ParametricFault` | `absolute(dB)` | The netlist parameter is derived (sign × 10^(dB/20)); the conversion belongs to the circuit description |
 | `ina_gain` | `ParametricFault` | `absolute(error)` | |
 | `electrode_off` | `ParametricFault` labelled as an open | `absolute(1 GΩ)` on the electrode series resistance | Replaces the value instead of inserting a resistance. Using `insert_series` would give a slightly different resistance (by less than 1 part in 10⁶) and break exact equivalence |
-| `electrode_high_z` | `CompositeFault` | `scale(k)` on Rd and `scale(1/k)` on Cd, on one or two electrodes | The condition `la+ra` affects two components with one cause |
+| `electrode_high_z` | `CompositeFault` | `scale(k)` on Rd and `divide(k)` on Cd, on one or two electrodes | The condition `la+ra` affects two components with one cause |
+
+This mapping is implemented in `tests/regression/ecg_adapter.py` and checked on every fault condition of both circuits: the netlists are identical, character by character, to those of `ecgfd`.
 
 Three requirements follow:
 
