@@ -334,10 +334,12 @@ class ReliabilityAnalysis:
         used for the thresholds and over the fault samples that still comply.
         """
         failed, flagged = self._failed(), self.flags(alpha, detector)
-        w = np.array([1.0 if weights is None else float(weights[f]) for f in self.fault_ids])
-        groups = [self._rows.get(f, np.array([], dtype=int)) for f in self.fault_ids]
-        if any(len(g) == 0 for g in groups):
-            raise ValueError("a fault has no successful simulation")
+        # a fault without any successful simulation cannot enter the estimate; it is counted
+        present = [f for f in self.fault_ids if f in self._rows]
+        w = np.array([1.0 if weights is None else float(weights[f]) for f in present])
+        groups = [self._rows[f] for f in present]
+        if not groups:
+            raise ValueError("no fault has a successful simulation")
 
         def coverage(rng: np.random.Generator | None = None) -> float:
             caught = failing = 0.0
@@ -363,6 +365,8 @@ class ReliabilityAnalysis:
             "n_failed_samples": int(failed[in_faults].sum()),
             "n_compliant_samples": n,
             "n_compliant_healthy": len(healthy),
+            "n_faults": len(present),
+            "n_faults_without_results": len(self.fault_ids) - len(present),
             "weights": "equal" if weights is None else "given",
             "alpha": alpha,
         }

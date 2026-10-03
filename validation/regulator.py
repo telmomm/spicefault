@@ -110,8 +110,10 @@ def study() -> Study:
     )
 
 
-# Declared limits: output within 3 % of 10.03 V, ripple gain at 100 Hz at most 0.05
-# (26 dB of rejection), output impedance at most 0.5 ohm.
+# Declared limits, of the kind a regulator is specified with, and meant to hold over
+# its range of input voltage, load and temperature: output within 3 % of 10.03 V,
+# ripple gain at 100 Hz at most 0.05 (26 dB of rejection), output impedance at most
+# 0.5 ohm. Every one of 600 healthy circuits at the nominal condition met them.
 SPECIFICATIONS = {
     "output_voltage": (9.73, 10.33),
     "ripple_gain_100": (0.0, 0.05),

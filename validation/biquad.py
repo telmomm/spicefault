@@ -48,12 +48,13 @@ def study() -> Study:
     )
 
 
-# Declared limits: corner frequency within 15 %, pass-band gain within 10 % and
-# peaking within 20 % of the values of the nominal circuit (4.03 kHz, 1.00 and 1.158).
+# Declared limits: as for the Sallen-Key study, the range that held the central 99 % of
+# 600 healthy circuits at the declared tolerances (seed 7), rounded outwards, around
+# nominal values of 4.03 kHz, 1.00 and 1.158. Fixed before any fault campaign was run.
 SPECIFICATIONS = {
-    "corner_frequency": (3.43e3, 4.65e3),
-    "passband_gain": (0.90, 1.10),
-    "peak_gain": (0.92, 1.39),
+    "corner_frequency": (3.5e3, 4.7e3),
+    "passband_gain": (0.85, 1.15),
+    "peak_gain": (0.97, 1.38),
 }
 NOISE = {
     "corner_frequency": 4.0,

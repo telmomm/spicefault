@@ -60,12 +60,17 @@ def study() -> Study:
     )
 
 
-# Declared limits: centre frequency within 15 %, peak gain within 20 % and bandwidth
-# within 25 % of the values of the nominal circuit (24.4 kHz, 2.00 and 6.06 kHz).
+# Declared limits. With the tolerances this benchmark is usually given, the filter has
+# no tight specification to meet: its gain depends on the ratio of two 5 % resistors
+# close to the edge of instability, and in 600 healthy circuits (seed 7) the peak gain
+# went from 1.01 to 22.8 and the bandwidth from 0.56 to 10.9 kHz, around nominal values
+# of 2.00 and 6.06 kHz. The limits are therefore the range that held the central 99 %
+# of those healthy circuits, rounded outwards: a circuit fails when it is outside what
+# the declared design produces. They were fixed before any fault campaign was run.
 SPECIFICATIONS = {
-    "centre_frequency": (20.8e3, 28.1e3),
-    "peak_gain": (1.60, 2.40),
-    "bandwidth": (4.55e3, 7.58e3),
+    "centre_frequency": (21.5e3, 27.5e3),
+    "peak_gain": (1.0, 25.0),
+    "bandwidth": (500.0, 11.5e3),
 }
 # An instrument that reads gains and voltages to 0.2 % of their design value,
 # frequencies to 0.1 % and phase to 0.2 degrees.

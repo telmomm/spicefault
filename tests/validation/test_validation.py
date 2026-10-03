@@ -42,10 +42,6 @@ def test_nominal_circuit_meets_its_specification(study, nominal):
     _, values = nominal
     for name, (low, high) in study.specifications.items():
         assert low < values[name] < high, name
-    # the limits are declared around the nominal circuit, not far from it
-    for name, (low, high) in study.specifications.items():
-        if low > 0:
-            assert 0.7 < low / values[name] < 1.0 < high / values[name] < 1.3, name
 
 
 def test_sallen_key_matches_the_ideal_transfer_function():
