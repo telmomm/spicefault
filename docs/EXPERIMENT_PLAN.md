@@ -90,6 +90,8 @@ Timing: fixed workload; at least 5 repetitions per configuration; report median 
 
 ### B. Reproducibility
 
+Automated as `python -m benchmarks.reproducibility.run`.
+
 - **Question:** are results independent of parallelism and repeatable? (RQ3)
 - **Design:** the same campaign with seed 42 run with 1 worker and with the maximum available; run twice with the same worker count; run interrupted and resumed. A subset rerun on a second platform for L3.
 - **Size:** *proposed* 5,000 cases on the ECG `integrated` circuit, covering every fault type.
@@ -100,6 +102,8 @@ Timing: fixed workload; at least 5 repetitions per configuration; report median 
 The specification asks for 16 workers. The available machine has 8 cores; 16 workers there would test oversubscription, not parallelism. A 16-core run needs another machine (open decision 1).
 
 ### C. Parallel scalability
+
+Automated as `python -m benchmarks.scalability.run`.
 
 - **Question:** how does throughput scale, and what does the abstraction cost? (RQ4)
 - **Design:** fixed workload at 1, 2, 4, 8 workers, and 16 where the hardware allows. The same workload with the baseline code.
@@ -112,6 +116,8 @@ The specification asks for 16 workers. The available machine has 8 cores; 16 wor
 Recovery time, listed in the specification, is measured here as the time from relaunching an interrupted campaign to the first new simulation, and the number of completed simulations that are repeated.
 
 ### D. Fault coverage
+
+Automated as `python -m benchmarks.fault_coverage.run`.
 
 - **Question:** is coverage systematic and auditable? (RQ1, RQ7)
 - **Design:** generate the fault universe of each validation circuit from the applicability rules; build the campaign; produce the coverage matrix and the exclusion list.

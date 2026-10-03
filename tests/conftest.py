@@ -1,12 +1,17 @@
+import importlib.util
+
 import pytest
 
 from spicefault.simulation import ngspice_path
 
 
 def pytest_collection_modifyitems(config, items):
-    if ngspice_path() is not None:
-        return
-    skip = pytest.mark.skip(reason="ngspice not installed")
+    missing = {}
+    if ngspice_path() is None:
+        missing["ngspice"] = "ngspice not installed"
+    if importlib.util.find_spec("ecgfd") is None:
+        missing["ecgfd"] = "ecgfd (the ECG baseline) not installed"
     for item in items:
-        if "ngspice" in item.keywords:
-            item.add_marker(skip)
+        for marker, reason in missing.items():
+            if marker in item.keywords:
+                item.add_marker(pytest.mark.skip(reason=reason))

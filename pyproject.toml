@@ -30,10 +30,10 @@ markers = [
 
 [tool.ruff]
 line-length = 100
-src = ["src", "tests"]
+src = ["src", "tests", "."]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["spicefault", "ecg_adapter"]
+known-first-party = ["spicefault", "ecg_adapter", "benchmarks"]

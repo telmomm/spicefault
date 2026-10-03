@@ -27,7 +27,8 @@ sample can be traced and regenerated.
 | 5. Experiment engine | Done: `FaultCampaign` (to disk, in chunks, resumable, every simulation accounted for) and the `Measurement` API |
 | 6. Reliability analysis | Done: detectability, failure probability and diagnostic coverage, sensitivity, robustness, separability, with confidence intervals |
 | 7. Dataset layer | Done: `Dataset`, `Manifest`, `Provenance`; a dataset folder can be verified, traced sample by sample, and simulated again |
-| 8. Benchmarking (runtime, speed-up, memory, I/O, coverage, reproducibility) | Not started |
+| 8. Benchmarking | Done: automated benchmarks of scalability, reproducibility and fault coverage, with results stored as JSON |
+| 9. ECG validation (the whole ECG study reproduced with `spicefault`) | Not started |
 
 The first application is the ECG front-end study
 ([ecg-frontend-fault-diagnosis](https://github.com/telmomm/ecg-frontend-fault-diagnosis)),
@@ -333,6 +334,20 @@ capacitor is detected about half of the time, which is what the tolerance overla
 predicts (half of that fault population is inside the tolerance band); and doubling
 the tolerances takes the detection of the ±5 % resistor faults from 100 % to between
 72 and 83 %.
+
+## Benchmarks
+
+[benchmarks/](benchmarks/README.md) automates the measurements of the experiment
+plan and stores each result as JSON under `benchmarks/results/`:
+
+```bash
+python -m benchmarks.scalability.run --workload ecg --workers 1 2 4 8   # runtime, speed-up, memory, I/O
+python -m benchmarks.reproducibility.run --workload ecg --workers 8     # 1 worker against several, resumed runs
+python -m benchmarks.fault_coverage.run                                 # coverage matrices of the circuits
+```
+
+The timing benchmarks need an idle machine. Only the fault-coverage result, which
+simulates nothing, is stored in the repository so far.
 
 ## Equivalence with the ECG baseline
 
