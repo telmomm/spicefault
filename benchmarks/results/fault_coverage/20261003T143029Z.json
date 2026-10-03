@@ -1,0 +1,516 @@
+{
+  "benchmark": "fault_coverage",
+  "environment": {
+    "date": "2026-10-03T14:30:29+00:00",
+    "host": "MacBook-Air-de-Telmo.local",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "cpu": {
+      "model": "Apple M2",
+      "logical_cores": 8,
+      "physical_cores": 8,
+      "performance_cores": 4,
+      "efficiency_cores": 4
+    },
+    "python": "3.12.9",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "spicefault_version": "0.1.0",
+    "spicefault_commit": "6d6477476411966d27b429b2a848f2d2297ca4e1",
+    "uncommitted_changes": true,
+    "simulator": "ngspice-44.2",
+    "load_average_1min_at_start": 12.54248046875
+  },
+  "circuits": {
+    "rc": {
+      "circuit": "rc_lowpass",
+      "netlist_sha256": "f0efb2ba450dd22f373836aee5b675e21532f9f2a960feef89bb86593112fa0f",
+      "n_components": 4,
+      "n_components_with_faults": 3,
+      "components_without_faults": [
+        "V1"
+      ],
+      "fault_types": [
+        "open",
+        "short",
+        "parametric"
+      ],
+      "n_distinct_magnitudes": 8,
+      "n_fault_conditions": 30,
+      "n_selected": 30,
+      "structural_coverage": 1.0,
+      "n_operating_conditions": 1,
+      "n_simulated_conditions": 30,
+      "conditions_per_fault_type": {
+        "open": 3,
+        "short": 3,
+        "parametric": 24
+      },
+      "coverage_matrix_universe": {
+        "R1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 8
+        },
+        "C1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 8
+        },
+        "R2": {
+          "open": 1,
+          "short": 1,
+          "parametric": 8
+        }
+      },
+      "coverage_matrix_selected": {
+        "R1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 8
+        },
+        "C1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 8
+        },
+        "R2": {
+          "open": 1,
+          "short": 1,
+          "parametric": 8
+        }
+      },
+      "exclusions": [],
+      "inside_tolerance": {
+        "n_fault_conditions": 3,
+        "faults": {
+          "C1:parametric:-0.05": 0.5,
+          "C1:parametric:+0.05": 0.5,
+          "C1:parametric:+0.1": 0.0455
+        }
+      }
+    },
+    "biquad": {
+      "circuit": "biquad",
+      "netlist_sha256": "0fc472e80628f0d9b964489d813d6fe9bf1e843d84a230a31f4f0548991f50ca",
+      "n_components": 16,
+      "n_components_with_faults": 15,
+      "components_without_faults": [
+        "Vin"
+      ],
+      "fault_types": [
+        "open",
+        "short",
+        "parametric",
+        "amplifier"
+      ],
+      "n_distinct_magnitudes": 8,
+      "n_fault_conditions": 96,
+      "n_selected": 96,
+      "structural_coverage": 1.0,
+      "n_operating_conditions": 1,
+      "n_simulated_conditions": 96,
+      "conditions_per_fault_type": {
+        "open": 11,
+        "short": 11,
+        "parametric": 66,
+        "amplifier": 8
+      },
+      "coverage_matrix_universe": {
+        "R1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R2": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R3": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R4": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R5": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R6": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R7": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R8": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R9": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "C1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "C2": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "XU1": {
+          "amplifier": 2
+        },
+        "XU2": {
+          "amplifier": 2
+        },
+        "XU3": {
+          "amplifier": 2
+        },
+        "XU4": {
+          "amplifier": 2
+        }
+      },
+      "coverage_matrix_selected": {
+        "R1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R2": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R3": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R4": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R5": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R6": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R7": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R8": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R9": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "C1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "C2": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "XU1": {
+          "amplifier": 2
+        },
+        "XU2": {
+          "amplifier": 2
+        },
+        "XU3": {
+          "amplifier": 2
+        },
+        "XU4": {
+          "amplifier": 2
+        }
+      },
+      "exclusions": [],
+      "inside_tolerance": {
+        "n_fault_conditions": 13,
+        "faults": {
+          "R1:parametric:+0.1": 0.0455,
+          "R2:parametric:+0.1": 0.0455,
+          "R3:parametric:+0.1": 0.0455,
+          "R4:parametric:+0.1": 0.0455,
+          "R5:parametric:+0.1": 0.0455,
+          "R6:parametric:+0.1": 0.0455,
+          "R7:parametric:+0.1": 0.0455,
+          "R8:parametric:+0.1": 0.0455,
+          "R9:parametric:+0.1": 0.0455,
+          "C1:parametric:-0.1": 0.5,
+          "C1:parametric:+0.1": 0.5,
+          "C2:parametric:-0.1": 0.5,
+          "C2:parametric:+0.1": 0.5
+        }
+      }
+    },
+    "regulator": {
+      "circuit": "regulator",
+      "netlist_sha256": "683cc18512fe658743513528372122627c5d4d7128db8a2b91112e15192343c8",
+      "n_components": 11,
+      "n_components_with_faults": 8,
+      "components_without_faults": [
+        "Vin",
+        "Iout",
+        "RL"
+      ],
+      "fault_types": [
+        "open",
+        "short",
+        "parametric",
+        "transistor",
+        "diode_open",
+        "diode_short"
+      ],
+      "n_distinct_magnitudes": 6,
+      "n_fault_conditions": 54,
+      "n_selected": 54,
+      "structural_coverage": 1.0,
+      "n_operating_conditions": 1,
+      "n_simulated_conditions": 54,
+      "conditions_per_fault_type": {
+        "open": 5,
+        "short": 5,
+        "parametric": 30,
+        "transistor": 12,
+        "diode_open": 1,
+        "diode_short": 1
+      },
+      "coverage_matrix_universe": {
+        "R1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R2": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R3": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R4": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "C1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "Q1": {
+          "transistor": 6
+        },
+        "Q2": {
+          "transistor": 6
+        },
+        "D1": {
+          "diode_open": 1,
+          "diode_short": 1
+        }
+      },
+      "coverage_matrix_selected": {
+        "R1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R2": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R3": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R4": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "C1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "Q1": {
+          "transistor": 6
+        },
+        "Q2": {
+          "transistor": 6
+        },
+        "D1": {
+          "diode_open": 1,
+          "diode_short": 1
+        }
+      },
+      "exclusions": [],
+      "inside_tolerance": {
+        "n_fault_conditions": 4,
+        "faults": {
+          "C1:parametric:-0.25": 0.3333,
+          "C1:parametric:-0.1": 0.7778,
+          "C1:parametric:+0.1": 0.7273,
+          "C1:parametric:+0.25": 0.4
+        }
+      }
+    },
+    "sallen_key": {
+      "circuit": "sallen_key",
+      "netlist_sha256": "2abf704abe55c39d99a202a63ef2d39bf3a54f1da44d27e05dced410ff0ed1ad",
+      "n_components": 9,
+      "n_components_with_faults": 8,
+      "components_without_faults": [
+        "Vin"
+      ],
+      "fault_types": [
+        "open",
+        "short",
+        "parametric",
+        "amplifier"
+      ],
+      "n_distinct_magnitudes": 8,
+      "n_fault_conditions": 58,
+      "n_selected": 58,
+      "structural_coverage": 1.0,
+      "n_operating_conditions": 1,
+      "n_simulated_conditions": 58,
+      "conditions_per_fault_type": {
+        "open": 7,
+        "short": 7,
+        "parametric": 42,
+        "amplifier": 2
+      },
+      "coverage_matrix_universe": {
+        "R1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R2": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R3": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R4": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R5": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "C1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "C2": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "XU1": {
+          "amplifier": 2
+        }
+      },
+      "coverage_matrix_selected": {
+        "R1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R2": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R3": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R4": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "R5": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "C1": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "C2": {
+          "open": 1,
+          "short": 1,
+          "parametric": 6
+        },
+        "XU1": {
+          "amplifier": 2
+        }
+      },
+      "exclusions": [],
+      "inside_tolerance": {
+        "n_fault_conditions": 9,
+        "faults": {
+          "R1:parametric:+0.1": 0.0455,
+          "R2:parametric:+0.1": 0.0455,
+          "R3:parametric:+0.1": 0.0455,
+          "R4:parametric:+0.1": 0.0455,
+          "R5:parametric:+0.1": 0.0455,
+          "C1:parametric:-0.1": 0.5,
+          "C1:parametric:+0.1": 0.5,
+          "C2:parametric:-0.1": 0.5,
+          "C2:parametric:+0.1": 0.5
+        }
+      }
+    }
+  }
+}

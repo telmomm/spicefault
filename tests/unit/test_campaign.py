@@ -272,3 +272,15 @@ def test_definitions_that_workers_cannot_receive_are_reported(tmp_path):
         local.experiment.run(workers=2)
     assert len(local.experiment.run(workers=1)) == N  # in this process it is fine
     assert not (tmp_path / "data").exists()
+
+
+def test_in_memory_run_also_records_a_measurement_that_fails(tmp_path):
+    """`Experiment.run` treats an unusable output as the campaign does: a status, not an error."""
+    c = campaign(tmp_path / "data", waveform=None)
+    c.run(progress=False)
+    stored = c.load(drop_failed=False)[0]
+    result = c.experiment.run(workers=1)
+    assert [s.result.status.value for s in result] == list(stored["status"])
+    invalid = [s for s in result if s.result.status.value == "INVALID_OUTPUT"]
+    assert invalid and all(s.result.message.startswith("measurement failed") for s in invalid)
+    assert all(s.measurements == {} and not s.result.ok for s in invalid)

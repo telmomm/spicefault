@@ -8,8 +8,9 @@ speed-up S(N) = T1 / TN and the efficiency E(N) = S(N) / N. It also holds the ti
 one sample split by phase, the peak memory, the bytes written and the cost of resuming
 a campaign.
 
-The comparison with a script written directly against ngspice for the same task, which
-measures what the framework costs, is not implemented yet (docs/EXPERIMENT_PLAN.md).
+With the `sallen_key` workload, the same campaign is also run by a script written
+directly against ngspice (`validation/direct/sallen_key_direct.py`), to measure what
+the framework costs.
 
 The protocol asks for an idle machine on mains power, at least 5 repetitions and 2000
 samples; those are the defaults. Smaller runs are for checking that the benchmark works.
@@ -113,6 +114,31 @@ def resume_overhead(experiment, n_points, workers: int, chunk: int) -> dict:
     return {"seconds": timer.seconds, "simulations_repeated": 0, "max_lost_on_interruption": chunk}
 
 
+def direct_script(workload: str, n_samples: int, workers, repetitions: int) -> dict:
+    """The same campaign with the direct script: timings per number of workers.
+
+    The script does the same simulations and measurements, and writes a CSV and the
+    waveforms. It keeps no status, no manifest and cannot resume.
+    """
+    from validation.direct import sallen_key_direct
+
+    per_fault, healthy = workloads.study_sizes(workload, n_samples)
+    table = {}
+    with tempfile.TemporaryDirectory(prefix="spicefault_bench_") as tmp:
+        sallen_key_direct.run(Path(tmp) / "warm", 8, 1, workers[-1])  # warm-up, discarded
+        for n_workers in workers:
+            walls = [
+                sallen_key_direct.run(Path(tmp) / f"{n_workers}_{r}", healthy, per_fault, n_workers)
+                for r in range(repetitions)
+            ]
+            n = healthy + per_fault * len(sallen_key_direct.fault_list())
+            table[str(n_workers)] = {
+                "wall_s": spread(walls),
+                "sims_per_s": spread([n / w for w in walls]),
+            }
+    return table
+
+
 def run(
     workload: str = "rc",
     workers: tuple[int, ...] = (1, 2, 4, 8),
@@ -177,6 +203,14 @@ def run(
     )
     result["bytes_per_sample"] = result["bytes_written"] / len(plan)
 
+    if workload == "sallen_key":
+        result["direct_script"] = direct_script(workload, len(plan), workers, repetitions)
+        result["relative_throughput"] = {
+            str(n): summary["spicefault"][str(n)]["sims_per_s"]["median"]
+            / result["direct_script"][str(n)]["sims_per_s"]["median"]
+            for n in workers
+        }
+
     result["phase_breakdown"] = phase_breakdown(experiment, min(100, len(plan)))
     result["resume_overhead"] = resume_overhead(experiment, n_points, workers[-1], chunk)
     result["peak_memory"] = peak_memory_mb()
@@ -196,6 +230,14 @@ def report(result: dict) -> str:
                 f" {n:>7} {row['wall_s']['median']:>10.2f} {row['sims_per_s']['median']:>8.1f} "
                 f"{row['speedup']:>10.2f} {row['efficiency']:>12.2f}"
             )
+    if "relative_throughput" in result:
+        lines.append("\ndirect ngspice script\n workers   wall [s]   sims/s")
+        for n, row in result["direct_script"].items():
+            lines.append(
+                f" {n:>7} {row['wall_s']['median']:>10.2f} {row['sims_per_s']['median']:>8.1f}"
+            )
+        ratio = ", ".join(f"{n}: {r:.3f}" for n, r in result["relative_throughput"].items())
+        lines.append(f"throughput of spicefault relative to the direct script, by workers: {ratio}")
     phases = result["phase_breakdown"]["ms_per_sample"]
     lines.append(
         "\ntime of one sample [ms]: " + ", ".join(f"{k} {v:.2f}" for k, v in phases.items())

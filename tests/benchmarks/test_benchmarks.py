@@ -45,6 +45,11 @@ def test_fault_coverage(results):
     assert path.parent == results / "fault_coverage" and path.name.endswith("_test.json")
     assert json.loads(path.read_text())["benchmark"] == "fault_coverage"
     assert "30 fault conditions" in fault_coverage.report(result)
+    counts = {name: c["n_fault_conditions"] for name, c in result["circuits"].items()}
+    assert counts == {"rc": 30, "biquad": 96, "regulator": 54, "sallen_key": 58}
+    regulator = result["circuits"]["regulator"]
+    assert {"Vin", "Iout", "RL"} <= set(regulator["components_without_faults"])
+    assert regulator["coverage_matrix_universe"]["Q1"] == {"transistor": 6}
 
 
 @pytest.mark.ngspice
@@ -83,3 +88,13 @@ def test_reproducibility(results):
     again = result["simulated_again_from_the_folder"]
     assert again["drawn_values_identical"] and again["max_abs_diff"] == 0.0
     json.loads(common.save("reproducibility", result, "test").read_text())
+
+
+@pytest.mark.ngspice
+def test_scalability_against_the_direct_script(results):
+    result = scalability.run("sallen_key", workers=(2,), repetitions=1, n_samples=120, chunk=60)
+    assert result["protocol"]["n_samples"] == 120
+    assert set(result["direct_script"]) == {"2"}
+    assert result["direct_script"]["2"]["sims_per_s"]["median"] > 0
+    assert 0.2 < result["relative_throughput"]["2"] < 5.0
+    assert "direct ngspice script" in scalability.report(result)

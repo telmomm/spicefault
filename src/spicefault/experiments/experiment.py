@@ -8,7 +8,7 @@ import pickle
 from collections import Counter
 from collections.abc import Sequence
 from concurrent.futures import ProcessPoolExecutor
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 import pandas as pd
 
@@ -17,7 +17,7 @@ from ..circuit import Circuit
 from ..conditions import OperatingCondition
 from ..faults import Fault, FaultSet
 from ..measurements import Measurement, Waveform
-from ..simulation import SimulationConfig, SimulationResult, Simulator
+from ..simulation import SimulationConfig, SimulationResult, SimulationStatus, Simulator
 from ..variation import VariationSet
 from .seeding import SCHEMES, sample_stream, seed_key
 
@@ -255,6 +255,16 @@ class Experiment:
     def run_sample(self, sample: Sample) -> SampleResult:
         realised = self.realise(sample)
         result = self.simulator.run(realised.netlist, self.config)
+        measurements = {}
+        if result.ok:
+            try:
+                measurements = self.measure(result)
+            except Exception as exc:  # the simulation ran but its output cannot be used
+                result = replace(
+                    result,
+                    status=SimulationStatus.INVALID_OUTPUT,
+                    message=f"measurement failed: {type(exc).__name__}: {exc}",
+                )
         return SampleResult(
             sample=sample,
             fault_id=self.fault_id(sample),
@@ -263,7 +273,7 @@ class Experiment:
             parameters=realised.parameters,
             labels=realised.labels,
             result=result,
-            measurements=self.measure(result) if result.ok else {},
+            measurements=measurements,
         )
 
     def run(self, workers: int = 1) -> ExperimentResult:

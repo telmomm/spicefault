@@ -3,6 +3,11 @@
 They are functions of one AC plot, defined at module level so that worker processes
 can receive them. Frequencies are located by interpolation over log-frequency: on the
 grid of the sweep they would move in steps, which would look like measurement noise.
+
+Every function is defined for any response, also for the one of a circuit whose fault
+has destroyed the shape the measurement was made for. A band edge that is not inside
+the sweep is taken at the end of the sweep. A measurement that could not be taken
+would turn a plainly faulty circuit into a missing result.
 """
 
 from __future__ import annotations
@@ -49,14 +54,14 @@ def peak_gain(plot) -> float:
 
 
 def bandwidth(plot) -> float:
-    """Width between the -3 dB points on each side of the peak [Hz]."""
+    """Width between the -3 dB points on each side of the peak, within the sweep [Hz]."""
     x, y = _response(plot)
     x0, y0 = _peak(plot)
     crossings = np.exp(_crossings(x, y, y0 - 0.5 * np.log(2.0)))
     lower, upper = crossings[crossings < np.exp(x0)], crossings[crossings > np.exp(x0)]
-    if not len(lower) or not len(upper):
-        raise ValueError("the response does not fall 3 dB on both sides of its peak")
-    return float(upper[0] - lower[-1])
+    low = lower[-1] if len(lower) else np.exp(x[0])
+    high = upper[0] if len(upper) else np.exp(x[-1])
+    return float(high - low)
 
 
 def passband_gain(plot) -> float:
@@ -65,9 +70,10 @@ def passband_gain(plot) -> float:
 
 
 def corner_frequency(plot) -> float:
-    """Lowest frequency at which a high-pass response reaches its pass-band gain - 3 dB [Hz]."""
+    """Lowest frequency at which a high-pass response reaches its pass-band gain - 3 dB [Hz].
+
+    The lowest frequency of the sweep if the response is already there.
+    """
     x, y = _response(plot)
     crossings = _crossings(x, y, y[-1] - 0.5 * np.log(2.0))
-    if not len(crossings):
-        raise ValueError("the response never crosses 3 dB below its pass band")
-    return float(np.exp(crossings[0]))
+    return float(np.exp(crossings[0] if len(crossings) else x[0]))

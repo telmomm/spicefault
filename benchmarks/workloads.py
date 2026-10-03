@@ -1,21 +1,21 @@
 """The workloads of the benchmarks.
 
-For now there is one, an RC low-pass filter with 30 faults. It only checks that the
-benchmarks work: a simulation takes about 15 ms, so starting processes weighs as much
-as simulating. The validation circuits of docs/SCIENTIFIC_SCOPE.md, section 8, are to
-be added here as they are written.
+- `sallen_key`, `biquad`, `regulator`: the validation studies of `validation/`. The
+  figures of the manuscript come from these.
+- `rc`: an RC low-pass filter with 30 faults. It only checks that the benchmarks work.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
+import validation
 from spicefault import Circuit, Experiment, Measurement, SimulationConfig, VariationSet, Waveform
 from spicefault.faults import FaultUniverse, open_rule, parametric_rule, short_rule
 from spicefault.variation import tolerances
 
 REPO = Path(__file__).resolve().parents[1]
-WORKLOADS = ("rc",)
+WORKLOADS = ("rc", *sorted(validation.STUDIES))
 
 RC_DEVIATIONS = [-0.5, -0.2, -0.1, -0.05, 0.05, 0.1, 0.2, 0.5]
 
@@ -58,7 +58,17 @@ def rc_experiment(n_samples: int, seed: int = 42) -> Experiment:
     )
 
 
+def study_sizes(workload: str, n_samples: int) -> tuple[int, int]:
+    """(samples per fault, healthy samples) that add up to about `n_samples`: half and half."""
+    n_faults = len(validation.get(workload).universe())
+    per_fault = max(n_samples // (2 * n_faults), 1)
+    return per_fault, max(n_samples - per_fault * n_faults, 1)
+
+
 def experiment(workload: str, n_samples: int) -> Experiment:
     if workload == "rc":
         return rc_experiment(n_samples)
+    if workload in validation.STUDIES:
+        per_fault, healthy = study_sizes(workload, n_samples)
+        return validation.get(workload).experiment(per_fault, healthy)
     raise ValueError(f"unknown workload {workload!r}; available: {WORKLOADS}")

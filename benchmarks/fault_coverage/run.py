@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 
+import validation
 from benchmarks import workloads
 from benchmarks.common import environment, save
 from spicefault import Circuit
@@ -62,6 +63,11 @@ def run() -> dict:
     circuits = {}
     rc = workloads.rc_circuit()
     circuits["rc"] = describe(rc, workloads.rc_universe(rc), workloads.rc_tolerances(rc))
+    for name in sorted(validation.STUDIES):
+        study = validation.get(name)
+        circuits[name] = describe(
+            study.circuit, study.universe(), study.variations, len(study.conditions["nominal"])
+        )
     return {"benchmark": "fault_coverage", "environment": environment(), "circuits": circuits}
 
 
