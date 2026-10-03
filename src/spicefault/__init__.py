@@ -4,6 +4,7 @@ __version__ = "0.1.0"
 
 from .circuit import Circuit, Component  # noqa: E402
 from .conditions import OperatingCondition  # noqa: E402
+from .dataset import Dataset  # noqa: E402
 from .experiments import Experiment, ExperimentResult, FaultCampaign  # noqa: E402
 from .faults import Fault  # noqa: E402
 from .measurements import Measurement, Waveform  # noqa: E402
@@ -18,6 +19,7 @@ from .variation import VariationSet  # noqa: E402
 __all__ = [
     "Circuit",
     "Component",
+    "Dataset",
     "Experiment",
     "ExperimentResult",
     "Fault",

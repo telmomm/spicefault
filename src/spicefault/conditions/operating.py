@@ -35,3 +35,8 @@ class OperatingCondition:
                 {"component": c, "parameter": p, "value": v} for (c, p), v in self.settings.items()
             ],
         }
+
+    @classmethod
+    def from_metadata(cls, record: dict) -> OperatingCondition:
+        settings = {(s["component"], s["parameter"]): s["value"] for s in record["settings"]}
+        return cls(record["name"], record["temperature"], settings)

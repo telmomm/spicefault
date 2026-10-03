@@ -9,7 +9,7 @@ from ecgfd.dataset import build_tasks, simulate_parts
 from ecgfd.specs import with_nominal_gain
 
 import ecg_adapter
-from spicefault.dataset import load_dataset
+from spicefault.dataset import load_dataset, load_metadata
 from spicefault.experiments import run_campaign, run_chunks
 
 pytestmark = [pytest.mark.ecgfd, pytest.mark.ngspice]
@@ -65,4 +65,4 @@ def test_campaign_dataset_matches_the_baseline(study, baseline, tmp_path):
     df, waveforms, manifest = load_dataset(out)
     pd.testing.assert_frame_equal(df, baseline[0], check_exact=True)
     assert np.array_equal(waveforms, baseline[1])
-    assert manifest["config"] == cfg and manifest["n_failed"] == 0
+    assert load_metadata(out) == cfg and manifest["n_failed"] == 0

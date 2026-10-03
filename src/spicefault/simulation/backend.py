@@ -62,6 +62,10 @@ class SimulationConfig:
             "spiceinit": self.spiceinit,
         }
 
+    @classmethod
+    def from_metadata(cls, record: dict) -> SimulationConfig:
+        return cls(**record)
+
 
 @dataclass(frozen=True)
 class SimulationResult:

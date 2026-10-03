@@ -29,7 +29,7 @@ Three caveats about using these figures as a performance baseline:
 - the elapsed time covers only the last run, so it is too low if the generation was resumed;
 - the repository has moved on since the dataset (commit `6a49f58` at the time of writing). Between `93a40d8` and that commit, the only change under `src/` and `configs/` is in `ambiguity.py`, so the simulation pipeline that produced the dataset is unchanged.
 
-The baseline timing must therefore be measured again under the protocol of §4 and not taken from the manifests. That the manifest lacks these fields is itself a finding for the provenance design.
+The baseline timing must therefore be measured again under the protocol of §4 and not taken from the manifests. That the manifest lacks these fields is itself a finding for the provenance design: the manifest of `spicefault` records the number of workers, the chunk size, whether the run was resumed, and the time spent over all the runs of a campaign as well as in the last one.
 
 ## 2. Reproducibility levels and seeding
 
@@ -39,7 +39,7 @@ The baseline timing must therefore be measured again under the protocol of §4 a
 | L2 | Equivalent outputs on one platform | Measurements and waveforms, same machine and simulator version |
 | L3 | Equivalent outputs across platforms | Same, across operating systems or simulator versions |
 
-L1 is a property of the framework and must hold exactly. L2 and L3 depend on the simulator; the framework's role is to measure and report the differences.
+L1 is a property of the framework and must hold exactly. L2 and L3 depend on the simulator; the framework's role is to measure and report the differences. `Dataset.reproduce` is the instrument for the three: it simulates samples of a stored dataset again and reports, per sample, whether the definition and the drawn values are identical (L1) and the largest difference in measurements and waveform (L2 on the same platform, L3 on another).
 
 Seeding. The baseline derives each stream from `SeedSequence(master, spawn_key=(condition_index, replica))`. This makes results independent of execution order, but the stream of a condition depends on its position in the catalogue, so adding or reordering faults changes the samples of the others. `Experiment` therefore has three schemes (`spicefault.experiments.seeding`):
 

@@ -12,6 +12,7 @@ from .types import (
     ToleranceVariation,
     UniformVariation,
     tolerances,
+    variation_from_metadata,
 )
 
 __all__ = [
@@ -31,4 +32,5 @@ __all__ = [
     "toleranced",
     "tolerances",
     "unit_deviation",
+    "variation_from_metadata",
 ]

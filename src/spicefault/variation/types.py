@@ -273,6 +273,31 @@ class JointVariation(Variation):
         }
 
 
+_REBUILDABLE = {
+    "fixed": FixedVariation,
+    "tolerance": ToleranceVariation,
+    "uniform": UniformVariation,
+    "normal": NormalVariation,
+    "lognormal": LogNormalVariation,
+    "loguniform": LogUniformVariation,
+}
+
+
+def variation_from_metadata(record: dict) -> Variation:
+    """Rebuild a variation from its record. Custom and joint ones hold a function,
+    which a record cannot carry.
+    """
+    record = dict(record)
+    kind = record.pop("type")
+    if kind not in _REBUILDABLE:
+        name = record.get("name") or record.get("component")
+        raise NotImplementedError(
+            f"the {kind} variation {name!r} holds a function and cannot be rebuilt from "
+            "its record; pass the variations explicitly"
+        )
+    return _REBUILDABLE[kind](**record)
+
+
 def tolerances(
     circuit: Circuit,
     by_kind: dict[str, float],

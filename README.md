@@ -26,7 +26,8 @@ sample can be traced and regenerated.
 | 4. Uncertainty framework | Done: tolerance, normal, log-normal, uniform, log-uniform, fixed, custom and joint variations; three seeding schemes |
 | 5. Experiment engine | Done: `FaultCampaign` (to disk, in chunks, resumable, every simulation accounted for) and the `Measurement` API |
 | 6. Reliability analysis | Done: detectability, failure probability and diagnostic coverage, sensitivity, robustness, separability, with confidence intervals |
-| 7. Dataset layer (`Dataset`, `Manifest`, `Provenance`) | Not started |
+| 7. Dataset layer | Done: `Dataset`, `Manifest`, `Provenance`; a dataset folder can be verified, traced sample by sample, and simulated again |
+| 8. Benchmarking (runtime, speed-up, memory, I/O, coverage, reproducibility) | Not started |
 
 The first application is the ECG front-end study
 ([ecg-frontend-fault-diagnosis](https://github.com/telmomm/ecg-frontend-fault-diagnosis)),
@@ -43,7 +44,7 @@ whose generic code was extracted into this package.
 | `spicefault.netlist` | Netlist as text and the three fault-injection primitives |
 | `spicefault.measurements` | `Measurement` and `Waveform`: what is read from each simulation; ADC quantisation |
 | `spicefault.reliability` | `ReliabilityAnalysis` and the metrics of docs/RELIABILITY_METRICS.md |
-| `spicefault.dataset` | Dataset directory: `samples.parquet`, `waveforms.npy`, `manifest.json` |
+| `spicefault.dataset` | `Dataset`, `Manifest`, `Provenance`: the folder a campaign writes, as an object |
 
 ## Setup
 
@@ -248,11 +249,48 @@ What the engine guarantees:
 - a simulation that fails, an output that cannot be measured and a fault that cannot
   be injected are rows with a status and a message; none of them stops the run;
 - a partial run is never mixed with a campaign whose definitions differ;
-- the manifest holds the complete definition of the experiment, the simulator and
-  package versions, the number of workers, and whether the run was resumed.
+- the folder holds the complete definition of the experiment and its source netlist,
+  the simulator and package versions, the number of workers, whether the run was
+  resumed and the time spent over all its runs.
 
 Functions passed to custom or joint variations and to custom measurements must be
 defined at module level, so that worker processes can receive them.
+
+### Dataset
+
+A campaign writes a folder that stands on its own:
+
+| File | Content |
+|---|---|
+| `samples.parquet` | One row per simulation: what was injected, its status, the realised component values, the measurements |
+| `waveforms.npy` | float32 `[samples, points]`, aligned with the table row by row (if a waveform was declared) |
+| `metadata.json` | The definition of the experiment: faults, variations, conditions, analyses, measurements, seed |
+| `circuit.cir` | The source netlist |
+| `manifest.json` | The record of the run: versions, platform, workers, counts by status, and the size and SHA-256 of every file |
+
+```python
+from spicefault import Dataset
+
+dataset = Dataset("data/rc_lowpass")
+
+dataset.verify()                 # [] if the files match the manifest and each other
+dataset.provenance(1234)         # fault, seed key, realised values, versions of one sample
+dataset.netlist(1234)            # the netlist that was simulated for it
+dataset.reproduce(n=50)          # simulate samples again and compare with what is stored
+
+X, y = dataset.to_ml(target="fault_location")       # for any ML or statistical tool
+analysis = dataset.analysis()                       # a ReliabilityAnalysis
+```
+
+- `netlist` rebuilds a sample from the values stored in the table, so it needs
+  nothing but the folder.
+- `reproduce` rebuilds the experiment from `metadata.json` and reports, per sample,
+  whether the definition, the drawn values and the status are the same, and the
+  largest difference in the measurements and the waveform. On the machine and
+  simulator version that wrote the dataset the differences are expected to be zero.
+- Functions cannot be stored. If the experiment used custom or joint variations, or
+  custom measurements, pass it again: `dataset.reproduce(experiment=experiment)`.
+- The library has no ML dependency: `to_ml` returns NumPy arrays.
 
 ### Reliability analysis
 
@@ -316,6 +354,7 @@ pytest tests/regression
 | `test_ecg_experiment.py` | Self-test measurement of faulty circuits through `Circuit`, `Fault` and `Simulator` | Identical vectors |
 | `test_ecg_service_dataset.py` | The self-test half of `data/v1` (features and waveforms) regenerated with spicefault objects only | Tolerances of docs/EXPERIMENT_PLAN.md §3; no difference found |
 | `test_ecg_reliability.py` | Fault dictionary, separation, ambiguity groups, limit test, escape and false-reject rates, sensitivities, on `data/v1`, against `ecgfd.ambiguity` and `ecgfd.evaluation` | Identical results |
+| `test_ecg_dataset.py` | A campaign over the whole fault catalogue (one sample per fault) written as a dataset, against the same samples of `data/v1`; then verified and reproduced from its folder | No difference found |
 | `test_ecg_campaign.py` | A reduced campaign run by both engines, with 1 and with several workers | Identical tables and waveforms |
 | `test_ecg_baseline_data.py` | Cases regenerated here against the published dataset `data/v1` | Tolerances of docs/EXPERIMENT_PLAN.md §3 |
 

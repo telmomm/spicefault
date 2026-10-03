@@ -161,6 +161,19 @@ class Measurement:
         return record
 
     @classmethod
+    def from_metadata(cls, record: dict) -> Measurement:
+        """Rebuild a measurement from its record; a custom one holds a function and cannot be."""
+        if record["kind"] not in _KINDS:
+            raise NotImplementedError(
+                f"the {record['kind']} measurement {record['name']!r} holds a function and "
+                "cannot be rebuilt from its record; pass the measurements explicitly"
+            )
+        parameters = {
+            k: tuple(v) if isinstance(v, list) else v for k, v in record["parameters"].items()
+        }
+        return cls(record["name"], record["kind"], record["vector"], record["analysis"], parameters)
+
+    @classmethod
     def _build(cls, kind, vector, analysis, name, **parameters) -> Measurement:
         parameters = {k: v for k, v in parameters.items() if v is not None and v is not False}
         return cls(name or f"{kind}_{vector.lower()}", kind, vector, analysis, parameters)
@@ -275,3 +288,7 @@ class Waveform:
             "analysis": self.analysis,
             "n_points": self.n_points,
         }
+
+    @classmethod
+    def from_metadata(cls, record: dict) -> Waveform:
+        return cls(record["vector"], record["fs"], record["duration"], record["analysis"])

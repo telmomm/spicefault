@@ -198,6 +198,42 @@ class Experiment:
             "waveform": None if self.waveform is None else self.waveform.metadata(),
         }
 
+    @classmethod
+    def from_metadata(cls, metadata: dict, netlist: str, **overrides) -> Experiment:
+        """Rebuild an experiment from its record and the netlist of its circuit.
+
+        What a record cannot carry must be passed again as keyword arguments: custom
+        or joint variations (`variations`), custom measurements (`measurements`) and
+        a backend other than the built-in ones (`simulator`). The netlist must be the
+        one the record was made with.
+        """
+        circuit = Circuit(netlist, metadata["circuit"])
+        if circuit.metadata()["netlist_sha256"] != metadata["netlist_sha256"]:
+            raise ValueError("the netlist is not the one this experiment was defined with")
+        waveform = metadata["waveform"]
+        parts = {
+            "simulator": lambda: Simulator(metadata["simulator"]),
+            "config": lambda: SimulationConfig.from_metadata(metadata["simulation"]),
+            "faults": lambda: [Fault.from_metadata(f) for f in metadata["faults"]],
+            "variations": lambda: VariationSet.from_metadata(metadata["variations"]),
+            "conditions": lambda: [
+                OperatingCondition.from_metadata(c) for c in metadata["conditions"]
+            ],
+            "measurements": lambda: [
+                Measurement.from_metadata(m) for m in metadata["measurements"]
+            ],
+            "waveform": lambda: None if waveform is None else Waveform.from_metadata(waveform),
+        }
+        built = {name: overrides.get(name) or make() for name, make in parts.items()}
+        return cls(
+            circuit,
+            samples=metadata["samples"],
+            healthy_samples=metadata["healthy_samples"],
+            seed=metadata["seed"],
+            seeding=metadata["seeding"],
+            **built,
+        )
+
     # --- execution --------------------------------------------------------------------
 
     def check_picklable(self) -> None:

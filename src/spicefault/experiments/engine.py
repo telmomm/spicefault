@@ -24,7 +24,8 @@ import numpy as np
 import pandas as pd
 
 from .. import __version__
-from ..dataset.store import assemble, write_manifest
+from ..dataset.manifest import Manifest, file_record
+from ..dataset.store import METADATA, assemble
 from ..simulation.ngspice import ngspice_version
 
 Worker = Callable[[Any, Any], "tuple[dict, np.ndarray | None]"]
@@ -68,6 +69,7 @@ def run_chunks(
     starts = range(0, len(tasks), chunk)
     stems = [parts_dir / f"part_{start:07d}" for start in starts]
     done, t0 = 0, time.time()
+    spent = elapsed_so_far(parts_dir)  # by the runs that were interrupted before this one
     with ProcessPoolExecutor(
         max_workers=workers, initializer=_init_worker, initargs=(worker, context)
     ) as pool:
@@ -92,7 +94,17 @@ def run_chunks(
             tmp = stem.with_suffix(".tmp")
             pd.DataFrame(rows).to_parquet(tmp, index=False)
             tmp.rename(stem.with_suffix(".parquet"))
+            (parts_dir / _ELAPSED).write_text(repr(spent + time.time() - t0))
     return stems
+
+
+_ELAPSED = "elapsed_s"
+
+
+def elapsed_so_far(parts_dir: str | Path) -> float:
+    """Seconds spent on the complete chunks of a campaign, over all its runs."""
+    file = Path(parts_dir) / _ELAPSED
+    return float(file.read_text()) if file.exists() else 0.0
 
 
 def run_campaign(
@@ -106,13 +118,15 @@ def run_campaign(
     chunk: int = 2000,
     progress: bool = True,
     summary: Callable[[pd.DataFrame], dict] | None = None,
+    files: dict[str, str] | None = None,
 ) -> Path:
     """Simulate every task and write the dataset to `out_dir`.
 
     `config` is whatever defines the campaign; it must be JSON-serialisable and is
-    copied into the manifest. If a previous run on the same folder and configuration
+    written to `metadata.json`. If a previous run on the same folder and configuration
     was interrupted, it resumes after the last complete chunk. `summary` adds
-    application counts, computed from the samples, to the manifest.
+    application counts, computed from the samples, to the manifest. `files` are text
+    files to keep with the dataset, by name, such as the source netlist.
     """
     out_dir = Path(out_dir)
     parts_dir = out_dir / "parts"
@@ -129,23 +143,28 @@ def run_campaign(
 
     t0 = time.time()
     stems = run_chunks(tasks, worker, context, parts_dir, n_points, workers, chunk, progress)
-    df, _ = assemble(stems, out_dir)
-    manifest = {
-        "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "spicefault_version": __version__,
-        "simulator": ngspice_version(),
-        "python": platform.python_version(),
-        "numpy": np.__version__,
-        "pandas": pd.__version__,
-        "platform": platform.platform(),
-        "n_samples": len(df),
-        "workers": workers,
-        "chunk": chunk,
-        "resumed": resumed,
-        "elapsed_last_run_s": round(time.time() - t0, 1),
-        **(summary(df) if summary is not None else {}),
-        "config": config,
-    }
-    write_manifest(out_dir, manifest)
+    df, waveforms = assemble(stems, out_dir)
+    (out_dir / METADATA).write_text(json.dumps(config, indent=2))
+    for name, text in (files or {}).items():
+        (out_dir / name).write_text(text)
+    written = ["samples.parquet", *(["waveforms.npy"] if waveforms is not None else [])]
+    manifest = Manifest(
+        created=datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        spicefault_version=__version__,
+        simulator=ngspice_version(),
+        python=platform.python_version(),
+        numpy=np.__version__,
+        pandas=pd.__version__,
+        platform=platform.platform(),
+        n_samples=len(df),
+        workers=workers,
+        chunk=chunk,
+        resumed=resumed,
+        elapsed_last_run_s=round(time.time() - t0, 1),
+        elapsed_total_s=round(elapsed_so_far(parts_dir), 1),
+        files={name: file_record(out_dir / name) for name in [*written, METADATA, *(files or {})]},
+        summary=summary(df) if summary is not None else {},
+    )
+    manifest.write(out_dir)  # last: its presence marks a complete dataset
     shutil.rmtree(parts_dir)
     return out_dir

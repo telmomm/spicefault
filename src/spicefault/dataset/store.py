@@ -3,7 +3,9 @@
 A dataset is a directory with:
 - samples.parquet  one row per simulation;
 - waveforms.npy    float32 [n_samples, n_points], row-aligned with the table (optional);
-- manifest.json    configuration, software versions and counts.
+- metadata.json    the definition of what was simulated: enough to regenerate it;
+- manifest.json    the record of the run: versions, counts, fingerprints of the files;
+- any other file the application adds, such as the source netlist.
 """
 
 from __future__ import annotations
@@ -14,7 +16,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-SAMPLES, WAVEFORMS, MANIFEST = "samples.parquet", "waveforms.npy", "manifest.json"
+from .manifest import MANIFEST
+
+SAMPLES, WAVEFORMS, METADATA = "samples.parquet", "waveforms.npy", "metadata.json"
 
 
 def assemble(stems: list[Path], out_dir: str | Path) -> tuple[pd.DataFrame, np.ndarray | None]:
@@ -29,8 +33,9 @@ def assemble(stems: list[Path], out_dir: str | Path) -> tuple[pd.DataFrame, np.n
     return df, waveforms
 
 
-def write_manifest(out_dir: str | Path, manifest: dict) -> None:
-    (Path(out_dir) / MANIFEST).write_text(json.dumps(manifest, indent=2))
+def load_metadata(path: str | Path) -> dict:
+    """The definition of the campaign that wrote the dataset."""
+    return json.loads((Path(path) / METADATA).read_text())
 
 
 def load_dataset(

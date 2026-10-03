@@ -15,6 +15,7 @@ from spicefault import (
     Simulator,
     Waveform,
 )
+from spicefault.dataset import load_metadata
 from spicefault.faults import OpenCircuit, ParametricFault, ShortCircuit
 from spicefault.variation import tolerances
 
@@ -49,11 +50,12 @@ def test_campaign_writes_every_sample_with_its_status(tmp_path):
 
     df, waveforms, manifest = c.load(drop_failed=False)
     assert len(df) == len(waveforms) == N and list(df["sample_id"]) == list(range(N))
-    assert list(df.columns[:11]) == [
-        "sample_id", "fault_index", "fault_id", "fault_type", "replica", "condition", "seed_key",
-        "status", "message", "sim_ok", "elapsed_s",
+    assert list(df.columns[:14]) == [
+        "sample_id", "fault_index", "fault_id", "fault_type", "fault_location",
+        "fault_magnitude", "fault_severity", "replica", "condition", "seed_key", "status",
+        "message", "sim_ok", "elapsed_s",
     ]
-    assert list(df.columns[11:]) == ["p_R1_value", "p_R2_value", "vout", "final_v(out)"]
+    assert list(df.columns[14:]) == ["p_R1_value", "p_R2_value", "vout", "final_v(out)"]
 
     # the open does not converge; some draws have R2 too large for the fake backend
     by_status = df.groupby("status")["fault_id"].agg(lambda s: sorted(set(s))).to_dict()
@@ -79,7 +81,8 @@ def test_campaign_writes_every_sample_with_its_status(tmp_path):
     n_ok = int(ok.sum())
     assert manifest["n_samples"] == N and manifest["n_completed"] == n_ok
     assert manifest["n_failed"] == N - n_ok and manifest["status_counts"]["CONVERGENCE_ERROR"] == 12
-    assert manifest["config"] == json.loads(json.dumps(c.experiment.metadata()))
+    assert load_metadata(c.out_dir) == json.loads(json.dumps(c.experiment.metadata()))
+    assert (c.out_dir / "circuit.cir").read_text() == CIRCUIT.to_netlist()
     assert manifest["workers"] == 2 and manifest["chunk"] == 20
     assert c.status() == {"total": N, "completed": n_ok, "failed": N - n_ok, "pending": 0}
     kept, kept_waveforms, _ = c.load()
@@ -159,7 +162,7 @@ def test_restart_and_finished_campaigns(tmp_path):
         other.run(chunk=10, progress=False)
     other.run(chunk=10, progress=False, resume=False)  # start again from nothing
     _, _, manifest = other.load()
-    assert manifest["resumed"] is False and manifest["config"]["seed"] == 4
+    assert manifest["resumed"] is False and load_metadata(other.out_dir)["seed"] == 4
 
     # a finished campaign is returned as it is, and never mixed with another one
     created = manifest["created"]
@@ -221,7 +224,7 @@ def test_campaign_from_an_experiment(tmp_path):
     c = FaultCampaign.from_experiment(experiment, tmp_path / "data")
     c.run(progress=False)
     df, waveforms, manifest = c.load(drop_failed=False)
-    assert len(df) == 6 and waveforms is None and manifest["config"]["waveform"] is None
+    assert len(df) == 6 and waveforms is None and load_metadata(c.out_dir)["waveform"] is None
 
 
 @pytest.mark.ngspice

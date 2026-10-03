@@ -115,3 +115,9 @@ class VariationSet:
 
     def metadata(self) -> list[dict]:
         return [v.metadata() for v in self.variations]
+
+    @classmethod
+    def from_metadata(cls, records: Sequence[dict]) -> VariationSet:
+        from .types import variation_from_metadata
+
+        return cls([variation_from_metadata(record) for record in records])

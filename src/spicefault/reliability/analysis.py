@@ -15,7 +15,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from ..dataset.store import load_dataset
+from ..dataset.store import load_dataset, load_metadata
 from .detection import Detector, LimitTest
 from .statistics import INTERVALS, auc, bootstrap_interval, robust_spread
 from .structure import ambiguity_groups, component_groups, confusable_components, pairwise_shift
@@ -151,8 +151,8 @@ class ReliabilityAnalysis:
         """Analysis of a dataset written by `FaultCampaign`. The features default to its
         measurements, and the fault records are taken from its manifest.
         """
-        samples, _, manifest = load_dataset(path, drop_failed=False)
-        config = manifest["config"]
+        samples, _, _ = load_dataset(path, drop_failed=False)
+        config = load_metadata(path)
         features = features or [m["name"] for m in config["measurements"]]
         return cls(samples, features, faults=config["faults"], **kwargs)
 

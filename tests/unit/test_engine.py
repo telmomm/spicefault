@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 from engine_workers import draw, scalar_only
 
-from spicefault.dataset import load_dataset
+from spicefault.dataset import Manifest, load_dataset, load_metadata
 from spicefault.experiments import run_campaign, run_chunks
 
 TASKS = [(index, replica) for index in range(5) for replica in range(20)]
@@ -53,13 +53,19 @@ def test_campaign_writes_a_dataset_with_its_provenance(tmp_path):
     out = run_campaign(
         TASKS, draw, CONFIG, tmp_path / "data", config=CONFIG, n_points=8, workers=2, chunk=30,
         progress=False, summary=lambda df: {"n_failed": int((~df["sim_ok"]).sum())},
+        files={"notes.txt": "kept with the dataset"},
     )
     assert sorted(p.name for p in out.iterdir()) == [
-        "manifest.json", "samples.parquet", "waveforms.npy"
+        "manifest.json", "metadata.json", "notes.txt", "samples.parquet", "waveforms.npy",
     ]
     df, waveforms, manifest = load_dataset(out, drop_failed=False)
     assert len(df) == len(waveforms) == manifest["n_samples"] == len(TASKS)
-    assert manifest["n_failed"] == 10 and manifest["config"] == CONFIG
+    assert manifest["n_failed"] == 10 and load_metadata(out) == CONFIG
+    assert manifest["schema_version"] == 1 and manifest["elapsed_total_s"] >= 0
+    assert sorted(manifest["files"]) == [
+        "metadata.json", "notes.txt", "samples.parquet", "waveforms.npy",
+    ]
+    assert Manifest.read(out).verify(out) == []
     assert manifest["workers"] == 2 and manifest["chunk"] == 30 and manifest["resumed"] is False
     assert {"spicefault_version", "simulator", "python", "numpy", "platform"} <= set(manifest)
     kept, kept_waveforms, _ = load_dataset(out)

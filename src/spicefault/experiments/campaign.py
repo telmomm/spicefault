@@ -13,7 +13,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from ..dataset.store import MANIFEST, SAMPLES, load_dataset
+from ..dataset.manifest import MANIFEST
+from ..dataset.store import SAMPLES, load_dataset, load_metadata
 from ..simulation import SimulationStatus
 from .engine import run_campaign
 from .experiment import HEALTHY_ID, Experiment, Sample
@@ -21,9 +22,11 @@ from .seeding import sample_stream
 
 # columns that describe a sample, before its labels, parameters and measurements
 DEFINITION_COLUMNS = [
-    "sample_id", "fault_index", "fault_id", "fault_type", "replica", "condition", "seed_key",
-    "status", "message", "sim_ok", "elapsed_s",
+    "sample_id", "fault_index", "fault_id", "fault_type", "fault_location", "fault_magnitude",
+    "fault_severity", "replica", "condition", "seed_key", "status", "message", "sim_ok",
+    "elapsed_s",
 ]  # fmt: skip
+CIRCUIT_FILE = "circuit.cir"
 
 
 def simulate_sample(sample: Sample, experiment: Experiment) -> tuple[dict, np.ndarray | None]:
@@ -34,10 +37,15 @@ def simulate_sample(sample: Sample, experiment: Experiment) -> tuple[dict, np.nd
     the row with its status. `elapsed_s` is the only column that is not reproducible.
     """
     fault = experiment.fault(sample)
+    magnitude = None if fault is None else fault.magnitude
+    severity = None if fault is None or fault.severity is None else fault.severity.value
     row: dict = {
         "fault_index": sample.fault_index,
         "fault_id": fault.fault_id if fault else HEALTHY_ID,
         "fault_type": fault.fault_type if fault else HEALTHY_ID,
+        "fault_location": "+".join(fault.components) if fault else "",
+        "fault_magnitude": math.nan if magnitude is None else magnitude,
+        "fault_severity": math.nan if severity is None else severity,
         "replica": sample.replica,
         "condition": experiment.conditions[sample.condition_index].name,
         "seed_key": "/".join(map(str, experiment.seed_key(sample))),
@@ -189,7 +197,7 @@ class FaultCampaign:
         """
         e = self.experiment
         if (self.out_dir / MANIFEST).exists():
-            if json.loads((self.out_dir / MANIFEST).read_text())["config"] != e.metadata():
+            if load_metadata(self.out_dir) != json.loads(json.dumps(e.metadata())):
                 raise FileExistsError(
                     f"{self.out_dir} holds the dataset of another campaign; choose another folder"
                 )
@@ -211,8 +219,29 @@ class FaultCampaign:
             workers=workers,
             chunk=chunk,
             progress=progress,
-            summary=_counts,
+            summary=self._summary,
+            files={CIRCUIT_FILE: e.circuit.to_netlist()},
         )
+
+    def _summary(self, df: pd.DataFrame) -> dict:
+        """Counts for the manifest, and the role of each column of the table."""
+        e = self.experiment
+        status = df["status"].value_counts().to_dict()
+        targets = [t for v in e.variations for t in v.targets()]
+        measurements = [m.name for m in e.measurements]
+        parameters = {f"p_{c}_{p}": [c, p] for c, p in targets}
+        known = {*DEFINITION_COLUMNS, *parameters, *measurements}
+        return {
+            "n_completed": int(df["sim_ok"].sum()),
+            "n_failed": int((~df["sim_ok"]).sum()),
+            "status_counts": {k: int(v) for k, v in sorted(status.items())},
+            "columns": {
+                "definition": DEFINITION_COLUMNS,
+                "labels": [c for c in df.columns if c not in known],
+                "parameters": parameters,
+                "measurements": measurements,
+            },
+        }
 
     # --- after, or while, running -------------------------------------------------------
 
@@ -252,15 +281,13 @@ class FaultCampaign:
         failed = ~rows["sim_ok"].astype(bool)
         return rows.loc[failed, DEFINITION_COLUMNS[:-2]].reset_index(drop=True)
 
+    def dataset(self):
+        """The finished campaign as a `Dataset`."""
+        from ..dataset import Dataset
+
+        return Dataset(self.out_dir)
+
     def load(self, drop_failed: bool = True):
         """(samples, waveforms, manifest) of the finished campaign."""
         return load_dataset(self.out_dir, drop_failed)
 
-
-def _counts(df: pd.DataFrame) -> dict:
-    status = df["status"].value_counts().to_dict()
-    return {
-        "n_completed": int(df["sim_ok"].sum()),
-        "n_failed": int((~df["sim_ok"]).sum()),
-        "status_counts": {k: int(v) for k, v in sorted(status.items())},
-    }
