@@ -28,7 +28,7 @@ jobs:
         run: |
           version=$(python -c "import re, pathlib; print(re.search(r'__version__ = \"(.+?)\"', pathlib.Path('src/spicefault/__init__.py').read_text())[1])")
           test "v$version" = "${{ github.event.release.tag_name }}"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist/
