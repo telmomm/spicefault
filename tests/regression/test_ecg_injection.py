@@ -53,9 +53,15 @@ def test_fault_records_are_complete_and_reversible(cfg):
         record = json.loads(json.dumps(fault.metadata()))
         assert spicefault.Fault.from_metadata(record) == fault
         assert record["tags"]["origin"] in ("circuit", "electrode")
+        assert type(spicefault.Fault.from_metadata(record)) is type(fault)
     # one cause acting on two components: both electrodes drying
     both = next(f for f in faults if f.fault_id.startswith("la+ra:"))
     assert both.components == ("Rd_la", "Cd_la", "Rd_ra", "Cd_ra")
+    # reported under the names of the ECG study, built from the generic types
+    classes = {f.fault_type: f.metadata()["class"] for f in faults}
+    assert classes["open"] == "open_circuit" and classes["short"] == "short_circuit"
+    assert classes["cap_degradation"] == classes["electrode_high_z"] == "composite"
+    assert classes["opamp_aol"] == classes["electrode_off"] == "parametric"
 
 
 def test_bench_is_an_operating_condition_applied_after_the_fault(cfg):

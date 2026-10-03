@@ -1,6 +1,6 @@
 # Fault model
 
-Phase 0 deliverable 2 of 4. Status: draft for review.
+Phase 0 deliverable 2 of 4. Status: implemented in `spicefault.faults` (Phase 3), except where a section says otherwise. The open decisions at the end still stand.
 
 This document defines what a fault is in `spicefault`, which fault types the first release contains, how each one changes the netlist, and what is recorded about it. Notation follows [SCIENTIFIC_SCOPE.md](SCIENTIFIC_SCOPE.md) §2.
 
@@ -46,7 +46,7 @@ Notes on each type.
 
 **Leakage and short are the same primitive at different magnitudes.** They are kept as two types because the physical interpretation and the usual severity axis differ: a short is a hard fault at a fixed low resistance, leakage is graded over decades.
 
-**DriftFault is a ParametricFault with a provenance.** Its only addition is that the deviation is computed from a law, such as $x(t) = x_0 (1 + a\,t^{b})$, whose form, coefficients and source are recorded. It should be implemented only when at least one law with a citable source is available for the case study; otherwise it adds a name without physical content. See open decision 1.
+**DriftFault is a ParametricFault with a provenance.** It is not implemented (open decision 1). Its only addition is that the deviation is computed from a law, such as $x(t) = x_0 (1 + a\,t^{b})$, whose form, coefficients and source are recorded. It should be implemented only when at least one law with a citable source is available for the case study; otherwise it adds a name without physical content. See open decision 1.
 
 **CompositeFault is not a multiple fault.** It represents one defect with several electrical consequences. The ECG example is electrolytic capacitor degradation, which lowers capacitance and raises series resistance together. Several independent defects at once (`MultipleFault`) remain out of scope.
 
@@ -59,9 +59,9 @@ A parametric deviation is a fault only relative to a declared tolerance. Let $t$
 - A relative fault of size $δ$ applied to a realised value gives a total deviation from nominal between $(1-t)(1+δ) - 1$ and $(1+t)(1+δ) - 1$.
 - If that interval overlaps $\pm t$, some faulty samples are healthy by definition and no method can detect them.
 
-This already happens in the ECG catalogue: capacitors have a 5 % tolerance and the smallest parametric fault is ±5 %, so for `δ = +0.05` the total deviation ranges from about −0.25 % to +10.25 %, and part of that population lies inside the healthy band. This is deliberate there, because small deviations are what separates percentage severity from functional severity, but it must be visible.
+This already happens in the ECG catalogue: capacitors have a 5 % tolerance and the smallest parametric faults are ±5 % and ±10 %. For `δ = +0.05` the total deviation ranges from −0.25 % to +10.25 %. With the uniform tolerance of that study, half of the ±5 % capacitor faults and 1 in 22 of the +10 % ones lie inside the healthy band; the −10 % ones never do, and neither does any resistor fault (1 % tolerance). This is deliberate there, because small deviations are what separates percentage severity from functional severity, but it must be visible.
 
-Rule for the framework: catalogue validation computes this overlap for every parametric fault condition and reports it. It does not reject the condition.
+Rule for the framework: catalogue validation computes this overlap for every parametric fault condition and reports it. It does not reject the condition. This is `FaultSet.tolerance_overlap`, which gives the deviation interval and the fraction of the fault population inside the band, for uniform and truncated-normal tolerances.
 
 ## 5. Magnitude and severity
 
@@ -94,12 +94,12 @@ Phase 1 must reproduce the ECG results unchanged, so every `ecgfd` fault kind ne
 | `cap_degradation` | `CompositeFault` | `scale(1 − loss)` and `insert_series(ESR)` | Two fixed pairs (loss, ESR) |
 | `opamp_vos`, `ina_vos` | `ParametricFault` | `absolute(v)` | Overwrites the drawn offset; only positive values are injected |
 | `opamp_aol` | `ParametricFault` | `scale(k)` | Compounds with the draw |
-| `ina_cmrr` | `ParametricFault` | `absolute(dB)` | The netlist parameter is derived (sign × 10^(dB/20)); the conversion belongs to the circuit description |
+| `ina_cmrr` | `ParametricFault` | `absolute(ratio)` | The netlist parameter is a signed ratio, sign × 10^(dB/20), and the sign is part of the Monte Carlo draw. The value to inject therefore depends on the drawn circuit, which a fault record written in advance cannot express. The adapter builds this fault per sample. A clean solution is to give the subcircuit separate magnitude and sign parameters, which changes the netlist text but not the results |
 | `ina_gain` | `ParametricFault` | `absolute(error)` | |
 | `electrode_off` | `ParametricFault` labelled as an open | `absolute(1 GΩ)` on the electrode series resistance | Replaces the value instead of inserting a resistance. Using `insert_series` would give a slightly different resistance (by less than 1 part in 10⁶) and break exact equivalence |
 | `electrode_high_z` | `CompositeFault` | `scale(k)` on Rd and `divide(k)` on Cd, on one or two electrodes | The condition `la+ra` affects two components with one cause |
 
-This mapping is implemented in `tests/regression/ecg_adapter.py` and checked on every fault condition of both circuits: the netlists are identical, character by character, to those of `ecgfd`.
+This mapping is implemented in `tests/regression/ecg_adapter.py` with the fault types of §3, and checked on every fault condition of both circuits: the netlists are identical, character by character, to those of `ecgfd`. The same file states the catalogue as applicability rules; the universe they generate (§8) is the catalogue of `ecgfd`, 293 and 307 conditions.
 
 Three requirements follow:
 
@@ -111,24 +111,38 @@ Three requirements follow:
 
 Every fault condition has a stable identifier, built from its content and independent of its position in a list. Proposed form: `<location>:<type>[:<magnitude>]`, for example `R17:open`, `R11:parametric:+0.2`, as in the ECG code.
 
-`fault.metadata()` returns a JSON-serialisable record:
+`fault.metadata()` returns a JSON-serialisable record. `class` is the type of §3 that built the fault and `fault_type` the type it is reported as; they differ when an application uses its own names. Severity is recorded with its scale and the parameters of the scale.
 
 ```json
 {
   "schema_version": 1,
   "fault_id": "R11:parametric:+0.2",
+  "class": "parametric",
   "fault_type": "parametric",
-  "components": ["R11"],
-  "primitives": [
-    {"op": "set_parameter", "component": "R11", "parameter": "value",
-     "rule": "relative", "value": 0.2}
+  "components": [
+    "R11"
   ],
-  "magnitude": {"value": 0.2, "unit": "relative"},
-  "severity": 0.2,
-  "severity_scale": "abs_relative_deviation",
+  "primitives": [
+    {
+      "op": "set_parameter",
+      "component": "R11",
+      "parameter": "value",
+      "rule": "relative",
+      "value": 0.2
+    }
+  ],
+  "magnitude": {
+    "value": 0.2,
+    "unit": "relative deviation"
+  },
+  "severity": {
+    "value": 0.2,
+    "scale": "abs_relative_deviation",
+    "parameters": {}
+  },
   "model_parameters": {},
   "nominal_state": "within tolerance",
-  "fault_state": "value +20 % from realised",
+  "fault_state": "+0.2 relative to realised",
   "tags": {}
 }
 ```
@@ -139,7 +153,7 @@ Requirements: a fault reconstructed from its record is equal to the original; th
 
 For a circuit, the **fault universe** is generated from applicability rules: for each component kind, which fault types apply, at which terminals, and at which magnitudes. A campaign then selects a subset. Every excluded pair carries a reason, for example "not applicable", "no model", "excluded by user", "equivalent to another condition".
 
-The coverage matrix (components × fault types) and the structural coverage figure are derived from this record; see RELIABILITY_METRICS.md, M10. Integrated circuits modelled behaviourally are covered through their model parameters, and the matrix must say so, since a behavioural model exposes only the failure modes its parameters can express.
+The coverage matrix (components × fault types) and the structural coverage figure are derived from this record; see RELIABILITY_METRICS.md, M10. This is `FaultUniverse`: rules generate the faults, `exclude` leaves some out with a reason, and `coverage_matrix`, `exclusions` and `metadata` give the record. Components that no rule applies to are listed, so that what lies outside the fault model is explicit. Integrated circuits modelled behaviourally are covered through their model parameters, and the matrix must say so, since a behavioural model exposes only the failure modes its parameters can express.
 
 ## 9. Assumptions and limitations
 
