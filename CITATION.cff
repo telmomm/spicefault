@@ -3,7 +3,8 @@ message: "If you use this software, please cite it as below."
 title: "spicefault: reproducible SPICE-based fault injection and reliability assessment of electronic circuits"
 type: software
 authors:
-  - name: "telmomm"
+  - family-names: "Miguel-Medina"
+    given-names: "Telmo"
 repository-code: "https://github.com/telmomm/spicefault"
 url: "https://spicefault.readthedocs.io"
 license: MIT

@@ -9,7 +9,7 @@ description = "Reproducible SPICE-based fault injection and reliability assessme
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-authors = [{ name = "telmomm" }]
+authors = [{ name = "Telmo Miguel-Medina" }]
 keywords = [
     "SPICE", "ngspice", "fault injection", "reliability", "analog circuits",
     "Monte Carlo", "fault diagnosis", "testability",
