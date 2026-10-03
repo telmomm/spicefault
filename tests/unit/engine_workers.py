@@ -17,3 +17,7 @@ def draw(task, context):
 
 def scalar_only(task, context):
     return {"x": float(task) * context}, None
+
+
+def fails(task, context):
+    return {"x": 1 / task}, None

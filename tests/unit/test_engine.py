@@ -3,7 +3,7 @@ import json
 import numpy as np
 import pandas as pd
 import pytest
-from engine_workers import draw, scalar_only
+from engine_workers import draw, fails, scalar_only
 
 from spicefault.dataset import Manifest, load_dataset, load_metadata
 from spicefault.experiments import run_campaign, run_chunks
@@ -89,3 +89,33 @@ def test_campaign_without_waveforms(tmp_path):
     out = run_campaign([1, 2, 3], scalar_only, 2.0, tmp_path / "data", config={}, progress=False)
     df, waveforms, _ = load_dataset(out)
     assert waveforms is None and list(df["x"]) == [2.0, 4.0, 6.0]
+
+
+def test_a_campaign_folder_is_run_by_one_process_at_a_time(tmp_path):
+    """A second launch on a folder whose campaign is running would corrupt both runs."""
+    import os
+    import subprocess
+    import sys
+
+    out = tmp_path / "data"
+    kwargs = {"config": CONFIG, "n_points": 8, "chunk": 30, "progress": False}
+    (out / "parts").mkdir(parents=True)
+    lock = out / "parts" / "running.pid"
+
+    lock.write_text(str(os.getppid()))  # a process that exists and is not this one
+    with pytest.raises(RuntimeError, match=f"already being run by process {os.getppid()}"):
+        run_campaign(TASKS, draw, CONFIG, out, **kwargs)
+    assert lock.read_text() == str(os.getppid()) and not (out / "manifest.json").exists()
+
+    finished = subprocess.Popen([sys.executable, "-c", "pass"])
+    finished.wait()
+    lock.write_text(str(finished.pid))  # a lock left behind by a process that is gone
+    run_campaign(TASKS, draw, CONFIG, out, **kwargs)
+    assert (out / "manifest.json").exists() and not (out / "parts").exists()
+
+    # an error during the run releases the folder
+    broken = tmp_path / "broken"
+    with pytest.raises(ZeroDivisionError):
+        run_campaign([1, 0], fails, None, broken, config={}, progress=False)
+    assert not (broken / "parts" / "running.pid").exists()
+    run_campaign([1, 2], fails, None, broken, config={}, progress=False)  # and it can be run again

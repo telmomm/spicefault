@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import platform
 import shutil
 import time
@@ -107,6 +108,44 @@ def elapsed_so_far(parts_dir: str | Path) -> float:
     return float(file.read_text()) if file.exists() else 0.0
 
 
+_LOCK = "running.pid"
+
+
+def _take_lock(parts_dir: Path) -> Path:
+    """Mark the campaign of this folder as running, or refuse if another process has it.
+
+    Two processes on one folder would simulate the same chunks, and the first to
+    finish would remove the chunk folder under the other. A lock left by a process
+    that no longer exists (a crash, a reboot) is taken over.
+    """
+    lock = parts_dir / _LOCK
+    try:
+        with lock.open("x") as stream:
+            stream.write(str(os.getpid()))
+        return lock
+    except FileExistsError:
+        pass
+    text = lock.read_text().strip()
+    owner = int(text) if text.isdigit() else None
+    if owner is not None and owner != os.getpid() and _is_running(owner):
+        raise RuntimeError(
+            f"the campaign in {parts_dir.parent} is already being run by process {owner}; "
+            "wait for it to finish, or stop it, before launching it again"
+        )
+    lock.write_text(str(os.getpid()))
+    return lock
+
+
+def _is_running(pid: int) -> bool:
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:  # it exists and belongs to someone else
+        return True
+    return True
+
+
 def run_campaign(
     tasks: Sequence[Any],
     worker: Worker,
@@ -142,7 +181,11 @@ def run_campaign(
     key_file.write_text(key)
 
     t0 = time.time()
-    stems = run_chunks(tasks, worker, context, parts_dir, n_points, workers, chunk, progress)
+    lock = _take_lock(parts_dir)
+    try:
+        stems = run_chunks(tasks, worker, context, parts_dir, n_points, workers, chunk, progress)
+    finally:
+        lock.unlink(missing_ok=True)
     df, waveforms = assemble(stems, out_dir)
     (out_dir / METADATA).write_text(json.dumps(config, indent=2))
     for name, text in (files or {}).items():
