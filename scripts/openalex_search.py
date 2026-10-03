@@ -28,7 +28,9 @@ OUT = Path(__file__).resolve().parents[1] / "docs" / "literature"
 MAILTO = os.environ.get("OPENALEX_MAILTO", "")
 MAX_PER_QUERY = 200
 PER_PAGE = 200
-FIELDS = "id,doi,title,publication_year,type,primary_location,cited_by_count,abstract_inverted_index"
+FIELDS = (
+    "id,doi,title,publication_year,type,primary_location,cited_by_count,abstract_inverted_index"
+)
 
 # Query strings must not contain commas: OpenAlex separates filters with them.
 QUERIES = {

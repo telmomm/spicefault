@@ -1,0 +1,24 @@
+Discrete series voltage regulator
+* A series pass transistor, a one-transistor error amplifier and a zener reference.
+* Nominal: 15 V in, about 10 V out, 100 ohm load.
+* The device models are generic small-signal parameter sets, without a cited source:
+* they must be replaced by vendor models before any result is published.
+.model QPASS NPN(Is=14.34f Xti=3 Eg=1.11 Vaf=74.03 Bf=255.9 Ne=1.307 Ise=14.34f Ikf=.2847
++ Xtb=1.5 Br=6.092 Nc=2 Isc=0 Ikr=0 Rc=1 Cjc=7.306p Mjc=.3416 Vjc=.75 Fc=.5 Cje=22.01p
++ Mje=.377 Vje=.75 Tr=46.91n Tf=411.1p Itf=.6 Vtf=1.7 Xtf=3 Rb=10)
+.model QERR NPN(Is=6.734f Xti=3 Eg=1.11 Vaf=74.03 Bf=416.4 Ne=1.259 Ise=6.734f Ikf=66.78m
++ Xtb=1.5 Br=.7371 Nc=2 Isc=0 Ikr=0 Rc=1 Cjc=3.638p Mjc=.3085 Vjc=.75 Fc=.5 Cje=4.493p
++ Mje=.2593 Vje=.75 Tr=239.5n Tf=301.2p Itf=.4 Vtf=4 Xtf=2 Rb=10)
+.model DREF D(Is=1e-14 N=1 Rs=5 Bv=4.7 Ibv=5m Tbv1=-5e-4)
+Vin in 0 dc 15 ac 1
+Iout out 0 dc 0 ac 0
+R1 in nb 1k tc1=1e-4
+R2 out nz 1k tc1=1e-4
+R3 out nd 1k tc1=1e-4
+R4 nd 0 1.2k tc1=1e-4
+C1 out 0 10u
+RL out 0 100
+Q1 in nb out QPASS
+Q2 nb nd nz QERR
+D1 0 nz DREF
+.end

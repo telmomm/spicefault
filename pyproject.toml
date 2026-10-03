@@ -35,5 +35,9 @@ src = ["src", "tests", "."]
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
 
+[tool.ruff.lint.per-file-ignores]
+# the search strings are kept on one line each, as they are sent
+"scripts/openalex_search.py" = ["E501"]
+
 [tool.ruff.lint.isort]
-known-first-party = ["spicefault", "ecg_adapter", "benchmarks"]
+known-first-party = ["spicefault", "ecg_adapter", "benchmarks", "validation"]

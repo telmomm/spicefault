@@ -1,0 +1,15 @@
+* Behavioural operational amplifier: one pole, finite gain, output resistance and
+* output swing.
+* aol: open-loop DC gain; gbw: gain-bandwidth product [Hz]; rout: output resistance
+* [ohm]; vsat: the output saturates at +-vsat [V].
+* Without the limit, a fault that makes a filter unstable would give a response that
+* grows without bound; a real amplifier stops at its supply rails.
+* No slew-rate limit and no offset.
+.subckt opamp inp inn out aol=2e5 gbw=1e7 rout=50 vsat=12
+Gm 0 n1 inp inn 1m
+Rp n1 0 {aol*1k}
+Cp n1 0 {1m/(6.283185307*gbw)}
+Bsat n1 0 I = v(n1) > {vsat} ? v(n1)-{vsat} : (v(n1) < -{vsat} ? v(n1)+{vsat} : 0)
+Eo n2 0 n1 0 1
+Ro n2 out {rout}
+.ends opamp
