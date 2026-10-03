@@ -1,0 +1,422 @@
+[
+ {
+  "id": "W2781052146",
+  "doi": "https://doi.org/10.1007/978-981-10-7470-7_19",
+  "year": 2017,
+  "type": "conference-paper",
+  "venue": "Communications in computer and information science",
+  "cited_by": 3,
+  "title": "SFG Based Fault Simulation of Linear Analog Circuits Using Fault Classification and Sensitivity Analysis",
+  "abstract": ""
+ },
+ {
+  "id": "W1972853246",
+  "doi": "https://doi.org/10.4028/www.scientific.net/amm.444-445.1158",
+  "year": 2013,
+  "type": "article",
+  "venue": "Applied Mechanics and Materials",
+  "cited_by": 0,
+  "title": "Research on Test Points Selection Using Complex Field Fault Modeling in Analog Circuit",
+  "abstract": "In this paper, a new test nodes selection technique based on the complex field fault modeling of analog circuits testability is presented. The function F () by the complex field fault modeling can be used as the fault model, which is applicable to both hard (open or short) and soft (parametric) faults. Therefore, we can obtain the signature curves of the potential fault components by PSPICE and MATLAB. For the testability of fault model, fault-test dependency matrix can be concluded. With the integer-coded fault-wise table method and heuristic graph search algorithm, we can obtain a global minimum node set. The number of potential faults with complex field fault modeling is half compared with the traditional methods and the time complexity of the circuit can be reduced significantly."
+ },
+ {
+  "id": "W4244818419",
+  "doi": "https://doi.org/10.4028/www.scientific.net/amm.0.1158",
+  "year": 2013,
+  "type": "article",
+  "venue": "Applied Mechanics and Materials",
+  "cited_by": 0,
+  "title": "Research on Test Points Selection Using Complex Field Fault Modeling in Analog Circuit",
+  "abstract": "In this paper, a new test nodes selection technique based on the complex field fault modeling of analog circuits testability is presented. The function F () by the complex field fault modeling can be used as the fault model, which is applicable to both hard (open or short) and soft (parametric) faults. Therefore, we can obtain the signature curves of the potential fault components by PSPICE and MATLAB. For the testability of fault model, fault-test dependency matrix can be concluded. With the integer-coded fault-wise table method and heuristic graph search algorithm, we can obtain a global minimum node set. The number of potential faults with complex field fault modeling is half compared with the traditional methods and the time complexity of the circuit can be reduced significantly."
+ },
+ {
+  "id": "W2029516759",
+  "doi": "https://doi.org/10.1007/s10470-014-0431-9",
+  "year": 2014,
+  "type": "article",
+  "venue": "Analog Integrated Circuits and Signal Processing",
+  "cited_by": 7,
+  "title": "High level fault modeling of analog circuits through automated model generation using Chebyshev and Newton interpolating polynomials",
+  "abstract": ""
+ },
+ {
+  "id": "W2029060048",
+  "doi": "https://doi.org/10.1109/icias.2012.6306132",
+  "year": 2012,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 12,
+  "title": "High level fault modeling and fault propagation in analog circuits using NLARX automated model generation technique",
+  "abstract": "It is known that fault modeling and fault propagation in analog circuits are extremely important and more challenging than in digital circuits. Several automated model generation (AMG) techniques are developed to model the nonlinear behavior of faulty analog circuits. However, most of the modeling techniques are performed under the MATLAB environment which is impractical and the models cannot be utilized in electronic circuits. To perform high level fault modeling (HLFM) and fault propagation (FP) on system level, the models need to be translated into hardware description language (HDL) models such as VHDL-AMS or Verilog-AMS models. In this paper, several faults are modeled for transistor level analog circuits using nonlinear autoregressive exogenous (NLARX) AMG technique in MATLAB. The resulting MATLAB models are translated into VHDL-AMS behavioral models. HLFM and FP are successfully implemented for benchmark analog circuits: inverting amplifier and biquadratic low-pass filter circuits."
+ },
+ {
+  "id": "W7201864094",
+  "doi": "https://doi.org/10.1007/978-3-032-34867-8_1",
+  "year": 2026,
+  "type": "conference-paper",
+  "venue": "Lecture notes in computer science",
+  "cited_by": 0,
+  "title": "OpenFI4ASIC: An Open-Source Fault Injection Framework for ASIC Designs via FPGA-Based Rapid Prototyping",
+  "abstract": ""
+ },
+ {
+  "id": "W783188090",
+  "doi": "https://doi.org/10.5815/ijisa.2015.07.02",
+  "year": 2015,
+  "type": "article",
+  "venue": "International Journal of Intelligent Systems and Applications",
+  "cited_by": 11,
+  "title": "Fault Diagnosis of Mixed-Signal Analog Circuit using Artificial Neural Networks",
+  "abstract": "This paper presents parametric fault diagnosis in mixed-signal analog circuit using artificial neural networks.Single parametric faults are considered in this study.A benchmark R2R digital to analog converter circuit has been used as an example circuit for experimental validations.The input test pattern required for testing are reduced to optimum value using sensitivity analysis of the circuit under test.The effect of component tolerances has also been taken care of by performing the Monte-Carlo analysis.In this study parametric fault models are defined for the R2R network of the digital to analog converter.The input test patterns are applied to the circuit under test and the output responses are measured for each fault model covering all the Monte-Carlo runs.The classification of the parametric faults is done using artificial neural networks.The fault diagnosis system is developed in LabVIEW environment in the form of a virtual instrument.The artificial neural network is designed using MATLAB and finally embedded in the virtual instrument.The fault diagnosis is validated with simulated data and with the actual data acquired from the circuit hardware."
+ },
+ {
+  "id": "W2375546889",
+  "doi": "",
+  "year": 2012,
+  "type": "article",
+  "venue": "Electronic Design Engineering",
+  "cited_by": 0,
+  "title": "Automatic acquisition technology for collecting fault samples of analog circuits based on SLPS",
+  "abstract": "The most basic step to diagnose fault of analog circuits is to acquire sample data.In order to achieve multiple fault-injection and obtain an adequate sum of sample statistics in short time,this paper elaborates on automatic fault-acquisition technology of analog circuits,which is on a basis of SLPS.Combined PSpice and Matlab through SLPS and programmed by Matlab,automatic fault-acquisition technology of analog circuits turn into reality.Practical test application proves that this method is of effective performance and high-degree automation."
+ },
+ {
+  "id": "W4387908411",
+  "doi": "https://doi.org/10.1007/s10836-023-06088-1",
+  "year": 2023,
+  "type": "article",
+  "venue": "Journal of Electronic Testing",
+  "cited_by": 3,
+  "title": "MATLAB-Open Source Tool Based Framework for Test Generation for Digital Circuits Using Evolutionary Algorithms",
+  "abstract": ""
+ },
+ {
+  "id": "W2360603754",
+  "doi": "",
+  "year": 2012,
+  "type": "article",
+  "venue": "Electronic Science and Technology",
+  "cited_by": 0,
+  "title": "Method for Catastrophic Faults Location in Analog Circuits Based on Wavelet Transform and Mahalanobis Distance",
+  "abstract": "To solve the catastrophic fault of analog circuits,this paper proposes a fast location method based on Mahalanobis distance.Firstly,a simulation of circuit and fault modeling is made in PSPICE for the Continuous-Time Sate-Variable Filter in the ITC'97 Analog and Mixed-Signal Benchmark Circuits.Secondly,simulation data of both fault-free and faulty circuit is imported into Matlab using PSPICE and Matlab software data interface technology.Then,wavelet transform and Mahalanobis distance calculation of the simulation data is done in Matlab.Finally,the faulty component would be detected based on the Mahalanobis distances of both fault-free and faulty circuits.Tests show that this method with quick positioning ability has the advantage of simplicity and small online computational amount."
+ },
+ {
+  "id": "W4413320446",
+  "doi": "https://doi.org/10.1109/iolts65288.2025.11116854",
+  "year": 2025,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 1,
+  "title": "Leveraging Open-Source Bitstream Documentation for FPGA Soft-Error Robustness Analysis",
+  "abstract": "While the vulnerability of SRAM-based FPGAs against soft errors affecting their configuration is a well-known issue, robustness analysis techniques and fault mitigation approaches for these devices predominantly focus on Xilinx/ AMD devices, making use of vendor-supplied analysis tools and fault injection infrastructure. This work presents a robustness analysis approach centered on entirely open-source FPGA synthesis, implementation, analysis, and configuration tools, as well as open-source device documentation. It demonstrates this approach - based on bitstream-level fault modeling and empirical intercon-nect fault characterization - on Lattice Semiconductor's low-power, low-cost, mid-size ECP5 FPGA technology. The proposed approach is evaluated on a NEORV32 RISC-V CPU design, showing that the predictions made by the approach reduce fault injection workload by up to 90%. Furthermore, the approach facilitates detailed fault analysis, both on the configuration level (by configuration bit - or fault - category) and on the structural level (by affected netlist module). To the best of our knowledge, the presented approach is the first comprehensive soft-error robustness analysis approach for a modern non-AMD SRAM-based FPGA technology,"
+ },
+ {
+  "id": "W4407246985",
+  "doi": "https://doi.org/10.1109/access.2025.3539932",
+  "year": 2025,
+  "type": "article",
+  "venue": "IEEE Access",
+  "cited_by": 4,
+  "title": "RADSAFiE: A Netlist-Level Fault Injection User Interface Application for FPGA-Based Digital Systems",
+  "abstract": "Field Programmable Gate Arrays are extensively utilized across numerous domains, including telecommunications, cryptography, Machine Learning, and safety-critical applications. In critical applications, FPGAs are often exposed to environmental challenges, such as Single Event Upsets, which can affect the reliability of the design. Therefore, assessing the robustness of FPGA-based systems becomes crucial to ensure their correct functionality under normal operation and mitigate potential risks. This can be done by developing a fault injection environment to simulate the effect of Single Event Effects over the specified Device Under Test. Firstly, this paper briefly reviews other related works, highlighting the differences between the various approaches. Then, our novel netlist-level fault injection tool called RADSAFiE is introduced. The tool is characterized by a Python-based User Interface that allows users to modify an input netlist by inserting fault injection logic primitives. The user can select between two interfaces: a Graphical User Interface or a Command Line Interface, both taking an HDL netlist as input. We discuss the supported fault types and highlight the compatibility with different FPGA vendors. We also conduct code profiling on the application and analyze, for specific operations, both execution time and memory usage. Specifically, we focus on a use case that features the Soft Graphic Processing Unit IP provided by IngeniArs S.r.l., namely GPU@SAT. We present performance results across netlists of different sizes and offer a concise overview of the simulation environment. Finally, in the last section of the paper, we hint at possible future development and conclude the work."
+ },
+ {
+  "id": "W4417131574",
+  "doi": "https://doi.org/10.1109/access.2025.3641762",
+  "year": 2025,
+  "type": "article",
+  "venue": "IEEE Access",
+  "cited_by": 1,
+  "title": "SHADOWFI: An Open-Source Framework for Fault Evaluation of Complex IC Designs Using Hyperscale Computing",
+  "abstract": "Cutting-edge integrated circuits (ICs) are increasingly vulnerable to hardware faults, which can jeopardize the overall reliability of the system. Hence, it is crucial to evaluate the impact of faults to identify hardware vulnerabilities that later designers can use to devise fault mitigation solutions during the circuit design stages. Fault injection (FI) through in-circuit emulation tackles the inherent complexity of fault evaluations by adopting FPGA emulation strategies. Although various works report frameworks using this FI approach, most of them are technology-dependent and hardly scalable when dealing with the increasing complexity of modern IC architectures. In addition, none of these frameworks is disclosed, which limits the adoption of fault emulation strategies due to the inherent complexity and the required time to set up a functional FI environment. This work introduces SHADOWFI, a generic, open-source, and netlist-based fault emulation framework that leverages the computational capabilities of hyperscale infrastructures for fault characterization and reliability estimation of complex IC designs. SHADOWFI offers two different functional workflows:i)simulation, which enables the parallelization of FI tasks on high-performance computing systems, andii)emulation, which leverages the flexibility of FPGA cluster implementations. The framework automates saboteur insertion, FI campaign execution, and report generation, requiring minimal user configuration. Each SHADOWFI workflow was evaluated on a set of IC design benchmarks, demonstrating practical usability and significant fault injections speedup. SHADOWFI is publicly available at https://github.com/divadnauj-GB/SHADOWFI.git."
+ },
+ {
+  "id": "W2927066959",
+  "doi": "https://doi.org/10.1186/s13639-019-0088-7",
+  "year": 2019,
+  "type": "article",
+  "venue": "EURASIP Journal on Embedded Systems",
+  "cited_by": 9,
+  "title": "FIJI: Fault InJection Instrumenter",
+  "abstract": "FPGAs are increasingly used in safety-critical applications (e.g., in aerospace and automotive engineering). Safety standards stipulate that implemented countermeasures against run-time faults such as detection and isolation of affected components, automatic reconfiguration, and redundancy mechanisms must be adequately verified. To that end, fault injection tests by various means have been established as a suitable method. For such tests, faults can be provoked by radiation, simulation, or manipulating the design, for example, by inserting additional logic or manipulating the synthesis flow. This work briefly summarizes the various fault injection approaches with a focus on methods that are capable of stressing critical nets of a design running on actual hardware without requiring to re-synthesize. While the state-of-the-art tools can work with complex designs, they often lack controllability of the exact timing of the injection events (which is important to track the system’s response on faults in a logic simulation) and/or use a high amount of FPGA resources. To overcome these issues, we propose a resource-saving netlist-based fault injection framework Fault InJection Instrumenter (FIJI) that can target individual nets at test runtime. This paper presents FIJI’s work flow, implementation details, and an evaluation in terms of FPGA resources, timing impact, and performance during instrumentation and test execution. The FIJI framework has been made publicly available by the authors under an open-source license."
+ },
+ {
+  "id": "W227106366",
+  "doi": "https://doi.org/10.1007/978-3-319-06340-9_5",
+  "year": 2014,
+  "type": "book-chapter",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Simulation Fault Injection Experimental Results",
+  "abstract": ""
+ },
+ {
+  "id": "W4399108477",
+  "doi": "https://doi.org/10.1109/lats62223.2024.10534606",
+  "year": 2024,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Analog Fault Simulation: Trends and Perspectives in Analog Hardware Description Languages",
+  "abstract": "Analog Hardware Description Languages (AHDLs) provide a valuable alternative to existing proprietary means of implementing defect models and generic templates. Analog defect modeling in SPICE engines and in event-driven digital simulators is discussed, with a review of the state-of-the-art, an analysis of possibilities, and proposals for future enhancements of tools and standards to meet the challenges of achieving good coverage estimations at the system level. Moreover, we discuss the possibilities of using the EDACurry open-source framework to instrument transistor-level analog circuits to support defects templates written through AHDL, e.g., Verilog-A."
+ },
+ {
+  "id": "W4386210977",
+  "doi": "https://doi.org/10.1109/iolts59296.2023.10224894",
+  "year": 2023,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 2,
+  "title": "Ray-Spect: Local Parametric Degradation for Secure Designs: An application to X-Ray Fault Injection",
+  "abstract": "In this paper, we introduce Ray-Spect (X-Ray-Spectre), a tool for simulating fault injection using parametric degradation of MOSFETs, which is typical of X-ray irradiation. The proposed tool is designed to enable the evaluation of the recently established semi-permanent fault model, where stuck-at faults can be induced reversibly. The tool is Python-based and utilizes a parametric injection method into the compact model: it is therefore capable of generating Spectre netlists with custom parameters based on a input description. It is generic and extendable: other types of netlists formats (such as HSPICE) can be easily implemented. Overall, the proposed tool provides a valuable resource to evaluate both the sensitivity of a secure design against fault attacks, and the effects of local ionizing radiation with large flexibility and at a low level of abstraction."
+ },
+ {
+  "id": "W2157052161",
+  "doi": "https://doi.org/10.1109/tcad.2010.2045556",
+  "year": 2010,
+  "type": "article",
+  "venue": "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems",
+  "cited_by": 15,
+  "title": "Automated Model Generation Algorithm for High-Level Fault Modeling",
+  "abstract": "High-level modeling for operational amplifiers (opamps) has been previously carried out successfully using models generated by published automated model generation approaches. Furthermore, high-level fault modeling (HLFM) has been shown to work reasonably well using manually designed fault models. However, no evidence shows that published automated model generation approaches based on opamps have been used in HLFM. This paper describes HLFM for analog circuits using an adaptive self-tuning algorithm called multiple model generation system using delta. The generation algorithms and simulation models were written in MATLAB and the hardware description language VHDL-AMS, respectively. The properties of these self-tuning algorithms were investigated by modeling complementary metal-oxide-semiconductor opamps, and comparing simulations using the HLFM against those of the original simulation program with integrated circuit emphasis circuit utilizing transient analysis. Results show that the models can handle both linear and nonlinear fault situations with better accuracy than previously published HLFMs."
+ },
+ {
+  "id": "W815940882",
+  "doi": "",
+  "year": 2008,
+  "type": "dissertation",
+  "venue": "Repository@Hull (Worktribe) (University of Hull)",
+  "cited_by": 0,
+  "title": "Automatic Generation of High Level Fault Simulation Models for Analogue Circuits",
+  "abstract": "High level modelling (HLM) for operational amplifiers (op amps) has been previously carried out successfully using models generated by published automated model generation (AMG) approaches. Furthermore, high level fault modelling (HLFM) has been shown to work reasonably well using manually designed fault models. However, no evidence shows that published AMG approaches based on op amps have been used in HLFM.This thesis describes an investigation into the development of adaptive self-tuning algorithms for automated analogue circuit modelling suitable for HLM and HLFM applications. The algorithms and simulation packages were written in MATLAB and the hardware description language - VHDL-AMS.The properties of these self-tuning algorithms were investigated by modelling a two-stage CMOS op amp and a comparator, and comparing simulations of the macromodel against those of the original SPICE circuit utilizing transient analysis.The proposed algorithms generate multiple models to cover a wide range of input conditions by detecting nonlinearity through variations in output error, and can achieve bumpless transfer between models and handle nonlinearity.This thesis describes the design, implementation and validation of these algorithms, their performance being evaluated for HLFM for both analogue and mix mode systems.HLFM results show that the models can handle both linear and nonlinear situations with good accuracy in a low-pass filter, and model digital outputs in a flash ADC correctly. Comparing with a published fault model, better accuracy has been achieved in terms of output signals using fault coverage measurement."
+ },
+ {
+  "id": "W4365131687",
+  "doi": "https://doi.org/10.1109/tcad.2023.3266368",
+  "year": 2023,
+  "type": "article",
+  "venue": "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems",
+  "cited_by": 8,
+  "title": "FSMx-Ultra: Finite State Machine Extraction From Gate-Level Netlist for Security Assessment",
+  "abstract": "Numerous security vulnerability assessment techniques urge precise and fast finite state machines (FSMs) extraction from the design under evaluation. Sequential logic locking, watermark insertion, fault-injection assessment of a system-on-a-chip (SoC) control flow, information leakage assessment, and reverse engineering at gate-level abstraction, to name a few, require precise FSM extraction from the synthesized netlist of the design. Unfortunately, no reliable solutions are currently available for fast and accurate extraction of FSMs from the highly unstructured gate-level netlist for effective security evaluation. The major challenge in developing such a solution is the precise recognition of FSM state flip-flops (FFs) in a netlist having a massive collection of FFs. In this article, we propose finite state machine extractor ultra (FSMx-Ultra), a framework for extracting FSMs from extremely unstructured gate-level netlists. FSMx-Ultra utilizes state-of-the-art graph theory concepts and algorithms to distinguish FSM state registers from other registers and then constructs gate-level state transition graphs (STGs) for each identified FSM state register using automatic test pattern generation (ATPG) techniques. The results of our experiments on 14 open-source benchmark designs illustrate that FSMx-Ultra can recover all FSMs quickly and precisely from synthesized gate-level netlists of diverse complexity and size utilizing various state encoding schemes."
+ },
+ {
+  "id": "W2005617706",
+  "doi": "https://doi.org/10.1109/tcad.2013.2295812",
+  "year": 2014,
+  "type": "article",
+  "venue": "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems",
+  "cited_by": 6,
+  "title": "Efficient Variation-Aware Delay Fault Simulation Methodology for Resistive Open and Bridge Defects",
+  "abstract": "SPICE offers an accurate method of simulating defect behavior. However, as demonstrated by recent research, it requires long computation time to simulate defect behavior, when considering process variation. To the best of our knowledge, there is no efficient variation-aware delay fault simulation methodology for resistive opens and resistive bridges. This paper presents a fast and accurate delay fault simulation methodology for these two defects. It is fast because it speeds up delay fault computation time by employing two efficient algorithms. The first algorithm is used to calculate transient gate output voltage, which is a key variable needed to compute delay faults. It employs a three step strategy to accelerate the computation of transient gate output voltage without compromising accuracy. The second algorithm uses bisection method to efficiently compute delay fault behavior of a fault-site. The proposed methodology (PM) has been incorporated in an open-source SPICE (NGSPICE) with BSIM4.7 transistor model. The methodology has been validated by comparing results with HSPICE using industrial designs from IWLS 2005 benchmarks and realistic fault-sites have been extracted from synthesized designs. Simulations are carried out using a 65-nm gate library (for illustration). When compared with HSPICE, results show that the PM is on average up to 52-times faster with ≤ 4.2% error in accuracy for resistive open and 39-times faster with ≤ 5.2% error in accuracy for resistive bridge defects."
+ },
+ {
+  "id": "W2522360987",
+  "doi": "https://doi.org/10.1109/isse.2016.7563244",
+  "year": 2016,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Simulation and educational tool for fault modelling in logic circuits",
+  "abstract": "Teaching electronic engineering and keeping students interested may sometimes be a challenge, especially for phenomena that rely heavily on a theoretical background. Classical SPICE simulators, although excellent at offering accurate results, rarely offer explanations as to how those results are obtained. This paper presents a novel simulator for modelling logic circuit faults implemented in MathWorks MATLAB which aims not only to provide correct waveforms for the simulated faults, but also let students understand how those results were obtained and what impact they would have in a real-life application of the circuit."
+ },
+ {
+  "id": "W2808756391",
+  "doi": "https://doi.org/10.1109/natw.2018.8388861",
+  "year": 2018,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 4,
+  "title": "Enabling fast process variation and fault simulation through macromodelling of analog components",
+  "abstract": "With the advent of built-in self-test (BIST) in analog and RF circuits, it is essential that the fault coverage of potential BIST solutions be evaluated before they are deployed. However, large scale fault simulations are often infeasible even when considering the extensive computational power available today. Fault simulations are more challenging for devices that contain frequency transformation, such as phased locked loops (PLLs) or mixers. Thus, a mixed-mode simulation is necessary that captures fault behavior at the lower levels of the hierarchy and propagates this information to the system-level. Mixed-mode simulators, such as Verilog-A, can be used for evaluating nominal circuit behavior but falls short when evaluating faulty circuit behavior. This paper presents a macro modeling approach for mixed-signal circuits through a case study of voltage controlled oscillators (VCOs) used in PLLs. The evaluated BIST technique is the measurement of the phase transfer function from the input to the output. This requires a long transient simulation due to the need to capture the high frequency behavior of the PLL while covering the settling time of the low-frequency filter and VCO input. As the ratio of the output to the input frequency increases, simulation time also increases, making the analyses prohibitively expensive for some cases. In this paper, we build a MATLAB/Simulink model of the VCO and PLL, which is also designed and simulated at the transistor level using the FinFET technology. By modeling free running frequency, sensitivity, duty cycle, non-linearity, and phase noise characteristic of the VCO, we show that both PLL simulations, one using Spice, and one using the proposed macromodeling technique along with Simulink, match in response whereas the proposed approach only takes a fraction of time of Spice simulations."
+ },
+ {
+  "id": "W2761444476",
+  "doi": "https://doi.org/10.1109/ecs.2017.8067859",
+  "year": 2017,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 14,
+  "title": "Verification of fault tolerant techniques in finite state machines using simulation based fault injection targeted at FPGAs for SEU mitigation",
+  "abstract": "Field Programmable Gate Arrays (FPGA) are susceptible to soft errors due to the shrinkage of feature size and reduction in core voltage which reduces the critical charge required to change the state of a circuit element. To improve the reliability and availability of the FPGA based designs used in Nuclear Power Plants special care has to be taken against these emerging risks. In this paper, the effects of radiation on Finite State Machines (FSM) is reviewed and resource utilization and performance penalty are analyzed by using the fault tolerant techniques like Triple Modular Redundancy (TMR), Hamming-3 encoding and safe FSM synthesis. A novel scripting based fault injection technique is proposed for verifying the fault tolerant techniques at netlist level. The PREP3 state machine is used as a benchmark circuit in this paper. This work predominantly focuses on the practical use of fault tolerant techniques such as TMR, Error Detection and Correction by using Hamming-3 encoding for state register and Safe FSM implementation in live designs targeted at Nuclear Power Plants in India. The major objective of this work is to review the various field proven fault tolerant techniques targeted at FPGAs and develop a simple scalable methodology for verification of the same."
+ },
+ {
+  "id": "W4403277107",
+  "doi": "https://doi.org/10.1109/vdat63601.2024.10705730",
+  "year": 2024,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "MATLAB-Simulink based Framework for Combinational ATPG Applied to Testing of Digital Blocks in Analog and Mixed-Signal Circuits",
+  "abstract": "Testing digital blocks embedded in analog and mixed signal (AMS) circuits poses several challenges to the test engineers. Addressing the challenges, the paper proposes a MATLAB-Simulink based framework for test generation as well as test application to combinational blocks embedded in AMS circuits without adding any design for testability (DFT) or additional circuits. In this framework, a well-known automatic test pattern generation (ATPG) algorithm is implemented in MATLAB-Simulink considering single stuck-at faults in the combinational circuits followed by fault simulation of the generated test patterns. While synthesizing the mixed-signal test stimulus which is to be applied to the inputs of linear analog block driving the digital block, the proposed approach exploits ‘analog backtrace’ method which is realized with the help of Simulink libraries. The test frequency is selected through sensitivity analysis to ensure that component variations in analog circuit have the least possible impact on the test generation and fault coverage. The effectiveness of the proposed method has been successfully verified through PSPICE simulation of AMS circuit structures formed by combinations of two benchmark analog circuits driving a benchmark combinational circuit. The simulation results show that the proposed framework can find a test sinusoid which can detect almost all single stuck-at faults in a combinational block resulting in fault coverage of nearly 100%."
+ },
+ {
+  "id": "W4413021311",
+  "doi": "https://doi.org/10.3390/electronics14153131",
+  "year": 2025,
+  "type": "article",
+  "venue": "Electronics",
+  "cited_by": 3,
+  "title": "Quasar—A Process Variability-Aware Radiation Robustness Evaluation Tool",
+  "abstract": "This work presents Quasar, an open-source tool developed to boost the characterization of how variability effects impact radiation sensitivity in digital circuits. Quasar receives a SPICE netlist as input and automatically determines robustness metrics, such as the critical Linear Energy Transfer, for every configuration in which a Single Event Transient fault can propagate an error. The tool can handle ranges from small basic cells to median multi-gate circuits in a few seconds, speeding up the traditional fault injection mechanism based on a large number of electrical simulations. The tool’s workflow explores logical masking to reduce the design space exploration, i.e., reducing the necessary number of electrical simulations, as well as regression methods to speed up variability evaluations. Quasar already has shown the potential to provide useful results, and a prototype has also been published. This work presents a more polished and complete version of the tool, one that optimizes the tool’s search process and allows not only for a fast evaluation of the radiation robustness of a circuit, but also for an analysis of how fabrication process metrics impact this robustness, such as Work Function Fluctuation."
+ },
+ {
+  "id": "W4360826129",
+  "doi": "https://doi.org/10.48550/arxiv.2303.12269",
+  "year": 2023,
+  "type": "preprint",
+  "venue": "arXiv (Cornell University)",
+  "cited_by": 3,
+  "title": "A Cycle-Accurate Soft Error Vulnerability Analysis Framework for FPGA-based Designs",
+  "abstract": "Many aerospace and automotive applications use FPGAs in their designs due to their low power and reconfigurability requirements. Meanwhile, such applications also pose a high standard on system reliability, which makes the early-stage reliability analysis for FPGA-based designs very critical. In this paper, we present a framework that enables fast and accurate early-stage analysis of soft error vulnerability for small FPGA-based designs. Our framework first extracts the post-synthesis netlist from an FPGA design. Then it inserts the bit-flip configuration faults into the design netlist using our proposed interface software. After that, it seamlessly feeds the golden copy and fault copies of the netlist into the open source simulator Verilator for cycle-accurate simulation. Finally, it generates a histogram of vulnerability scores of the original design to guide the reliability analysis. Experimental results show that our framework runs up to 53x faster than the Xilinx Vivado fault simulation with cycle-level accuracy, when analyzing the injected bit-flip faults on the ITC'99 benchmarks."
+ },
+ {
+  "id": "W3211064344",
+  "doi": "https://doi.org/10.1109/fdl53530.2021.9568379",
+  "year": 2021,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 3,
+  "title": "A Common Manipulation Framework for Transistor-Level Languages",
+  "abstract": "There are plentiful successors of SPICE language for describing transistor-level designs. For most of them, the semantic matches those of SPICE, and only the syntax is changed. Others instead provide more default models or analysis tools. Consequently, a commercial tool is usually required for simulating, analyzing, and especially manipulating these languages. This article proposes a framework that relies on the shared semantic for reading, writing, or manipulating transistor-level designs. The ultimate goal of the framework is: reading an input design written in a specific syntax and then allowing to write the same design in another syntax. First, the input description is parsed by a language-specific front-end which turns it into an in-memory abstract syntax tree that follows the common semantic. Then, the in-memory description can be subject to different user-defined manipulations built on top of a series of API or visitor/listener classes. Finally, the description goes through the desired back-end, transforming the in-memory description into the target transistor-level language. As a use-case for the proposed framework, we chose the process of analog fault injection. This activity requires adding, removing, or replacing nodes, components, or even entire sub-circuits. Therefore, the framework is completely written in C++, and its APIs are also interfaced with python. The entire framework is open-source and available on GitHub."
+ },
+ {
+  "id": "W4388579578",
+  "doi": "https://doi.org/10.1109/tcad.2023.3331968",
+  "year": 2023,
+  "type": "article",
+  "venue": "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems",
+  "cited_by": 10,
+  "title": "Toward Critical Flip-Flop Identification for Soft-Error Tolerance With Graph Neural Networks",
+  "abstract": "Nanometer circuits are becoming increasingly susceptible to soft errors. Selective hardening is a less expensive technique to improve the reliability of circuits because it hardens the critical components instead of hardening an entire circuit. One challenge of selective hardening is efficiently and effectively identifying the critical parts in circuits. Simulation-based fault injection is commonly used but extremely time-consuming, especially for complex circuits. This article proposes an approach based on graph neural networks (GNNs) to identify critical flip-flops in circuits. GNNs can take advantage of the circuit’s structural features and the features of individual flip-flops. To convert the features into abstract data that can be fed into GNNs, we provide a feature extraction method that uses a graph model to represent the relevant features of the circuit. The method converts the target circuit into a graph representing its architecture. The graph also contains features of individual flip-flops extracted from the circuit’s netlist and the value change dump (VCD) waveforms of the test used for fault simulation. Additionally, we extract edge features in the graph to utilize the information on combinational gates on the path between flip-flops. Datasets generated based on two open-source RISC-V cores are used to validate the proposed approach. We compare the performance of different GNNs on them and discuss the contribution of edge features to their performance. Our experiments show that the prediction accuracy increases significantly with edge features. GraphSAGE and SAGE-GCN with edge features perform best among the selected GNNs. The highest accuracy we achieved on Ibex and RI5CY is 97.75% and 98.67%, respectively. We also provide a method to accelerate the process of critical flip-flop identification."
+ },
+ {
+  "id": "W4320527381",
+  "doi": "https://doi.org/10.1109/tpds.2023.3237777",
+  "year": 2023,
+  "type": "article",
+  "venue": "IEEE Transactions on Parallel and Distributed Systems",
+  "cited_by": 11,
+  "title": "HPC Hardware Design Reliability Benchmarking With HDFIT",
+  "abstract": "Chips pack ever more, ever smaller transistors. Fault rates increase in turn and become more concerning, particularly at the scale ofHigh-Performance Computing(HPC) systems: on one hand, hardware fault protection is costly - more than 10% silicon area for floating-point units; on the other, HPC users expect correct application output after the anticipated time of computation, but workloads are seldom bit-reproducible and tolerances in output are allowed for. Benign hardware faults causing errors within these tolerances are therefore acceptable: however, with abstract reliability targets such as ’undetected failures per time,’ current HPC system design does not allow for pursuing trade-offs between reliability and performance with respect to faults. To address the above, we propose a user-centric reliability benchmark to specify HPC system reliability targets, allowing for better performance optimizations in hardware design, while meeting HPC user expectations. Our open-sourceHardware Design Fault Injection Toolkit(HDFIT) enables - for the first time - end-to-end hardware design reliability experiments: from netlist-level fault injection to application output error. In a proof of concept we present an HPCgeneral matrix multiply(GEMM) reliability study, targeting a series of popular applications, and using HDFIT to benchmark an open-source GEMM accelerator."
+ },
+ {
+  "id": "W4379116037",
+  "doi": "https://doi.org/10.23919/date56975.2023.10137300",
+  "year": 2023,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 11,
+  "title": "BAFFI: a bit-accurate fault injector for improved dependability assessment of FPGA prototypes",
+  "abstract": "FPGA-based fault injection (FFI) is an indispensable technique for verification and dependability assessment of FPGA designs and prototypes. Existing FFI tools make use of Xilinx essential bits technology to locate the relevant fault targets in FPGA configuration memory (CM). Most FFI tools treat essential bits as black-box, while few of them are able to filter essential bits on the area basis in order to selectively target design components contained within the predefined Pblocks. This approach, however, remains insufficiently precise since the granularity of Pblocks in practice does not reach the smallest design components. This paper proposes an open-source FFI tool that enables much more fine-grained FFI experiments for Xilinx 7-series and Ultrascale+ FPGAs. By mapping the essential bits with the hierarchical netlist, it allows to precisely target any component in the design tree, up to an individual LUT or register, without the need for defining Pblocks (floorplanning). With minimal experimental effort it estimates the contribution of each DUT component into the resulting dependability features, and discovers weak points of the DUT. Through case studies we show how the proposed tool can be applied to different kinds of DUTs: from small-footprint microcontrollers, up to multicore RISC-V SoC. The correctness of FFI results is validated by means of RT-level and gate-level simulation-based fault injection."
+ },
+ {
+  "id": "W7140283243",
+  "doi": "https://doi.org/10.1145/3803557",
+  "year": 2026,
+  "type": "article",
+  "venue": "ACM Transactions on Design Automation of Electronic Systems",
+  "cited_by": 1,
+  "title": "A Fast and Accurate Single-Event Transient Reliability Analysis of Logic Circuits Using Adaptive Importance Sampling Method",
+  "abstract": "In nanometric integrated circuits, reliability has become one of the main design measures for space and safety-critical applications. This makes the reliability evaluation process an inevitable part of the circuit design flow. The Monte Carlo method typically adopts random sampling for single-event transient reliability evaluation, which leads to large variance in the estimated reliability. To address this issue, we develop an adaptive importance sampling (AIS) method for early stages of the design. AIS has several iterations of sampling region adjustments. By iteratively searching for failure regions, AIS may lead to better efficiency and accuracy. Additionally, a fast fault injection method is proposed to support adaptive importance sampling and multi-dimensional reliability analysis for logic circuits. Furthermore, we design an open-source netlist-level fault injection tool named NFIT . The convergence speed of the AIS method has been demonstrated to achieve up to an 18x acceleration compared to the Monte Carlo method on the ISCAS’85, EPFL, and ALS benchmark suites. We use the NFIT tool to evaluate the effect of circuit structure and targeted hardening on circuit reliability. The results indicate that, for the same Boolean function, the circuit structure has a notable influence on reliability. They also show that hardening a few critical gates can significantly improve circuit reliability."
+ },
+ {
+  "id": "W4312878747",
+  "doi": "https://doi.org/10.1109/isvlsi54635.2022.00017",
+  "year": 2022,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 7,
+  "title": "A Methodology for Identifying Critical Sequential Circuits with Graph Convolutional Networks",
+  "abstract": "The reliability of circuits becomes increasingly important with the transistor scaling. One efficient approach to address this problem is to select the critical components and apply hardening techniques only to them. The question of how to identify such critical parts is one of the key challenges. This paper explores the potential of using Graph Convolutional Networks (GCNs) instead of fault simulation to identify critical sequential circuits at the netlist level. GCNs can learn from both features of individual sequential gates and structural features of the circuit topology. Our proposed methodology converts circuits into graphs by taking each sequential gate as a node and using Breadth-First Search (BFS) to search the shortest path between these sequential gates to create edges. Then GCNs are used to learn from the graphs to predict critical sequential gates. We evaluate two types of GCNs, including GCN with and without combinational logics. Finally, we validate the approach on an open-source RISC-V core. The experiments results indicate that GCN with combinational logics has the best prediction performance, and the achieved accuracy is up to 91.1%."
+ },
+ {
+  "id": "W202215480",
+  "doi": "https://doi.org/10.1007/978-1-4020-5646-8_5",
+  "year": 2007,
+  "type": "book-chapter",
+  "venue": "",
+  "cited_by": 4,
+  "title": "Effects of Radiation on Analog and Mixed-Signal Circuits",
+  "abstract": ""
+ },
+ {
+  "id": "W3034651944",
+  "doi": "",
+  "year": 2020,
+  "type": "article",
+  "venue": "Journal of the Arkansas Academy of Science",
+  "cited_by": 0,
+  "title": "Built-In Self-Test (BIST) for Multi-Threshold NULL Convention Logic (MTNCL) Circuits",
+  "abstract": "This dissertation proposes a Built-In Self-Test (BIST) hardware implementation for Multi-Threshold NULL Convention Logic (MTNCL) circuits. Two different methods are proposed: an area-optimized topology that requires minimal area overhead, and a test-performance-optimized topology that utilizes parallelism and internal hardware to reduce the overall test time through additional controllability points. Furthermore, an automated software flow is proposed to insert, simulate, and analyze an input MTNCL netlist to obtain a desired fault coverage, if possible, through iterative digital and fault simulations. The proposed automated flow is capable of producing both area-optimized and test-performance-optimized BIST circuits and scripts for digital and fault simulation using commercial software that may be utilized to manually verify or adjust further, if desired."
+ },
+ {
+  "id": "W4414478525",
+  "doi": "https://doi.org/10.3390/chips4040039",
+  "year": 2025,
+  "type": "article",
+  "venue": "Chips",
+  "cited_by": 2,
+  "title": "A Comprehensive Methodology for Soft Error Rate (SER) Reduction in Clock Distribution Network",
+  "abstract": "Single Event Transients (SETs) in clock-distribution networks are a major source of soft errors in synchronous systems. We present a practical framework that assesses SET risk early in the design cycle, before layout and parasitics, using a Vulnerability Function (VF) derived from Verilog fault injection. This framework guides targeted Engineering Change Orders (ECOs), such as clock-net remapping, re-routing, and the selective insertion of SET filters, within a reproducible open-source flow (Yosys, OpenROAD, OpenSTA). A new analytical Soft Error Rate (SER) model for clock trees is also proposed, which decomposes contributions from the root, intermediate levels, and leaves, and is calibrated by SPICE-measured propagation probabilities, area, and particle flux. When coupled with throughput, this model yields a frequency-aware system-level Bit Error Rate (BERsys). The methodology was validated on a First-In First-Out (FIFO) memory, demonstrating a significant vulnerability reduction of approximately 3.35× in READ mode and 2.67× in WRITE mode. Frequency sweeps show monotonic decreases in both clock-tree vulnerability and BERsys at higher clock frequencies, a trend attributed to temporal masking and throughput effects. Cross-node SPICE characterization between 65 nm and 28 nm reveals a technology-dependent effect: for the same injected charge, the 28 nm process produces a shorter root-level pulse, which lowers the propagation probability relative to 65 nm and shifts the optimal clock-tree partition. These findings underscore the framework’s key innovations: a technology-independent, early-stage VF for ranking critical clock nets; a clock-tree SER model calibrated by measured propagation probabilities; an ECO loop that converts VF insights into concrete hardening actions; and a fully reproducible open-source implementation. The paper’s scope is architectural and pre-layout, with extensions to broader circuit classes and a full electrical analysis outlined for future work."
+ },
+ {
+  "id": "W2025531505",
+  "doi": "https://doi.org/10.3182/20060926-3-pl-4904.00014",
+  "year": 2006,
+  "type": "conference-paper",
+  "venue": "IFAC Proceedings Volumes",
+  "cited_by": 2,
+  "title": "FAULT TOLERANCE EXTENSIONS OF TrueTime PACKAGE FOR DISCRETE SYSTEMS SIMULATION",
+  "abstract": ""
+ },
+ {
+  "id": "W2585294117",
+  "doi": "https://doi.org/10.1002/cta.2323",
+  "year": 2017,
+  "type": "article",
+  "venue": "International Journal of Circuit Theory and Applications",
+  "cited_by": 6,
+  "title": "Resource optimization for emulation of behavioral models of mixed signal circuits on FPGA: a case study of DC–DC buck converter",
+  "abstract": "Summary This paper presents a semi‐automated word‐length optimization framework to reduce field‐programmable gate array (FPGA) resource utilization for FPGA‐based pre‐silicon test emulation of analog and mixed signal circuits while achieving the desired accuracy and overcoming long optimization time. Although high‐level behavioral models exist for modeling analog and mixed signal circuits, these comprise many complex differential equations which cannot be realized implicitly using Boolean logic (which is the basic functional block of an FPGA) on an FPGA. So, a more convenient way is explored to map analog circuits into digital domain by converting them into fixed‐point architectures because of its advantage of manipulating data with lower word‐length. To address the loss of accuracy due to finite word‐length effects and limited reconfigurable resources, word‐lengths are optimized under the constraint of given performance metrics. The proposed technique built in MATLAB/Simulink environment with Xilinx System Generator support is illustrated with the help of a case study of a peak‐current‐mode‐controlled buck‐type switching converter implemented on Xilinx Virtex™‐5 FPGA. To illustrate the applicability of this environment for pre‐silicon test development, well‐accepted fault models are emulated with the help of non‐ideal model of a buck converter. The emulation results are seen to be close to that of a post‐fabricated power converter in the presence of faults. Experimental results show that FPGA resource utilization can be reduced significantly while achieving the desired performance accuracy under the constraint of multiple error metrics. Copyright © 2017 John Wiley & Sons, Ltd."
+ },
+ {
+  "id": "W4378191169",
+  "doi": "https://doi.org/10.1109/host55118.2023.10133494",
+  "year": 2023,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 3,
+  "title": "Targeted Bitstream Fault Fuzzing Accelerating BiFI on Large Designs",
+  "abstract": "Fault injection attacks are a powerful instrument in an attacker’s toolbox to extract secret keys from cryptographic primitives. Generally, detailed information about the implementation and platform is needed to conduct such an attack in a meaningful fashion. With Bitstream Fault Injection (BiFI), Swierczynski et al. demonstrated that even without any prior knowledge, an adversary could use bitstream faults to disclose the secret key of cryptographic implementations on FPGAs. With a brute-force strategy, an extensive set of faulty bitstreams is generated by manipulating the FPGA’s LUTs, some of which enable the adversary to attack the design successfully. The drawback of BiFI is that its runtime scales with the design size because of aforementioned brute-force approach. Hence, it can be prohibitively slow, e.g., months, for large state-of-the-art FPGAs.In this work, we present Targeted Bitstream Fault Fuzzing (TBFF), which accelerates BiFI by identifying candidates of vulnerable LUTs using automated netlist reverse-engineering algorithms. Hence, the goal of TBFF is to combine the best of both worlds: TBFF automatically identifies small but crucial structures that are part of most cryptographic primitives, such as counters, done signals, or SBoxes. Introducing faults in these structures often instantly results in faulty behavior that can be exploited to recover the secret key. As a result, instead of brute-forcing, only a few targeted bitstream manipulations are needed to recover the secret key with the marginal overhead of identifying the relevant areas. Extrapolating this result for large-scale designs, TBFF can be conducted in minutes compared to months using the previous brute-force approach. In various case studies, we demonstrate the efficacy of our attack by attacking several AES designs."
+ },
+ {
+  "id": "W4317521358",
+  "doi": "https://doi.org/10.1007/s00034-022-02262-6",
+  "year": 2023,
+  "type": "article",
+  "venue": "Circuits Systems and Signal Processing",
+  "cited_by": 4,
+  "title": "Soft Fault Diagnosis in Embedded Switched-Capacitor Filters",
+  "abstract": ""
+ },
+ {
+  "id": "W7135412242",
+  "doi": "https://doi.org/10.5281/zenodo.19023904",
+  "year": 2026,
+  "type": "software",
+  "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+  "cited_by": 0,
+  "title": "ARVS: Adaptive Robust Verification System",
+  "abstract": "ARVS v1.0.0 — Initial Release Adaptive Robust Verification System — A research-grade autonomy architecture for spacecraft, rovers, and safety-critical autonomous systems. 🔬 What is ARVS? ARVS is a full-stack autonomy framework built for environments where failure is not an option — planetary rovers, orbital spacecraft, and multi-robot systems. It implements a five-stage pipeline: Sense → Think → Verify → Optimise → Enforce Every stage is formally grounded: Bayesian state estimation, a frozen axiom constitution, QUBO-based optimization, and a sub-millisecond C++ safety gate. ✨ Key Features 25-Axiom Frozen Constitution — Immutable safety axioms enforced identically in both Python and C++, with a SHA-256 cryptographic audit chain 8-Dimensional Risk Quantifier — Risk is embedded directly into the MDP reward function: R(s,a) = gain − λ·risk − μ·energy ±15% Bounded Adaptive Learning — Parameters cannot drift beyond safe bounds per cycle; risk_penalty is floor-guarded by Axiom L1 Real-Time C++ Enforcement — Zero-heap hot path, fixed-size arrays, SCHED_FIFO watchdog, latching emergency stop, full ROS2 node wrappers Quantum-Ready Optimization — QUBO solver targeting D-Wave Leap with automatic Tabu fallback Multi-Source Telemetry — Live loaders for NASA REMS (Mars weather), SPICE (orbital mechanics), ESA Mars Express, and ISS OSDR 4 Validated Scenarios — Normal ops, fault injection (1.8× torque spike), communication blackout (300s), and axiom cascade → safe hold 69-Test CI Suite — Full simulation test coverage with forensic JSON audit trails 📦 What's Included Component Description ARVS/ Python core (HAL, EKF, risk, planning, learning, audit) cpp/ C++ real-time components + ROS2 nodes simulation/ 4-scenario simulation engine + pre-generated outputs Docs/ Architecture, API reference, axioms, reliability analysis 🛰️ Tested Against Real Space Telemetry Validated across 16 runs (4 scenarios × 4 data sources) using actual NASA and ESA mission data as input. Author: Chirag Rathi — Independent Researcher ORCID: 0009-0008-1682-4369 License: Apache-2.0"
+ },
+ {
+  "id": "W7135398648",
+  "doi": "https://doi.org/10.5281/zenodo.19023905",
+  "year": 2026,
+  "type": "software",
+  "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+  "cited_by": 0,
+  "title": "ARVS: Adaptive Robust Verification System",
+  "abstract": "ARVS v1.0.0 — Initial Release Adaptive Robust Verification System — A research-grade autonomy architecture for spacecraft, rovers, and safety-critical autonomous systems. 🔬 What is ARVS? ARVS is a full-stack autonomy framework built for environments where failure is not an option — planetary rovers, orbital spacecraft, and multi-robot systems. It implements a five-stage pipeline: Sense → Think → Verify → Optimise → Enforce Every stage is formally grounded: Bayesian state estimation, a frozen axiom constitution, QUBO-based optimization, and a sub-millisecond C++ safety gate. ✨ Key Features 25-Axiom Frozen Constitution — Immutable safety axioms enforced identically in both Python and C++, with a SHA-256 cryptographic audit chain 8-Dimensional Risk Quantifier — Risk is embedded directly into the MDP reward function: R(s,a) = gain − λ·risk − μ·energy ±15% Bounded Adaptive Learning — Parameters cannot drift beyond safe bounds per cycle; risk_penalty is floor-guarded by Axiom L1 Real-Time C++ Enforcement — Zero-heap hot path, fixed-size arrays, SCHED_FIFO watchdog, latching emergency stop, full ROS2 node wrappers Quantum-Ready Optimization — QUBO solver targeting D-Wave Leap with automatic Tabu fallback Multi-Source Telemetry — Live loaders for NASA REMS (Mars weather), SPICE (orbital mechanics), ESA Mars Express, and ISS OSDR 4 Validated Scenarios — Normal ops, fault injection (1.8× torque spike), communication blackout (300s), and axiom cascade → safe hold 69-Test CI Suite — Full simulation test coverage with forensic JSON audit trails 📦 What's Included Component Description ARVS/ Python core (HAL, EKF, risk, planning, learning, audit) cpp/ C++ real-time components + ROS2 nodes simulation/ 4-scenario simulation engine + pre-generated outputs Docs/ Architecture, API reference, axioms, reliability analysis 🛰️ Tested Against Real Space Telemetry Validated across 16 runs (4 scenarios × 4 data sources) using actual NASA and ESA mission data as input. Author: Chirag Rathi — Independent Researcher ORCID: 0009-0008-1682-4369 License: Apache-2.0"
+ }
+]

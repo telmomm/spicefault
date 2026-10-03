@@ -12,7 +12,7 @@ Thresholds marked *proposed* are starting values. They are to be confirmed or re
 |---|---|---|
 | Resistive divider, RC low-pass | A | Closed-form answers for correctness and for the metric estimators |
 | Sallen–Key band-pass filter | A, B, D, E, G | Small benchmark; comparison task of the state-of-the-art study |
-| State-variable filter | A, C, D, E, G | Larger benchmark; workload of the scalability measurements; ambiguity analysis |
+| Four-op-amp biquad high-pass filter | A, C, D, E, G | Larger benchmark; workload of the scalability measurements; ambiguity analysis |
 | Linear voltage regulator | A, D, E, F | Device-level models; operating conditions, temperature included |
 
 Every circuit comes with its netlist, its fault rules, its measurements and its specification limits. Until the three validation circuits exist, the RC low-pass of `examples/filter` stands in for them in the benchmarks. It is too small to be a workload: one simulation takes about 15 ms, so starting processes weighs as much as simulating.
@@ -90,7 +90,7 @@ Automated as `python -m benchmarks.scalability.run`.
 
 - **Question:** how does throughput scale, and what does the abstraction cost? (RQ4)
 - **Design:** fixed workload at 1, 2, 4, 8 workers, and 16 where the hardware allows. The same task with the direct script of §1.
-- **Size:** *proposed* 2,000 samples of the state-variable filter.
+- **Size:** *proposed* 2,000 samples of the biquad filter.
 - **Output:** wall time, simulations per second, $S(N) = T_1 / T_N$, $E(N) = S(N)/N$, peak memory, bytes written, and a breakdown of the time of one sample into netlist generation, simulator process, output parsing, measurement and storage.
 - **Acceptance:** none on speed-up, which is reported as measured. *Proposed* for overhead: `spicefault` throughput at least 0.95 of the direct script at equal worker count.
 - **Caveat:** the development machine has 4 performance and 4 efficiency cores, so efficiency beyond 4 workers falls for hardware reasons. For the paper the curve should be measured on a machine with homogeneous cores.
@@ -109,7 +109,7 @@ Automated as `python -m benchmarks.fault_coverage.run`.
 ### E. Impact of variability
 
 - **Question:** how does tolerance degrade detectability and diagnostic coverage? (RQ2, RQ6)
-- **Design:** every tolerance scaled by 0, 0.2, 1 and 2 times its declared value (the equivalent, for 5 % parts, of 0, 1, 5 and 10 %), same fault list, same measurement model. Healthy reference recomputed at each level. The same circuits at every level (§2).
+- **Design:** every tolerance scaled by 0, 0.2, 1 and 2 times its declared value, same fault list, same measurement model. The filters are declared with 5 % resistors and 10 % capacitors, as in the diagnosis literature, so the scales are 0, 1, 5 and 10 % for the resistors. Healthy reference recomputed at each level. The same circuits at every level (§2).
 - **Size:** *proposed* 5,000 healthy and 200 per fault condition at each level.
 - **Output:** M1, M2 and M8 per fault condition with intervals; yield and failure probability against tolerance (M5); diagnostic coverage against tolerance (M6); the faults whose detection probability falls below $1 - \beta$ and the tolerance at which it happens.
 - **Acceptance:** none; this is the main reliability result. The zero level requires the measurement model, otherwise the populations are degenerate.
@@ -125,7 +125,7 @@ Automated as `python -m benchmarks.fault_coverage.run`.
 ### G. Fault separability
 
 - **Question:** how distinguishable are faults from each other? (RQ5)
-- **Circuit:** the state-variable filter, at the declared tolerance, with the data of Experiment E.
+- **Circuit:** the biquad filter, at the declared tolerance, with the data of Experiment E.
 - **Design:** M9 once on scalar measurements and once on waveforms. For waveforms the feature vector is the sampled response, reduced to a fixed number of components by a declared method.
 - **Output:** pairwise separation matrix, undetectable conditions, ambiguity groups, confusable components; comparison with the collinear groups and the testability rank predicted by local sensitivity (M7a).
 - **Acceptance:** none. The comparison between what local sensitivity predicts and what the campaign finds is the result.

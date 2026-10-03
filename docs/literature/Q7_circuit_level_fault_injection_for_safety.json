@@ -1,0 +1,602 @@
+[
+ {
+  "id": "W4411995904",
+  "doi": "https://doi.org/10.1109/access.2025.3585636",
+  "year": 2025,
+  "type": "article",
+  "venue": "IEEE Access",
+  "cited_by": 1,
+  "title": "A Layout-Based Method for Analog Fault Injection in the Context of Functional Safety",
+  "abstract": "Digital and analog circuits are fundamental components embedded across a vast array of applications, including but not limited to consumer electronics, automotive systems, aerospace technologies, medical instrumentation, and industrial automation. The critical role they play in ensuring the functionality and efficiency of modern technological systems introduces significant risks, as failures or defects can lead to catastrophic consequences. The focus of this work is on analog fault injection for automotive applications. ISO 26262 sets the global standard for the functional safety of circuits in the automotive domain and identifies fault injection as a key method to assess safety metrics and validate this class of circuits. Although fault injection is a well-known and widely adopted strategy in the digital domain, its usage is less widespread in analog circuits. The purpose of this work is to propose a layout-based method addressed to analog circuits, where parasitic components in the post-layout extracted schematics are used as indicators to assign the likelihood of fault occurrence that may affect the functionality of circuits and impact the safety of the application. Moreover, the proposed approach leverages simulations to enable a quantitative assessment of the diagnostic coverage achieved by the implemented safety mechanisms. Although the results show a Diagnostic Coverage of 91.82%, which falls short of the assumed 99% by ISO 26262 [1], the method provides valuable insight into identifying critical architecture or layout patterns that can be improved to achieve better safety metrics while maintaining electrical performance."
+ },
+ {
+  "id": "W4416923892",
+  "doi": "https://doi.org/10.1109/miel66332.2025.11261061",
+  "year": 2025,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Methods for Fault Injection Simulations and Reliability Analysis in SPICE",
+  "abstract": "Within safety/mission - critical systems safety analysis and selection of appropriate verification methods is crucial in mitigating the residual risk in operational life. Despite standardized description of verification methods given by the safety standardization [1] [2] of different industries, little resources are provided that are addressing techniques of fault insertions that may be applied on a hardware-level simulations. This paper will address pre-requisites for such kind of verification on hardware level, and outcomes that may be expected."
+ },
+ {
+  "id": "W4323546570",
+  "doi": "https://doi.org/10.1117/12.2670634",
+  "year": 2023,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Design of analog signal processing module for VCU of pure electric vehicle based on ISO 26262",
+  "abstract": "Aiming the potential hazards and risks brought by the analog signal processing module of the vehicle controller, an analog signal processing module based on ISO26262 standard is designed to enhance the safety and reliability of the vehicle controller. Based on the relevant technical design methods in the functional safety standards, this paper performs a hazard and risk assessment on the unexpected acceleration or deceleration of the vehicle caused by the failure of the analog signal processing module, determines that it should achieve the functional safety level ASIL D and functional safety requirements, and then adopted the dual-core principle for redundancy design of the analog signal processing module. The fault injection is carried to simulate the vehicle controller analog signal processing fault. The test and verification results show that the vehicle controller analog signal processing module designed in this paper meets the ASIL D safety level, and the three types of fault injection pass rate are above 99%. It improves the safety and reliability of the vehicle controller."
+ },
+ {
+  "id": "W2496582029",
+  "doi": "https://doi.org/10.1109/smacd.2016.7520721",
+  "year": 2016,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 14,
+  "title": "Fault grouping for fault injection based simulation of AMS circuits in the context of functional safety",
+  "abstract": "The fault injection technique is utilized for simulation-based verification of safety-related analog and mixed-signal (AMS) circuits for compliance with safety requirements in the presence of hardware faults. Exhaustive fault simulation is very time consuming with respect to the number of faults to simulate at circuit level. For efficient simulation-based verification, a fault grouping approach is proposed to reduce the number of faults to simulate without missing out potentially safety-critical faults. The fault grouping approach is based on component-level fault simulation, hierarchical clustering and internal cluster validation. The effectiveness is investigated on a component extracted from an automotive safety-related System on a Chip."
+ },
+ {
+  "id": "W4378801013",
+  "doi": "https://doi.org/10.1145/3583781.3590317",
+  "year": 2023,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 2,
+  "title": "Verilog-A Implementation of Generic Defect Templates for Analog Fault Injection",
+  "abstract": "With functional safety being increasingly important in the development of mixed-signal products for automotive applications, EDA solutions have appeared striving to help designers in the setup and execution of fault injection campaigns. Despite the ongoing work to standardize the definition of defect models and coverage calculation methods in the IEEE P2427 draft standard, there is a lack of a unified and portable method to define defect templates that can be used to inject in a systematic way defects in an analog circuit. Each of the existing EDA tool sets for fault injection proposes its own proprietary method to specify how defects should be defined and injected. The proposed paper describes a Verilog-A-based approach to coding defect templates, which through compliance with the Verilog-A standard, warrants portability across compatible simulators. The approach has been validated on the circuits from the Analogue Benchmark Circuits made available by the IEEE P2427 working group."
+ },
+ {
+  "id": "W2810453186",
+  "doi": "https://doi.org/10.1109/dtip.2018.8394196",
+  "year": 2018,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 1,
+  "title": "Dynamic fault injection for system level simulation of MEMS - A design method for functional safety",
+  "abstract": "In this paper a method for dynamic fault injection and fault simulation as well as its application to MEMS based sensor systems is described. The prerequisite for this approach is the availability of accurate, but likewise numerically efficient models for the MEMS element. Simulations based on SystemC and SystemC AMS are suitable to analyze the nominal behavior of complex systems including electronics and the mechanical behavior of the MEMS elements [1], [2]. They offer capabilities to represent analog and digital hardware as well as software and nonelectrical components in one simulation environment. Especially for the modelling of mechanical structures, dedicated modelling algorithms like model order reduction [3], [4] have to be applied to ensure high numerical efficiency."
+ },
+ {
+  "id": "W4402628514",
+  "doi": "https://doi.org/10.1109/fdl63219.2024.10673865",
+  "year": 2024,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Cross-domain Analog Fault Injection for Designing Robust Smart Systems",
+  "abstract": "Under the pressure of the Industry 4.0 revolution, and now with the European Chips Act, smart systems are becoming omnipresent in all industrial sectors, e.g., automotive and aerospace. Such systems contain digital and analog components belonging to several physical domains, e.g., electrical and mechanical. To ensure robustness, the whole system must be validated as early as possible in the development cycle, by taking into account all such domains, as recommended by the ISO 26262 standard in the case, e.g., of automotive systems. Unfortunately, validation techniques, including fault injection and simulation are not as advanced on the analog side as the digital counterpart: i) they are not fully standardized ii) they are highly domain-dependent, and iii) they are performed separately from the digital flow. This article proposes to improve the design of smart systems by generating faulty scenarios through analog fault injection across several physical domains. By exploiting these faulty scenarios, it is possible to improve the robustness of the analog part and, at the same time, to improve the quality of the digital part that controls the system functionality. A multi-domain case study containing a microcontroller and a three-axis accelerometer is presented to demonstrate the validity of the proposed approach in many industrial contexts."
+ },
+ {
+  "id": "W1994996817",
+  "doi": "https://doi.org/10.1109/etsym.2010.5512730",
+  "year": 2010,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 2,
+  "title": "Increasing reliability of programmable mixed-signal systems by applying design diversity redundancy",
+  "abstract": "This work explores the concept of design diversity redundancy applied to mixed-signal (MS) circuits. Results from fault injection experiments show a very good ability of the system to tolerate double faults."
+ },
+ {
+  "id": "W4401502926",
+  "doi": "https://doi.org/10.2139/ssrn.4923730",
+  "year": 2024,
+  "type": "preprint",
+  "venue": "SSRN Electronic Journal",
+  "cited_by": 0,
+  "title": "Intermittent Fault Diagnosis of Analog Circuit Based on Multi-Dilated Convolutional Long Short-Term Memory Network with a Novel Fault Injection Strategy",
+  "abstract": ""
+ },
+ {
+  "id": "W2940128495",
+  "doi": "https://doi.org/10.1109/dcis.2018.8681485",
+  "year": 2018,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 3,
+  "title": "Single Event Transient injection in large mixed-signal circuits",
+  "abstract": "Radiation can influence the reliability of electronic circuits and systems in a variety of ways. One of the most elusive to detection is the occurrence of Single-Event Transients (SETs): short current pulses can occur in any PN junction of the semiconductor. These short current pulses may then propagate through the circuit and affect operation and reliability.In this paper, we leverage the power of a fault injection tool to the case of Single Events in order to assess the overall robustness of large analog and mixed-signal circuits to these effects. The idea consists in extracting the likelihood of occurrence of the Single Events on different sites from either the layout of the schematic and, with that information, perform a likelihood-weighted random sampling to provide a statistically sound estimate of the circuit sensitivity."
+ },
+ {
+  "id": "W1416418966",
+  "doi": "https://doi.org/10.1016/j.microrel.2015.08.011",
+  "year": 2015,
+  "type": "article",
+  "venue": "Microelectronics Reliability",
+  "cited_by": 11,
+  "title": "Exploring design diversity redundancy to improve resilience in mixed-signal systems",
+  "abstract": ""
+ },
+ {
+  "id": "W4283314082",
+  "doi": "https://doi.org/10.1109/iccss55260.2022.9802217",
+  "year": 2022,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Fault Injection Model of SRAM Memory Circuit Based on Hybrid Modeling",
+  "abstract": "As one of the important parts of the space system, the reliability of the SRAM storage circuit always affects the safety of the spacecraft. The harsh environment full of radiation and extreme temperature in space brings radiation effect and aging effect to the circuit, which causes accidental damage and life reduction of the device, and in serious cases, circuit error and system failure. In this paper, from the perspective of fault model and fault injection, the hybrid modeling method of device level and circuit level is adopted to establish the fault model. At the same time, the sensitive area and the randomness of the fault are considered, and the switching factor is introduced to comprehensively consider the fault injection to improve the accuracy of the model. A device-level Metal-Oxide-Semiconductor Field-Effect Transistor (MOSFET) simulation model is established in Technology Computer-Aided Design (TCAD), and the process calibration of the established MOSFET model is carried out through the process library file, to better approximate the actual model. Combined with the established MOSFET device model, the failure mechanism of single-particle effect in radiation effect and negative bias temperature instability effect in aging effect was studied. Based on the physical mechanism of the device level, the fault is mapped to the circuit level and the corresponding hybrid model is established. Combined with the advantages of the Veriloga language, the current source, and voltage source models are established, and the fault sensitive area and the randomness of fault occurrence are considered, and the switching factor is introduced into the fault model. Then, the established fault model is injected into the SRAM storage circuit in the form of fault devices for fault simulation, and the power current data is collected and compared with the fault model without a switching factor. Taking the measured data as a reference, the data errors of the two are compared. Experimental results show that the proposed fault model fits the actual data better and has higher accuracy."
+ },
+ {
+  "id": "W3027739090",
+  "doi": "https://doi.org/10.1109/tvlsi.2020.2992982",
+  "year": 2020,
+  "type": "article",
+  "venue": "IEEE Transactions on Very Large Scale Integration (VLSI) Systems",
+  "cited_by": 2,
+  "title": "HYFII: HYbrid Fault Injection Infrastructure for Accurate Runtime System Failure Analysis",
+  "abstract": "In this article, we propose an efficient circuit reliability analysis infrastructure utilizing on-demand transistor-accurate fault injection based on workload-specific distributional properties. A novel two-phase approach is developed to achieve circuit-level accuracy, via careful transistor-level precharacterization, and gate-level efficiency, via fast runtime fault generation. A time-consuming circuit characterization is performed once, and the result of the precharacterization is used multiple times at runtime to inject faults. Also, novel fault probability estimation and fault injection methods are developed. Fault probabilities are computed based on workload-specific voltage/temperature distribution, and faults are injected efficiently by scaling the computed fault probabilities. We demonstrate the proposed methodology on an OpenSPARC core targeting an implementation on a 32-nm technology node. Analysis indicates that the injector computes the system failure rate with 0.1-ms simulation overhead per injection while having circuit-level accuracy."
+ },
+ {
+  "id": "W2045763711",
+  "doi": "https://doi.org/10.1145/1854153.1854188",
+  "year": 2010,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 3,
+  "title": "Evaluating the effectiveness of a mixed-signal TMR scheme based on design diversity",
+  "abstract": "This paper explores the concept of design diversity redundancy applied to mixed-signal (MS) circuit blocks, as a proposal to increase system reliability. Three different implementations of a second order low-pass filter (which perform the same transfer function) associated to a majority voter are used to build a diversity TMR scheme. The whole system is prototyped by using a single programmable mixed-signal device. Functional verifications and a fault injection campaign are performed, and the effectiveness of the voting system to detect single faults is investigated. Based on these results, analytical calculations were done to estimate the behavior of the system under the occurrence of double faults. Results show a very good ability of the system to tolerate double faults from the considered model."
+ },
+ {
+  "id": "W2774929202",
+  "doi": "",
+  "year": 2017,
+  "type": "article",
+  "venue": "Illinois Digital Environment for Access to Learning and Scholarship (University of Illinois at Urbana-Champaign)",
+  "cited_by": 0,
+  "title": "Detection, diagnosis and modeling of ESD-induced soft failures - a gate-level and mixed-signal approach",
+  "abstract": "Electronic systems are an indispensable part of people's lives today. However, the reliability of electronic systems can be threatened by external stimuli such as Electrostatic Discharges (ESDs). ESDs can either physically damage an electronic system or let it malfunction without damaging it. Therefore, a lot of design work and qualification testings are needed by manufacturers to improve the robustness against the negative effects of ESDs. The trial-and-error based solution implementation has incurred huge costs to companies in terms of labor and time. Despite the ever-increasing effort being devoted to solving ESD-related problems, cases of field returns still happen, and a significant portion can be attributed to soft failure induced by system-level ESD. Despite that, the ESD-induced permanent failures are well-studied and protection mechanisms have proven to work, the studies on ESD-induced soft failures are all on the physical and transistor level. \\n \\nIn this thesis, we studied ESD-induced soft failures by first conducting case studies of injecting ESDs into physical devices and observing the application level symptoms of the failures, and then performing simulation-based ESD injections on a well-known instruction-set-architecture. For the first time, we correlated the physical level ESD event to high-level system behavior. We implemented a mixed-signal-simulation-based fault injection environment and device models to allow ESDs to be injected to target systems. By injecting different types of ESDs into the target system, we, for the first time, identified gate-level bit-flip patterns from a SPICE level high-voltage event. Our experimental results show that the extent of register value corruption can be single-bit or widespread, and the bit flips manifested can affect the system in multiple ways. We also demonstrated low-cost protection measures for some of the failures resulted."
+ },
+ {
+  "id": "W4385237263",
+  "doi": "https://doi.org/10.1109/tcad.2023.3298698",
+  "year": 2023,
+  "type": "review",
+  "venue": "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems",
+  "cited_by": 18,
+  "title": "Analog Defect Injection and Fault Simulation Techniques: A Systematic Literature Review",
+  "abstract": "Since the last century, the exponential growth of the semiconductor industry has led to the creation of tiny and complex integrated circuits, e.g., sensors, actuators, and smart power. Innovative techniques are needed to ensure the correct functionality of analog devices that are ubiquitous in every smart system. The ISO 26262 standard for functional safety in the automotive context specifies that fault injection is necessary to validate all electronic devices. For decades, standardization of defect modeling and injection mainly focused on digital circuits and, in a minor part, on analog ones. An initial attempt is being made with the IEEE P2427 draft standard that started to give a structured and formal organization to the analog testing field. Various methods have been proposed in the literature to speed up the fault simulation of the defect universe for an analog circuit. A more limited number of papers seek to reduce the overall simulation time by reducing the number of defects to be simulated. This literature survey describes the state-of-the-art of analog defect injection and fault simulation methods. The survey is based on the Preferred Reporting Items for Systematic Reviews and Meta-Analyses (PRISMA) methodological flow, allowing for a systematic and complete literature survey. Each selected paper has been categorized and presented to provide an overview of all the available approaches. In addition, the limitations of the various approaches are discussed by showing possible future directions."
+ },
+ {
+  "id": "W3180380519",
+  "doi": "https://doi.org/10.1049/pbcs057e",
+  "year": 2020,
+  "type": "book",
+  "venue": "",
+  "cited_by": 24,
+  "title": "Cross-Layer Reliability of Computing Systems",
+  "abstract": "Reliability has always been a major concern in designing computing systems. However, the increasing complexity of such systems has led to a situation where efforts for assuring reliability have become extremely costly, both for the design of solutions for the mitigation of possible faults, and for the reliability assessment of such techniques. Cross-layer reliability is fast becoming the preferred solution. In a cross-layer resilient system, physical and circuit level techniques can mitigate low-level faults. Hardware redundancy can be used to manage errors at the hardware architecture layer. Eventually, software implemented error detection and correction mechanisms can manage those errors that escaped the lower layers of the stack. This book presents state-of-the-art solutions for increasing the resilience of computing systems, both at single levels of abstraction and multi-layers. The book begins by addressing design techniques to improve the resilience of computing systems, covering the logic layer, the architectural layer and the software layer. The second part of the book focuses on cross-layer resilience, including coverage of physical stress, reliability assessment approaches, fault injection at the ISA level, analytical modelling for cross-later resiliency, and stochastic methods. Cross-Layer Reliability of Computing Systems is a valuable resource for researchers, postgraduate students and professional computer architects focusing on the dependability of computing systems."
+ },
+ {
+  "id": "W2033214828",
+  "doi": "https://doi.org/10.1109/isqed.2015.7085409",
+  "year": 2015,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 6,
+  "title": "Architectural reliability estimation using design diversity",
+  "abstract": "Reliability has emerged as an important design criterion due to shrinking device dimensions. Several reliability estimation techniques have been proposed which apply either fault injection or analytical methods. Among all such techniques, design diversity, which is initially proposed to protect system from common-mode failures using redundant copies of different implementation, has been applied to quantify the availability of a duplex system in circuit-level design. In this paper, we utilize the design diversity metric for architecture-level reliability analysis and validate the concept with diverse processing architectures. A novel graph based analysis is introduced which jointly quantifies circuit-level design diversity and architecture-level operator exclusiveness. The proposed approach is demonstrated on several embedded computing architectures through the analysis on architecture and application-level design diversity, as well as estimation of system Mean-Time-to-Failure."
+ },
+ {
+  "id": "W2018299365",
+  "doi": "https://doi.org/10.1145/2660540.2660985",
+  "year": 2014,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 6,
+  "title": "Reliability Analysis of a 130nm Charge Redistribution SAR ADC under Single Event Effects",
+  "abstract": "Successive Approximation Register (SAR) converters based on charge redistribution are often present in embedded mixed-signal systems. Previous works have shown that this topology is prone to errors on the conversion, caused by Single Event Transients (SET), when exposed to ionizing radiation. Such errors can propagate to the subsequent steps of conversion, leading to multiple bit errors on the converted data. In this work, the effects of SETs on the analog switches and on the digital control logic of a charge redistribution SAR A/D converter are analyzed. A fault injection framework was developed in a way that faults are randomly injected, by means of spice simulations, considering a 130nm CMOS technology. This way, the behavior of the converter under single event effects can be predicted, and the most vulnerable circuit nodes can be identified."
+ },
+ {
+  "id": "W4200134238",
+  "doi": "https://doi.org/10.1109/lats53581.2021.9651736",
+  "year": 2021,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 1,
+  "title": "Reliability Evaluation of Voters for Fault Tolerant Approximate Systems",
+  "abstract": "This work presents a study on the reliability of voters for approximate fault tolerant systems in the context of single event effects. A first case study analyses different topologies of single-bit majority voters for logic circuits by means of fault injection by simulation. In these simulations a previous analysis is performed identifying the critical diffusion areas of the physical implementation according to the voter input vector. Additionally, as second case study, practical heavy ion experiments on different architectures of software-based approximate voters for mixed-signal applications are also presented, and the cross section of each voter is evaluated. The system comprising the voter was irradiated in two distinct experiments with an16O ion beam, producing an effective$LET$at the active region of 5.5 MeV/mg/cm2. Results of both case-studies allow identifying the most tolerant voter architectures (among the studied ones) for approximate computing applications under single event effects."
+ },
+ {
+  "id": "W4381337193",
+  "doi": "https://doi.org/10.1007/s10836-023-06072-9",
+  "year": 2023,
+  "type": "article",
+  "venue": "Journal of Electronic Testing",
+  "cited_by": 3,
+  "title": "Evaluating the Reliability of Different Voting Schemes for Fault Tolerant Approximate Systems",
+  "abstract": ""
+ },
+ {
+  "id": "W3208137173",
+  "doi": "https://doi.org/10.1109/dft52944.2021.9568307",
+  "year": 2021,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 2,
+  "title": "Usability-based Cross-Layer Reliability Evaluation of Image Processing Applications",
+  "abstract": "Image processing applications are today increasingly employed in safety- and mission-critical fields for perception tasks. It is therefore vital to analyse the reliability of the designed system before its deployment and, if necessary, to adopt specific hardening techniques. In this paper we propose a cross-layer reliability evaluation framework specifically meant for image processing applications accelerated onto SRAM-based FPGAs. The framework is based on two key concepts: i) an application-level error simulation based on validated error models to speedup execution times, and ii) an analysis of the usability of the output images based on the working scenario. Such usability analysis allows the designer to study whether the downstream system would be able to take correct decisions even if the image processing outputs are corrupted. We applied the proposed idea on a motion detection application and we compared the achieved accuracy and the required execution times with the ones of a circuit-level fault injector, here considered as a ground truth. This experiment highlighted an accuracy comparable with the one of the fault injection with a dramatic time saving."
+ },
+ {
+  "id": "W2663019443",
+  "doi": "https://doi.org/10.1007/978-981-10-1073-6",
+  "year": 2017,
+  "type": "book",
+  "venue": "Computer architecture and design methodologies",
+  "cited_by": 7,
+  "title": "High-level Estimation and Exploration of Reliability for Multi-Processor System-on-Chip",
+  "abstract": ""
+ },
+ {
+  "id": "W7148562997",
+  "doi": "https://doi.org/10.1109/tdmr.2026.3680306",
+  "year": 2026,
+  "type": "article",
+  "venue": "IEEE Transactions on Device and Materials Reliability",
+  "cited_by": 0,
+  "title": "Design of Quintuple-Node-Upset Hardened Latches Based on C-Element Voting and an Analog Voter",
+  "abstract": "As nanometer-scale CMOS technology continues to advance, the susceptibility of memory cells to soft errors has significantly increased. Single-event multiple-node upsets (MNUs) have become a critical factor affecting integrated circuit reliability. This paper first proposes a self-recoverable double-node-upset (DNU) hardened latch (DSAR) based on the Soft-Error Aware Read-Decoupled (SAR) latch. Building upon this, a Quad-SAR latch capable of tolerating Quintuple-node upset (QtNU) is designed through dual DSAR redundancy and a two-stage Celement (CE) voting mechanism, achieving an optimized balance in area, power consumption, and delay. Furthermore, to address the high-impedance-state (HIS) sensitivity issue of C-elements, a Quint-SAR latch is achieved in this paper through the implementation of Quintuple-modular redundancy (QMR) combined with an Analog Voter (AV). This structure not only effectively tolerates QtNUs, but its incorporated Analog Voter features HIS insensitivity and offers significant low-overhead advantages compared to traditional voters. Extensive fault injection, PVT fluctuation, and negative bias temperature instability (NBTI) aging effect simulations verify the reliability of the proposed designs. HSPICE simulation results show that both the Quad-SAR and Quint-SAR latches possess QtNU tolerance capability and achieve a good balance in hardware overhead. Quad-SAR is suitable for low-power and low-delay requirements in non-HIS-sensitive scenarios, while Quint-SAR, with its HIS immunity, becomes the preferred solution for high-robustness scenarios. Compared to QNU-hardened and QtNU-hardened latches, their area-power-delay product (APDP) exhibits a decrease of 49.41% and 17.16%, respectively, and their setup time exhibits a decrease of 35.10% and 49.71%, respectively."
+ },
+ {
+  "id": "W1983106448",
+  "doi": "https://doi.org/10.1016/j.anucene.2010.06.009",
+  "year": 2010,
+  "type": "article",
+  "venue": "Annals of Nuclear Energy",
+  "cited_by": 12,
+  "title": "Reliability assessment method for NPP digital I&C systems considering the effect of automatic periodic tests",
+  "abstract": ""
+ },
+ {
+  "id": "W7203725333",
+  "doi": "https://doi.org/10.1080/10589759.2026.2717645",
+  "year": 2026,
+  "type": "article",
+  "venue": "Nondestructive Testing And Evaluation",
+  "cited_by": 0,
+  "title": "DEF-RSFA: an integrated nondestructive testing and reliability-aware SRAM design with fault analysis for additive manufacturing",
+  "abstract": "Additive manufacturing (AM) enables the rapid fabrication of complex electronic packages and structural components; however, defects such as pores, cracks, voids, and interlayer discontinuities can compromise structural integrity and electronic reliability. This study proposes a novel Defect Evaluation and Reliability-Conscious SRAM Fault Analysis (DEF-RSFA) framework that integrates non-destructive defect inspection with circuit-level reliability assessment. The framework initially employs X-ray Computed Tomography (CT) to acquire three-dimensional volumetric representations of additively manufactured components. AI-assisted image analysis is then used to identify voxel-level defects and quantify their spatial extent and severity. The extracted defect characteristics are mapped to circuit stress parameters and subsequently evaluated using Static Random-Access Memory (SRAM) as a representative circuit-level reliability model. Based on defect severity, adaptive fault-mitigation strategies, including guard-banding, transistor resizing, and redundancy, are applied to reduce defect-induced reliability degradation. Fault-injection analysis is performed to evaluate bit-error rates, timing errors, and failure probabilities under different defect conditions. Experimental results demonstrate a defect detection coverage of 98.42%, while the reliability analysis indicates a strong relationship between defect severity and circuit failure probability. The proposed DEF-RSFA framework provides an interpretable and scalable approach for linking manufacturing defects with electronic reliability, supporting defect-aware design optimization and manufacturing-process improvement for aerospace, automotive, and high-performance computing applications."
+ },
+ {
+  "id": "W4410267700",
+  "doi": "https://doi.org/10.32996/jcsts.2025.7.4.23",
+  "year": 2025,
+  "type": "article",
+  "venue": "Journal of Computer Science and Technology Studies",
+  "cited_by": 0,
+  "title": "Advancing Automotive Semiconductor Verification Through Simulation-Based Methodologies",
+  "abstract": "The rise of advanced driver-assistance systems (ADAS) and electric vehicles has placed unprecedented demands on automotive semiconductor designs. This article explores simulation-centric methodologies tailored to meet the stringent safety and reliability requirements of the automotive industry. The article focuses on compliance with standards like ISO 26262 and emphasizes fault injection testing as a core component of the verification process. Mixed-signal simulations play a crucial role in validating interactions between analog and digital components, ensuring seamless integration in automotive ICs. By incorporating advanced reliability metrics and failure mode analysis, the framework addresses potential vulnerabilities early in the design phase. Case studies from powertrain and ADAS IC projects demonstrate how simulation-based verification tools have significantly reduced defect rates while accelerating time-to-market and ensuring compliance with industry standards."
+ },
+ {
+  "id": "W2806617189",
+  "doi": "https://doi.org/10.1109/vts.2018.8368639",
+  "year": 2018,
+  "type": "conference-abstract",
+  "venue": "",
+  "cited_by": 1,
+  "title": "Innovative practices on functional testing and fault simulation for FuSa",
+  "abstract": "In this IP session, there will be 3 presentations focusing on functional testing and fault injection for automotive functional safety applications as well as a discussion on fault simulation and modeling for relevant analog test content. The 1stpresentation will discuss verification solutions that accelerate fault injection for diagnostic coverage to meet ASIL requirements. The 2ndpresentation discusses the use of focused random testing to achieve better functional coverage for automotive products. The 3rdpresentation will discuss the various challenges associated with analog fault coverage in the absence of standards and discusses approaches to address them."
+ },
+ {
+  "id": "W4239774968",
+  "doi": "https://doi.org/10.1109/fdl.2014.7119346",
+  "year": 2014,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 4,
+  "title": "Towards simulation based evaluation of safety goal violations in automotive systems",
+  "abstract": "With the advent of the ISO 26262 it became crucial to prove that electrical and electronic products delivered into safety-related automotive applications are adequately safe. For this purpose safety goal violations due to random hardware failures need to be evaluated. In order to gain evident results for argumentation within the evaluation, a fault injection based approach is utilized. Potential risk scenarios are initiated by injection of analog and digital faults into the heterogeneous behavioral model which comprises the safety-related hardware. For fault injection in heterogeneous models, we propose analog saboteurs, designed in VHDL-AMS, by which amongst electrical or mechanical, diverse energy domain analog hardware faults may be injected. For demonstration of this approach, a hardware model, comprising lithium-ion battery cells with a cell balancing module and safety-related circuitry is used."
+ },
+ {
+  "id": "W3047723463",
+  "doi": "https://doi.org/10.1109/iolts50870.2020.9159746",
+  "year": 2020,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 4,
+  "title": "Error Modeling for Image Processing Filters accelerated onto SRAM-based FPGAs",
+  "abstract": "Image processing is today employed in a variety of application fields, including safety- and mission-critical ones. In these scenarios it is vital to carefully analyse the reliability of the designed system before deployment and, if necessary, to adopt specific hardening techniques. Two are the techniques generally employed: circuit-level fault injection and application-level functional error simulation. In this paper we present a set of functional error models specific for a number of convolution-based filters that are the basic building blocks for a wide range of image processing applications. The presented error models, derived through a number of circuit-level fault injection experiments, may be integrated into application-level functional error simulators, bridging the gap between the two strategies. The presented error models are the first step towards combining the accuracy of fault injection and the flexibility of error simulation into a widely adopted reliability analysis tool."
+ },
+ {
+  "id": "W7106333956",
+  "doi": "https://doi.org/10.5281/zenodo.17635304",
+  "year": 2025,
+  "type": "article",
+  "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+  "cited_by": 0,
+  "title": "Investment Risk Assessment: Neuromorphic Computing for Edge AI - Safety Certification Barrier, Benchmark Vacuum, and Revenue Reality Analysis",
+  "abstract": "Comprehensive technical analysis of neuromorphic computing investment risk revealing pre-commercial market reality masked as product maturity with structural safety certification barrier blocking highest-value automotive/industrial applications. Quantifies three primary constraints plus compounding ecosystem gaps: (1) Revenue Reality Validates Pre-Commercial Status - BrainChip Holdings Ltd (ASX:BRN) FY2024 audited financials: $0.6 Million AUD total revenue (+100% YoY from $0.3M AUD); $39.3M AUD net loss; negative >6,000% operating margin; Akida processor revenue $314K AUD (primary product); geographic breakdown: Europe/Middle East/Asia $441K AUD (73% of revenue), Americas minimal contribution indicating early traction only outside mature US market; Intel Loihi 2 platform generates zero disclosed product revenue despite $13.7B quarterly parent revenue (positioned as research platform via INRC access, not commercial business unit); IBM TrueNorth zero disclosed product revenue despite $65.4B TTM parent revenue (legacy R&D platform); combined sector disclosed revenue <$1M USD; not execution failure but validation that leading vendors treat neuromorphic as strategic R&D investment not commercial profit center; BrainChip $0.6M AUD represents IP licensing and pilot programs not volume chip sales; pre-commercial IP licensing phase not volume production; (2) ISO 26262 Certification Barrier - independent technical assessment Q4 2025 explicitly identifies functional safety certification absence as \"greatest structural barrier preventing deployment of neuromorphic chips in markets like autonomous vehicles\"; zero platforms have achieved ISO 26262 (automotive ASIL-B or higher) or IEC 61508 (industrial SIL) certification as of Q4 2025; fundamental incompatibility: ISO 26262/IEC 61508 frameworks designed for synchronous deterministic digital logic operating on clock cycles; neuromorphic architectures use asynchronous event-driven probabilistic spike timing; safety standards require: deterministic failure analysis (quantified failures per hour for every component), fault injection testing with predictable observable outcomes, FMEDA comprehensive failure mode mapping and diagnostic coverage, static behavior (safety case assumes fixed non-adaptive operation); neuromorphic architectures provide: probabilistic timing (spike arrival depends on accumulated potential and stochastic noise), emergent computation (output from collective patterns not deterministic paths), continuous adaptation (on-chip learning causes behavior evolution during operation), asynchronous communication (no clock-synchronized state capture for failure analysis); certification timeline 42-72 months (3.5-6 years) comprising safety case development (12-18 months), FMEDA and fault injection (12-24 months), validation testing (12-18 months), certification body review (6-12 months); no neuromorphic platform has entered certification process; market lock mechanism: DVS sensors automotive-qualified (Sony IMX636, Prophesee partnerships) but uncertified compute platform blocks complete system deployment; automotive ADAS market (multi-billion opportunity) structurally locked regardless of chip performance; optimistic deployment 2028-2030, realistic post-2030; (3) Benchmark Vacuum Prevents Validation - MLPerf Tiny v1.3 (September 2025 latest) contains no neuromorphic track; benchmark tasks (keyword spotting, visual wake words, image classification, anomaly detection) use conventional NPUs (Syntiant, Arm Ethos), DSPs, microcontrollers; zero neuromorphic results (track does not exist); ONNX specification contains zero native SNN operators (missing: leaky integrate-and-fire neurons, spike generation, Address Event Representation communication, synaptic plasticity rules); consequence: proprietary toolchains required (Intel Lava, BrainChip MetaTF) preventing ecosystem network effects; NeuroBench community initiative emerging but preliminary framework not yet required for procurement; vendor-provided metrics non-comparable: Intel Loihi 2 \"up to 15 TOPS/W\" (peak efficiency, select workloads) vs Syntiant NDP120 \"1.80ms latency KWS\" (MLPerf Tiny v1.3 standardized streaming wake word) vs Arm Ethos-U65 \"1 TOP/s in 0.6mm²\" (16nm normalized area); procurement officer evaluating $10M deployment cannot determine if Loihi 2 vendor-optimized peak theoretical delivers lower system cost than Syntiant standardized measured task because different dimensions on different tasks with no common baseline; competing conventional baseline: Syntiant NDP120 MLPerf Tiny v1.3 winner achieving lowest energy-per-inference AND highest throughput for streaming wake word using analog/digital hybrid computation-in-memory architecture; Arm Ethos-U series: Ethos-U65 1 TOP/s in 0.6mm² at 16nm (2× vs predecessor), Ethos-U85 20% more energy efficient scaling to 4 TOPs, mature ecosystem (TensorFlow Lite Micro, ONNX support), proven safety qualification pathway (Arm Safety Ready); independent assessment conclusion: \"performance of highly specialized non-SNN accelerators like NDP120 demonstrates significant energy efficiency can be achieved via architectural optimization (analog computation in memory) without adopting full SNN paradigm\"; efficiency gap compressed from claimed \"100-1000×\" to realistic <20× on standardized workloads; conventional NPUs benefit from mature toolchains (no ONNX gap), standardized benchmarks (MLPerf validation), proven certification pathways (ISO 26262 compatible), volume production economics (millions of units). Additional constraints: DVS sensor market coupling ($180-220M in 2024) is 100× smaller than conventional vision sensors ($20B+); systemic advantage requires DVS sensors addressing <1% of vision applications; frame-to-spike conversion overhead erodes efficiency gains when using conventional cameras; toolchain friction from ONNX zero native SNN operators requires proprietary frameworks preventing third-party tools and pre-trained models; market forecast conditionality: 15× variance in projections ($1.3B to $20B by 2030); higher forecasts include sensors ($5-7B) and services ($5-10B); neuromorphic chip vendors address only $1.3-2B processor segment; 89.7% CAGR \"hockey stick\" explicitly \"predicated on successful resolution of non-technical roadblocks, including achievement of functional safety certification\"; failure to certify by 2028 collapses market to <$500M niche; constraint cascade: certification barrier is primary disqualifier blocking automotive/industrial regardless of performance; if certification somehow accelerated, benchmark vacuum prevents standardized deployment; if certification + benchmarks solved, ONNX gap creates vendor lock-in; if all ecosystem barriers solved, competing NPUs established extreme efficiency using mature approaches. Investment taxonomy: AVOID commercial volume deployment (2025-2028) facing <$1M revenue reality, zero certifications, structural market lock; EXTREME SELECTIVITY for four protected archetypes: (1) Research Platform Access (Intel INRC membership, no commercial expectations, pre-commercial acknowledgment, certification pathway with milestones, 3-5 year funding runway); (2) Component Technology Providers (IP licensing, development tools, DVS sensors, revenue from pilot/R&D independent of deployment success, customer diversification >5, >40% gross margin, revenue independent of volume deployment); (3) Defense & Non-Critical Industrial (custom specs bypass certification, low-volume high-value model, <$300M annually addressable, secured contracts, non-safety-critical, DVS sensors, low-volume pricing); (4) Post-Certification Conditional (2028+ entry after ISO 26262 achieved, required triggers: first certification achieved, MLPerf SNN track, ONNX native ops, OEM volume intent). Combined near-term addressable market (research, components, defense, non-critical) <$500M annually not $1.3-20B forecasts. Addresses $50M-$500M+ investment decisions with 2025-2035 horizon evaluation and pre-commercial reality framework."
+ },
+ {
+  "id": "W7106337368",
+  "doi": "https://doi.org/10.5281/zenodo.17635303",
+  "year": 2025,
+  "type": "article",
+  "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+  "cited_by": 0,
+  "title": "Investment Risk Assessment: Neuromorphic Computing for Edge AI - Safety Certification Barrier, Benchmark Vacuum, and Revenue Reality Analysis",
+  "abstract": "Comprehensive technical analysis of neuromorphic computing investment risk revealing pre-commercial market reality masked as product maturity with structural safety certification barrier blocking highest-value automotive/industrial applications. Quantifies three primary constraints plus compounding ecosystem gaps: (1) Revenue Reality Validates Pre-Commercial Status - BrainChip Holdings Ltd (ASX:BRN) FY2024 audited financials: $0.6 Million AUD total revenue (+100% YoY from $0.3M AUD); $39.3M AUD net loss; negative >6,000% operating margin; Akida processor revenue $314K AUD (primary product); geographic breakdown: Europe/Middle East/Asia $441K AUD (73% of revenue), Americas minimal contribution indicating early traction only outside mature US market; Intel Loihi 2 platform generates zero disclosed product revenue despite $13.7B quarterly parent revenue (positioned as research platform via INRC access, not commercial business unit); IBM TrueNorth zero disclosed product revenue despite $65.4B TTM parent revenue (legacy R&D platform); combined sector disclosed revenue <$1M USD; not execution failure but validation that leading vendors treat neuromorphic as strategic R&D investment not commercial profit center; BrainChip $0.6M AUD represents IP licensing and pilot programs not volume chip sales; pre-commercial IP licensing phase not volume production; (2) ISO 26262 Certification Barrier - independent technical assessment Q4 2025 explicitly identifies functional safety certification absence as \"greatest structural barrier preventing deployment of neuromorphic chips in markets like autonomous vehicles\"; zero platforms have achieved ISO 26262 (automotive ASIL-B or higher) or IEC 61508 (industrial SIL) certification as of Q4 2025; fundamental incompatibility: ISO 26262/IEC 61508 frameworks designed for synchronous deterministic digital logic operating on clock cycles; neuromorphic architectures use asynchronous event-driven probabilistic spike timing; safety standards require: deterministic failure analysis (quantified failures per hour for every component), fault injection testing with predictable observable outcomes, FMEDA comprehensive failure mode mapping and diagnostic coverage, static behavior (safety case assumes fixed non-adaptive operation); neuromorphic architectures provide: probabilistic timing (spike arrival depends on accumulated potential and stochastic noise), emergent computation (output from collective patterns not deterministic paths), continuous adaptation (on-chip learning causes behavior evolution during operation), asynchronous communication (no clock-synchronized state capture for failure analysis); certification timeline 42-72 months (3.5-6 years) comprising safety case development (12-18 months), FMEDA and fault injection (12-24 months), validation testing (12-18 months), certification body review (6-12 months); no neuromorphic platform has entered certification process; market lock mechanism: DVS sensors automotive-qualified (Sony IMX636, Prophesee partnerships) but uncertified compute platform blocks complete system deployment; automotive ADAS market (multi-billion opportunity) structurally locked regardless of chip performance; optimistic deployment 2028-2030, realistic post-2030; (3) Benchmark Vacuum Prevents Validation - MLPerf Tiny v1.3 (September 2025 latest) contains no neuromorphic track; benchmark tasks (keyword spotting, visual wake words, image classification, anomaly detection) use conventional NPUs (Syntiant, Arm Ethos), DSPs, microcontrollers; zero neuromorphic results (track does not exist); ONNX specification contains zero native SNN operators (missing: leaky integrate-and-fire neurons, spike generation, Address Event Representation communication, synaptic plasticity rules); consequence: proprietary toolchains required (Intel Lava, BrainChip MetaTF) preventing ecosystem network effects; NeuroBench community initiative emerging but preliminary framework not yet required for procurement; vendor-provided metrics non-comparable: Intel Loihi 2 \"up to 15 TOPS/W\" (peak efficiency, select workloads) vs Syntiant NDP120 \"1.80ms latency KWS\" (MLPerf Tiny v1.3 standardized streaming wake word) vs Arm Ethos-U65 \"1 TOP/s in 0.6mm²\" (16nm normalized area); procurement officer evaluating $10M deployment cannot determine if Loihi 2 vendor-optimized peak theoretical delivers lower system cost than Syntiant standardized measured task because different dimensions on different tasks with no common baseline; competing conventional baseline: Syntiant NDP120 MLPerf Tiny v1.3 winner achieving lowest energy-per-inference AND highest throughput for streaming wake word using analog/digital hybrid computation-in-memory architecture; Arm Ethos-U series: Ethos-U65 1 TOP/s in 0.6mm² at 16nm (2× vs predecessor), Ethos-U85 20% more energy efficient scaling to 4 TOPs, mature ecosystem (TensorFlow Lite Micro, ONNX support), proven safety qualification pathway (Arm Safety Ready); independent assessment conclusion: \"performance of highly specialized non-SNN accelerators like NDP120 demonstrates significant energy efficiency can be achieved via architectural optimization (analog computation in memory) without adopting full SNN paradigm\"; efficiency gap compressed from claimed \"100-1000×\" to realistic <20× on standardized workloads; conventional NPUs benefit from mature toolchains (no ONNX gap), standardized benchmarks (MLPerf validation), proven certification pathways (ISO 26262 compatible), volume production economics (millions of units). Additional constraints: DVS sensor market coupling ($180-220M in 2024) is 100× smaller than conventional vision sensors ($20B+); systemic advantage requires DVS sensors addressing <1% of vision applications; frame-to-spike conversion overhead erodes efficiency gains when using conventional cameras; toolchain friction from ONNX zero native SNN operators requires proprietary frameworks preventing third-party tools and pre-trained models; market forecast conditionality: 15× variance in projections ($1.3B to $20B by 2030); higher forecasts include sensors ($5-7B) and services ($5-10B); neuromorphic chip vendors address only $1.3-2B processor segment; 89.7% CAGR \"hockey stick\" explicitly \"predicated on successful resolution of non-technical roadblocks, including achievement of functional safety certification\"; failure to certify by 2028 collapses market to <$500M niche; constraint cascade: certification barrier is primary disqualifier blocking automotive/industrial regardless of performance; if certification somehow accelerated, benchmark vacuum prevents standardized deployment; if certification + benchmarks solved, ONNX gap creates vendor lock-in; if all ecosystem barriers solved, competing NPUs established extreme efficiency using mature approaches. Investment taxonomy: AVOID commercial volume deployment (2025-2028) facing <$1M revenue reality, zero certifications, structural market lock; EXTREME SELECTIVITY for four protected archetypes: (1) Research Platform Access (Intel INRC membership, no commercial expectations, pre-commercial acknowledgment, certification pathway with milestones, 3-5 year funding runway); (2) Component Technology Providers (IP licensing, development tools, DVS sensors, revenue from pilot/R&D independent of deployment success, customer diversification >5, >40% gross margin, revenue independent of volume deployment); (3) Defense & Non-Critical Industrial (custom specs bypass certification, low-volume high-value model, <$300M annually addressable, secured contracts, non-safety-critical, DVS sensors, low-volume pricing); (4) Post-Certification Conditional (2028+ entry after ISO 26262 achieved, required triggers: first certification achieved, MLPerf SNN track, ONNX native ops, OEM volume intent). Combined near-term addressable market (research, components, defense, non-critical) <$500M annually not $1.3-20B forecasts. Addresses $50M-$500M+ investment decisions with 2025-2035 horizon evaluation and pre-commercial reality framework."
+ },
+ {
+  "id": "W2909913318",
+  "doi": "https://doi.org/10.1016/j.microrel.2018.12.013",
+  "year": 2019,
+  "type": "article",
+  "venue": "Microelectronics Reliability",
+  "cited_by": 7,
+  "title": "A BICS-based strategy for mitigating the effects of single event transients on SAR converter",
+  "abstract": ""
+ },
+ {
+  "id": "W4242869351",
+  "doi": "https://doi.org/10.1007/s10836-015-5522-8",
+  "year": 2015,
+  "type": "editorial",
+  "venue": "Journal of Electronic Testing",
+  "cited_by": 0,
+  "title": "Editorial",
+  "abstract": ""
+ },
+ {
+  "id": "W2107830854",
+  "doi": "https://doi.org/10.1109/tns.2009.2013347",
+  "year": 2009,
+  "type": "article",
+  "venue": "IEEE Transactions on Nuclear Science",
+  "cited_by": 14,
+  "title": "A Self-Checking Scheme to Mitigate Single Event Upset Effects in SRAM-Based FPAAs",
+  "abstract": "In this work the problem of Single Event Upset (SEU) is considered in a recent analog technology: The Field Programmable Analog Arrays (FPAAs). Some FPAA models are based on SRAM memory cells to implement the user programmability, which makes this kind of device vulnerable to SEU when employed in applications susceptible to the incidence of radiation. In the former part of this work some fault injection experiments are made in order to investigate the effects of SEU in the SRAM blocks of a commercial FPAA. For this purpose, single bit inversions are injected in the FPAA programming bitstream, when an oscillator module is programmed. In a second moment, a self-checking scheme using the studied FPAA is proposed. This scheme, which is built from the FPAA programming resources, is able to restore the original programming data if an error is detected. Fault injection is also performed to investigate the reliability of the proposed scheme when the bitstream section which controls the checker blocks is corrupted due to a SEU."
+ },
+ {
+  "id": "W2022090170",
+  "doi": "https://doi.org/10.1109/dsd.2014.92",
+  "year": 2014,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 11,
+  "title": "Probabilistic Gate Level Fault Modeling for Near and Sub-Threshold CMOS Circuits",
+  "abstract": "This paper presents gate level delay dependent probabilistic fault models for CMOS circuits operating at sub-threshold and near-threshold supply voltages. A bottom-up approach has been employed: SPICE simulations have been used to derive higher level error models implemented using Verilog HDL. HSPICE Monte-Carlo simulations show that the delay dependent probabilistic nature of these faults is due to the process-voltage-temperature (PVT) variations which affect the circuits operating at very low supply voltages. For gate level error analysis, mutant based simulated fault injection (SFI) techniques have been employed for combinational net list reliability analysis. Four types of gate level fault models, with different accuracies, are proposed. Our findings show that the proposed SFI method presents a 2X-5X simulation time overhead compared to the simulation of the gold circuit, with respect to SPICE analysis, the proposed method requires three orders of magnitude less simulation time."
+ },
+ {
+  "id": "W3150636843",
+  "doi": "https://doi.org/10.1109/radecs.2008.5782691",
+  "year": 2008,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "A self-checking scheme to mitigate single event upset effects in SRAM-based FPAAs",
+  "abstract": "In this work the problem of Single Event Upset (SEU) is considered in a recent analog technology: The Field Programmable Analog Arrays (FPAAs). Some FPAA models are based on SRAM memory cells to implement the user programmability, which makes this kind of device vulnerable to SEU when employed in applications susceptible to the incidence of radiation. In a previous work some fault injection experiments were made in order to investigate the effects of SEU in the SRAM blocks of a commercial FPAA. For this purpose, single BIT inversions were injected in the FPAA programming bitstream, when an oscillator module was programmed. Based on the obtained results, a self-checking scheme using the studied FPAA is proposed. This scheme, which is built from the FPAA programming resources, is able to restore the original programming data if an error is detected. Fault injection is also performed to investigate the reliability of the proposed scheme when the bitstream section which controls the checker blocks is corrupted due to a SEU."
+ },
+ {
+  "id": "W2028423495",
+  "doi": "https://doi.org/10.1088/1674-4926/30/3/035007",
+  "year": 2009,
+  "type": "article",
+  "venue": "Journal of Semiconductors",
+  "cited_by": 7,
+  "title": "A novel radiation hardened by design latch",
+  "abstract": "Due to aggressive technology scaling, radiation-induced soft errors have become a serious reliability concern in VLSI chip design. This paper presents a novel radiation hardened by design latch with high single-event-upset (SEU) immunity. The proposed latch can effectively mitigate SEU by internal dual interlocked scheme. The propagation delay, power dissipation and power delay product of the presented latch are evaluated by detailed SPICE simulations. Compared with previous SEU-hardening solutions such as TMR-Latch, the presented latch is more area efficient, delay and power efficient. Fault injection simulations also demonstrate the robustness of the presented latch even under high energy particle strikes."
+ },
+ {
+  "id": "W7125406814",
+  "doi": "https://doi.org/10.1007/978-3-032-09586-2_3",
+  "year": 2026,
+  "type": "book-chapter",
+  "venue": "Synthesis lectures on engineering, science, and technology",
+  "cited_by": 0,
+  "title": "Related Work",
+  "abstract": ""
+ },
+ {
+  "id": "W2185422214",
+  "doi": "",
+  "year": 2014,
+  "type": "article",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Effect Analysis of Faults in Digital I&C Systems of Nuclear Power Plants",
+  "abstract": "A reliability analysis of digital instrumentation and control (I&C) systems in nuclear power plants has been introduced as one of the important elements of a probabilistic safety assessment because of the unique characteristics of digital I&C systems. Digital I&C systems have various features distinguishable from those of analog I&C systems such as software and fault-tolerant techniques. In this work, the faults in a digital I&C system were analyzed and a model for representing the effects of the faults was developed. First, the effects of the faults in a system were analyzed using fault injection experiments. A software-implemented fault injection technique in which faults can be injected into the memory was used based on the assumption that all faults in a system are reflected in the faults in the memory. In the experiments, the effect of a fault on the system output was observed. In addition, the success or failure in detecting the fault by fault-tolerant functions included in the system was identified. Second, a fault tree model for representing that a fault is propagated to the system output was developed. With the model, it can be identified how a fault is propagated to the output or why a fault is not detected by fault-tolerant techniques. Based on the analysis results of the proposed method, it is possible to not only evaluate the system reliability but also identify weak points of fault-tolerant techniques by identifying undetected faults. The results can be reflected in the designs to improve the capability of fault-tolerant techniques. Keyword: Digital I&C, fault-tolerant technique, fault injection"
+ },
+ {
+  "id": "W4200309542",
+  "doi": "https://doi.org/10.1109/asid52932.2021.9651696",
+  "year": 2021,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 3,
+  "title": "A Single Event Effect Simulation Method for RISC-V Processor",
+  "abstract": "For accurately assessing the reliability of space application toward soft errors, this paper proposed a method of Single Event Effect simulation method for Large Scale Integrated Circuits (LSI). This simulation method divided into three levels: fault model, fault injection and target system simulation, which consists of a variety of simulation tools, such as TCAD, SPICE circuit simulator and analyzing tools of gate-level netlist. A 4-stage in-order RISC-V soft processor is used as the simulation target system. The simulation method has the following advantages: 1. It is a universal method of testing any large-scale integrated circuit including its peripheral components. 2. By input the gate-level net-list of the circuit and add the simulation stimulus, the method can get the simulation report automatically. 3. The soft error can be traced: The faulty node and the voltage waveform of the node can be reported intuitively."
+ },
+ {
+  "id": "W2622213335",
+  "doi": "",
+  "year": 2016,
+  "type": "dissertation",
+  "venue": "Illinois Digital Environment for Access to Learning and Scholarship (University of Illinois at Urbana-Champaign)",
+  "cited_by": 0,
+  "title": "A testbed to assess digital instrumentation and control and cyber security of nuclear power plants",
+  "abstract": "Existing nuclear power plants (NPPs) are switching from analog to digital control systems, and digital instrumentation and control (I&C) systems are expected to be used in all of the new NPPs. Digital I&C is expected to improve the performance of communication, maintenance, and signal processing. However, research needs to be done to ensure the nuclear-grade safety and reliability of these systems. The goals of this research project are to identify potential faults and to evaluate the resiliency of safety-critical digital I&C systems destined for use in NPPs. A test bed is developed for this purpose. This test bed consists of a model of a NPP, a main control room (MCR), and associated digital I&C controllers. The digital controller has a triple-modular redundant (TMR) architecture system. This device uses a two-out-of-three voting algorithm for the purpose of better reliability. A simple real-time NPP simulator is developed in LabVIEW using the point kinetics equation with feedback for the core. It also includes models for a pressurizer, a steam generator, and a pump. The test bed also includes a set of specialized fault injectors for injecting different types of faults into the system. A fault injection module is developed in LabVIEW in order to simulate sensor failures. The module contains a fault list manager (FLM), a fault injection manager (FIM), and a result analyzer (RA). This thesis describes the details of the test bed, the associated fault injection system, and the results of the fault injection studies which are carried out using this test bed to find critical sensor failures in NPPs. In addition, the performance of the RA module is also evaluated. Based on the results of the numerical experiments performed, conditions that require most care are when the faulty sensor data implies either steady state or sub-critical condition of the reactor. The RA module helps the operators in identifying, in some cases, if the sensor data is bad due to a faulty sensor. The most vulnerable scenario is when the reactor is under steady-state operation and faulty sensor is stuck at its value corresponding to that steady-state. The operators in this scenario will not become aware if the reactor goes through an unanticipated transient, unless the simulator mode is switched to “transient”."
+ },
+ {
+  "id": "W7125383643",
+  "doi": "https://doi.org/10.1007/978-3-032-09586-2_1",
+  "year": 2026,
+  "type": "book-chapter",
+  "venue": "Synthesis lectures on engineering, science, and technology",
+  "cited_by": 0,
+  "title": "Introduction",
+  "abstract": ""
+ },
+ {
+  "id": "W7125383062",
+  "doi": "https://doi.org/10.1007/978-3-032-09586-2_2",
+  "year": 2025,
+  "type": "book-chapter",
+  "venue": "Synthesis lectures on engineering, science, and technology",
+  "cited_by": 0,
+  "title": "Background",
+  "abstract": ""
+ },
+ {
+  "id": "W1650942424",
+  "doi": "https://doi.org/10.1109/recosoc.2015.7238095",
+  "year": 2015,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 10,
+  "title": "A Partial Reconfiguration-based scheme to mitigate Multiple-Bit Upsets for FPGAs in low-cost space applications",
+  "abstract": "Conventionally, the design of fault-tolerant architectures for space applications has mainly been focused on reliability and correction latency. However, based on cost reduction requirements, the power consumption must also be minimized, as it impacts the battery size and the weight of the satellite. While technology scaling helps in this purpose, it also increases the circuit sensitivity to Multiple-Bit Upsets (MBU), thus specific design techniques must be applied to compensate this effect. In order to leverage high-performance and low-cost Commercial Off-The-Shelf (COTS) FPGAs in space applications, this work tackles fault tolerance along three abstraction levels: circuit, organization and control. At the circuit level, a new ultra-low overhead Forward Temporal Redundancy (FTR) scheme is proposed for error detection in user logic. At the organization level in the FPGA, this work leverages the opportunities brought by frame- and module-based Dynamic Partial Reconfiguration (DPR) to handle configuration memory errors. At the control level, this work fully exploits the modern Xilinx Zynq System-on-Chip FPGA which embeds a hard processor used for circuit state preservation with checkpointing and rollback. The overall topology is successfully validated with 99.998% reliability through fault-injection for a five-stage pipelined MIPS processor at a global resource overhead of only 85% in LUTs and 125% in flip-flops."
+ },
+ {
+  "id": "W7162751477",
+  "doi": "https://doi.org/10.2139/ssrn.6849816",
+  "year": 2026,
+  "type": "preprint",
+  "venue": "SSRN Electronic Journal",
+  "cited_by": 0,
+  "title": "QART: A Low-Power Quadruple-Node-Upset Hardened Latch Based on Asymmetric Ring Topology",
+  "abstract": ""
+ },
+ {
+  "id": "W4411446564",
+  "doi": "https://doi.org/10.1109/tcad.2025.3581138",
+  "year": 2025,
+  "type": "article",
+  "venue": "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems",
+  "cited_by": 0,
+  "title": "FR 2 eRAM: A Fault-Resilient Graph Processing Paradigm in Realistic ReRAMs",
+  "abstract": "With the explosive growth of modern graph data, ReRAM-based graph processing paradigms are emerging as promising solutions to the “memory wall” bottleneck. However, existing paradigms often lean on overly idealized ReRAM architectures, overlooking the critical influence of various hardware faults due to the analog nature and immature fabrication processes of realistic ReRAMs. These hardware faults can lead to convergence anomalies or unacceptable output deviations (i.e., Severe Errors), undermining the reliability of ReRAM-based graph processing. While some studies enhance the reliability of ReRAM-based computation through fault-aware remapping or robust algorithm design, the unique graph execution characteristics make these efforts challenging to migrate effectively. In this work, we first develop ReGFI, a microarchitecture-level Fault Injection framework for ReRAM-based Graph processing. Unlike traditional fault injection methods that only introduce random algorithm-level faults, ReGFI precisely maps hardware faults into the microarchitectural graph execution flow to effectively characterize their effects on the execution correctness. Based on ReGFI, we propose FReRAM, a Fault-Resilient graph processing paradigm in realistic ReRAMs. Firstly, observing the fault robustness of graph vertices compared to graph edges, we reverse-map the vertex values to the non-ideal crossbar while using the edge values as inputs, for proactive SE avoidance. Then, leveraging the cell idleness in ReRAM crossbars and bit-wise reliability discrepancies of graph data, we recycle idle crossbar cells and squeeze out approximable Least Significant Bits to robust-encode the fault-sensitive bits, for further SE elimination. Experimental results exhibit that FReRAM achieves 88.84% SE reduction while incurring negligible overhead for fault-resilient ReRAM-based graph processing. Furthermore, we evaluate the effectiveness and performance of FReRAM under different hardware configurations, graph datasets, and data formats."
+ },
+ {
+  "id": "W2285970245",
+  "doi": "",
+  "year": 2013,
+  "type": "dissertation",
+  "venue": "Lume (Universidade Federal do Rio Grande do Sul)",
+  "cited_by": 0,
+  "title": "Detecting transient faults in the configurable reconfigurable core architecture without false error signals",
+  "abstract": "Fault tolerance is an important issue to worry about in the computing world. The detection of errors provided by transient faults, among others source of errors, in a determined region of a computer architecture is necessary to increase the reliability of the architecture. Circuit level time-redundancy (NICOLAIDIS, 1999) is a good technique to detect transient errors (those caused by transient faults) with low impact in area in a first moment. This work presents two implementations of the technique and the conditions we must respect in order to maximize the error detection without generating false errors signals. In addition, these implementations are used to construct the component that is part of a flexible error handling module (FEHM) (SCHWEIZER et al., 2012). This module is incorporated in the Configurable Reconfigurable Core (OPPOLD et al., 2007) architecture in order to detect and mask errors caused by permanent and transient faults. As a result, the simulations confirm that the conditions formulated avoids the false errors signals generation. However, the synthesis results shows that the technique can impact, not only in the area, but also in the performance of the circuit. Furthermore, fault injection simulations show that the FEHM has a vulnerability in the presence of transient faults."
+ },
+ {
+  "id": "W2798776715",
+  "doi": "https://doi.org/10.23919/date.2018.8342224",
+  "year": 2018,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 6,
+  "title": "A soft-error resilient route computation unit for 3D Networks-on-Chips",
+  "abstract": "Three-dimensional Networks-on-Chips (3D-NoCs) have emerged as an alternative to further enhance the performance, functionality, and packaging density of 2D-NoCs. However, the increasing complexity of NoC routers, the continuous miniaturization of silicon technology, the lower operating voltages, and the higher operating frequencies have made the NoC increasingly vulnerable to soft errors. In particular, transient faults occurring in the route computation unit (RCU) can provoke misrouting which may lead to severe effects such as deadlocks or packet loss, corrupting the operation of the entire chip. By combining a reliable fault detection circuit leveraging circuit-level double-sampling, with a cost-effective rerouting mechanism, we develop a full fault-tolerance solution that can efficiently detect and correct such fatal errors before the affected packets leave the router. To validate the proposed solution, we also introduce a novel method for simulation-based fault-injection based on the NoC's gate-level netlist. Experimental results obtained from a partially and vertically connected 3D-NoC indicate that our solution can provide a high level of reliability in the presence of errors, at the expense of an area and power overhead of 4.1% and 6.8% respectively."
+ },
+ {
+  "id": "W4416010330",
+  "doi": "https://doi.org/10.1109/tla.2025.11231230",
+  "year": 2025,
+  "type": "article",
+  "venue": "IEEE Latin America Transactions",
+  "cited_by": 0,
+  "title": "A Test Strategy for a Current Source Designed for Fast Field-Cycling Nuclear Magnetic Resonance",
+  "abstract": "This article presents a novel structural test strategy for a single MOSFET (Metal-Oxide-Semiconductor Field-Effect Transistor) source designed for Fast Field-Cycling Nuclear Magnetic Resonance (FFC-NMR) systems. The proposed methodology enables in-field fault detection during idle intervals or before experiment initiation, a critical step to ensure the reliability and validity of the experimental outcomes. The circuit under test is divided into two sections: low-power and high-power. Each one is evaluated using tailored analog testing techniques: OBT (Oscillation-Based Test) and direct current testing are applied to the low-power section, while transient analysis with DTW (Dynamic Time Warping) is used for fault detection in the high-power section. This approach achieves high fault coverage 93.7% for the low-power section and 100% for the high-power section without requiring complex signal processing. The effectiveness of the method is validated through simulation studies complement-ed by experimental fault injection on a scaled-down prototype. The results demonstrate that this test strategy significantly enhances system reliability, offering a valuable contribution to the development of more robust and maintainable FFC-NMR instrumentation for scientific and industrial applications."
+ },
+ {
+  "id": "W4399408993",
+  "doi": "https://doi.org/10.1109/tr.2024.3405825",
+  "year": 2024,
+  "type": "article",
+  "venue": "IEEE Transactions on Reliability",
+  "cited_by": 7,
+  "title": "An Empirical Fault Vulnerability Exploration of ReRAM-Based Process-in-Memory CNN Accelerators",
+  "abstract": "Resistive random-access memory (ReRAM)-basedprocessing-in-memory(PIM) accelerator is a promising platform for processing massively memory intensive matrix-vector multiplications of neural networks in parallel domain, due to its capability of analog computation, ultra-high density, near-zero leakage current, and nonvolatility. Despite many advantages, ReRAM-based accelerators are highly error-prone due to limitations of technology fabrication that lead to process variations and defects. These limitations degrade the accuracy of deep convolutional neural networks (CNNs) (Deep CNNs) running on PIM accelerators. While these CNNs accelerators are widely deployed in safety-critical systems, their vulnerability to fault is not well explored. In this article, we have developed a fault-injection framework to investigate the vulnerability of large-scale CNNs at both software- and hardware-level of inference phases. Faulty ReRAM devices are another reliability challenges due to significant degradation of classification accuracy when CNN parameters are mapped to the accelerators. To investigate this challenge, we map the CNN learning parameter to the ReRAM crossbar and inject faults into crossbar arrays. The proposed framework analyzes the impact ofstuck-at high(SaH) andstuck-at low(SaL) fault models on different layers and locations of CNN learning parameters. By performing extensive fault injections, we illustrate that the vulnerability behavior of ReRAM-based PIM accelerator for CNNs is greatly impressible to the types and depth of layers, the location of the learning parameter in every layer, and the value and types of faults. Our observations show that different models have different vulnerabilities to faults. Specifically, we show that SaL further reduces classification accuracy than SaH."
+ },
+ {
+  "id": "W7117996372",
+  "doi": "https://doi.org/10.1007/978-981-95-1802-9_8",
+  "year": 2026,
+  "type": "conference-paper",
+  "venue": "Lecture notes in electrical engineering",
+  "cited_by": 0,
+  "title": "Model-Based Prognosis for Hybrid Systems: A Perspective of Patent",
+  "abstract": ""
+ },
+ {
+  "id": "W2510644716",
+  "doi": "https://doi.org/10.1109/isvlsi.2016.19",
+  "year": 2016,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 7,
+  "title": "Soft Error Effect Tolerant Temporal Self-Voting Checkers: Energy vs. Resilience Tradeoffs",
+  "abstract": "Achieving high reliability against transient faults poses significant challenges due to the trends of technology and voltage scaling. Thus, numerous soft error mitigation techniques have been proposed for masking Soft Error Rate (SER) in logic circuits. However, most soft error suppression approaches have significant overheads in terms of area, power consumption, and speed performance degradation. Herein, we propose two circuit-level techniques, namely Temporal Self-Voting Logic (TSVL) and Hybrid Spatial and Temporal Redundancy Double-Error Correction (HSTR-DEC), to prevent the effects of soft errors in logic circuits, occurring due to Single Event Upset (SEU) or Single Event Transient (SET). TSVL and HSTR-DEC circuits can be utilized to improve the reliability of a logic path with minimal impact on circuit delay while achieving a complete and cost-effective SEU handling as compared to traditional spatial or temporal redundancy approach. The primary contribution of the TSVL approach is that it eliminates error masking from the critical datapath, thus, area and energy overheads are significantly reduced. A transient gate-level fault injection and analysis is used to evaluate the capability of soft errors suppression of the proposed hardening approach. Experimental results indicate that TSVL can cover soft errors, on average, roughly by 99% while realizing an amelioration of 22.02% and 2.15% for area and speed degradation as compared to the previous Self-Voting DMR approach. Meanwhile, HSTRDEC approach realizes a complete coverage for single and double SEUs while incurring comparable area and delay overheads as compared to the prior hybrid redundancy approach."
+ },
+ {
+  "id": "W7167834684",
+  "doi": "https://doi.org/10.1016/j.mejo.2026.107358",
+  "year": 2026,
+  "type": "article",
+  "venue": "Microelectronics Journal",
+  "cited_by": 0,
+  "title": "QART: A low-power quadruple-node-upset hardened latch based on asymmetric ring topology",
+  "abstract": ""
+ },
+ {
+  "id": "W7168236941",
+  "doi": "https://doi.org/10.48550/arxiv.2607.10938",
+  "year": 2026,
+  "type": "preprint",
+  "venue": "arXiv (Cornell University)",
+  "cited_by": 0,
+  "title": "ARMOR-IMC: Adaptive Resource Mapping for Operational Robustness via Secure In-Memory Computing",
+  "abstract": "The massive data-movement overhead in traditional architectures has led to the adoption of In-Memory Computing (IMC) for energy-efficient Deep Neural Network (DNN) processing. By leveraging emerging devices like Spin-Orbit Torque Magnetic Tunnel Junctions (SOT-MTJs), IMC bypasses the \"memory wall\" and reduces leakage power inherent in traditional CMOS. However, this shift introduces dual hardware threats: manufacturing Process Variation (PV) degrades reliability and increases vulnerability to fault injection, while power Side-Channel Attacks (SCAs) compromise security. Existing defenses address these threats in isolation. This work presents a posttraining framework that simultaneously hardens analog IMC accelerators against both threats without retraining the model. Implemented in the IMAC-Sim simulator, our approach uses the proposed Variation Impact Score (VIS) to guide the mapping of Fault Observation Windows (FOWs) and introduces the Leakage Per Inference (LPI) metric to quantify input-dependent power variability under stochastic injection and the resulting reduction in effective signal-to-noise ratio. Experiments show that PV-induced faults can degrade accuracy by over 50%, while our method restores near-baseline accuracy and mitigates the threat of correlation-based power analysis attacks."
+ },
+ {
+  "id": "W4413938519",
+  "doi": "https://doi.org/10.1088/1361-6501/ae01c3",
+  "year": 2025,
+  "type": "article",
+  "venue": "Measurement Science and Technology",
+  "cited_by": 2,
+  "title": "Fault diagnosis strategy for the current source section of a field-cycling nuclear magnetic resonance instrument",
+  "abstract": "Abstract This paper proposes a fault diagnosis strategy to address catastrophic failures in all power components of the current source of a field-cycling nuclear magnetic resonance (FC-NMR) instrument. The current source, implemented with a single power MOSFET operating in linear mode, is prone to thermal instability and degradation under high-current conditions, posing significant risks to system reliability. Due to the continuous conduction inherent in linear-mode operation, fault signatures in the MOSFET could be subtle and difficult to distinguish from normal operational variations, making diagnostic methods relying on switching transients ineffective in this context. To overcome these limitations, an active fault diagnosis framework is introduced to enhance fault detection and localization. This framework combines test signal injection with data-driven artificial intelligence classifiers. Three algorithms—ResNet, a convolutional neural network (CNN), and a nearest neighbor with dynamic time warping (NN-DTW), used as a benchmark—are evaluated using hybrid datasets derived from simulation program with integrated circuit emphasis (SPICE) simulations and experimental fault injections. The methodology employs time-domain signals measured at key circuit nodes, avoiding computationally intensive preprocessing steps. Simulation and experimental results demonstrate classification accuracies of 100% for ResNet and NN-DTW, and 95.2% for CNN, with prediction times under 20 ms for neural networks. The proposal successfully diagnoses both easy-to-detect faults, validated through simulation, and hard-to-detect faults, confirmed experimentally. The entire fault diagnosis process is completed in under 15 s, making it suitable for in-field monitoring of FC-NMR systems."
+ },
+ {
+  "id": "W7213282790",
+  "doi": "https://doi.org/10.17918/00011559",
+  "year": 2026,
+  "type": "dissertation",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Dependable digital spiking neuromorphic hardware",
+  "abstract": "Spiking neural networks (SNNs) are a biologically inspired class of machine learning models in which information is encoded and processed as sparse, asynchronous spike events distributed over time. When mapped onto digital neuromorphic hardware, these networks perform event-driven computation at very low power, making them attractive for edge intelligence, autonomous systems, and other low power applications. However, as neuromorphic systems move toward real-world deployment, they inherit the reliability problems of modern silicon. Single-event upsets, stuck-at defects, process variation, aging, and timing errors can corrupt the arithmetic and control logic of a spiking neuron. Since computation in an SNN is temporally encoded, such a fault can delay a spike, suppress a spike that should have occurred, or introduce a spurious one. The temporal encoding attenuates errors, because the membrane update applies its decay factor to an injected error. Reliability analysis for neuromorphic hardware therefore differs from that of conventional deep-learning accelerators, and it requires error-detection and fault-tolerance methods developed specifically for spiking systems. This dissertation develops four such methods, organized along two directions. Detection and tolerance are developed to establish a method, and that method's cost. All four are implemented and evaluated on QUANTISENC, an open-source digital spiking neuromorphic core, executing standard image-classification workloads. The first method performs concurrent (online) error detection and isolation using hierarchical, model-based monitoring. A software-based monitor observes the presynaptic and postsynaptic spike trains produced by hardware-mapped neurons and compares them against the nominal behavior predicted by lightweight, tree-based machine learning models. An inexpensive system-level monitor continuously checks the aggregate behavior of the network, and neuron-level monitoring is invoked only when a system-level discrepancy is detected. To keep neuron-level monitoring affordable, critical neurons are identified from the magnitude of their synaptic weights and grouped into clusters, with a single predictive model representing each cluster. Fault-injection experiments on MNIST, Fashion-MNIST, and SVHN detect injected faults at rates around 88% at both levels, with model storage under 2 MB and model inference times below a millisecond on the host processor. The quantity reported is the detection rate over the injected population. The second method asks what that monitoring needs to pay for. Revisiting the first pipeline on its own fault-injection data shows that the learned per-neuron model is less computationally efficient: a model-free residual fed to a sequential change detector matches the tree-ensemble residual to within ±0.001 AU-ROC on every data set and metric. This permits a cheap-first, expensive-on-demand cascade, in which an inexpensive rate and regularity chart runs on every neuron and the costly Victor-Purpura and van Rossum spike distances are computed only on flagged neurons, reducing the modeled online cost of the sensitive metric by about 13.6x at an end-to-end recall of 0.95. The saving is derived from an operation-count model, the confirmation stage is measured directly on MNIST. The third method addresses fault tolerance through the selective hardening of the neuron datapath. Circuit-level faults are injected into the adder, multiplier, comparator, and refractory counter of the leaky integrate-and-fire neuron, and a criticality analysis combining synaptic-weight strength with input-dependent firing activity identifies the neurons and components whose failures distort spike-timing. The analysis identifies the multiplier, and in particular its most significant bit region, as the dominant contributor to spike timing error. Applying triple modular redundancy only to MSB slice within the critical neurons reduces the average inter-spike-interval deviation under randomized fault injection from 1.65% to 1.49%, at an area overhead of about 1% and a negligible power overhead. This is the only comparison in the chapter in which both conditions use the same fault-sampling procedure. The fourth method allocates redundancy from how long each storage element actually retains a captured fault. A matched IF, obtained by removing only the leaky path from the design, isolates the contribution of the membrane leak from the threshold reset. Across 288 paired fault descriptors on three data sets, output spike-train masking is 86.5% with leak and 75.3% without, and residual spike corruption is 5.9 times smaller. Bit-level campaigns show three register-dependent criticality patterns consistent with differences in state-update and persistence semantics. On a held-out descriptor set, a register-transfer-level built 13-bit selected protection mask raises masking from 59 to 89 of 96 injections and lowers critical silent data corruption from five events to one, at an overhead of 1.56% generic mapped cells, whereas triplicating the twelve low-order membrane bits recovers none of the baseline critical events at 1.44%. On shared configuration state, triplication lowers critical silent data corruption from 36.4% to 13.1%, and adding periodic repair lowers it to 6.1%, over 198 paired observations per variant. Together the four methods span the reliability of a neuromorphic system. The first two detect faults during operation and then remove monitoring cost that does not buy detection; the second two tolerate the faults. The evidence throughout is simulation and register-transfer-level fault injection on image-classification workloads, with faults injected at chosen sites and times."
+ },
+ {
+  "id": "W7135412242",
+  "doi": "https://doi.org/10.5281/zenodo.19023904",
+  "year": 2026,
+  "type": "software",
+  "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+  "cited_by": 0,
+  "title": "ARVS: Adaptive Robust Verification System",
+  "abstract": "ARVS v1.0.0 — Initial Release Adaptive Robust Verification System — A research-grade autonomy architecture for spacecraft, rovers, and safety-critical autonomous systems. 🔬 What is ARVS? ARVS is a full-stack autonomy framework built for environments where failure is not an option — planetary rovers, orbital spacecraft, and multi-robot systems. It implements a five-stage pipeline: Sense → Think → Verify → Optimise → Enforce Every stage is formally grounded: Bayesian state estimation, a frozen axiom constitution, QUBO-based optimization, and a sub-millisecond C++ safety gate. ✨ Key Features 25-Axiom Frozen Constitution — Immutable safety axioms enforced identically in both Python and C++, with a SHA-256 cryptographic audit chain 8-Dimensional Risk Quantifier — Risk is embedded directly into the MDP reward function: R(s,a) = gain − λ·risk − μ·energy ±15% Bounded Adaptive Learning — Parameters cannot drift beyond safe bounds per cycle; risk_penalty is floor-guarded by Axiom L1 Real-Time C++ Enforcement — Zero-heap hot path, fixed-size arrays, SCHED_FIFO watchdog, latching emergency stop, full ROS2 node wrappers Quantum-Ready Optimization — QUBO solver targeting D-Wave Leap with automatic Tabu fallback Multi-Source Telemetry — Live loaders for NASA REMS (Mars weather), SPICE (orbital mechanics), ESA Mars Express, and ISS OSDR 4 Validated Scenarios — Normal ops, fault injection (1.8× torque spike), communication blackout (300s), and axiom cascade → safe hold 69-Test CI Suite — Full simulation test coverage with forensic JSON audit trails 📦 What's Included Component Description ARVS/ Python core (HAL, EKF, risk, planning, learning, audit) cpp/ C++ real-time components + ROS2 nodes simulation/ 4-scenario simulation engine + pre-generated outputs Docs/ Architecture, API reference, axioms, reliability analysis 🛰️ Tested Against Real Space Telemetry Validated across 16 runs (4 scenarios × 4 data sources) using actual NASA and ESA mission data as input. Author: Chirag Rathi — Independent Researcher ORCID: 0009-0008-1682-4369 License: Apache-2.0"
+ },
+ {
+  "id": "W7135398648",
+  "doi": "https://doi.org/10.5281/zenodo.19023905",
+  "year": 2026,
+  "type": "software",
+  "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+  "cited_by": 0,
+  "title": "ARVS: Adaptive Robust Verification System",
+  "abstract": "ARVS v1.0.0 — Initial Release Adaptive Robust Verification System — A research-grade autonomy architecture for spacecraft, rovers, and safety-critical autonomous systems. 🔬 What is ARVS? ARVS is a full-stack autonomy framework built for environments where failure is not an option — planetary rovers, orbital spacecraft, and multi-robot systems. It implements a five-stage pipeline: Sense → Think → Verify → Optimise → Enforce Every stage is formally grounded: Bayesian state estimation, a frozen axiom constitution, QUBO-based optimization, and a sub-millisecond C++ safety gate. ✨ Key Features 25-Axiom Frozen Constitution — Immutable safety axioms enforced identically in both Python and C++, with a SHA-256 cryptographic audit chain 8-Dimensional Risk Quantifier — Risk is embedded directly into the MDP reward function: R(s,a) = gain − λ·risk − μ·energy ±15% Bounded Adaptive Learning — Parameters cannot drift beyond safe bounds per cycle; risk_penalty is floor-guarded by Axiom L1 Real-Time C++ Enforcement — Zero-heap hot path, fixed-size arrays, SCHED_FIFO watchdog, latching emergency stop, full ROS2 node wrappers Quantum-Ready Optimization — QUBO solver targeting D-Wave Leap with automatic Tabu fallback Multi-Source Telemetry — Live loaders for NASA REMS (Mars weather), SPICE (orbital mechanics), ESA Mars Express, and ISS OSDR 4 Validated Scenarios — Normal ops, fault injection (1.8× torque spike), communication blackout (300s), and axiom cascade → safe hold 69-Test CI Suite — Full simulation test coverage with forensic JSON audit trails 📦 What's Included Component Description ARVS/ Python core (HAL, EKF, risk, planning, learning, audit) cpp/ C++ real-time components + ROS2 nodes simulation/ 4-scenario simulation engine + pre-generated outputs Docs/ Architecture, API reference, axioms, reliability analysis 🛰️ Tested Against Real Space Telemetry Validated across 16 runs (4 scenarios × 4 data sources) using actual NASA and ESA mission data as input. Author: Chirag Rathi — Independent Researcher ORCID: 0009-0008-1682-4369 License: Apache-2.0"
+ },
+ {
+  "id": "W2595569031",
+  "doi": "",
+  "year": 2015,
+  "type": "article",
+  "venue": "Journal of International Crisis and Risk Communication Research",
+  "cited_by": 0,
+  "title": "Adaptive Architectural Strategies for Resilient Energy-Aware Computing",
+  "abstract": "Reconfigurable logic or Field-Programmable Gate Array (FPGA) devices have the ability to dynamically adapt the computational circuit based on user-specified or operating-condition requirements. Such hardware platforms are utilized in this dissertation to develop adaptive techniques for achieving reliable and sustainable operation while autonomously meeting these requirements. In particular, the properties of resource uniformity and in-field reconfiguration via on-chip processors are exploited to implement Evolvable Hardware (EHW). EHW utilize genetic algorithms to realize logic circuits at runtime, as directed by the objective function. However, the size of problems solved using EHW as compared with traditional approaches has been limited to relatively compact circuits. This is due to the increase in complexity of the genetic algorithm with increase in circuit size. To address this research challenge of scalability, the Netlist-Driven Evolutionary Refurbishment (NDER) technique was designed and implemented herein to enable on-the-fly permanent fault mitigation in FPGA circuits. NDER has been shown to achieve refurbishment of relatively large sized benchmark circuits as compared to related works. Additionally, Design Diversity (DD) techniques which are used to aid such evolutionary refurbishment techniques are also proposed and the efficacy of various DD techniques is quantified and evaluated. Similarly, there exists a growing need for adaptable logic datapaths in custom-designed nanometer-scale ICs, for ensuring operational reliability in the presence of Process, Voltage, and Temperature (PVT) and, transistor-aging variations owing to decreased feature sizes for electronic devices. Without such adaptability, excessive design guardbands are required to maintain the desired integration and performance levels. To address these challenges, the circuit-level technique of Self-Recovery Enabled Logic (SREL) was designed herein. At design-time, vulnerable portions of the circuit identified using conventional Electronic Design Automation tools are replicated to provide post-fabrication adaptability via intelligent techniques. In-situ timing sensors are utilized in a feedback loop to activate suitable datapaths based on current conditions that optimize performance and energy consumption. Primarily, SREL is able to mitigate the timing degradations caused due to transistor aging effects in sub-micron devices by reducing the stress induced on active elements by utilizing power-gating. As a result, fewer guardbands need to be included to achieve comparable performance levels which leads to considerable energy savings over the operational lifetime. The need for energy-efficient operation in current computing systems has given rise to Near-Threshold Computing as opposed to the conventional approach of operating devices at nominal voltage. In particular, the goal of exascale computing initiative in High Performance Computing (HPC) is to achieve 1 EFLOPS under the power budget of 20MW. However, it comes at the cost of increased reliability concerns, such as the increase in performance variations and soft errors. This has given rise to increased resiliency requirements for HPC applications in terms of ensuring functionality within given error thresholds while operating at lower voltages. My dissertation research devised techniques and tools to quantify the effects of radiation-induced transient faults in distributed applications on large-scale systems. A combination of compiler-level code transformation and instrumentation are employed for runtime monitoring to assess the speed and depth of application state corruption as a result of fault injection. Finally, fault propagation models are derived for each HPC application that can be used to estimate the number of corrupted memory locations at runtime. Additionally, the tradeoffs between performance and vulnerability and the causal relations between compiler optimization and application vulnerability are investigated."
+ }
+]

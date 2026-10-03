@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-03T14:13:58+00:00",
+  "source": "OpenAlex, title_and_abstract.search",
+  "max_per_query": 200,
+  "queries": {
+    "Q1_spice_fault_injection_tools": {
+      "question": "Frameworks or tools that automate fault injection or fault simulation of analog circuits in SPICE",
+      "q": "(\"fault injection\" OR \"fault simulation\" OR \"defect simulation\" OR \"fault simulator\") AND (\"SPICE\" OR \"ngspice\" OR \"HSPICE\" OR \"Spectre\" OR \"circuit simulator\") AND (\"analog\" OR \"mixed-signal\" OR \"analogue\") AND (\"framework\" OR \"tool\" OR \"automated\" OR \"automatic\" OR \"environment\")",
+      "years": [
+        2000,
+        2026
+      ],
+      "matches": 20,
+      "stored": 20
+    },
+    "Q2_python_spice_automation": {
+      "question": "Open tools that drive SPICE simulators programmatically",
+      "q": "(\"PySpice\" OR \"ngspice\" OR \"LTspice\" OR \"PyLTSpice\" OR \"Xyce\") AND (\"Python\" OR \"open-source\" OR \"open source\") AND (\"Monte Carlo\" OR \"fault\" OR \"automation\" OR \"framework\" OR \"dataset\")",
+      "years": [
+        2010,
+        2026
+      ],
+      "matches": 86,
+      "stored": 86
+    },
+    "Q3_benchmark_circuits_fault_diagnosis": {
+      "question": "Which circuits the analog fault-diagnosis literature uses as benchmarks",
+      "q": "(\"fault diagnosis\" OR \"fault classification\") AND (\"analog circuit\" OR \"analog circuits\" OR \"analogue circuit\") AND (\"Sallen-Key\" OR \"Sallen Key\" OR \"state variable filter\" OR \"biquad\" OR \"four-opamp\" OR \"leapfrog filter\" OR \"benchmark circuit\")",
+      "years": [
+        2005,
+        2026
+      ],
+      "matches": 172,
+      "stored": 172
+    },
+    "Q4_tolerance_and_detectability": {
+      "question": "Studies of how component tolerance affects fault detectability, testability or ambiguity in analog circuits",
+      "q": "(\"fault detectability\" OR \"detectability\" OR \"testability\" OR \"ambiguity group\" OR \"fault coverage\") AND (\"analog circuit\" OR \"analog circuits\" OR \"analogue circuit\") AND (\"tolerance\" OR \"tolerances\" OR \"Monte Carlo\" OR \"process variation\")",
+      "years": [
+        2000,
+        2026
+      ],
+      "matches": 374,
+      "stored": 200
+    },
+    "Q5_simulated_datasets_and_reproducibility": {
+      "question": "How simulated fault datasets for analog diagnosis are generated and whether the generation is reported or shared",
+      "q": "(\"fault diagnosis\") AND (\"analog circuit\" OR \"analog circuits\") AND (\"SPICE\" OR \"PSpice\" OR \"simulation data\" OR \"simulated data\") AND (\"dataset\" OR \"data generation\" OR \"reproducible\" OR \"reproducibility\" OR \"open-source\" OR \"publicly available\")",
+      "years": [
+        2010,
+        2026
+      ],
+      "matches": 5,
+      "stored": 5
+    },
+    "Q6_analog_defect_coverage": {
+      "question": "Defect-oriented analog test and analog fault coverage, including the IEEE P2427 effort and commercial simulators",
+      "q": "(\"analog defect\" OR \"defect-oriented\" OR \"analog fault simulation\" OR \"P2427\" OR \"defect coverage\") AND (\"analog\" OR \"mixed-signal\") AND (\"simulation\" OR \"coverage\")",
+      "years": [
+        2005,
+        2026
+      ],
+      "matches": 106,
+      "stored": 106
+    },
+    "Q7_circuit_level_fault_injection_for_safety": {
+      "question": "Circuit-level fault injection used for reliability or functional-safety assessment",
+      "q": "(\"fault injection\") AND (\"analog\" OR \"mixed-signal\" OR \"circuit-level\" OR \"SPICE\") AND (\"reliability\" OR \"functional safety\" OR \"ISO 26262\" OR \"FMEDA\" OR \"diagnostic coverage\")",
+      "years": [
+        2005,
+        2026
+      ],
+      "matches": 60,
+      "stored": 60
+    },
+    "Q8_open_fault_injection_software": {
+      "question": "Open-source or scripted fault-injection software for analog circuits",
+      "q": "(\"fault injection\" OR \"fault simulation\" OR \"fault modeling\") AND (\"analog circuit\" OR \"analog circuits\" OR \"SPICE\" OR \"netlist\") AND (\"open-source\" OR \"open source\" OR \"Python\" OR \"MATLAB\" OR \"script\" OR \"toolbox\" OR \"software tool\")",
+      "years": [
+        2005,
+        2026
+      ],
+      "matches": 42,
+      "stored": 42
+    }
+  },
+  "distinct_works": 655
+}

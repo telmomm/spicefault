@@ -2,7 +2,7 @@
 
 Status: revised. The first version took an ECG front-end as its main case study; this one is about the framework alone, validated on generic circuits. The framework is implemented (phases 1 to 8); the validation circuits and the experiments on them are not.
 
-Companion documents: [FAULT_MODEL.md](FAULT_MODEL.md), [RELIABILITY_METRICS.md](RELIABILITY_METRICS.md), [EXPERIMENT_PLAN.md](EXPERIMENT_PLAN.md).
+Companion documents: [FAULT_MODEL.md](FAULT_MODEL.md), [RELIABILITY_METRICS.md](RELIABILITY_METRICS.md), [EXPERIMENT_PLAN.md](EXPERIMENT_PLAN.md), [RELATED_WORK.md](RELATED_WORK.md).
 
 This document fixes what `spicefault` is meant to demonstrate, in terms precise enough that the work can be checked against it. The target venue is *IEEE Transactions on Reliability*, so the contribution is a reliability methodology; the software is the instrument that makes it reproducible.
 
@@ -119,17 +119,17 @@ Criteria, one row per tool in the final table: fault abstraction; separation of 
 
 Method: one benchmark task (one validation circuit, a fixed fault list, a fixed number of samples) is implemented with direct scripting, with one Python/SPICE interface and with `spicefault`. Reported: lines of task-specific code, whether each criterion is met, and how. Lines of code is a weak measure of effort and is reported as such.
 
-The dedicated literature search has not been done. It is a prerequisite for the novelty claim and should come before any writing: a comparable framework would change the positioning of the paper.
+A first literature search is in [RELATED_WORK.md](RELATED_WORK.md). Its main consequences: fault injection in SPICE and the treatment of tolerance are established, with a standard (IEEE Std 2427) and commercial tools for integrated circuits, so the contribution to defend is the reproducible experiment and its metrics in an open implementation, not a new kind of simulation; and the terms of that standard must be used consistently. The capabilities of the software tools in the table are still to be established from their documentation.
 
 ## 8. Validation circuits
 
-The circuits are generic and of increasing size. None belongs to a particular application domain. The set below is a proposal (open decision 1); the benchmark status of the two filters in the fault-diagnosis literature must be confirmed in the literature search.
+The circuits are generic and of increasing size. None belongs to a particular application domain. The two filters are the benchmarks of the fault-diagnosis literature (RELATED_WORK.md §2.4: named in 85 and 45 of 137 abstracts); a regulator is part of a published analog test benchmark (§2.1). They are implemented in `validation/`. Their exact schematics and values are still to be taken from a cited source (open decision 1).
 
 | Circuit | Role | Why |
 |---|---|---|
 | Resistive divider and RC low-pass | Analytical reference | Closed-form response and closed-form distributions under tolerance: the estimators are tested against known values. Already in the unit tests and in `examples/filter` |
 | Sallen–Key band-pass filter, one op-amp | Small benchmark | A circuit used in the analog fault-diagnosis literature, so results can be set beside published ones. Natural specifications: centre frequency, gain, quality factor |
-| State-variable (biquad) filter, three or four op-amps | Larger benchmark | More components than independent measurements: the case where ambiguity groups appear. The full ambiguity analysis of the manuscript goes here |
+| Four-op-amp biquad high-pass filter | Larger benchmark | The second benchmark of that literature. More components than independent measurements: the case where ambiguity groups appear. The full ambiguity analysis of the manuscript goes here |
 | Linear voltage regulator with device-level models | Realistic, not a filter | Transistors and a reference with real temperature behaviour, so temperature is a meaningful operating condition, together with line and load. Specifications with engineering meaning: output voltage, line and load regulation, dropout |
 
 Each circuit needs four things, and only these are specific to it: its netlist, its fault rules, its measurements, and its specification limits. How little that is, is the evidence for RQ7.
@@ -150,7 +150,7 @@ Dependence on an external simulator and its version; convergence failures under 
 
 ## 11. Open decisions
 
-1. **Validation circuits** (§8): confirm the set, and for the regulator, the topology and the device models.
+1. **Validation circuits** (§8): align the schematics and values of the two filters with a cited source, and replace the device models of the regulator by vendor models with their source.
 2. **Sharper criterion for RQ6** (§4).
-3. **Literature search** on SPICE fault-injection frameworks: before any writing.
+3. **Literature**: the follow-up of RELATED_WORK.md §4 (full texts, software documentation, citation chaining, a second database).
 4. **Licence**: MIT or BSD-3-Clause.

@@ -1,0 +1,656 @@
+id,year,cited_by,best_rank,queries,venue,type,title,doi
+W3152902866,2021,46,1,Q3,Scientific Reports,article,Application of DBN and GWO-SVM in analog circuit fault diagnosis,https://doi.org/10.1038/s41598-021-86916-6
+W3038743613,2020,30,1,Q6,,conference-paper,Analog Fault Simulation - a Hot Topic!,https://doi.org/10.1109/ets48528.2020.9131581
+W2160737140,2003,8,1,Q4,,conference-paper,Limited access testing of analog circuits: handling tolerances,https://doi.org/10.1109/test.1999.805782
+W2781052146,2017,3,1,Q1 Q3 Q4 Q8,Communications in computer and information science,conference-paper,SFG Based Fault Simulation of Linear Analog Circuits Using Fault Classification and Sensitivity Analysis,https://doi.org/10.1007/978-981-10-7470-7_19
+W4410887043,2025,2,1,Q2,,conference-paper,Open-ALOE: An Analog Layout Automation Flow for the Open-Source Ecosystem,https://doi.org/10.1109/isqed65160.2025.11014456
+W4411995904,2025,1,1,Q7,IEEE Access,article,A Layout-Based Method for Analog Fault Injection in the Context of Functional Safety,https://doi.org/10.1109/access.2025.3585636
+W7213484513,2026,0,1,Q1,Lume (Universidade Federal do Rio Grande do Sul),dissertation,Use of hardware-emulated fault injection in the evaluation of an automatic mixed-signal test pattern generation tool,
+W7161015720,2026,0,1,Q3 Q5,Figshare,dataset,DiffDA-Net benchmark analog circuit fault diagnosis datasets,https://doi.org/10.6084/m9.figshare.32260188
+W3162621823,2021,100,2,Q3,IEEE Transactions on Circuits and Systems I Regular Papers,article,Soft Fault Diagnosis of Analog Circuits Based on a ResNet With Circuit Spectrum Map,https://doi.org/10.1109/tcsi.2021.3076282
+W1976088919,2010,71,2,Q4,IEEE Transactions on Instrumentation and Measurement,article,Methods of Handling the Tolerance and Test-Point Selection Problem for Analog-Circuit Fault Diagnosis,https://doi.org/10.1109/tim.2010.2050356
+W2088797164,2014,58,2,Q6,,conference-paper,Practical random sampling of potential defects for analog fault simulation,https://doi.org/10.1109/test.2014.7035281
+W815940882,2008,0,2,Q1 Q8,Repository@Hull (Worktribe) (University of Hull),dissertation,Automatic Generation of High Level Fault Simulation Models for Analogue Circuits,
+W7160244816,2026,0,2,Q2,Zenodo (CERN European Organization for Nuclear Research),preprint,A CMOS Square-Root Circuit Implementation on Open-Source Sky130 PDK with Process Corner and Monte Carlo Analysis,https://doi.org/10.5281/zenodo.20035589
+W7163819689,2026,0,2,Q3 Q5,Figshare,dataset,DiffDA-Net benchmark analog circuit fault diagnosis datasets,https://doi.org/10.6084/m9.figshare.32260188.v4
+W4416923892,2025,0,2,Q7,,conference-paper,Methods for Fault Injection Simulations and Reliability Analysis in SPICE,https://doi.org/10.1109/miel66332.2025.11261061
+W1972853246,2013,0,2,Q8,Applied Mechanics and Materials,article,Research on Test Points Selection Using Complex Field Fault Modeling in Analog Circuit,https://doi.org/10.4028/www.scientific.net/amm.444-445.1158
+W3007644171,2019,34,3,Q6,,conference-paper,Efficient Analog Defect Simulation,https://doi.org/10.1109/itc44170.2019.9000141
+W7154727704,2026,0,3,Q1,,conference-paper,Evaluating an Analog Test Pattern Generation Tool by Means of Hardware-Emulated Fault Injection,https://doi.org/10.1109/lats70329.2026.11480304
+W7160249137,2026,0,3,Q2,Zenodo (CERN European Organization for Nuclear Research),preprint,A CMOS Square-Root Circuit Implementation on Open-Source Sky130 PDK with Process Corner and Monte Carlo Analysis,https://doi.org/10.5281/zenodo.20035588
+W7153181037,2026,0,3,Q3,IEEE DataPort,dataset,"""Analog Circuit Fault Diagnosis Dataset""",https://doi.org/10.21227/tvch-9d57
+W7161036506,2026,0,3,Q3 Q5,Figshare,dataset,DiffDA-Net benchmark analog circuit fault diagnosis datasets,https://doi.org/10.6084/m9.figshare.32260188.v3
+W2378413701,2008,0,3,Q4,Fudan xuebao. Ziran Kexue ban,article,Tests and Diagnosis of Complex Faults in Analog Circuits with Tolerance,
+W4323546570,2023,0,3,Q7,,conference-paper,Design of analog signal processing module for VCU of pure electric vehicle based on ISO 26262,https://doi.org/10.1117/12.2670634
+W4244818419,2013,0,3,Q8,Applied Mechanics and Materials,article,Research on Test Points Selection Using Complex Field Fault Modeling in Analog Circuit,https://doi.org/10.4028/www.scientific.net/amm.0.1158
+W2795765414,2018,133,4,Q3,IEEE Access,article,Analog Circuit Incipient Fault Diagnosis Method Using DBN Based Features Extraction,https://doi.org/10.1109/access.2018.2823765
+W1993765721,2011,36,4,Q6,,conference-paper,Defect Oriented Testing for analog/mixed-signal devices,https://doi.org/10.1109/test.2011.6139127
+W2496582029,2016,14,4,Q7,,conference-paper,Fault grouping for fault injection based simulation of AMS circuits in the context of functional safety,https://doi.org/10.1109/smacd.2016.7520721
+W2029516759,2014,7,4,Q1 Q8,Analog Integrated Circuits and Signal Processing,article,High level fault modeling of analog circuits through automated model generation using Chebyshev and Newton interpolating polynomials,https://doi.org/10.1007/s10470-014-0431-9
+W4387489755,2023,7,4,Q2,,conference-paper,Python-LTSpice Framework for Multi-Objective EMC Filter Optimization,https://doi.org/10.1109/emceurope57790.2023.10274317
+W2735327212,2017,1,4,Q4,,conference-paper,Parameter fault diagnosis on analog circuits with tolerance,https://doi.org/10.1109/ccdc.2017.7979224
+W4399108477,2024,0,4,Q1 Q6 Q8,,conference-paper,Analog Fault Simulation: Trends and Perspectives in Analog Hardware Description Languages,https://doi.org/10.1109/lats62223.2024.10534606
+W7161034105,2026,0,4,Q3 Q5,Figshare,dataset,DiffDA-Net benchmark analog circuit fault diagnosis datasets,https://doi.org/10.6084/m9.figshare.32260188.v1
+W2165016980,2007,36,5,Q4,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,Statistical Test Development for Analog Circuits Under High Process Variations,https://doi.org/10.1109/tcad.2007.891373
+W1970655797,2012,17,5,Q6,IEEE Design & Test of Computers,article,Defect Oriented Testing for Analog/Mixed-Signal Designs,https://doi.org/10.1109/mdt.2012.2210852
+W2029060048,2012,12,5,Q8,,conference-paper,High level fault modeling and fault propagation in analog circuits using NLARX automated model generation technique,https://doi.org/10.1109/icias.2012.6306132
+W4378801013,2023,2,5,Q6 Q7,,conference-paper,Verilog-A Implementation of Generic Defect Templates for Analog Fault Injection,https://doi.org/10.1145/3583781.3590317
+W1926449594,2002,0,5,Q1,,conference-paper,Automatic dependency model generator for mixed-signal circuits,https://doi.org/10.1109/autest.1998.713426
+W4403760912,2024,0,5,Q2,,conference-paper,Python-LTSpice Framework for Impact Study of PCB Parasitics on Conducted Emission,https://doi.org/10.1109/pemc61721.2024.10726409
+W3115905226,2020,0,5,Q3,,conference-paper,Potentiality of Data Fusion in Analog Circuit Fault Diagnosis,https://doi.org/10.1109/ats49688.2020.9301544
+W7160998882,2026,0,5,Q3 Q5,Figshare,dataset,DiffDA-Net benchmark analog circuit fault diagnosis datasets,https://doi.org/10.6084/m9.figshare.32260188.v2
+W400853255,2012,64,6,Q4,,book,Analog Circuit Design for Process Variation-Resilient Systems-on-a-Chip,https://doi.org/10.1007/978-1-4614-2296-9
+W4383032100,2023,38,6,Q3,Alexandria Engineering Journal,article,An efficient method for faults diagnosis in analog circuits based on machine learning classifiers,https://doi.org/10.1016/j.aej.2023.06.090
+W3033062045,2020,11,6,Q6,,conference-paper,Pinhole Latent Defect Modeling and Simulation for Defect-Oriented Analog/Mixed-Signal Testing,https://doi.org/10.1109/vts48691.2020.9107625
+W4229444196,2022,8,6,Q1,Analog Integrated Circuits and Signal Processing,article,Automatic tool for test set generation and DfT assessment in analog circuits,https://doi.org/10.1007/s10470-022-02039-6
+W2981204667,2019,7,6,Q2,,conference-paper,Design and Verification of Analog Integrated Circuits Using Free or Open source EDA Tools,https://doi.org/10.1109/icces45898.2019.9002123
+W2810453186,2018,1,6,Q7,,conference-paper,Dynamic fault injection for system level simulation of MEMS - A design method for functional safety,https://doi.org/10.1109/dtip.2018.8394196
+W7201864094,2026,0,6,Q8,Lecture notes in computer science,conference-paper,OpenFI4ASIC: An Open-Source Fault Injection Framework for ASIC Designs via FPGA-Based Rapid Prototyping,https://doi.org/10.1007/978-3-032-34867-8_1
+W2077700998,2011,35,7,Q4,International Journal of Circuit Theory and Applications,article,Multiple catastrophic fault diagnosis of analog circuits considering the component tolerances,https://doi.org/10.1002/cta.770
+W2040707982,2009,26,7,Q1,,conference-paper,Defect-based analog fault coverage analysis using mixed-mode fault simulation,https://doi.org/10.1109/ims3tw.2009.5158688
+W783188090,2015,11,7,Q4 Q8,International Journal of Intelligent Systems and Applications,article,Fault Diagnosis of Mixed-Signal Analog Circuit using Artificial Neural Networks,https://doi.org/10.5815/ijisa.2015.07.02
+W1524198421,2005,2,7,Q6,,conference-paper,Analog Fault Simulation: Need it? No. It is already done,https://doi.org/10.1109/test.1999.805790
+W7154031138,2026,0,7,Q2,IEEE journal on multiscale and multiphysics computational techniques,article,Chrono::Electronics: An Open-Source Simulation Library for Electro-Mechanical Problems,https://doi.org/10.1109/jmmct.2026.3683328
+W4402628514,2024,0,7,Q7,,conference-paper,Cross-domain Analog Fault Injection for Designing Robust Smart Systems,https://doi.org/10.1109/fdl63219.2024.10673865
+W1507435216,2012,2,8,Q4,,article,Analog Circuits Testing Using Monte-Carlo Analysis and Neural Networks,
+W7119505217,2025,2,8,Q6,,standard,IEEE Standard for Analog Defect Modeling and Coverage,https://doi.org/10.1109/ieeestd.2025.11343929
+W1994996817,2010,2,8,Q7,,conference-paper,Increasing reliability of programmable mixed-signal systems by applying design diversity redundancy,https://doi.org/10.1109/etsym.2010.5512730
+W1984594576,2009,0,8,Q1 Q4,"Proceedings of SPIE, the International Society for Optical Engineering/Proceedings of SPIE",conference-paper,FDSAC-SPICE: fault diagnosis software for analog circuit based on SPICE simulation,https://doi.org/10.1117/12.855758
+W3084212817,2020,0,8,Q2,The Journal of Open Source Software,article,Scripts for Easier Use of Spice (SEUS): A Perl script package for simulating and creating batches of circuit netlists for Monte Carlo simulations when using Ngspice or Ngspice-based simulators,https://doi.org/10.21105/joss.02183
+W2375546889,2012,0,8,Q8,Electronic Design Engineering,article,Automatic acquisition technology for collecting fault samples of analog circuits based on SLPS,
+W2121851502,2002,34,9,Q4,,conference-paper,Fault diagnosis of analog circuits with tolerances using artificial neural networks,https://doi.org/10.1109/apccas.2000.913491
+W4387908411,2023,3,9,Q8,Journal of Electronic Testing,article,MATLAB-Open Source Tool Based Framework for Test Generation for Digital Circuits Using Evolutionary Algorithms,https://doi.org/10.1007/s10836-023-06088-1
+W4410859547,2025,0,9,Q2,Research Square,preprint,Chrono::Electronics: An Open-Source Simulation Package for Complex Electro-Mechanical Problems,https://doi.org/10.21203/rs.3.rs-6566755/v1
+W4401502926,2024,0,9,Q7,SSRN Electronic Journal,preprint,Intermittent Fault Diagnosis of Analog Circuit Based on Multi-Dilated Convolutional Long Short-Term Memory Network with a Novel Fault Injection Strategy,https://doi.org/10.2139/ssrn.4923730
+W1999141085,2003,36,10,Q4,IEEE Transactions on Instrumentation and Measurement,article,Test limitations of parametric faults in analog circuits,https://doi.org/10.1109/tim.2003.818541
+W4414543839,2025,5,10,Q2,Scientific Reports,article,"An open source platform to automate the design, verification, and manufacture of 3D printed microfluidic devices",https://doi.org/10.1038/s41598-025-15976-9
+W2066710830,2015,5,10,Q6,,conference-paper,New Methods for Simulation Speed-up and Test Qualification with Analog Fault Simulation,https://doi.org/10.1109/vlsid.2015.67
+W2940128495,2018,3,10,Q7,,conference-paper,Single Event Transient injection in large mixed-signal circuits,https://doi.org/10.1109/dcis.2018.8681485
+W2609933764,2017,0,10,Q1 Q6,,conference-paper,Low cost automatic test vector generation for structural analog testing,https://doi.org/10.1109/latw.2017.7906740
+W2360603754,2012,0,10,Q8,Electronic Science and Technology,article,Method for Catastrophic Faults Location in Analog Circuits Based on Wavelet Transform and Mahalanobis Distance,
+W4236794964,2005,16,11,Q6,,conference-paper,Rapid Frequency-domain Analog Fault Simulation Under Parameter Tolerances,https://doi.org/10.1109/dac.1997.597157
+W1416418966,2015,11,11,Q7,Microelectronics Reliability,article,Exploring design diversity redundancy to improve resilience in mixed-signal systems,https://doi.org/10.1016/j.microrel.2015.08.011
+W2612538664,2017,9,11,Q1 Q6,,conference-paper,Analog fault testing through abstraction,https://doi.org/10.23919/date.2017.7926996
+W4413320446,2025,1,11,Q8,,conference-paper,Leveraging Open-Source Bitstream Documentation for FPGA Soft-Error Robustness Analysis,https://doi.org/10.1109/iolts65288.2025.11116854
+W7215052511,2026,0,11,Q2,SSRN Electronic Journal,preprint,CLIMS: An Open-Source Platform for Personalized Cardiovascular Lumped Parameter Modelling and Simulation,https://doi.org/10.2139/ssrn.7540332
+W1738097308,2002,0,11,Q4,,conference-paper,Interval test method for fault location of the analog circuit with element tolerance,https://doi.org/10.1109/ciccas.1991.184401
+W2112501613,2006,52,12,Q4,IEEE Transactions on Instrumentation and Measurement,article,Coefficient-Based Test of Parametric Faults in Analog Circuits,https://doi.org/10.1109/tim.2005.861490
+W3178463360,2021,6,12,Q3,Recent Advances in Electrical & Electronic Engineering (Formerly Recent Patents on Electrical & Electronic Engineering),article,A Novel Analog Circuit Fault Diagnosis Approach,https://doi.org/10.2174/2352096514666210713101436
+W4407246985,2025,4,12,Q8,IEEE Access,article,RADSAFiE: A Netlist-Level Fault Injection User Interface Application for FPGA-Based Digital Systems,https://doi.org/10.1109/access.2025.3539932
+W1683165039,2005,2,12,Q6,,conference-paper,"Analog Fault Simulation: Key to Product Quality, or a Foot in the Door",https://doi.org/10.1109/test.1999.805791
+W7111001553,2025,0,12,Q2,Zenodo (CERN European Organization for Nuclear Research),article,An Open-Source Adaptive Event-Based ADC for Bio-Signal Acquisition in 130nm CMOS,https://doi.org/10.5281/zenodo.17859059
+W4283314082,2022,0,12,Q7,,conference-paper,Fault Injection Model of SRAM Memory Circuit Based on Hybrid Modeling,https://doi.org/10.1109/iccss55260.2022.9802217
+W2166159664,2010,10,13,Q4,Metrology and Measurement Systems,article,Soft-Fault Diagnosis of Analog Circuit with Tolerance Using FNLP,https://doi.org/10.2478/v10178-010-0030-8
+W3110962465,2020,4,13,Q3,2020 IEEE 9th Data Driven Control and Learning Systems Conference (DDCLS),conference-paper,Fault Diagnosis of Analog Circuit Based CS_SVM Algorithm,https://doi.org/10.1109/ddcls49620.2020.9275159
+W3027739090,2020,2,13,Q7,IEEE Transactions on Very Large Scale Integration (VLSI) Systems,article,HYFII: HYbrid Fault Injection Infrastructure for Accurate Runtime System Failure Analysis,https://doi.org/10.1109/tvlsi.2020.2992982
+W2144689709,2005,1,13,Q6,,conference-paper,Is Analog Fault Simulation a Key to Product Quality? Practical Considerations,https://doi.org/10.1109/test.1999.805789
+W4417131574,2025,1,13,Q8,IEEE Access,article,SHADOWFI: An Open-Source Framework for Fault Evaluation of Complex IC Designs Using Hyperscale Computing,https://doi.org/10.1109/access.2025.3641762
+W2774929202,2017,0,13,Q1 Q7,Illinois Digital Environment for Access to Learning and Scholarship (University of Illinois at Urbana-Champaign),article,"Detection, diagnosis and modeling of ESD-induced soft failures - a gate-level and mixed-signal approach",
+W7110823181,2025,0,13,Q2,Zenodo (CERN European Organization for Nuclear Research),article,An Open-Source Adaptive Event-Based ADC for Bio-Signal Acquisition in 130nm CMOS,https://doi.org/10.5281/zenodo.17859058
+W1954409450,2002,17,14,Q1 Q4,,conference-paper,A virtual test-bench for analog circuit testability analysis and fault diagnosis,https://doi.org/10.1109/autest.1998.713467
+W2153989069,2009,17,14,Q3,,conference-paper,Analog circuit fault diagnosis based on bandwidth and fuzzy classifier,https://doi.org/10.1109/tencon.2009.5396219
+W2143802986,2011,17,14,Q4,,conference-paper,Performance bound analysis of analog circuits considering process variations,https://doi.org/10.1145/2024724.2024799
+W2927066959,2019,9,14,Q8,EURASIP Journal on Embedded Systems,article,FIJI: Fault InJection Instrumenter,https://doi.org/10.1186/s13639-019-0088-7
+W2045763711,2010,3,14,Q7,,conference-paper,Evaluating the effectiveness of a mixed-signal TMR scheme based on design diversity,https://doi.org/10.1145/1854153.1854188
+W7170198583,2026,0,14,Q2,Zenodo (CERN European Organization for Nuclear Research),article,Towards a practical open source RF SoC design flow: Lessons from a 40 GHz tapeout in IHP SG13G2,https://doi.org/10.5281/zenodo.21508491
+W2519819295,2012,0,14,Q6,Proceedings - International Symposium for Testing and Failure Analysis,conference-paper,Improved Parasitic Fault Modeling for Automatic Analog Fault Simulation,https://doi.org/10.31399/asm.cp.istfa2012p0281
+W2807591199,2018,3,15,Q6,,conference-paper,Analog fault simulation automation at schematic level with random sampling techniques,https://doi.org/10.1109/dtis.2018.8368549
+W2106158552,2006,1,15,Q1,,conference-paper,Analysis of dc simulation convergence of nonlinear analog circuits with initial solution,https://doi.org/10.1109/ccece.2005.1557032
+W7170201275,2026,0,15,Q2,Zenodo (CERN European Organization for Nuclear Research),article,Towards a practical open source RF SoC design flow: Lessons from a 40 GHz tapeout in IHP SG13G2,https://doi.org/10.5281/zenodo.21508492
+W4384037959,2026,0,15,Q3,Analog Integrated Circuits and Signal Processing,article,Analog circuit fault diagnosis based on feature attention,https://doi.org/10.1007/s10470-026-02590-6
+W2748351604,2016,0,15,Q4,Gao dianya jishu,article,Evolutionary Design of High Robust Analog Circuit Based on Fault-tolerance Test,
+W227106366,2014,0,15,Q8,,book-chapter,Simulation Fault Injection Experimental Results,https://doi.org/10.1007/978-3-319-06340-9_5
+W4385237263,2023,18,16,Q6 Q7,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,review,Analog Defect Injection and Fault Simulation Techniques: A Systematic Literature Review,https://doi.org/10.1109/tcad.2023.3298698
+W2011352087,2013,14,16,Q4,IEEE Transactions on Instrumentation and Measurement,article,Fault Modeling on Complex Plane and Tolerance Handling Methods for Analog Circuits,https://doi.org/10.1109/tim.2013.2259732
+W4320712918,2023,14,16,Q6,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,Boosting Latent Defect Coverage in Automotive Mixed-Signal ICs Using SVM Classifiers,https://doi.org/10.1109/tcad.2023.3244892
+W3211064344,2021,3,16,Q1 Q8,,conference-paper,A Common Manipulation Framework for Transistor-Level Languages,https://doi.org/10.1109/fdl53530.2021.9568379
+W3029825433,2019,1,16,Q3,,conference-paper,Analog circuit fault diagnosis based on CBEA-SVM,https://doi.org/10.1109/icemi46757.2019.9101717
+W7113568947,2025,0,16,Q2,University Library Linz repository (Johannes Kepler Universitat Linz),dissertation,Ein Open-Source adaptiver ereignisbasierter ADC zur Erfassung von Biosignalen in 130nm CMOS,
+W3180380519,2020,24,17,Q7,,book,Cross-Layer Reliability of Computing Systems,https://doi.org/10.1049/pbcs057e
+W2018299365,2014,6,17,Q1 Q7,,conference-paper,Reliability Analysis of a 130nm Charge Redistribution SAR ADC under Single Event Effects,https://doi.org/10.1145/2660540.2660985
+W4386210977,2023,2,17,Q8,,conference-paper,Ray-Spect: Local Parametric Degradation for Secure Designs: An application to X-Ray Fault Injection,https://doi.org/10.1109/iolts59296.2023.10224894
+W2370199461,2013,1,17,Q3,Journal of Circuits and Systems,article,Analog circuit fault diagnosis based on PCA and LVQ,
+W2366707073,2006,1,17,Q4,Modern Electronics Technique,article,Fault Diagnosis of Analog Circuits with Tolerance Based on Genetic Algorithms,
+W7112039904,2025,0,17,Q2,University Library Linz repository (Johannes Kepler Universitat Linz),dissertation,Design of a differential high-speed current-steering DAC in IHP's 130nm BiCMOS using open-source tools,
+W4388048181,2023,0,17,Q6,,preprint,Digital-Like Built-In Defect-Oriented Test for Analog-Mixed Signal Circuits,https://doi.org/10.36227/techrxiv.24438487
+W3104997747,2020,92,18,Q3,IEEE Transactions on Instrumentation and Measurement,article,A Novel Incipient Fault Diagnosis Method for Analog Circuits Based on GMKL-SVM and Wavelet Fusion Features,https://doi.org/10.1109/tim.2020.3024337
+W2084894644,2010,18,18,Q1,,conference-paper,Developing digital test sequences for through-silicon vias within 3D structures,https://doi.org/10.1109/3dic.2010.5751442
+W2157052161,2010,15,18,Q8,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,Automated Model Generation Algorithm for High-Level Fault Modeling,https://doi.org/10.1109/tcad.2010.2045556
+W2033214828,2015,6,18,Q7,,conference-paper,Architectural reliability estimation using design diversity,https://doi.org/10.1109/isqed.2015.7085409
+W2901884729,2018,1,18,Q4,MATEC Web of Conferences,conference-paper,Fault features analysis for soft faults of analog circuits with tolerance,https://doi.org/10.1051/matecconf/201823204017
+W7202385239,2026,0,18,Q2,Zenodo (CERN European Organization for Nuclear Research),article,From Idea to Tapeout: An Open-Source Analog Mixed-Signal Design Flow with the IHP Open-PDK,https://doi.org/10.5281/zenodo.21922850
+W4388048109,2023,0,18,Q6,,preprint,Digital-Like Built-In Defect-Oriented Test for Analog-Mixed Signal Circuits,https://doi.org/10.36227/techrxiv.24438487.v1
+W4206926848,2022,27,19,Q3,Integration,article,Multi-source data fusion technique for parametric fault diagnosis in analog circuits,https://doi.org/10.1016/j.vlsi.2022.01.005
+W7117887497,2025,1,19,Q2,,conference-paper,Open-LUT: Interactive g m /ID Lookup Tables for MOSFET Sizing in Open-Source PDKs,https://doi.org/10.1109/icicm66614.2025.11316023
+W7147185144,2026,0,19,Q1,,conference-paper,ATPG-Compliant Digital Modeling of MRAM for Cell-Aware Testing,https://doi.org/10.1109/lascas67804.2026.11457178
+W4392613898,2024,0,19,Q4,Fayoum University Journal of Engineering,article,Digital Testing of Analog Circuits,https://doi.org/10.21608/fuje.2024.343764
+W4404615395,2024,0,19,Q6,Design+,article,Digital-like built-in defect-oriented test for analog-mixed signal circuits,https://doi.org/10.36922/dp.4351
+W4365131687,2023,8,20,Q8,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,FSMx-Ultra: Finite State Machine Extraction From Gate-Level Netlist for Security Assessment,https://doi.org/10.1109/tcad.2023.3266368
+W4413446322,2025,5,20,Q3,Journal of Electronic Testing,article,Fault Diagnosis of Analog Circuits Using an Improved BiTCN Combined with BiLSTM,https://doi.org/10.1007/s10836-025-06190-6
+W4312470641,2022,5,20,Q6,,conference-paper,Application of Sampling in Industrial Analog Defect Simulation,https://doi.org/10.1109/itc50671.2022.00051
+W1986548504,2014,3,20,Q1,SAE technical papers on CD-ROM/SAE technical paper series,conference-paper,Virtual FMEA : Simulation-Based ECU Electrical Failure Mode and Effects Analysis,https://doi.org/10.4271/2014-01-0205
+W4200134238,2021,1,20,Q7,,conference-paper,Reliability Evaluation of Voters for Fault Tolerant Approximate Systems,https://doi.org/10.1109/lats53581.2021.9651736
+W7202373576,2026,0,20,Q2,Zenodo (CERN European Organization for Nuclear Research),article,From Idea to Tapeout: An Open-Source Analog Mixed-Signal Design Flow with the IHP Open-PDK,https://doi.org/10.5281/zenodo.21922849
+W4385612465,2023,0,20,Q4,Electronics ETF,article,Fault Coverage Improvement of CMOS Analog Circuits Using Supply Current Testing Method,https://doi.org/10.53314/els2327009a
+W2149162434,2002,9,21,Q4,,conference-paper,On the application of artificial neural networks to fault diagnosis in analog circuits with tolerances,https://doi.org/10.1109/icosp.2000.893415
+W2005617706,2014,6,21,Q2 Q8,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,Efficient Variation-Aware Delay Fault Simulation Methodology for Resistive Open and Bridge Defects,https://doi.org/10.1109/tcad.2013.2295812
+W4381337193,2023,3,21,Q7,Journal of Electronic Testing,article,Evaluating the Reliability of Different Voting Schemes for Fault Tolerant Approximate Systems,https://doi.org/10.1007/s10836-023-06072-9
+W4379984461,2023,2,21,Q2,,conference-paper,A Python Framework for System-on-Chip Power Integrity Simulation,https://doi.org/10.1109/icit58465.2023.10143164
+W2374992192,2011,1,21,Q3,Jisuanji gongcheng,article,Subspace Ensemble Method for Analog Circuit Fault Diagnosis,
+W4401329672,2024,0,21,Q6,,conference-paper,Assessing Robustness of Smart Systems via Multi-domain Analog Fault Simulation,https://doi.org/10.1109/iolts60994.2024.10616082
+W2887015612,2018,42,22,Q3,Integration,article,An accurate classifier based on adaptive neuro-fuzzy and features selection techniques for fault classification in analog circuits,https://doi.org/10.1016/j.vlsi.2018.08.001
+W2150294020,2002,12,22,Q4,,conference-paper,Test generation for linear analog circuits,https://doi.org/10.1109/cicc.1995.518237
+W4205581880,2018,3,22,Q2,,report,Digital/Analog Cosimulation using CocoTB and Xyce,https://doi.org/10.2172/1761909
+W3208137173,2021,2,22,Q7,,conference-paper,Usability-based Cross-Layer Reliability Evaluation of Image Processing Applications,https://doi.org/10.1109/dft52944.2021.9568307
+W2522360987,2016,0,22,Q8,,conference-paper,Simulation and educational tool for fault modelling in logic circuits,https://doi.org/10.1109/isse.2016.7563244
+W2054099778,2014,8,23,Q3,,conference-paper,Parametric fault diagnosis in analog circuit using genetic algorithm,https://doi.org/10.1109/icgccee.2014.6921410
+W2663019443,2017,7,23,Q7,Computer architecture and design methodologies,book,High-level Estimation and Exploration of Reliability for Multi-Processor System-on-Chip,https://doi.org/10.1007/978-981-10-1073-6
+W2808756391,2018,4,23,Q8,,conference-paper,Enabling fast process variation and fault simulation through macromodelling of analog components,https://doi.org/10.1109/natw.2018.8388861
+W2916026833,2018,0,23,Q2,,report,Digital/Analog Cosimulation using CocoTB and Xyce,https://doi.org/10.2172/1488489
+W2363397998,2015,0,23,Q4,Ceshi jishu xuebao,article,Fault Diagnosis Method of Tolerance Analog Circuits Based on Slope Character,
+W4400034162,2024,0,23,Q6,,conference-paper,A Concept of Provably Detected Defects for Analog Defect Simulation Campaign Improvement,https://doi.org/10.1109/ets61313.2024.10567699
+W2549351519,2016,53,24,Q3,Applied Soft Computing,article,Research on WNN soft fault diagnosis for analog circuit based on adaptive UKF algorithm,https://doi.org/10.1016/j.asoc.2016.11.012
+W2761444476,2017,14,24,Q8,,conference-paper,Verification of fault tolerant techniques in finite state machines using simulation based fault injection targeted at FPGAs for SEU mitigation,https://doi.org/10.1109/ecs.2017.8067859
+W2073478667,2013,2,24,Q4,Applied Mechanics and Materials,article,Fault Diagnosis of Analog Circuits with Tolerance Based on Simulation-before-Test and Distance Algorithm,https://doi.org/10.4028/www.scientific.net/amm.475-476.156
+W7125979767,2026,0,24,Q2,Journal of Physics Conference Series,conference-paper,Compact STT/SHE-MTJ Model with Monte-Carlo Independent Thermal Noise,https://doi.org/10.1088/1742-6596/3161/1/012023
+W4386414654,2023,0,24,Q6,,conference-paper,Unified Analog Mixed-Signal Defect Simulation and Applications,https://doi.org/10.1109/itcindia59034.2023.10235531
+W7148562997,2026,0,24,Q7,IEEE Transactions on Device and Materials Reliability,article,Design of Quintuple-Node-Upset Hardened Latches Based on C-Element Voting and an Analog Voter,https://doi.org/10.1109/tdmr.2026.3680306
+W1946895340,2003,16,25,Q4,Student Conference on Research and Development,conference-paper,Fault diagnosis of analog circuits with tolerances by using RBF and BP neural networks,https://doi.org/10.1109/scored.2002.1033122
+W1983106448,2010,12,25,Q7,Annals of Nuclear Energy,article,Reliability assessment method for NPP digital I&C systems considering the effect of automatic periodic tests,https://doi.org/10.1016/j.anucene.2010.06.009
+W3080588109,2020,5,25,Q6,ACM Transactions on Design Automation of Electronic Systems,article,Machine Learning-based Defect Coverage Boosting of Analog Circuits under Measurement Variations,https://doi.org/10.1145/3408063
+W2035840328,2009,4,25,Q3,,conference-paper,Analog Circuit Fault Diagnosis with Hybrid PSO-SVM,https://doi.org/10.1109/cas-ictd.2009.4960778
+W4294001705,2022,0,25,Q2,arXiv (Cornell University),preprint,Novel STT/SHE MTJ Compact Model Compatible with NGSPICE,https://doi.org/10.48550/arxiv.2208.14055
+W4403277107,2024,0,25,Q8,,conference-paper,MATLAB-Simulink based Framework for Combinational ATPG Applied to Testing of Digital Blocks in Analog and Mixed-Signal Circuits,https://doi.org/10.1109/vdat63601.2024.10705730
+W4297984689,2022,9,26,Q6,,conference-paper,A Time-Efficient Defect Simulation Framework for Analog and Mixed Signal (AMS) Circuits,https://doi.org/10.1109/sbcci55532.2022.9893224
+W3211303798,2021,8,26,Q3,"2021 IEEE International Conference on Electronic Technology, Communication and Information (ICETCI)",conference-paper,Research on Analog Circuit Fault Diagnosis Based on CBAM-CNN,https://doi.org/10.1109/icetci53161.2021.9563552
+W2156651535,2002,5,26,Q4,,conference-paper,Multiple fault testing in analog circuits,https://doi.org/10.1109/icvd.1994.282657
+W4413021311,2025,3,26,Q8,Electronics,article,Quasar—A Process Variability-Aware Radiation Robustness Evaluation Tool,https://doi.org/10.3390/electronics14153131
+W4404711432,2024,2,26,Q2,Electronics,article,PySpice-Simulated In Situ Learning with Memristor Emulation for Single-Layer Spiking Neural Networks,https://doi.org/10.3390/electronics13234665
+W7203725333,2026,0,26,Q7,Nondestructive Testing And Evaluation,article,DEF-RSFA: an integrated nondestructive testing and reliability-aware SRAM design with fault analysis for additive manufacturing,https://doi.org/10.1080/10589759.2026.2717645
+W2171869881,2007,9,27,Q6,,conference-paper,Implementation of Defect Oriented Testing and ICCQ testing for industrial mixed-signal IC,https://doi.org/10.1109/ats.2007.93
+W4360826129,2023,3,27,Q8,arXiv (Cornell University),preprint,A Cycle-Accurate Soft Error Vulnerability Analysis Framework for FPGA-based Designs,https://doi.org/10.48550/arxiv.2303.12269
+W4402835830,2024,1,27,Q3,,conference-paper,Parametric Fault Diagnosis of Analog Circuits using Adaptive Boosting,https://doi.org/10.1109/isvlsi61997.2024.00138
+W7213523348,2026,0,27,Q2,Zenodo (CERN European Organization for Nuclear Research),software,"xpar-toolkit: companion MATLAB and ngspice tools for ""Symmetry and the Form of Nonlinear Behavioral Models""",https://doi.org/10.5281/zenodo.22816759
+W2384171344,2005,0,27,Q4,Journal of Hunan University,article,A Fuzzy Soft Fault Dictionary Method for Diagnosis of Analog Circuits with Tolerance,
+W4410267700,2025,0,27,Q7,Journal of Computer Science and Technology Studies,article,Advancing Automotive Semiconductor Verification Through Simulation-Based Methodologies,https://doi.org/10.32996/jcsts.2025.7.4.23
+W2151815468,2002,80,28,Q4,,conference-paper,Analog circuit testing based on sensitivity computation and new circuit modeling,https://doi.org/10.1109/test.1993.470638
+W4409698198,2025,3,28,Q2,Multibody System Dynamics,article,A general purpose co-simulation C++/Python framework for strongly coupled electro-mechanical applications,https://doi.org/10.1007/s11044-025-10075-z
+W2806617189,2018,1,28,Q7,,conference-abstract,Innovative practices on functional testing and fault simulation for FuSa,https://doi.org/10.1109/vts.2018.8368639
+W3020592139,2019,0,28,Q3,,conference-paper,Wavelet Neural Network Fault Diagnosis Based on UKF Algorithm for Sallen-Key Bandpass Filter Circuit,https://doi.org/10.1109/iciscae48440.2019.221699
+W4235181214,2007,0,28,Q6,Proceedings - Asian Test Symposium/Proceedings,conference-paper,Implementation of Defect Oriented Testing and ICCQ testing for industrial mixed-signal IC,https://doi.org/10.1109/ats.2007.4388046
+W4388579578,2023,10,29,Q8,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,Toward Critical Flip-Flop Identification for Soft-Error Tolerance With Graph Neural Networks,https://doi.org/10.1109/tcad.2023.3331968
+W4386161308,2023,4,29,Q3 Q4,Biomimetics,article,Fault Diagnosis in Analog Circuits Using Swarm Intelligence,https://doi.org/10.3390/biomimetics8050388
+W4239774968,2014,4,29,Q7,,conference-paper,Towards simulation based evaluation of safety goal violations in automotive systems,https://doi.org/10.1109/fdl.2014.7119346
+W4364295880,2023,1,29,Q6,,conference-paper,Accelerating Defect Simulation in Analog and Mixed-Signal Circuits by Parallel Defect Injection,https://doi.org/10.1109/vlsid57277.2023.00072
+W7213506475,2026,0,29,Q2,Zenodo (CERN European Organization for Nuclear Research),software,"xpar-toolkit: companion MATLAB and ngspice tools for ""Symmetry and the Form of Nonlinear Behavioral Models""",https://doi.org/10.5281/zenodo.22816760
+W2149455403,2009,0,29,Q4,,conference-paper,Fuzzy diagnosis method based on multi-frequency responses for tolerance analog circuit,https://doi.org/10.1109/icemi.2009.5274715
+W4320527381,2023,11,30,Q8,IEEE Transactions on Parallel and Distributed Systems,article,HPC Hardware Design Reliability Benchmarking With HDFIT,https://doi.org/10.1109/tpds.2023.3237777
+W3080085509,2020,7,30,Q3,,conference-paper,Wavelet Transform based fault diagnosis in analog circuits with SVM classifier,https://doi.org/10.1109/itcindia49857.2020.9171798
+W3047723463,2020,4,30,Q7,,conference-paper,Error Modeling for Image Processing Filters accelerated onto SRAM-based FPGAs,https://doi.org/10.1109/iolts50870.2020.9159746
+W4415822016,2025,2,30,Q6,,conference-paper,Scan Test for 99% Defect Coverage of R-2R DACs,https://doi.org/10.1109/itc58126.2025.00006
+W7128243359,2025,0,30,Q2,Бурение и нефть,article,Компьютерное моделирование в средах LTspice и Multisim как инструмент разработки генератора синусоидального сигнала,https://doi.org/10.62994/2072-4799.2025.24.15.010
+W2618497183,2015,0,30,Q4 Q6,HAL (Le Centre pour la Communication Scientifique Directe),dissertation,Test Techniques for Analog Circuits and Systems,
+W2039267132,2011,26,31,Q6,,conference-paper,Test time reduction in analogue/mixed-signal devices by defect oriented testing: An industrial example,https://doi.org/10.1109/date.2011.5763065
+W4379116037,2023,11,31,Q8,,conference-paper,BAFFI: a bit-accurate fault injector for improved dependability assessment of FPGA prototypes,https://doi.org/10.23919/date56975.2023.10137300
+W2909732287,2018,7,31,Q3,,conference-paper,A New Approach for Analog Circuit Fault Diagnosis Based on Extreme Learning Machine,https://doi.org/10.1109/phm-chongqing.2018.00040
+W1931639027,2003,4,31,Q4,,conference-paper,On fault diagnosis of analog circuits with tolerance using simulated annealing optimization algorithm,https://doi.org/10.1109/iecon.1992.254384
+W7216454071,2026,0,31,Q2,Zenodo (CERN European Organization for Nuclear Research),software,"xpar-toolkit: companion MATLAB and ngspice tools for ""Symmetry and the Form of Nonlinear Behavioral Models""",https://doi.org/10.5281/zenodo.23107935
+W7106333956,2025,0,31,Q7,Zenodo (CERN European Organization for Nuclear Research),article,"Investment Risk Assessment: Neuromorphic Computing for Edge AI - Safety Certification Barrier, Benchmark Vacuum, and Revenue Reality Analysis",https://doi.org/10.5281/zenodo.17635304
+W2145696418,2005,6,32,Q4,,conference-paper,Soft Fault Test and Diagnosis for Analog Circuits,https://doi.org/10.1109/iscas.2005.1465055
+W4405846303,2024,2,32,Q3,,conference-paper,The Intermittent Fault Diagnosis of Analog Circuits Based on EMD-CrossFormer,https://doi.org/10.1109/apccas62602.2024.10808449
+W4412963540,2025,1,32,Q6,,conference-paper,Digital Defect Oriented Test Method for Phase Locked Loops with High Coverage,https://doi.org/10.1109/i2mtc62753.2025.11078967
+W7140283243,2026,1,32,Q8,ACM Transactions on Design Automation of Electronic Systems,article,A Fast and Accurate Single-Event Transient Reliability Analysis of Logic Circuits Using Adaptive Importance Sampling Method,https://doi.org/10.1145/3803557
+W7172404297,2026,0,32,Q2,Zenodo (CERN European Organization for Nuclear Research),dataset,LOADBench Dataset,https://doi.org/10.5281/zenodo.21759759
+W7106337368,2025,0,32,Q7,Zenodo (CERN European Organization for Nuclear Research),article,"Investment Risk Assessment: Neuromorphic Computing for Edge AI - Safety Certification Barrier, Benchmark Vacuum, and Revenue Reality Analysis",https://doi.org/10.5281/zenodo.17635303
+W2763550765,2017,24,33,Q6,IEEE Transactions on Circuits and Systems I Regular Papers,article,Improving Time-Efficiency of Fault-Coverage Simulation for MOS Analog Circuit,https://doi.org/10.1109/tcsi.2017.2751561
+W2909913318,2019,7,33,Q7,Microelectronics Reliability,article,A BICS-based strategy for mitigating the effects of single event transients on SAR converter,https://doi.org/10.1016/j.microrel.2018.12.013
+W4312878747,2022,7,33,Q8,,conference-paper,A Methodology for Identifying Critical Sequential Circuits with Graph Convolutional Networks,https://doi.org/10.1109/isvlsi54635.2022.00017
+W2364471037,2009,2,33,Q4,Jisuanji fangzhen,article,Fault Diagnosis of Analog Circuits with Tolerance Based on Clustering and SVM Multi-Classification,
+W7172428476,2026,0,33,Q2,Zenodo (CERN European Organization for Nuclear Research),dataset,LOADBench Dataset,https://doi.org/10.5281/zenodo.21759758
+W4409883489,2024,0,33,Q3,,conference-paper,An Analog Circuit Fault Diagnosis Method Based on ITQWT-MKL-SVM,https://doi.org/10.1109/icda64850.2024.00009
+W4384199505,2023,11,34,Q6,Analog Integrated Circuits and Signal Processing,article,Low-cost defect simulation framework for analog and mixed signal (AMS) circuits with enhanced time-efficiency,https://doi.org/10.1007/s10470-023-02167-7
+W2129085661,2008,7,34,Q3 Q4,,conference-paper,Analog circuit fault diagnosis using Ada Boost and SVM,https://doi.org/10.1109/icccas.2008.4657978
+W4361792114,2022,5,34,Q2,,conference-paper,Computer Vision based Framework for Power Converter Identification and Analysis,https://doi.org/10.1109/pedes56012.2022.10080752
+W202215480,2007,4,34,Q8,,book-chapter,Effects of Radiation on Analog and Mixed-Signal Circuits,https://doi.org/10.1007/978-1-4020-5646-8_5
+W2361151561,2000,1,34,Q4,Journal of Hunan University,article,Fault Diagnosis of Analog Circuits with Tolerances Using Back Propagation Neural Networks,
+W4242869351,2015,0,34,Q7,Journal of Electronic Testing,editorial,Editorial,https://doi.org/10.1007/s10836-015-5522-8
+W1572788129,2004,31,35,Q4,,conference-paper,Analog circuit test using transfer function coefficient estimates,https://doi.org/10.1109/test.2003.1271104
+W2107830854,2009,14,35,Q7,IEEE Transactions on Nuclear Science,article,A Self-Checking Scheme to Mitigate Single Event Upset Effects in SRAM-Based FPAAs,https://doi.org/10.1109/tns.2009.2013347
+W3031045895,2019,6,35,Q3,,conference-paper,Analog Circuit Incipient Fault Diagnosis Using Deep Neural Network,https://doi.org/10.1109/icemi46757.2019.9101841
+W7167716394,2026,0,35,Q2,Procedia Computer Science,conference-paper,Discrete Analog Design Automation Using Reinforcement Learning,https://doi.org/10.1016/j.procs.2026.06.281
+W4309968124,2022,0,35,Q6,Research Square,preprint,Low-Cost Defect Simulation Framework for Analog and Mixed Signal (AMS) Circuits with Enhanced Time-Efficiency,https://doi.org/10.21203/rs.3.rs-2299488/v1
+W3034651944,2020,0,35,Q8,Journal of the Arkansas Academy of Science,article,Built-In Self-Test (BIST) for Multi-Threshold NULL Convention Logic (MTNCL) Circuits,
+W4411057605,2025,47,36,Q3,Scientific Reports,article,Enhanced analog circuit fault diagnosis via continuous wavelet transform and dual-stream convolutional fusion,https://doi.org/10.1038/s41598-025-02596-6
+W2022090170,2014,11,36,Q7,,conference-paper,Probabilistic Gate Level Fault Modeling for Near and Sub-Threshold CMOS Circuits,https://doi.org/10.1109/dsd.2014.92
+W4295215004,2022,10,36,Q2,Symmetry,article,Simulation Tool to Evaluate Fault Diagnosis Techniques for DC-DC Converters,https://doi.org/10.3390/sym14091886
+W4414478525,2025,2,36,Q8,Chips,article,A Comprehensive Methodology for Soft Error Rate (SER) Reduction in Clock Distribution Network,https://doi.org/10.3390/chips4040039
+W2265838183,2009,0,36,Q4,,article,Dictionary Method for Multiple Soft Fault Diagnosis in Analog Circuits with Handling Tolerances,
+W4393306319,2023,0,36,Q6,,dissertation,Techniques for efficient and robust defect detection in analog and mixed signal circuits,https://doi.org/10.31274/td-20240329-729
+W3147604431,2021,48,37,Q6,IEEE Transactions on Circuits and Systems I Regular Papers,article,SymBIST: Symmetry-Based Analog and Mixed-Signal Built-In Self-Test for Functional Safety,https://doi.org/10.1109/tcsi.2021.3067180
+W1992648906,2011,14,37,Q4,,conference-paper,A kind integrated adaptive fuzzy neural network tolerance analog circuit fault diagnosis method,https://doi.org/10.1109/ccieng.2011.6007987
+W4385819948,2023,9,37,Q3,IEEE Access,article,An Auxiliary Classifier Generative Adversarial Network Based Fault Diagnosis for Analog Circuit,https://doi.org/10.1109/access.2023.3305261
+W2025531505,2006,2,37,Q8,IFAC Proceedings Volumes,conference-paper,FAULT TOLERANCE EXTENSIONS OF TrueTime PACKAGE FOR DISCRETE SYSTEMS SIMULATION,https://doi.org/10.3182/20060926-3-pl-4904.00014
+W4417004108,2025,0,37,Q2,,conference-paper,Automated Design Framework Using Regression Learning,https://doi.org/10.1109/uemcon67449.2025.11267738
+W3150636843,2008,0,37,Q7,,conference-paper,A self-checking scheme to mitigate single event upset effects in SRAM-based FPAAs,https://doi.org/10.1109/radecs.2008.5782691
+W4231025771,2013,25,38,Q6,,conference-paper,Fault Analysis and Simulation of Large Scale Industrial Mixed-Signal Circuits,https://doi.org/10.7873/date.2013.125
+W2028423495,2009,7,38,Q7,Journal of Semiconductors,article,A novel radiation hardened by design latch,https://doi.org/10.1088/1674-4926/30/3/035007
+W4362579621,2020,6,38,Q3,Archives of Electrical Engineering,article,Fault diagnosis of analog circuit based on wavelet transform and neural network,https://doi.org/10.24425/aee.2020.131766
+W2585294117,2017,6,38,Q8,International Journal of Circuit Theory and Applications,article,Resource optimization for emulation of behavioral models of mixed signal circuits on FPGA: a case study of DC–DC buck converter,https://doi.org/10.1002/cta.2323
+W7213496223,2026,0,38,Q4,Zenodo (CERN European Organization for Nuclear Research),software,Analog Circuit Design,https://doi.org/10.5281/zenodo.22809127
+W2000811372,2005,26,39,Q4 Q6,Journal of Electronic Testing,article,Defect Oriented Testing of Analog Circuits Using Wavelet Analysis of Dynamic Supply Current,https://doi.org/10.1007/s10836-005-6144-3
+W2517871721,2016,17,39,Q3,Computational Intelligence and Neuroscience,article,"Fault Diagnosis for Analog Circuits by Using EEMD, Relative Entropy, and ELM",https://doi.org/10.1155/2016/7657054
+W2553245882,2016,17,39,Q4,Journal of Electronic Testing,article,Analog Circuit Test Point Selection Incorporating Discretization-Based Fuzzification and Extended Fault Dictionary to Handle Component Tolerances,https://doi.org/10.1007/s10836-016-5620-2
+W4378191169,2023,3,39,Q8,,conference-paper,Targeted Bitstream Fault Fuzzing Accelerating BiFI on Large Designs,https://doi.org/10.1109/host55118.2023.10133494
+W7165540865,2026,0,39,Q2,Zenodo (CERN European Organization for Nuclear Research),software,ArtifactGate-EDA: An Adapter-Based Claim-Safe Artifact Evaluation Framework for Software-Only EDA Experiments,https://doi.org/10.5281/zenodo.20798200
+W7125406814,2026,0,39,Q7,"Synthesis lectures on engineering, science, and technology",book-chapter,Related Work,https://doi.org/10.1007/978-3-032-09586-2_3
+W2020582671,2011,39,40,Q6,Knee Surgery Sports Traumatology Arthroscopy,article,The combination of microfracture and a cell‐free polymer‐based implant immersed with autologous serum for cartilage defect coverage,https://doi.org/10.1007/s00167-011-1763-y
+W2163440282,2011,9,40,Q4,,conference-paper,Non-linear analog circuit test and diagnosis under process variation using V-Transform coefficients,https://doi.org/10.1109/vts.2011.5783756
+W2166880811,2006,5,40,Q3,,conference-paper,Characteristics of fault diagnosis for analog circuits based on preset test,https://doi.org/10.1109/dftvs.2005.21
+W4317521358,2023,4,40,Q8,Circuits Systems and Signal Processing,article,Soft Fault Diagnosis in Embedded Switched-Capacitor Filters,https://doi.org/10.1007/s00034-022-02262-6
+W7165479280,2026,0,40,Q2,Zenodo (CERN European Organization for Nuclear Research),software,ArtifactGate-EDA: An Adapter-Based Claim-Safe Artifact Evaluation Framework for Software-Only EDA Experiments,https://doi.org/10.5281/zenodo.20789287
+W2185422214,2014,0,40,Q7,,article,Effect Analysis of Faults in Digital I&C Systems of Nuclear Power Plants,
+W2336323883,2015,6,41,Q4,Advances in intelligent systems and computing,book-chapter,A Technique of Analog Circuits Testing and Diagnosis Based on Neuromorphic Classifier,https://doi.org/10.1007/978-3-319-28658-7_33
+W3177489215,2021,4,41,Q3,2021 IEEE 10th Data Driven Control and Learning Systems Conference (DDCLS),conference-paper,SCA-SVM Fault Diagnosis of Analog Circuits Based on Transfer Learning,https://doi.org/10.1109/ddcls52934.2021.9455518
+W4200309542,2021,3,41,Q7,,conference-paper,A Single Event Effect Simulation Method for RISC-V Processor,https://doi.org/10.1109/asid52932.2021.9651696
+W4388214490,2023,1,41,Q6,,conference-paper,Graph Theory Based Defect Simulation Framework for Analog and Mixed Signal (AMS) Circuits with Improved Time-Efficiency,https://doi.org/10.1109/ewdts59469.2023.10297056
+W7165484898,2026,0,41,Q2,Zenodo (CERN European Organization for Nuclear Research),software,ArtifactGate-EDA: An Adapter-Based Claim-Safe Artifact Evaluation Framework for Software-Only EDA Experiments,https://doi.org/10.5281/zenodo.20789516
+W7135412242,2026,0,41,Q7 Q8,Zenodo (CERN European Organization for Nuclear Research),software,ARVS: Adaptive Robust Verification System,https://doi.org/10.5281/zenodo.19023904
+W4288779689,2022,36,42,Q3,IEEE Transactions on Instrumentation and Measurement,article,BIT-Based Intermittent Fault Diagnosis of Analog Circuits by Improved Deep Forest Classifier,https://doi.org/10.1109/tim.2022.3194890
+W2014417962,2013,16,42,Q6,"Design, Automation, and Test in Europe",article,Fault analysis and simulation of large scale industrial mixed-signal circuits,https://doi.org/10.5555/2485288.2485427
+W2014669288,2013,3,42,Q4,,conference-paper,Statistical modelling of analog circuits for test metrics computation,https://doi.org/10.1109/dtis.2013.6527772
+W7165495458,2026,0,42,Q2,Zenodo (CERN European Organization for Nuclear Research),software,ArtifactGate-EDA: An Adapter-Based Claim-Safe Artifact Evaluation Framework for Software-Only EDA Experiments,https://doi.org/10.5281/zenodo.20789288
+W2622213335,2016,0,42,Q7,Illinois Digital Environment for Access to Learning and Scholarship (University of Illinois at Urbana-Champaign),dissertation,A testbed to assess digital instrumentation and control and cyber security of nuclear power plants,
+W7135398648,2026,0,42,Q7 Q8,Zenodo (CERN European Organization for Nuclear Research),software,ARVS: Adaptive Robust Verification System,https://doi.org/10.5281/zenodo.19023905
+W2553580748,2016,37,43,Q6,IEEE Transactions on Circuits and Systems I Regular Papers,article,Using Mixed-Signal Defect Simulation to Close the Loop Between Design and Test,https://doi.org/10.1109/tcsi.2016.2616159
+W4394911535,2024,2,43,Q3,,conference-paper,Analog Circuit Fault Classification Detection Based on Adam-CNN Models,https://doi.org/10.1109/icicacs60521.2024.10498531
+W7169620891,2026,0,43,Q2,IEEE Access,article,An Efficient SPICE Framework for Simulation of BTI Effects at the Circuit Level,https://doi.org/10.1109/access.2026.3714030
+W7125383643,2026,0,43,Q7,"Synthesis lectures on engineering, science, and technology",book-chapter,Introduction,https://doi.org/10.1007/978-3-032-09586-2_1
+W2096728620,2013,8,44,Q4,ACM Transactions on Design Automation of Electronic Systems,article,Performance bound analysis of analog circuits in frequency- and time-domain considering process variations,https://doi.org/10.1145/2534395
+W4399490997,2024,6,44,Q3,Symmetry,article,A Fault Diagnosis Method for Analog Circuits Based on Improved TQWT and Inception Model,https://doi.org/10.3390/sym16060720
+W4385411967,2023,0,44,Q2,,conference-paper,Framework to Simulate and Analyse the Electromagnetic Emission of Integrated Circuits under Electromagnetic Interference,https://doi.org/10.1109/smacd58065.2023.10192236
+W4255888515,2015,0,44,Q6,,conference-paper,A Method for the Estimation of Defect Detection Probability of Analog/RF Defect-Oriented Tests,https://doi.org/10.7873/date.2015.0617
+W7125383062,2025,0,44,Q7,"Synthesis lectures on engineering, science, and technology",book-chapter,Background,https://doi.org/10.1007/978-3-032-09586-2_2
+W1650942424,2015,10,45,Q7,,conference-paper,A Partial Reconfiguration-based scheme to mitigate Multiple-Bit Upsets for FPGAs in low-cost space applications,https://doi.org/10.1109/recosoc.2015.7238095
+W2141407617,2008,5,45,Q4,,article,Research on k-fault diagnosis and testability in analog circuit,
+W3157977407,2021,2,45,Q3,Journal of Physics Conference Series,conference-paper,Kent-PSO optimized ELM fault diagnosis model in analog circuits,https://doi.org/10.1088/1742-6596/1871/1/012053
+W7217233412,2026,0,45,Q2,International Journal of Engineering Research and Science & Technology,article,A REINFORCEMENT LEARNING FRAMEWORK FOR MULTI-OBJECTIVE OPTIMIZATION OF 8T-SRAM CELLS,
+W2010187163,2015,0,45,Q6,"Design, Automation, and Test in Europe",article,A method for the estimation of defect detection probability of analog/RF defect-oriented tests,https://doi.org/10.5555/2755753.2757136
+W2044500680,2014,18,46,Q4 Q6,,conference-paper,Optimization of analog fault coverage by exploiting defect-specific masking,https://doi.org/10.1109/ets.2014.6847817
+W2900692850,2015,7,46,Q2,London Met Repository (London Metropolitan University),conference-paper,Qucs: an introduction to the new simulation and compact device modelling features implemented in release 0.0.19/0.0.19Src2 of the popular GPL circuit simulator.,
+W2139045599,2005,6,46,Q4,,conference-paper,Reconfiguration for Enhanced ALternate Test (REALTest) of Analog Circuits,https://doi.org/10.1109/ats.2004.73
+W4409979093,2025,2,46,Q3,Journal of Electronic Testing,article,Extreme Learning Machine Model For Multi-Fault Diagnosis of Analog Circuits,https://doi.org/10.1007/s10836-025-06167-5
+W7162751477,2026,0,46,Q7,SSRN Electronic Journal,preprint,QART: A Low-Power Quadruple-Node-Upset Hardened Latch Based on Asymmetric Ring Topology,https://doi.org/10.2139/ssrn.6849816
+W1488751397,2012,3,47,Q4,Metrology and Measurement Systems,article,A Novel Method of Handling Tolerances for Analog Circuit Fault Diagnosis Based on Normal Quotient Distribution,https://doi.org/10.2478/v10178-012-0073-0
+W4404847783,2024,2,47,Q6,,conference-paper,TEACH: Outlier Oriented Testing of Analog/Mixed-Signal Circuits Using One-class Hyperdimensional Clustering,https://doi.org/10.1109/itc51657.2024.00065
+W4413319021,2025,1,47,Q2,IEEE Design and Test,article,EAVREF: An Evolutionary-Algorithm-Based Tool for Low-Power CMOS Voltage Reference Designs,https://doi.org/10.1109/mdat.2025.3600355
+W2378640225,2013,1,47,Q3,Modern Electronics Technique,article,Analog circuit fault diagnosis based on BP neural network,
+W4411446564,2025,0,47,Q7,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,FR 2 eRAM: A Fault-Resilient Graph Processing Paradigm in Realistic ReRAMs,https://doi.org/10.1109/tcad.2025.3581138
+W4387496142,2023,13,48,Q3,Circuits Systems and Signal Processing,article,Investigation of Extreme Learning Machine-Based Fault Diagnosis to Identify Faulty Components in Analog Circuits,https://doi.org/10.1007/s00034-023-02526-9
+W4200144194,2021,5,48,Q6,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,DDtM: Increasing Latent Defect Detection in Analog/Mixed-Signal ICs Using the Difference in Distance to Mean Value,https://doi.org/10.1109/tcad.2021.3139311
+W2538119176,2013,2,48,Q4,,conference-paper,The application of multi-objective programming in single soft-fault diagnosis of nonlinear analog circuit with tolerance,https://doi.org/10.1109/icemi.2013.6743147
+W4283814068,2022,1,48,Q2,,conference-paper,Statistical Analysis of a Low Power Analog Current Source,https://doi.org/10.1109/vlsidcs53788.2022.9811473
+W2285970245,2013,0,48,Q7,Lume (Universidade Federal do Rio Grande do Sul),dissertation,Detecting transient faults in the configurable reconfigurable core architecture without false error signals,
+W2137282157,2003,31,49,Q4,,conference-paper,Dynamic supply current testing of analog circuits using wavelet transform,https://doi.org/10.1109/vts.2002.1011158
+W2798776715,2018,6,49,Q7,,conference-paper,A soft-error resilient route computation unit for 3D Networks-on-Chips,https://doi.org/10.23919/date.2018.8342224
+W4404314179,2024,3,49,Q2,arXiv (Cornell University),preprint,SPICEPilot: Navigating SPICE Code Generation and Simulation with AI Guidance,https://doi.org/10.48550/arxiv.2410.20553
+W2037044612,2012,1,49,Q3,Applied Mechanics and Materials,article,GA Optimized Binary Tree SVM for Analog Circuit Fault Diagnosis,https://doi.org/10.4028/www.scientific.net/amm.235.423
+W2480236156,2016,0,49,Q6,,conference-paper,Measuring defect tolerance within mixed-signal ICs,https://doi.org/10.1109/ets.2016.7519320
+W4388208118,2023,41,50,Q3,IEEE Transactions on Industrial Electronics,article,An Incipient Fault Diagnosis Method Based on Complex Convolutional Self-Attention Autoencoder for Analog Circuits,https://doi.org/10.1109/tie.2023.3310075
+W3035722655,2020,33,50,Q6,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,Defect-Oriented Test: Effectiveness in High Volume Manufacturing,https://doi.org/10.1109/tcad.2020.3001259
+W7214889325,2026,0,50,Q2,International journal of engineering science and advanced technology.,article,Design and Post-Layout Characterization of a CMOS Inverter in SKY130 Technology,https://doi.org/10.64771/ijesat.2026.v26.i9.3976
+W2347829087,2005,0,50,Q4,Systems engineering and electronics,article,Analysis of test parameter in analog circuit based on sensitivity,
+W4416010330,2025,0,50,Q7,IEEE Latin America Transactions,article,A Test Strategy for a Current Source Designed for Fast Field-Cycling Nuclear Magnetic Resonance,https://doi.org/10.1109/tla.2025.11231230
+W2742779439,2017,26,51,Q2,PLoS ONE,article,Modeling and simulation of biological systems using SPICE language,https://doi.org/10.1371/journal.pone.0182385
+W2810737259,2018,15,51,Q6,,conference-paper,Measuring mixed-signal test stimulus quality,https://doi.org/10.1109/ets.2018.8400688
+W4399408993,2024,7,51,Q7,IEEE Transactions on Reliability,article,An Empirical Fault Vulnerability Exploration of ReRAM-Based Process-in-Memory CNN Accelerators,https://doi.org/10.1109/tr.2024.3405825
+W1963751612,2008,1,51,Q4,VLSI design,article,A Tool for Single‐Fault Diagnosis in Linear Analog Circuits with Tolerance Using the T‐Vector Approach,https://doi.org/10.1155/2008/630951
+W4417337053,2025,0,51,Q3,IEEE Access,article,Counterfactual Inference for Early Parametric Drift Fault Diagnosis in Analog Circuits,https://doi.org/10.1109/access.2025.3644032
+W1992984946,2012,50,52,Q6,,conference-paper,Introduction to the defect-oriented cell-aware test methodology for significant reduction of DPPM rates,https://doi.org/10.1109/ets.2012.6233046
+W3172560884,2021,24,52,Q3,IEICE Electronics Express,article,Incipient fault diagnosis of analog circuits based on wavelet transform and improved deep convolutional neural network,https://doi.org/10.1587/elex.18.20210174
+W4387075466,2023,0,52,Q2,Zenodo (CERN European Organization for Nuclear Research),dissertation,Pultec EQP-1A Modeling with Wave Digital Filters,https://doi.org/10.5281/zenodo.8382764
+W7214635785,2026,0,52,Q4,arXiv (Cornell University),preprint,Simulation-Efficient Analog Circuit Yield Optimization via Monte Carlo Zeroth-Order Gradient Estimation,https://doi.org/10.48550/arxiv.2609.30678
+W7117996372,2026,0,52,Q7,Lecture notes in electrical engineering,conference-paper,Model-Based Prognosis for Hybrid Systems: A Perspective of Patent,https://doi.org/10.1007/978-981-95-1802-9_8
+W2069483742,2002,35,53,Q4,Measurement,article,A fuzzy approach for soft fault detection in analog circuits,https://doi.org/10.1016/s0263-2241(01)00049-5
+W2510644716,2016,7,53,Q7,,conference-paper,Soft Error Effect Tolerant Temporal Self-Voting Checkers: Energy vs. Resilience Tradeoffs,https://doi.org/10.1109/isvlsi.2016.19
+W4249701547,2006,3,53,Q6,Kluwer Academic Publishers eBooks,book-chapter,Test and Design-for-Test of Mixed-Signal Integrated Circuits,https://doi.org/10.1007/1-4020-8159-6_7
+W4406296097,2025,1,53,Q3,Research Square,preprint,A Fault Diagnosis Method for Analog Circuits Based on VMD-CFOA-ELM,https://doi.org/10.21203/rs.3.rs-5769828/v1
+W7117671231,2025,0,53,Q2,arXiv (Cornell University),preprint,AnalogSAGE: Self-evolving Analog Design Multi-Agents with Stratified Memory and Grounded Experience,https://doi.org/10.48550/arxiv.2512.22435
+W2549201753,2015,8,54,Q3,,conference-paper,Analog circuit fault diagnosis using wavelet feature optimization approach,https://doi.org/10.1109/icemi.2015.7494225
+W2138209291,2003,1,54,Q4,,conference-paper,Automated development of test program sets for analog circuit modules,https://doi.org/10.1109/autest.1988.9619
+W7165613724,2026,0,54,Q2,Electronics,article,AI-Assisted Circuit Digital Twin Reproducing Ultrasound Waves in Human Tissues,https://doi.org/10.3390/electronics15122726
+W3117360808,2010,0,54,Q6,Proceedings - International Symposium for Testing and Failure Analysis,conference-paper,Combining Time Resolved Emission and Analog Simulation for Fault Localization,https://doi.org/10.31399/asm.cp.istfa2010p0384
+W7167834684,2026,0,54,Q7,Microelectronics Journal,article,QART: A low-power quadruple-node-upset hardened latch based on asymmetric ring topology,https://doi.org/10.1016/j.mejo.2026.107358
+W3002656377,2020,122,55,Q3,IEEE Access,article,Data-Driven Feature Extraction for Analog Circuit Fault Diagnosis Using 1-D Convolutional Neural Network,https://doi.org/10.1109/access.2020.2968744
+W2508571990,2016,6,55,Q6,,conference-paper,Closing the loop between analog design and test,https://doi.org/10.1109/iscas.2016.7527385
+W2089935472,2012,3,55,Q4,,conference-paper,Improving analog circuit fault diagnosis by testing points selection,https://doi.org/10.1109/icses.2012.6382247
+W7167086902,2026,0,55,Q2,Zenodo (CERN European Organization for Nuclear Research),software,SBO_HB_PFM_LLC_WOR,https://doi.org/10.5281/zenodo.21127604
+W7168236941,2026,0,55,Q7,arXiv (Cornell University),preprint,ARMOR-IMC: Adaptive Resource Mapping for Operational Robustness via Secure In-Memory Computing,https://doi.org/10.48550/arxiv.2607.10938
+W4404848983,2024,8,56,Q6,,conference-paper,Digital Scan and ATPG for Analog Circuits,https://doi.org/10.1109/itc51657.2024.00055
+W4413938519,2025,2,56,Q7,Measurement Science and Technology,article,Fault diagnosis strategy for the current source section of a field-cycling nuclear magnetic resonance instrument,https://doi.org/10.1088/1361-6501/ae01c3
+W7167236308,2026,0,56,Q2,Code Ocean,software,Simulation-Based Optimization for LLC Resonant Converter Design Over a Wide Operating Range,https://doi.org/10.24433/co.2089923.v1
+W7154982486,2026,0,56,Q3,Figshare,dataset,A Monte Carlo-based Sallen-Key benchmark dataset for data-driven predictive maintenance and few-shot fault diagnosis,https://doi.org/10.6084/m9.figshare.32054736.v1
+W4401414010,2024,0,56,Q4,,conference-paper,HD-MCTS: an Analog Circuit Optimization Algorithm Based on High-dimensional Monte Carlo Tree Search,https://doi.org/10.1109/iseda62518.2024.10617902
+W4409282428,2024,19,57,Q2,,conference-paper,AnalogGym: An Open and Practical Testing Suite for Analog Circuit Synthesis,https://doi.org/10.1145/3676536.3697117
+W2023170340,2011,13,57,Q4,Journal of Electronic Testing,article,Analog Circuit Fault Detection Using Location of Poles,https://doi.org/10.1007/s10836-011-5240-9
+W3124009303,2021,5,57,Q3,IOP Conference Series Earth and Environmental Science,conference-paper,Fault Diagnosis of Analog Circuits Based on Wavelet Packet Energy Entropy and DBN,https://doi.org/10.1088/1755-1315/632/4/042018
+W7167941127,2026,0,57,Q6,,conference-paper,Distributed Delay-Based BIST for Mixed-Signal Circuits in Flexible Electronics,https://doi.org/10.1109/ets69887.2026.11591727
+W7213282790,2026,0,57,Q7,,dissertation,Dependable digital spiking neuromorphic hardware,https://doi.org/10.17918/00011559
+W2361761963,2014,3,58,Q3,Journal of Central South University(Science and Technology),article,WNN soft fault diagnosis of analog circuit based on KPLS feature extraction,
+W2125781519,2007,1,58,Q4,International Conference on Circuits,conference-paper,Worst case analysis of the analog circuits,
+W7167027234,2026,0,58,Q2,Zenodo (CERN European Organization for Nuclear Research),software,SBO_HB_PFM_LLC_WOR,https://doi.org/10.5281/zenodo.21127605
+W4384026274,2023,0,58,Q6,,conference-paper,High-coverage analog IP block test generation methodology using low-cost signal generation and output response analysis,https://doi.org/10.1109/ets56758.2023.10173963
+W2170598229,2006,5,59,Q3,Proceedings,conference-paper,Fault Diagnosis of Analog Circuits Based on Adaptive Test and Output Characteristics,https://doi.org/10.1109/dft.2006.30
+W2143417371,2013,5,59,Q4,,conference-paper,Adaptive quality binning for analog circuits,https://doi.org/10.1109/ets.2013.6569357
+W7131816377,2026,1,59,Q2,Micromachines,article,Corner Simulation of CMOS Analog Integrated Circuit Taking into Account Radiation Influence,https://doi.org/10.3390/mi17030300
+W2781952488,2017,1,59,Q6,,conference-paper,Non-intrusive detection of defects in mixed-signal integrated circuits using light activation,https://doi.org/10.1109/test.2017.8242056
+W2967540737,2019,14,60,Q6,,conference-paper,"Requirements, for Industrial Analog Faulf-Simulator",https://doi.org/10.1109/smacd.2019.8795222
+W2054041063,2012,2,60,Q3,Advanced materials research,article,Analog Circuit Fault Diagnosis Using AdaBoost with SVM-Based Component Classiﬁers,https://doi.org/10.4028/www.scientific.net/amr.591-593.1414
+W7103896073,2025,0,60,Q2,Zenodo (CERN European Organization for Nuclear Research),dataset,Junctionless Silicon Vertical Nanowire Field-effect Transistor Compact Model,https://doi.org/10.5281/zenodo.16968094
+W2385979385,2014,0,60,Q4,Microelectronics & Computer,article,The Analog Circuit BIST Design Based on the Frequency Characteristic Test,
+W2595569031,2015,0,60,Q7,Journal of International Crisis and Risk Communication Research,article,Adaptive Architectural Strategies for Resilient Energy-Aware Computing,
+W1935013468,2003,1,61,Q4,,conference-paper,Analog circuit for sound localization applications,https://doi.org/10.1109/apasic.2002.1031521
+W4411173250,2025,1,61,Q4 Q6,,conference-paper,Defect Severity Analysis for Analog Circuits Using Zoom Search and Hierarchical Fault Simulation,https://doi.org/10.1109/vts65138.2025.11022957
+W7103899315,2025,0,61,Q2,Zenodo (CERN European Organization for Nuclear Research),dataset,Junctionless Silicon Vertical Nanowire Field-effect Transistor Compact Model,https://doi.org/10.5281/zenodo.16968093
+W7155393994,2026,0,61,Q3,Figshare,dataset,A Monte Carlo-based Sallen-Key benchmark dataset for data-driven predictive maintenance and few-shot fault diagnosis,https://doi.org/10.6084/m9.figshare.32054736.v2
+W3097553233,2020,27,62,Q4,Circuits Systems and Signal Processing,article,A Statistical Approach of Analog Circuit Fault Detection Utilizing Kolmogorov–Smirnov Test Method,https://doi.org/10.1007/s00034-020-01572-x
+W3048170192,2020,8,62,Q6,,conference-paper,Automatic Fault Simulators for Diagnosis of Analog Systems,https://doi.org/10.1109/iolts50870.2020.9159747
+W4403661859,2024,3,62,Q2,arXiv (Cornell University),preprint,AnalogGym: An Open and Practical Testing Suite for Analog Circuit Synthesis,https://doi.org/10.48550/arxiv.2409.08534
+W2374245718,2005,2,62,Q3,Acta Simulata Systematica Sinica,article,Applying Wavelet Transform and Neural Networks to Fault Diagnosis in Analog Circuits,
+W2570705108,2016,7,63,Q6,,conference-paper,Automatic test signal generation for mixed-signal integrated circuits using circuit partitioning and interval analysis,https://doi.org/10.1109/test.2016.7805867
+W4405619913,2024,5,63,Q3 Q4,Circuits Systems and Signal Processing,article,Intelligent Analog Circuit Soft Fault Diagnosis Based on Multi-level SWT and EM-PCA,https://doi.org/10.1007/s00034-024-02947-0
+W1980138501,2011,5,63,Q4,,conference-paper,Improved coefficient based test for diagnosing parametric faults of analog circuits,https://doi.org/10.1109/tencon.2011.6129064
+W4324356712,2022,0,63,Q2,Journal of Student Research,article,DeepSPICE: Accelerating Digital Cell Characterization Using Deep Learning,https://doi.org/10.47611/jsrhs.v11i3.3375
+W2386839719,2013,1,64,Q3,Journal of Heilongjiang Institute of Science and Technology,article,Analog circuit faults diagnosis online based on gaussian fuzzy kernel clustering,
+W2545142444,2003,1,64,Q4,,conference-paper,Analog circuit for sound localization applications,https://doi.org/10.1109/icccas.2002.1178941
+W4402749501,2024,0,64,Q2,Вісник Черкаського державного технологічного університету,article,"A study of the electric circuit modelling and simulation software efficiency and their accuracy, speed and ease of use comparison",https://doi.org/10.62660/bcstu/2.2024.32
+W4411238629,2025,0,65,Q2,SSRN Electronic Journal,preprint,Shylu Node: On-Node Scalable Solvers and Preconditionersrecent Progresses and Current Performance,https://doi.org/10.2139/ssrn.5291205
+W2393636642,2009,0,65,Q3,Journal of Sichuan University of Science & Engineering,article,An Analog Circuit Fault Diagnosis Method Based on Integrated Calculation of Intelligent,
+W3209499246,2021,0,65,Q4,IETE Journal of Research,article,Experimental Verification of a New Oscillation-based Test Algorithm for Analog Circuits,https://doi.org/10.1080/03772063.2021.1994040
+W4392268055,2021,0,65,Q6,HAL (Le Centre pour la Communication Scientifique Directe),dissertation,Analog Hardware Fault Diagnosis,
+W1983799265,2012,17,66,Q4,Circuits Systems and Signal Processing,article,Fault Diagnosis of Analog Circuits Using Systematic Tests Based on Data Fusion,https://doi.org/10.1007/s00034-012-9487-x
+W4417097403,2025,0,66,Q2,arXiv (Cornell University),preprint,ShyLU node: On-node Scalable Solvers and Preconditioners Recent Progresses and Current Performance,https://doi.org/10.48550/arxiv.2506.05793
+W2373305517,2009,0,66,Q3,Journal of Sichuan University of Science & Engineering,article,An Analog Circuit Fault Diagnosis Method Based on Integrated Calculation of Intelligent,
+W1583239823,2000,20,67,Q4,Journal of Electronic Testing,article,Fault Simulation for Analog Circuits Under Parameter Variations,https://doi.org/10.1023/a:1008351601024
+W7134055841,2026,0,67,Q2,Parallel Computing,article,ShyLU-node: On-node scalable solvers and preconditioners: Recent progress and current performance,https://doi.org/10.1016/j.parco.2026.103194
+W2389373966,2010,0,67,Q3,Jisuanji fangzhen,article,Algorithm Based on RBF Artificial Network for Analog Circuit Faults Diagnosis,
+W2567975304,2016,26,68,Q6,,conference-paper,Effective DC fault models and testing approach for open defects in analog circuits,https://doi.org/10.1109/test.2016.7805830
+W1984354089,2013,17,68,Q4,Journal of Electronic Testing,article,Analog Circuits Fault Detection Using Cross-Entropy Approach,https://doi.org/10.1007/s10836-012-5344-x
+W7132833327,2026,0,68,Q2,Zenodo (CERN European Organization for Nuclear Research),software,Hrishikesh-Acharyya/Ultrasonic-Acoustic-Signal-Acquisition-and-Conditioning-Frontend: Initial Release: Complete Design and SPICE Validation,https://doi.org/10.5281/zenodo.18816771
+W2383137838,2005,0,68,Q3,Systems engineering and electronics,article,Determination of a minimum form of the linear combinationmatrix for analog circuit fault diagnosis,
+W2761915076,2017,18,69,Q4,Analog Integrated Circuits and Signal Processing,article,Parametric fault detection of analog circuits based on Bhattacharyya measure,https://doi.org/10.1007/s10470-017-1052-x
+W1980151347,2012,13,69,Q6,,conference-paper,"Advances in variation-aware modeling, verification, and testing of analog ICs",https://doi.org/10.1109/date.2012.6176730
+W4403278932,2024,0,69,Q2,,conference-paper,Stability and Anomaly Analysis of RC Circuits under Disturbance Conditions Based on Deep Learning,https://doi.org/10.1109/ecnct63103.2024.10704366
+W2376541718,2008,0,69,Q3,Measurement & Control Technology,article,Analog Circuit Fault Diagnosis Based on SVDD and Dempster-Shafer Theory,
+W1519584088,2002,3,70,Q4,,conference-paper,FDP: fault detection probability function for analog circuits,https://doi.org/10.1109/iscas.2001.922157
+W7127621644,2026,1,70,Q3,Measurement Science and Technology,article,Analog circuit fault diagnosis method based on CEEMDAN and SA-DCGAN,https://doi.org/10.1088/1361-6501/ae41d7
+W7132816776,2026,0,70,Q2,Zenodo (CERN European Organization for Nuclear Research),software,Hrishikesh-Acharyya/Ultrasonic-Acoustic-Signal-Acquisition-and-Conditioning-Frontend: Initial Release: Complete Design and SPICE Validation,https://doi.org/10.5281/zenodo.18816770
+W3010887939,2020,0,70,Q6,Integration,article,An adaptive simulation framework for AMS-RF test quality,https://doi.org/10.1016/j.vlsi.2020.03.003
+W2140764686,2002,3,71,Q4,,conference-paper,Test generation for fault isolation in analog circuits using behavioral models,https://doi.org/10.1109/ats.2000.893597
+W1909547679,2015,3,71,Q6,,conference-paper,Automatic generation of lightweight controllability and observability structures for analog circuits,https://doi.org/10.1109/smacd.2015.7301706
+W7125945307,2025,0,71,Q2,,conference-paper,Cross-Domain Power Orchestration for TI AM6442 Heterogeneous Multi-Core Processor,https://doi.org/10.1109/icrm66809.2025.11349009
+W7149979847,2026,0,71,Q3,e-Prime – Nexus of Electrical Electronic and Intelligent Engineering,article,An improved method for soft fault diagnosis of analog circuits based on transfer learning,https://doi.org/10.1016/j.eprime.2026.201166
+W4297337422,2022,15,72,Q6,,conference-paper,All Digital Low-Cost Built-in Defect Testing Strategy for Operational Amplifiers with High Coverage,https://doi.org/10.1109/iolts56730.2022.9897224
+W3009485259,2018,1,72,Q2,,conference-paper,Reliability Analysis of Memristor using Supervised Learning Algorithm,https://doi.org/10.1109/rteict42901.2018.9012433
+W4382204737,2023,1,72,Q3,,conference-paper,A Transfer Learning Method for Fault Diagnosis of Analog Circuit Using Deep Subdomain Adaptation Network,https://doi.org/10.1109/phm58589.2023.00056
+W7140364012,2026,3,73,Q2,IEEE Sensors Journal,article,AI-Assisted Electronic Digital Twin for Capacitive Pressure Sensors Controlling Robotic Gripping,https://doi.org/10.1109/jsen.2026.3676256
+W2148422009,2003,2,73,Q4,,conference-paper,Cost-effective concurrent test hardware design for linear analog circuits,https://doi.org/10.1109/iccd.2002.1106779
+W2951669030,2018,0,73,Q3,,conference-paper,WNN Tolerance Fault Diagnosis for Analog Circuits Based on Wavelet Packet Transform Features,https://doi.org/10.23977/icamcs.2018.048
+W4414647924,2025,0,73,Q6,,conference-paper,"""Pseudo-Soft Defects"": A Critical Examination of Their Effects on Analog Circuit Performance",https://doi.org/10.1109/mdts64924.2025.11177068
+W2365857479,2016,15,74,Q6,Integration,article,Automatic generation of test infrastructures for analog integrated circuits by controllability and observability co-optimization,https://doi.org/10.1016/j.vlsi.2016.05.001
+W3043802025,2020,4,74,Q3,Journal of Physics Conference Series,conference-paper,Fault Diagnosis Method of Analog Circuit Based on Radial Base Function Neural Network,https://doi.org/10.1088/1742-6596/1575/1/012148
+W7214729859,2026,0,74,Q2,Zenodo (CERN European Organization for Nuclear Research),software,Discrete Analog Battery Management System (BMS),https://doi.org/10.5281/zenodo.23045348
+W2280791209,2012,0,74,Q4,Advances in intelligent systems and computing,book-chapter,Research on Optimization Algorithm for Analog Circuit Simulation,https://doi.org/10.1007/978-3-642-31698-2_65
+W4409787121,2025,6,75,Q3 Q4,Circuits Systems and Signal Processing,article,Fault Diagnosis in Analog Circuits Using Stacking Ensemble Machine Learning Approach,https://doi.org/10.1007/s00034-025-03081-1
+W4294190179,2022,1,75,Q4,Journal of Biomedical and Allied Research,article,Fault Testing and Diagnosis in Analog Circuits Using Fault Dictionary Techniques,https://doi.org/10.37191/mapsci-2582-4937-4(2)-027
+W2983258159,2019,1,75,Q6,Mathematics in industry,book-chapter,Fast Fault Simulation for Detecting Erroneous Connections in ICs,https://doi.org/10.1007/978-3-030-30726-4_17
+W7214776938,2026,0,75,Q2,Zenodo (CERN European Organization for Nuclear Research),software,Discrete Analog Battery Management System (BMS),https://doi.org/10.5281/zenodo.23045349
+W2349274239,2007,4,76,Q3,Journal of Circuits and Systems,article,Fault diagnosis in analog circuits based on neural network information fusion technique,
+W2153200955,2007,1,76,Q4,,conference-paper,Analog Circuit Testing Using Auto Regressive Moving Average Models,https://doi.org/10.1109/vlsid.2007.35
+W7166958152,2025,0,76,Q2,Siti Hasmah Digital Library-MMU Institutiona Repository (Multimedia University),dissertation,Development of agriculture monitoring system implemented in Convolution Neural Networks with Simulated Annealing using Hybrid Energy Harvester,
+W2039856391,2005,12,77,Q4,Microelectronics Journal,article,Test generation for specification test of analog circuits using efficient test response observation methods,https://doi.org/10.1016/j.mejo.2005.03.005
+W4388798454,2023,2,77,Q6,Journal of Circuits Systems and Computers,article,A Defects Classification Algorithm for the Hybrid OBT–IDDQ Fault Diagnosis Technique in Analog CMOS Integrated Circuits,https://doi.org/10.1142/s0218126624501469
+W7214457947,2026,0,77,Q2,Zenodo (CERN European Organization for Nuclear Research),other,Open RTU: an open reference instrument for grid-side frequency compliance monitoring,https://doi.org/10.5281/zenodo.22969284
+W2379496832,2012,0,77,Q3,Journal of Guizhou Normal University,article,Method of LSSVM optimized by particle swarm and its application in fault diagnosis of analog circuit,
+W1982268872,2006,21,78,Q6,Journal of Electronic Testing,article,Defect Simulation Methodology for iDDT Testing,https://doi.org/10.1007/s10836-006-9318-8
+W2383285167,2005,3,78,Q3,JOURNAL OF ELECTRONIC MEASUREMENT AND INSTRUMENT,article,Fault Diagnosis in Analog Circuits Based on Principal Component Analysis and Neural Networks,
+W7171156870,2026,0,78,Q2,Zenodo (CERN European Organization for Nuclear Research),software,Open RTU: an open reference instrument for grid-side frequency compliance monitoring,https://doi.org/10.5281/zenodo.21575262
+W1523637658,2011,0,78,Q4,"Argentine School of Micro-Nanoelectronics, Technology and Applications",article,Ultra low-cost configurability test strategy for an embedded analog circuit,
+W2088677210,2012,9,79,Q4,Journal of Electronic Testing,article,Fault Detection of Analog Circuits Using Network Parameters,https://doi.org/10.1007/s10836-012-5284-5
+W2271166772,2013,0,79,Q2,,dissertation,Compact models and the i-MOS platform developments for the tunneling field-effect transistor technology,https://doi.org/10.14711/thesis-b1255587
+W4416380822,2025,0,79,Q3,Frontiers in artificial intelligence and applications,book-chapter,Improved Stacked Autoencoder Combined with Density-Based Clustering for Analog Circuit Fault Diagnosis,https://doi.org/10.3233/faia251531
+W7163054516,2026,0,79,Q6,AEU - International Journal of Electronics and Communications,article,Optimal DfT test-transistor insertion for neural-network-classification-boosted latent pinhole detection and monitoring in Analog circuits,https://doi.org/10.1016/j.aeue.2026.156416
+W3173417448,2021,28,80,Q3,Symmetry,article,A Novel Analog Circuit Soft Fault Diagnosis Method Based on Convolutional Neural Network and Backward Difference,https://doi.org/10.3390/sym13061096
+W2103787815,2004,7,80,Q4,IEEE Transactions on Very Large Scale Integration (VLSI) Systems,article,Design of concurrent test Hardware for Linear analog circuits with constrained hardware overhead,https://doi.org/10.1109/tvlsi.2004.827597
+W7147214506,2026,0,80,Q2,ITEGAM- Journal of Engineering and Technology for Industrial Applications (ITEGAM-JETIA),article,Performance-Driven Optimization of CMOS-Based Two-Stage Operational Amplifier Using Metaheuristic Algorithms,https://doi.org/10.5935/jetia.v12i58.2676
+W4411172889,2025,0,80,Q6,,conference-abstract,Hardware Security and Test for AMS Circuits,https://doi.org/10.1109/vts65138.2025.11022865
+W2099383324,2009,206,81,Q4,IEEE Transactions on Instrumentation and Measurement,article,A New Neural-Network-Based Fault Diagnosis Approach for Analog Circuits by Using Kurtosis and Entropy as a Preprocessor,https://doi.org/10.1109/tim.2009.2025068
+W4376135190,2023,3,81,Q6,Research Square,preprint,Defect Detection and Localization in Operational Amplifiers using Digital Control and Monitor Circuits,https://doi.org/10.21203/rs.3.rs-2890198/v1
+W4309225724,2022,1,81,Q3,2022 Global Reliability and Prognostics and Health Management (PHM-Yantai),conference-paper,An Incipient Fault Diagnosis Method Based on Spatio-Temporal Center Network for Analog Circuits,https://doi.org/10.1109/phm-yantai55411.2022.9941966
+W7135097628,2025,0,81,Q2,,conference-paper,Investigations of the Usefulness of Automated FMECAs for Electronic Circuits,https://doi.org/10.1109/icsrs68021.2025.11422236
+W2031114368,2014,22,82,Q4,Circuits Systems and Signal Processing,article,Catastrophic Fault Diagnosis of a Certain Class of Nonlinear Analog Circuits,https://doi.org/10.1007/s00034-014-9857-7
+W7160687879,2026,0,82,Q2,DR-NTU (Nanyang Technological University),dissertation,Development of flutter apps for rectifier circuit analysis,
+W2884592403,2018,0,82,Q3,DEStech Transactions on Computer Science and Engineering,article,Nonlinear Dimension Reduction on Analog Circuit Fault Diagnosis Using L-Isomap,https://doi.org/10.12783/dtcse/cnai2018/24138
+W4283739058,2022,0,82,Q6,,conference-paper,ETS 2022 Panel Discussion,https://doi.org/10.1109/ets54262.2022.9810365
+W2564408197,2016,11,83,Q6,,conference-paper,Efficient Cell-Aware Fault Modeling by Switch-Level Test Generation,https://doi.org/10.1109/ats.2016.33
+W3016703538,2020,6,83,Q3,IOP Conference Series Materials Science and Engineering,conference-paper,Research on Fault Diagnosis of Analog Circuit Based on Volterra Theory and Higher-Order Spectrum Analysis,https://doi.org/10.1088/1757-899x/782/3/032096
+W7152536663,2025,0,83,Q2,,conference-paper,Adaptive Control and Simulation of a Transformer-Aided Full-Bridge Rectifier for Enhanced Piezoelectric Energy Harvesting in Smart Power Systems,https://doi.org/10.1109/icecet63943.2025.11472273
+W2556591123,2016,0,83,Q4,Integration,article,A novel test compression algorithm for analog circuits to decrease production costs,https://doi.org/10.1016/j.vlsi.2016.10.010
+W2506011703,2014,2,84,Q4,Lecture notes in mechanical engineering,book-chapter,A Simulation Research on Gradual Faults in Analog Circuits for PHM,https://doi.org/10.1007/978-3-319-09507-3_140
+W4411724779,2025,1,84,Q6,,conference-paper,Robust Defect Detection for Phase-Locked Loops using All-Digital Built-In Self-Test (BIST) Circuitry,https://doi.org/10.1109/iscas56072.2025.11044075
+W4411723027,2025,0,84,Q2,,other,Averaged‐Switch Modeling and Simulation,https://doi.org/10.1002/9781394289448.ch1
+W7204193871,2026,0,84,Q3,Machine Learning Engineering,article,Patch-based DWconv-ECA-transformer network for incipient fault diagnosis of analog circuits,https://doi.org/10.1088/3049-4761/ae9e31
+W2023237504,2014,11,85,Q4,Mathematical Problems in Engineering,article,Entropy Based Test Point Evaluation and Selection Method for Analog Circuit Fault Diagnosis,https://doi.org/10.1155/2014/259430
+W7210281411,2026,0,85,Q2,Zenodo (CERN European Organization for Nuclear Research),dataset,Reproduction package for 'Electrothermal Modeling of Thermally Coupled Silicon Carbide Modules Using Double-Pulse-Test Data for a Five-Phase Traction Inverter',https://doi.org/10.5281/zenodo.22544287
+W4402512501,2024,0,85,Q3,SSRN Electronic Journal,preprint,Multi-Feature Fusion Fault Diagnosis Method for Analog Circuit Based on Emd and Dgcca,https://doi.org/10.2139/ssrn.4955693
+W2082783753,2014,0,85,Q6,,conference-abstract,Innovative practices session 4C: Disruptive solutions in the non-digital world,https://doi.org/10.1109/vts.2014.6818759
+W2792945660,2018,15,86,Q4,Mathematical Problems in Engineering,article,Test Point Selection Method for Analog Circuit Fault Diagnosis Based on Similarity Coefficient,https://doi.org/10.1155/2018/9714206
+W3139465983,2007,4,86,Q6,,conference-paper,Test Quality Analysis and Improvement for an Embedded Asynchronous FIFO,https://doi.org/10.1109/date.2007.364400
+W7210284510,2026,0,86,Q2,Zenodo (CERN European Organization for Nuclear Research),dataset,Reproduction package for 'Electrothermal Modeling of Thermally Coupled Silicon Carbide Modules Using Double-Pulse-Test Data for a Five-Phase Traction Inverter',https://doi.org/10.5281/zenodo.22544286
+W2365590010,2009,0,86,Q3,Kongzhi yu juece,article,Analog circuit fault diagnosis based on cross-entropy method and support vector machine,
+W3210131976,2021,7,87,Q3,Scientific Programming,article,Analog Circuit Soft Fault Diagnosis Based on Sparse Random Projections and K-Nearest Neighbor,https://doi.org/10.1155/2021/8040140
+W2143301601,2012,0,87,Q4,Spectrum Research Repository (Concordia University),dissertation,A Framework for Noise Analysis and Verification of Analog Circuits,
+W2956965484,2019,0,87,Q6,,conference-abstract,Innovative Practices on IEEE 1687.xyz,https://doi.org/10.1109/vts.2019.8758629
+W36263940,2011,12,88,Q4,University Library - University of Saskatchewan (University of Saskatchewan),dissertation,Study of Single-Event Transient Effects on Analog Circuits,
+W4405910035,2024,5,88,Q3,PLoS ONE,article,Fault diagnosis of nonlinear analog circuits using generalized frequency response function and LSSVM,https://doi.org/10.1371/journal.pone.0316151
+W2100157586,2013,1,88,Q6,,conference-paper,Embedded tutorials: Embedded tutorial 1: Cell-aware test-from gates to transistors,https://doi.org/10.1109/vlsi-soc.2013.6673230
+W4396888411,2024,10,89,Q3 Q4,Review of Scientific Instruments,article,An analog circuit fault diagnosis method using improved sparrow search algorithm and support vector machine,https://doi.org/10.1063/5.0210515
+W4400877876,2024,3,89,Q6,Electronics,article,Operational Amplifiers Defect Detection and Localization Using Digital Injectors and Observer Circuits,https://doi.org/10.3390/electronics13142871
+W2380427041,2006,0,89,Q4,Microelectronics & Computer,article,A New Fuzzy Control for Analog Circuit Fault Location,
+W4402952585,2024,12,90,Q3,Analog Integrated Circuits and Signal Processing,article,A novel analog circuit fault diagnosis method based on multi-channel 1D-resnet and wavelet packet transform,https://doi.org/10.1007/s10470-024-02291-y
+W3046774195,2020,7,90,Q6,IEEE Journal of Emerging and Selected Topics in Power Electronics,article,Assessing the Effectiveness of Different Test Approaches for Power Devices in a PCB,https://doi.org/10.1109/jestpe.2020.3013229
+W2139274095,2011,1,90,Q4,,conference-paper,Distinguishing process variation induced faults from manufacturing defects in analog circuits using V-transform coefficients,https://doi.org/10.1109/ssst.2011.5753812
+W4312893281,2022,12,91,Q6,,conference-paper,Robust Built-in Defect-Detection for Low Drop-Out Regulators using Digital Mismatch Injection,https://doi.org/10.1109/iscas48785.2022.9937644
+W4377939676,2023,9,91,Q3,Review of Scientific Instruments,article,An effective approach based on nonlinear spectrum and improved convolution neural network for analog circuit fault diagnosis,https://doi.org/10.1063/5.0142657
+W2545933988,2010,1,91,Q4,,conference-paper,Fault diagnosis of con figurative linear analog circuit,https://doi.org/10.1109/icelce.2010.5700724
+W2151337473,2008,32,92,Q6,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,Bridging Fault Test Method With Adaptive Power Management Awareness,https://doi.org/10.1109/tcad.2008.923247
+W3126961950,2021,30,92,Q4,Electronics,article,A Neural Network Classifier with Multi-Valued Neurons for Analog Circuit Fault Diagnosis,https://doi.org/10.3390/electronics10030349
+W2377419935,2014,0,92,Q3,Jisuanji fangzhen,article,Analog Circuit Fault Diagnosis Based on Artificial Fish Swarm Optimization Support Vector Machine,
+W2991965607,2019,7,93,Q6,,conference-paper,Software-Based Self-Test for Transition Faults: a Case Study,https://doi.org/10.1109/vlsi-soc.2019.8920306
+W4388820958,2023,4,93,Q3,,conference-paper,Fault Diagnosis of Analog Circuits Based on Multi-Scale 1D Convolutional Neural Network,https://doi.org/10.1109/ats59501.2023.10317956
+W1977548452,2009,0,93,Q4,,conference-paper,Diagnosis of soft-fault in analog circuit based on FNLP,https://doi.org/10.1109/icccas.2009.5250333
+W2097413707,2003,1,94,Q4,,article,Structure-based specification-constrained test frequency generation for linear analog circuits,https://doi.org/10.6688/jise.2003.19.4.4
+W2368685810,2012,0,94,Q3,Jisuanji yingyong yanjiu,article,Novel analog circuit fault diagnosis method based on SVM of learning using privileged information,
+W4404848953,2024,0,94,Q6,,conference-paper,Diagnosis of intermittent faults and corresponding algorithm development beyond 5nm technologies,https://doi.org/10.1109/itc51657.2024.00048
+W3008865632,2020,17,95,Q4,Circuits Systems and Signal Processing,article,Analog Circuit Fault Detection by Impulse Response-Based Signature Analysis,https://doi.org/10.1007/s00034-020-01375-0
+W4301185057,2022,0,95,Q3,Research Square,preprint,A Novel Analog Circuit Fault Diagnosis Method Based on Multi-channel 1D-Resnet and Wavelet Packet Transform,https://doi.org/10.21203/rs.3.rs-2118439/v1
+W6999731052,2021,0,95,Q6,HAL (Le Centre pour la Communication Scientifique Directe),dissertation,Développement d’outils de diagnostic pour l’analyse des défaillances des circuits intégrés analogiques et mixtes,https://doi.org/10.70675/59d53a95ze3b3z4f2ez9b8cz391f6237574a
+W2003443969,2000,73,96,Q4,Measurement,article,Fault diagnosis of electronic analog circuits using a radial basis function network classifier,https://doi.org/10.1016/s0263-2241(00)00008-7
+W2525089770,2016,52,96,Q3,Journal of Electronic Testing,article,A Novel Approach for Diagnosis of Analog Circuit Fault by Using GMKL-SVM and PSO,https://doi.org/10.1007/s10836-016-5616-y
+W2162433349,2008,50,96,Q6,,conference-paper,Test cost minimization through adaptive test development,https://doi.org/10.1109/iccd.2008.4751867
+W2087825164,2005,8,97,Q6,Integration,article,Automatic generation of defect injectable VHDL fault models for ASIC standard cell libraries,https://doi.org/10.1016/j.vlsi.2005.08.002
+W2785562132,2017,3,97,Q4,,conference-paper,Single fault diagnosis in analog circuits: A multi-step approach,https://doi.org/10.1109/aieee.2017.8270523
+W2384740040,2013,0,97,Q3,Electric Power Science and Engineering,article,Analog Circuit Fault Diagnosis Based on Artificial Bees Colony Support Vector Machine,
+W2031787973,2006,0,98,Q3,Electronics and Communications in Japan (Part II Electronics),article,Fault diagnosis of analog circuits by X‐Y zoning method and operation‐region model,https://doi.org/10.1002/ecjb.20289
+W4415822155,2025,0,98,Q6,,conference-paper,Combined Array and ADC Structural Test for RRAM-based Multiply-and-Accumulate Circuits,https://doi.org/10.1109/itc58126.2025.00076
+W2468361032,2016,6,99,Q6,OpenCommons at University of Connecticut (University of Connecticut),dissertation,Establishment of Trust and Integrity in Modern Supply Chain from Design to Resign,
+W3088723681,2020,4,99,Q3,Mathematical Problems in Engineering,article,Fault Diagnosis of Nonlinear Analog Circuit Based on Generalized Frequency Response Function and LSSVM Classifier Fusion,https://doi.org/10.1155/2020/8274570
+W2539713869,2011,2,99,Q4,,conference-paper,Application of immune clustering algorithm to analog circuit fault diagnosis,https://doi.org/10.1109/tmee.2011.6199549
+W2054222051,2011,55,100,Q6,Journal of Shoulder and Elbow Surgery,article,Early clinical and structural results after autologous chondrocyte transplantation at the glenohumeral joint,https://doi.org/10.1016/j.jse.2011.07.030
+W2356231968,2011,0,100,Q4,Modern Electronics Technique,article,Fault Diagnosis System of Analog Circuit Based on DSP,
+W2008298078,2013,13,101,Q4,Metrology and Measurement Systems,article,Kalman Filter Based Method for Fault Diagnosis of Analog Circuits,https://doi.org/10.2478/mms-2013-0027
+W4413872256,2025,2,101,Q3,Journal of Electronic Testing,article,A Method of Redundant Feature Suppression in Circuit Output Positions for Analog Circuit Soft and Hard Fault Diagnosis,https://doi.org/10.1007/s10836-025-06187-1
+W2493669808,2014,0,101,Q6,,book-chapter,Logic Testing based Hardware Trojan Detection,https://doi.org/10.1201/b17555-24
+W2165973438,2013,134,102,Q6,Arthroscopy The Journal of Arthroscopic and Related Surgery,article,Preliminary Results of a Novel Single‐Stage Cartilage Restoration Technique: Particulated Juvenile Articular Cartilage Allograft for Chondral Defects of the Patella,https://doi.org/10.1016/j.arthro.2013.05.021
+W4411726836,2025,1,102,Q3,,conference-paper,Analog Circuit Fault Diagnosis Algorithm Based on KPCA Feature Optimization Combined with Improved GA - SVM,https://doi.org/10.1109/acpee64358.2025.11041448
+W23364383,2008,1,102,Q4,Lecture notes in electrical engineering,book-chapter,An Improved Multiclassifier for Soft Fault Diagnosis of Analog Circuits,https://doi.org/10.1007/978-0-387-74935-8_9
+W2974755124,2019,36,103,Q6,Journal of Shoulder and Elbow Surgery,article,Autologous chondrocyte implantation for treatment of focal articular cartilage defects of the humeral head,https://doi.org/10.1016/j.jse.2019.07.030
+W2350190330,2009,5,103,Q4,Modern Electronics Technique,article,Fault Diagnosis of Analog Circuit Based on BP Neural Network,
+W3112221446,2020,4,103,Q3,Recent Advances in Computer Science and Communications,article,An Analog Circuit Fault Diagnosis Approach Based on Wavelet-based Fractal Analysis and Multiple Kernel SVM,https://doi.org/10.2174/2666255813666201207154641
+W2414400841,2016,4,104,Q3,,conference-paper,A novel strategy for fault diagnosis of analog circuit online based modified kernel fuzzy C-means,https://doi.org/10.1109/icit.2016.7474878
+W2568703550,2016,0,104,Q4,,conference-paper,A multidimensional features fault diagnosis method for analog circuits,https://doi.org/10.1109/iecon.2016.7793374
+W7134897210,2026,0,104,Q6,,conference-paper,PV-ReCAM: Process Variation-Aware Testing for ReRAM-based Content Addressable Memory,https://doi.org/10.1109/asp-dac66049.2026.11420683
+W1984204893,2007,23,105,Q4,Measurement,article,One-class classifier based on SBT for analog circuit fault diagnosis,https://doi.org/10.1016/j.measurement.2007.02.007
+W4385597088,2023,6,105,Q3,Journal of Ambient Intelligence and Humanized Computing,article,Fault diagnosis using redundant data in analog circuits via slime module algorithm for support vector machine,https://doi.org/10.1007/s12652-023-04664-z
+W4243462010,2018,0,105,Q6,Journal Of Clinical Periodontology,conference-abstract,"PC065: Clinical management of gingival recessions with laterally moved, coronally advanced flap and connective tissue graft: a case series",https://doi.org/10.1111/jcpe.64_12916
+W2979980326,2019,40,106,Q3,Electronics Letters,article,Analogue circuit fault diagnosis based on convolution neural network,https://doi.org/10.1049/el.2019.2892
+W2006907450,2011,0,106,Q4,,conference-abstract,Implicit test of high-speed analog circuits using non-intrusive sensors,https://doi.org/10.1109/ecctd.2011.6043627
+W7170951433,2026,0,106,Q6,Biomedicines,article,Leukocyte-Rich Platelet-Rich Plasma Improves Cartilage Repair After High Tibial Osteotomy: A Second-Look Arthroscopic Study,https://doi.org/10.3390/biomedicines14081664
+W3160863008,2008,1,107,Q3,Journal of Electronic Testing,article,Adaptive Fault Diagnosis of Analog Circuits by Operation-Region Model and X–Y Zoning Method,https://doi.org/10.1007/s10836-007-5022-6
+W2912904502,2016,0,107,Q4,IEEE Conference Proceedings,conference-paper,A multidimensional features fault diagnosis method for analog circuits,
+W2150353966,2001,20,108,Q4,International Journal of Circuit Theory and Applications,article,Frequency‐domain grouping robust fault diagnosis for analog circuits with uncertainties,https://doi.org/10.1002/cta.180
+W4412035203,2025,0,108,Q3,SSRN Electronic Journal,preprint,Analog Circuit Test Point Selection Method for Fault Diagnosis Based on Deep Reinforcement Learning,https://doi.org/10.2139/ssrn.5338908
+W2768360287,2017,10,109,Q4,,conference-paper,Automated simulation of faults in analog circuits based on parallel paradigm,https://doi.org/10.1109/ewdts.2017.8110133
+W4410522202,2025,0,109,Q3,SSRN Electronic Journal,preprint,Analog Circuit Test Point Selection Method for Fault Diagnosis Based on Deep Reinforcement Learning,https://doi.org/10.2139/ssrn.5261590
+W2087486594,2013,3,110,Q4,IEICE Transactions on Fundamentals of Electronics Communications and Computer Sciences,article,Structured Analog Circuit and Layout Design with Transistor Array,https://doi.org/10.1587/transfun.e96.a.2475
+W7167691764,2026,0,110,Q3,Preprints.org,preprint,Tolerance-Aware Contrastive Siamese Networks for Few-Shot and Open-Set Analog Circuit Fault Diagnosis,https://doi.org/10.20944/preprints202607.0205.v1
+W3116425192,2020,4,111,Q3,2020 11th International Conference on Prognostics and System Health Management (PHM-2020 Jinan),conference-paper,Analog Circuit Incipient Fault Diagnosis from Raw Signals using Multi-Layer Extreme Learning Machine,https://doi.org/10.1109/phm-jinan48558.2020.00063
+W2613944466,2017,0,111,Q4,DEStech Transactions on Computer Science and Engineering,article,A Network Decomposition Approach of Analog Circuit Based on Alternating Voltage,https://doi.org/10.12783/dtcse/itms2016/9440
+W4390658440,2024,10,112,Q3,Advanced Engineering Informatics,article,WavePHMNet: A comprehensive diagnosis and prognosis approach for analog circuits,https://doi.org/10.1016/j.aei.2023.102323
+W2360310239,2011,0,112,Q4,Microprocessors,article,Analog Circuit Trimming Technology Based on NVM Repair,
+W7164902252,2026,0,113,Q3,Figshare,dataset,AC sweep frequency response data of a Sallen-Key low-pass filter with simulated faults and component tolerances,https://doi.org/10.6084/m9.figshare.32054736.v3
+W3158558719,2021,32,114,Q4,Computers & Electrical Engineering,article,Simultaneous fault localization and detection of analog circuits using deep learning approach,https://doi.org/10.1016/j.compeleceng.2021.107162
+W7165458634,2026,0,114,Q3,Figshare,dataset,AC sweep frequency response data of a Sallen-Key low-pass filter with simulated faults and component tolerances,https://doi.org/10.6084/m9.figshare.32054736.v4
+W2982344404,2019,28,115,Q3,Review of Scientific Instruments,article,A novel fault diagnostic method for analog circuits using frequency response features,https://doi.org/10.1063/1.5120560
+W2168446548,2011,2,115,Q4,International Journal of Electronics,article,Design of test stimuli and minimisation of ambiguity in fault diagnosis of analogue circuits with tolerance,https://doi.org/10.1080/00207217.2010.506839
+W2154076473,2009,10,116,Q4,,conference-paper,Soft Fault Diagnosis in Analog Circuit Based on Fuzzy and Direction Vector,https://doi.org/10.1109/cas-ictd.2009.4960875
+W3004378026,2019,0,116,Q3,2019 IEEE 1st International Conference on Civil Aviation Safety and Information Technology (ICCASIT),conference-paper,Tolerance Fault with Variance Inflation Factor for Analog Circuit,https://doi.org/10.1109/iccasit48058.2019.8973221
+W3093190319,2020,31,117,Q3,Analog Integrated Circuits and Signal Processing,article,A deep network solution for intelligent fault detection in analog circuit,https://doi.org/10.1007/s10470-020-01732-8
+W2108079845,2011,6,117,Q4,,conference-paper,Soft Fault Diagnosis of Analog Circuit Using Transfer Function Coefficients,https://doi.org/10.1109/pacc.2011.5978952
+W7128422338,2026,3,118,Q3,Circuits Systems and Signal Processing,article,Analog Circuit Fault Diagnosis Based on Gramian Angular Field and Multi-Scale Dual Attention Residual Shrinkage Network,https://doi.org/10.1007/s00034-026-03514-5
+W2357986833,2012,0,118,Q4,Computer and Modernization,article,Study on Fault Diagnosis in Analog Circuits Based on Frequency Characteristics,
+W2955518464,2019,4,119,Q4,ACM Transactions on Design Automation of Electronic Systems,article,Adaptive Test for RF/Analog Circuit Using Higher Order Correlations among Measurements,https://doi.org/10.1145/3308566
+W3177149020,2021,3,119,Q3,,conference-paper,A Dual-input Fault Diagnosis Model Based on Convolutional Neural Networks and Gated Recurrent Unit Networks for Analog Circuits,https://doi.org/10.1109/i2mtc50364.2021.9459990
+W2545311408,2011,2,120,Q4,,conference-paper,A method for fault diagnosis of analog circuit based on rough set,https://doi.org/10.1109/icawst.2011.6163188
+W7155020963,2026,0,120,Q3,Figshare,dataset,AC sweep frequency response data of a Sallen-Key low-pass filter with simulated faults and component tolerances,https://doi.org/10.6084/m9.figshare.32054736
+W2899800208,2018,4,121,Q4,Automatika,article,Time-efficient fault detection and diagnosis system for analog circuits,https://doi.org/10.1080/00051144.2018.1541644
+W7212729043,2026,0,121,Q3,Ain Shams Engineering Journal,article,Hybrid Satin Bowerbird–Egret Swarm optimization driven iterative temporal CNN for high-accuracy analog circuit fault diagnosis,https://doi.org/10.1016/j.asej.2026.104400
+W2798019665,2018,10,122,Q4,IEICE Electronics Express,article,Phase difference analysis technique for parametric faults BIST in CMOS analog circuits,https://doi.org/10.1587/elex.15.20180175
+W4389312841,2023,0,122,Q3,Applied Mathematics and Nonlinear Sciences,article,Fault diagnosis of analogue circuits based on artificial intelligence algorithms,https://doi.org/10.2478/amns.2023.2.01163
+W2282963360,2015,33,123,Q3,Metrology and Measurement Systems,article,A Novel Approach To Diagnosis Of Analog Circuit Incipient Faults Based On KECA And OAO LSSVM,https://doi.org/10.1515/mms-2015-0025
+W3163522598,2021,0,124,Q3,"2021 IEEE Asia-Pacific Conference on Image Processing, Electronics and Computers (IPEC)",conference-paper,Wavelet Network Network Diagnosis Method for Soft Fault in Analog Circuit,https://doi.org/10.1109/ipec51340.2021.9421270
+W2379611928,2013,0,124,Q4,Jisuanji gongcheng,article,FPGA Implementation of Online Fault Detection and Diagnosis for Analog Circuits,
+W2110962837,2000,8,125,Q4,,article,Partial simulation-driven ATPG for detection and diagnosis of faults in analog circuits,https://doi.org/10.5555/602902.603027
+W4256423899,2020,5,125,Q3,International Journal of Innovative Technology and Exploring Engineering,article,A Novel Method for Detecting Parametric Faults in Analog Circuits using Fuzzy Logic,https://doi.org/10.35940/ijitee.c8883.019320
+W2169948955,2007,8,126,Q4,,conference-paper,Design of Neural Network Output Layer in Fault Diagnosis of Analog Circuit,https://doi.org/10.1109/icemi.2007.4350998
+W2371883181,2012,0,126,Q3,Electronic Measurement Technology,article,A novel analog circuit fault diagnosis method based on dual-space feature extraction algorithm and SVM of learning using privileged information,
+W4235748303,2002,7,127,Q4,,conference-paper,Partial simulation-driven ATPG for detection and diagnosis of faults in analog circuits,https://doi.org/10.1109/iccad.2000.896532
+W2046297216,2006,0,127,Q3,Journal of Electronic Testing,article,Proposal of Fault Diagnosis of Analog Circuits by Combining Operation-Region Model and X–Y Zoning Method: Case Study,https://doi.org/10.1007/s10836-006-9456-z
+W4398187725,2024,10,128,Q3 Q4,IEEE Access,article,Analog Circuit Incipient Fault Detection Based on Attention Mechanism and Fully Convolutional Network,https://doi.org/10.1109/access.2024.3403908
+W1978174359,2015,1,128,Q4,Journal of Applied Mathematics,article,Fault Modeling and Testing for Analog Circuits in Complex Space Based on Supply Current and Output Voltage,https://doi.org/10.1155/2015/851837
+W4285592253,2022,25,129,Q4,Applied Intelligence,article,A Dual-input Fault Diagnosis Model Based on SE-MSCNN for Analog Circuits,https://doi.org/10.1007/s10489-022-03665-3
+W4408696604,2024,0,129,Q3,,conference-paper,A Novel Test Stimulus Generation Method Based On Ensemble Learners for Analog Circuits,https://doi.org/10.1109/icsmd64214.2024.10920505
+W4387500301,2023,13,130,Q3,Circuits Systems and Signal Processing,article,A Novel Incipient Fault Diagnosis Method for Analogue Circuits Based on an MLDLCN,https://doi.org/10.1007/s00034-023-02524-x
+W2605088533,2016,0,130,Q4,Illinois Digital Environment for Access to Learning and Scholarship (University of Illinois at Urbana-Champaign),dissertation,Validation and optimization of analog circuits using randomized search algorithms,
+W4313452332,2022,19,131,Q3,Measurement Science and Technology,article,An incipient fault diagnosis method based on Att-GCN for analogue circuits,https://doi.org/10.1088/1361-6501/acad1e
+W1969658806,2008,8,131,Q4,International Journal of Electronics,article,A novel method for fault diagnosis of analog circuits based on WP and GPNN,https://doi.org/10.1080/00207210801996139
+W2988475892,2019,0,132,Q3,,book-chapter,Fault detection and diagnosis of analog circuits based on LOGFA algorithm optimized ELM,https://doi.org/10.1201/9780429295300-11
+W7161788803,2026,0,132,Q4,Results in Engineering,article,A neural surrogate for accelerated multi-topology analog circuit simulation,https://doi.org/10.1016/j.rineng.2026.111112
+W1929047971,2003,13,133,Q4,,conference-paper,Fault diagnosis of analog circuits using artificial neural networks as signature analyzers,https://doi.org/10.1109/asic.1992.270220
+W1991551814,2010,0,133,Q3,,conference-paper,At-Speed Current testing for fault diagnosis of analogue circuits,https://doi.org/10.1109/iccsit.2010.5565152
+W1918300222,2002,1,134,Q4,,conference-paper,An automatic diagnosis system with fuzzy diagnostic approach for linear analog circuits,https://doi.org/10.1109/autest.1990.111507
+W4392201827,2024,0,134,Q3,International Journal on Recent and Innovation Trends in Computing and Communication,article,Analysis of Fault Detection in Analog Circuits Using WSF-SKC Optimized SVM Technique,https://doi.org/10.17762/ijritcc.v11i9.10028
+W4282978599,2022,9,135,Q4,,conference-paper,Performance Degradation Monitoring for Analog Circuits Using Lightweight Built-in Components,https://doi.org/10.1109/vts52500.2021.9794141
+W2602020133,2017,1,135,Q3 Q4,Asian Journal of Research in Social Sciences and Humanities,article,Novel Analog Circuit Fault Detection using Adaptive Neuro Fuzzy Inference System,https://doi.org/10.5958/2249-7315.2017.00188.5
+W3149202397,2012,12,136,Q4,,conference-paper,A fast analog circuit yield estimation method for medium and high dimensional problems,https://doi.org/10.1109/date.2012.6176569
+W4408590734,2025,4,136,Q3,Analog Integrated Circuits and Signal Processing,article,BCSSA-VMD and ICOA-ELM based fault diagnosis method for analogue circuits,https://doi.org/10.1007/s10470-025-02360-w
+W1983870861,2014,3,137,Q4,Automatika,article,Analog Circuit Fault Detection Using Relative Amplitude and Relative Phase Analysis,https://doi.org/10.7305/automatika.2014.12.605
+W2008316046,2009,2,137,Q3,,conference-paper,VLSI Analog Circuit Fault Diagnostic Correlation Coefficient Analytical Method,https://doi.org/10.1109/cas-ictd.2009.4960907
+W1876253750,2007,2,138,Q4,Lecture notes in computer science,conference-paper,Probabilistic Neural Network Based Method for Fault Diagnosis of Analog Circuits,https://doi.org/10.1007/978-3-540-72395-0_71
+W2104962649,2013,0,138,Q3,Applied Mechanics and Materials,article,Fault Localization of Analog Circuit with Small Sample Using SVM and AIS Methods,https://doi.org/10.4028/www.scientific.net/amm.325-326.893
+W4414834311,2025,2,139,Q3,Circuits Systems and Signal Processing,article,A Novel Analogue Circuit Incipient Soft Fault Diagnosis Method Based on a Multiscale Fault Diagnosis Network,https://doi.org/10.1007/s00034-025-03353-w
+W2383076627,2009,1,139,Q4,Modern Electronics Technique,article,Research of Analog Circuit Fault Diagnosis Based on BP Neural Network,
+W2984133648,2019,13,140,Q3,Analog Integrated Circuits and Signal Processing,article,A test point selection approach for DC analog circuits with large number of predefined faults,https://doi.org/10.1007/s10470-019-01550-7
+W2786351246,2018,2,140,Q4,International Journal of Electronics and Telecommunications,article,A Verification Technique for Multiple Soft Fault Diagnosis of Linear Analog Circuits,https://doi.org/10.24425/118150
+W2621634198,2017,0,141,Q3,American journal of electrical and electronic engineering,article,The Faults Diagnostic Analysis for Analog Circuit Faults Based on Cuckoo Search Algorithm and BP Neural Network,https://doi.org/10.12691/ajeee-5-3-5
+W2384692885,2013,0,141,Q4,Ship Electronic Engineering,article,Fault Diagnosis of Analog Circuits Based on Hierarchical Model Tracks Methods,
+W7134272758,2026,2,142,Q3,Circuits Systems and Signal Processing,article,Identification of Simultaneous Soft Faults in Analog Circuits Using a Hybrid PSO-Machine Learning Approach,https://doi.org/10.1007/s00034-026-03531-4
+W2356639367,2008,0,142,Q4,Journal of Jinhua College of Profession and Technology,article,On Analog Circuit Fault Diagnosis Based on the Ant Colony Neural Network,
+W1972861092,2008,5,143,Q4,ACM Transactions on Design Automation of Electronic Systems,article,Parametric variability analysis for multistage analog circuits using analytical sensitivity modeling,https://doi.org/10.1145/1344418.1344429
+W4408674003,2025,1,143,Q3,Journal of New Materials for Electrochemical Systems,article,An Experimental Investigation on Feature Extraction and Fault Detection in Analog Circuits Using Fuzzy Logic and Neural Network,https://doi.org/10.14447/jnmes.v28i1.a04
+W2111008192,2002,134,144,Q4,IEEE Transactions on Instrumentation and Measurement,article,Soft fault detection and isolation in analog circuits: some results and a comparison between a fuzzy approach and radial basis function networks,https://doi.org/10.1109/19.997811
+W4401109274,2024,0,144,Q3,SSRN Electronic Journal,preprint,A Hybrid Fault Diagnosis Framework Based on Test Stimulus Optimization and an Mpcnn for Analogue Circuits,https://doi.org/10.2139/ssrn.4910835
+W3091120323,2020,0,145,Q3,Lecture notes in electrical engineering,conference-paper,Processing Signal Parameters Based Fuzzy Inference System Classifier for Analog Circuit Single Parametric Faults,https://doi.org/10.1007/978-981-15-6403-1_62
+W7136083304,2026,0,145,Q4,Zenodo (CERN European Organization for Nuclear Research),article,SANE: A Neural Surrogate for Accelerated Multi-Topology Analog Circuit Simulation,https://doi.org/10.5281/zenodo.19033448
+W2526918565,2016,17,146,Q3,Mathematical Problems in Engineering,article,Wavelet-Based Feature Extraction in Fault Diagnosis for Biquad High-Pass Filter Circuit,https://doi.org/10.1155/2016/5682847
+W4411159091,2025,6,147,Q3,Circuits Systems and Signal Processing,article,SPOT Faults: Parametric Fault Detection in Linear Analog Circuit Via Sooty Egret Optimization Based Iterative Decisioned CNN,https://doi.org/10.1007/s00034-025-03184-9
+W7155703571,2026,0,147,Q4,Zenodo (CERN European Organization for Nuclear Research),article,SANE: A Neural Surrogate for Accelerated Multi-Topology Analog Circuit Simulation,https://doi.org/10.5281/zenodo.19786529
+W2170741310,2005,11,148,Q4,"Design, Automation, and Test in Europe",conference-paper,Hierarchical Variance Analysis for Analog Circuits Based on Graph Modelling and Correlation Loop Tracing,https://doi.org/10.1109/date.2005.175
+W4409450991,2025,3,148,Q3,Measurement Science Review,article,Parametric Faults Detection in Analog Circuits using Variable Ranking-based Feature Selection Method and Optimized SVM Model,https://doi.org/10.2478/msr-2025-0005
+W2041147806,2013,13,149,Q4,Journal of Electronic Testing,article,An Approximate Calculation of Ratio of Normal Variables and Its Application in Analog Circuit Fault Diagnosis,https://doi.org/10.1007/s10836-013-5382-z
+W2964721017,2018,4,149,Q3,,conference-paper,Electronic Circuit Fault Diagnosis Based on SCA-SVM,https://doi.org/10.1109/icccas.2018.8768963
+W2539201410,2011,8,150,Q3,,conference-paper,Analog fault diagnosis by inverse problem technique,https://doi.org/10.1109/icm.2011.6177361
+W2169275087,2009,5,150,Q4,,conference-paper,Fault Diagnosis of Analog Circuit Using Multi-Objective Linear Programming and Fuzzy,https://doi.org/10.1109/cas-ictd.2009.4960821
+W2014559604,2012,2,151,Q3,,conference-paper,Analog fault diagnosis and testing by inverse problem technique,https://doi.org/10.1109/icecs.2012.6463631
+W2159656367,2009,6,152,Q4,,conference-paper,Analog circuit fault diagnosis using bagging ensemble method with cross-validation,https://doi.org/10.1109/icma.2009.5246675
+W4392940503,2023,0,152,Q3,,conference-paper,Fault Diagnosis of Circuits Based on IHHO-MA1DCNN,https://doi.org/10.1109/cac59555.2023.10451232
+W2072620992,2012,2,153,Q3,Advanced materials research,article,Application of SVM Classifier and Fractal Feature in Circuit Fault Diagnosis,https://doi.org/10.4028/www.scientific.net/amr.490-495.942
+W2096919951,2011,2,153,Q4,,conference-paper,Research on method of analog circuit fault diagnosis based on voltage sensitivity ratio,https://doi.org/10.1109/iceice.2011.5777460
+W3217221838,2021,1,154,Q3,"Smart innovation, systems and technologies",book-chapter,Multiple Data-Dependent Kernel Learning for Circuit Fault Diagnosis,https://doi.org/10.1007/978-981-16-4039-1_20
+W4410855118,2025,0,154,Q4,,conference-paper,Single and Multiple Fault Detection in Analog Circuits Using V-Transform Coefficients,https://doi.org/10.1109/devic63749.2025.11012469
+W2144114667,2008,11,155,Q3,,conference-paper,SVM Classifier for Analog Fault Diagnosis Using Fractal Features,https://doi.org/10.1109/iita.2008.249
+W4410639134,2025,1,155,Q4,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,High-Dimensional Yield Optimization for Analog Circuits via Monte Carlo Tree Search and Self-Regressive Auto-Encoder Promoted Subspace Decomposed Gaussian Process,https://doi.org/10.1109/tcad.2025.3573229
+W4212823655,2022,27,156,Q3,Processes,article,TLSCA-SVM Fault Diagnosis Optimization Method Based on Transfer Learning,https://doi.org/10.3390/pr10020362
+W2574429116,2016,4,157,Q3,,conference-paper,A novel approach for analog fault diagnosis based on LMD decomposition and reconstruction,https://doi.org/10.1109/phm.2016.7819814
+W2147773749,2013,0,157,Q4,International Journal of Computer Applications,article,On the Design of Intelligent Virtual Instrument for Fault Diagnosis in Mixed Signal Analog Circuit,https://doi.org/10.5120/12822-9875
+W2748032557,2017,5,158,Q3,,article,Fault Detection in State Variable Filter Circuit Using Kernel Extreme Learning Machine (KELM) Algorithm,
+W7112952829,2025,0,158,Q4,HARVEST (University of Saskatchewan),dissertation,High performance radiation tolerant analog circuits in 28-nm FDSOI technology,
+W23546750,2013,19,159,Q4,Lecture notes in mechanical engineering,book-chapter,Experimental Validation of LS-SVM Based Fault Identification in Analog Circuits Using Frequency Features,https://doi.org/10.1007/978-1-4471-4993-4_54
+W4412455336,2025,10,159,Q3,Integration,article,Soft fault diagnosis in analog electronic circuits using supervised machine learning,https://doi.org/10.1016/j.vlsi.2025.102482
+W4412164747,2025,3,160,Q3,IEEE Transactions on Instrumentation and Measurement,article,Evaluating and Optimizing Conventional Training Circuits for Analog Fault Diagnosis via Transfer Learning,https://doi.org/10.1109/tim.2025.3586376
+W2356792673,2006,0,160,Q4,Yiqi yibiao xuebao,article,Analog circuit soft-faults diagnosis based on response error matrix SVD,
+W3014468990,2020,10,161,Q4,Applied Sciences,article,An Analog Circuit Fault Diagnosis Method Based on Circle Model and Extreme Learning Machine,https://doi.org/10.3390/app10072386
+W7129090970,2019,0,161,Q3,Daffodil International University Journal of Science and Technology,article,Fault Diagnosis Methods in Analog and Mixed Signal Circuits,https://doi.org/10.36481/diujst.v12i1.9grn6n29
+W3024657017,2020,1,162,Q4,Journal of Coastal Research,article,Combined Optimization of Neural Network Fault Diagnosis Methods for Analog Circuits on Ships,https://doi.org/10.2112/si99-023.1
+W7129001143,2019,0,162,Q3,Daffodil International University Journal of Science and Technology,article,Fault Diagnosis Methods in Analog and Mixed Signal Circuits,https://doi.org/10.36481/diujst.v14i1.9grn6n29
+W3176165926,2021,18,163,Q4,Electronics,article,Analog Circuit Fault Diagnosis Based on Support Vector Machine Classifier and Fuzzy Feature Selection,https://doi.org/10.3390/electronics10121496
+W3088454864,2019,0,163,Q3,Zenodo (CERN European Organization for Nuclear Research),article,Fault Diagnosis Methods in Analog and Mixed Signal Circuits,https://doi.org/10.5281/zenodo.13770922
+W2090666879,2014,26,164,Q3,Analog Integrated Circuits and Signal Processing,article,Fault detection in analogue circuits using hybrid evolutionary algorithm and neural network,https://doi.org/10.1007/s10470-014-0352-7
+W2091648075,2011,1,164,Q4,,conference-paper,Layout-aware variation evaluation of analog circuits and its validity on op-amp designs,https://doi.org/10.1145/1973009.1973059
+W2054006255,2010,3,165,Q3,International Journal of Computer Applications,article,Fault Diagnosis in Analog Integrated Circuits Using Artificial Neural Networks,https://doi.org/10.5120/497-811
+W4407404780,2024,0,165,Q4,,conference-paper,A Machine Learning Based Approach for Post Manufacturing Performance Sensing in Analog Circuits,https://doi.org/10.1109/aisp61711.2024.10870736
+W3013969073,2020,11,166,Q3,Journal of Ambient Intelligence and Humanized Computing,article,Multiple parametric fault diagnosis using computational intelligence techniques in linear filter circuit,https://doi.org/10.1007/s12652-020-01908-0
+W2016870102,2013,2,166,Q4,Journal of Networks,article,A Soft Fault-concept Diagnosis Method of Analog Circuits Based on Cloud Model Theory,https://doi.org/10.4304/jnw.8.7.1497-1503
+W2099903815,2007,3,167,Q3,,conference-paper,Analogue Electronic Circuit Fault Diagnosis Based on Hierarchical Support Vector Machine and Dempster-Shafer Theory,https://doi.org/10.1109/icemi.2007.4350981
+W2034650804,2007,47,168,Q4,Journal of Electronic Testing,article,Estimation of Test Metrics for the Optimisation of Analogue Circuit Testing,https://doi.org/10.1007/s10836-007-5006-6
+W7168237166,2026,0,168,Q3,Journal of Sensor and Actuator Networks,article,Multi-Domain Feature Engineering for Noise-Tolerant Fault Classification in Analog Filter Circuits,https://doi.org/10.3390/jsan15040054
+W2089644943,2010,1,169,Q3,,conference-paper,A New Algorithm of Support Vector Machine Ensemble and Its Application,https://doi.org/10.1109/ihmsc.2010.63
+W7130575814,2025,0,170,Q3,,conference-paper,Machine Learning Framework for Analog Filter Fault Identification,https://doi.org/10.1109/iciiet65921.2025.11377989
+W2136866166,2002,0,170,Q4,,conference-paper,Fault diagnosis for linear analog circuits with symbolic analysis and reduced observable point set,https://doi.org/10.1109/olt.2001.937845
+W2002011622,2010,8,171,Q4,,conference-paper,Fault Diagnosis of Analog Circuit Based on Wavelet Neural Networks and Chaos Differential Evolution Algorithm,https://doi.org/10.1109/icece.2010.250
+W4388806942,2022,0,171,Q3,Congresso Brasileiro de Automática,conference-paper,Diagnóstico de Falhas em Circuitos Analógicos Usando Otimização por Enxame de Partículas,https://doi.org/10.20906/cba2022/3286
+W2036706191,2006,1,172,Q3,Journal of Electronic Testing,article,TBSA: Threshold-Based Simulation Accuracy Method for Fast Analog DC Fault Simulation,https://doi.org/10.1007/s10836-006-9502-x
+W1972066340,2014,1,172,Q4,Advanced materials research,article,Phasor Analysis Based Fault Modeling and Fault Diagnosis Methods for Linear Analog Circuits,https://doi.org/10.4028/www.scientific.net/amr.981.3
+W153142740,2021,0,173,Q4,Digital Commons - USU (Utah State University),article,Statistical Analysis of Linear Analog Circuits Using Gaussian Message Passing in Factor Graphs,https://doi.org/10.26076/63a7-a800
+W4292065176,2022,3,174,Q4,Telecommunications and Radio Engineering,article,A NOVEL APPROACH FOR THE DESIGN AUTOMATION OF CMOS ANALOG CIRCUITS USING HYBRID SCAmGWO ALGORITHM,https://doi.org/10.1615/telecomradeng.2022043176
+W4220752642,2022,8,175,Q4,ETRI Journal,article,Machine learning‐based design automation of CMOS analog circuits using SCA‐mGWO algorithm,https://doi.org/10.4218/etrij.2021-0203
+W1987937249,2012,10,176,Q4,IEEE Transactions on Very Large Scale Integration (VLSI) Systems,article,"Parametric DFM Solution for Analog Circuits: Electrical-Driven Hotspot Detection, Analysis, and Correction Flow",https://doi.org/10.1109/tvlsi.2012.2201759
+W4399199161,2024,0,177,Q4,Procedia Computer Science,conference-paper,Distortion Analysis and Fault Detection in Weakly Non-linear Analog Circuits Using Simplified Volterra Series Method,https://doi.org/10.1016/j.procs.2024.04.226
+W1980260079,2014,34,180,Q4,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,Fast Monte Carlo-Based Estimation of Analog Parametric Test Metrics,https://doi.org/10.1109/tcad.2014.2360458
+W4310202002,2022,7,182,Q4,Microelectronics Journal,article,Comparative analysis of radiation tolerant analog circuit layout in 180 nm CMOS technology for space application,https://doi.org/10.1016/j.mejo.2022.105665
+W2159254831,2010,184,183,Q4,IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems,article,Why Quasi-Monte Carlo is Better Than Monte Carlo or Latin Hypercube Sampling for Statistical Circuit Analysis,https://doi.org/10.1109/tcad.2010.2062750
+W1976296586,2011,3,184,Q4,,conference-paper,"A parametric DFM solution for analog circuits: Electrical driven hot spot detection, analysis and correction flow",https://doi.org/10.1109/socc.2011.6085082
+W1511796203,2003,4,185,Q4,Journal of Electronic Testing,article,Statistical Tolerance Analysis for Assured Analog Test Coverage,https://doi.org/10.1023/a:1022893724851
+W2253649986,2010,4,186,Q4,Zenodo (CERN European Organization for Nuclear Research),article,A Neural-Network-Based Fault Diagnosis Approach For Analog Circuits By Using Wavelet Transformation And Fractal Dimension As A Preprocessor,https://doi.org/10.5281/zenodo.1327776
+W2565590386,2016,2,187,Q4,,conference-paper,A Study on the Transfer Function Based Analog Fault Model for Linear and Time-Invariant Continuous-Time Analog Circuits,https://doi.org/10.1109/ats.2016.38
+W4417414980,2025,4,188,Q4,Microelectronics Reliability,article,Machine learning classifiers with explainable insights for parametric fault diagnosis in linear analog circuits using frequency response features,https://doi.org/10.1016/j.microrel.2025.115982
+W2782704079,2017,6,189,Q4,,conference-paper,Test pattern generator optimization for digital testing of analogue circuits,https://doi.org/10.1109/intelcis.2017.8260042
+W3166790959,2021,6,190,Q4,Proceedings of the Institution of Mechanical Engineers Part I Journal of Systems and Control Engineering,article,Fault isolation of analog circuit using an optimized ensemble empirical mode decomposition approach based on multi-objective optimization,https://doi.org/10.1177/09596518211020534
+W2159171829,2007,4,191,Q4,,conference-paper,Minimization of functional tests by statistical modelling of analogue circuits,https://doi.org/10.1109/dtis.2007.4449488
+W2622507137,2007,1,192,Q4,HAL (Le Centre pour la Communication Scientifique Directe),conference-paper,Functional test compaction by statistical modelling of analogue circuits,
+W2150653428,2003,6,193,Q4,,conference-paper,Boosting the accuracy of analog test coverage computation through statistical tolerance analysis,https://doi.org/10.1109/vts.2002.1011141
+W2347261824,2003,0,194,Q4,JOURNAL OF ELECTRONIC MEASUREMENT AND INSTRUMENT,article,A Neural Network Approach to Fault Location of Tolerance Network Based on Testability Analysis,
+W744638074,2008,8,195,Q4,Bulletin of the Polish Academy of Sciences Technical Sciences,article,Heuristic methods to test frequencies optimization for analogue circuits diagnosis,
+W2783286393,2017,2,196,Q4,,conference-paper,Study of jitter generators for high-speed I/O interface jitter tolerance testing,https://doi.org/10.1109/ispacs.2017.8266524
+W2165015944,2014,16,197,Q4,,conference-paper,Efficient Monte Carlo-based analog parametric fault modelling,https://doi.org/10.1109/vts.2014.6818741
+W2347943665,2014,0,198,Q4,Journal of Xi'an Aeronautical University,article,Fault Diagnosis of Tolerance Circuits Based on Wavelet Method,
+W2158572650,2005,88,200,Q4,IEEE Transactions on Circuits and Systems I Fundamental Theory and Applications,article,A new diagnosis approach for handling tolerance in analog and mixed-signal circuits by using fuzzy math,https://doi.org/10.1109/tcsi.2005.853266

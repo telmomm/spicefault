@@ -1,0 +1,1062 @@
+[
+ {
+  "id": "W3038743613",
+  "doi": "https://doi.org/10.1109/ets48528.2020.9131581",
+  "year": 2020,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 30,
+  "title": "Analog Fault Simulation - a Hot Topic!",
+  "abstract": "Automotive applications are driving the need for a systematic way to decrease analog test escape rates to 0 DPPM, while providing functional safety. This tutorial briefly reviews the history of analog fault simulation, from academic simulation of basic shorts and opens, to the advent of industrial analog defect/fault simulators. Then it addresses the two biggest problems: no industry-accepted fault model, and impractically long simulation time. The solutions are the proposed IEEE P2427 standard for analog defect coverage, for which a brief summary of its requirements is provided, and a variety of methods to reduce total simulation time, such as defect collapsing, simulating only the most likely defects or likelihood-weighted randomly selection of defects, and parallel simulation."
+ },
+ {
+  "id": "W2088797164",
+  "doi": "https://doi.org/10.1109/test.2014.7035281",
+  "year": 2014,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 58,
+  "title": "Practical random sampling of potential defects for analog fault simulation",
+  "abstract": "Analog simulation is much less efficient than digital simulation, so it is essential to reduce the number of potential defects to be simulated when assessing defect coverage of an analog circuit's test. Simple random sampling (SRS) is a published technique for digital fault sampling; stratified sampling is an improvement explored for analog fault simulation. This paper compares the defect coverage estimation accuracy of several sampling techniques and our improvements based on defect-likelihood-weighted selection, as measured by confidence interval. For practical cases, it is shown that the estimation accuracy of SRS gets progressively worse as defects become less uniform in likelihood, but with weighted selection, accuracy improves. We conclude that defect coverage can always be estimated sufficiently accurately by simulating fewer than a thousand defects (and usually much fewer), regardless of circuit size, analog/digital content, and defect likelihood distribution."
+ },
+ {
+  "id": "W3007644171",
+  "doi": "https://doi.org/10.1109/itc44170.2019.9000141",
+  "year": 2019,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 34,
+  "title": "Efficient Analog Defect Simulation",
+  "abstract": "Simulation of defects in industrial analog and mixed-signal (A/MS) circuits has long been regarded as impractical: how to simulate the tens of thousands of potential defects for each test and significant process corner of a PLL or SerDes, for example, when simulating each defect could require hours or days of simulation? Would the results for a subset be useful? This paper shows an efficient flow, consistent with the proposed IEEE P2427 Standard for Analog Defect Modeling and Coverage. The flow describes development of realistic models for hard/catastrophic and soft/parametric defects, introduces analog defect collapsing, discusses coverage results for an ITC'17 A/MS benchmark bandgap voltage reference plus LDO voltage regulator, and a programmable PLL, and shows why the results are applicable to large circuits. The results also show that some strategies are more useful than others."
+ },
+ {
+  "id": "W1993765721",
+  "doi": "https://doi.org/10.1109/test.2011.6139127",
+  "year": 2011,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 36,
+  "title": "Defect Oriented Testing for analog/mixed-signal devices",
+  "abstract": "We present an application of Defect Oriented Testing (DOT) to an industrial mixed signal device to reduce test time and maintain quality. The device is an automotive IC product with stringent quality requirements and a mature test program that is already in volume production. A complete flow is presented including defect extraction, defect simulation, and test selection. A major challenge of DOT for mixed signal devices is the simulation time. We address this challenge with a new fault simulation algorithm that provides significant speedup of over 100x in the DOT process. Moreover, a number of methods are presented to improve the accuracy of this algorithm. Based on the fault simulations, we determine a minimal set of tests which detects all defects. The proposed minimal test set is compared with the actual test results of more than a million ICs. We prove that the analyzed production tests of the device can be reduced by at least 50%."
+ },
+ {
+  "id": "W1970655797",
+  "doi": "https://doi.org/10.1109/mdt.2012.2210852",
+  "year": 2012,
+  "type": "article",
+  "venue": "IEEE Design & Test of Computers",
+  "cited_by": 17,
+  "title": "Defect Oriented Testing for Analog/Mixed-Signal Designs",
+  "abstract": "In this contribution, the authors describe an application of Defect Oriented Testing (DOT) to commercial mixed-signal designs. A major challenge of DOT application to these designs is the enormous simulation time typically required. The authors address this major challenge with a new algorithm that provides a significant speed-up of over 100x, while at the same time reduces test time by 48% and improves fault coverage by 15%."
+ },
+ {
+  "id": "W3033062045",
+  "doi": "https://doi.org/10.1109/vts48691.2020.9107625",
+  "year": 2020,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 11,
+  "title": "Pinhole Latent Defect Modeling and Simulation for Defect-Oriented Analog/Mixed-Signal Testing",
+  "abstract": "Test detection of lifetime failures due to latent defects is a necessity to reach the tightening quality requirements of automotive systems. This paper presents a pinhole latent defect model, together with a simulation workflow, that can be used to develop defect-oriented analog test approaches for pinhole latent defects. This work also defines the latent defect coverage and activation coverage, providing the means to compare different test methods under the same rules. Furthermore, a circuit taken from an industrial mixed-signal IC is used as case study. The results show that the typically applied specification tests are insufficient to detect latent defects. It is demonstrated that the coverage can be increased by adding well-selected tests in combination with voltage stress techniques. Doing so, the coverage for the case study is increased by 15x."
+ },
+ {
+  "id": "W1524198421",
+  "doi": "https://doi.org/10.1109/test.1999.805790",
+  "year": 2005,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 2,
+  "title": "Analog Fault Simulation: Need it? No. It is already done",
+  "abstract": "Analog design requires simulation comprehending detailed and accurate semiconductor process knowledge in order to produce designs which will (one hopes) meet narrowly defined specifications. QED The fault simulation is already done! ((Quod erat demonstrandum = which was to be demonstrated.) for those, like me, wondering what the latin acronym means...) Model-to-hardware correlation is a requirement for design success. The simulation of analog devices occurs in the same manner as digital devices for reasonably small counts of devices. It is only when large numbers of digital devices are connected together that the expedient of switch based stuck fault testing is applied. Is there yet an ‘analog’ to the digital modeling process? Should there be? Simulating gross faults, like stuck fault behavior, using switch based methods is pointless when applied to complex analog circuits. Clearly the simulated defective analog behavior will deviate from the expected unless aliasing is possible. Murphy will ensure its untimely arrival. For combined analog functions ‘logic depth’ grows much more rapidly than digital logic having similar transistor counts, particularly if the combined analog devices have continuous response ranges. What does coverage mean in this environment? How is a passing range of values defined?"
+ },
+ {
+  "id": "W7119505217",
+  "doi": "https://doi.org/10.1109/ieeestd.2025.11343929",
+  "year": 2025,
+  "type": "standard",
+  "venue": "",
+  "cited_by": 2,
+  "title": "IEEE Standard for Analog Defect Modeling and Coverage",
+  "abstract": "A defect coverage accounting method based on simulation models for defects observed within integrated circuits (ICs) is defined in this standard. The portion of a defect universe, comprising thousands or millions of reasonably likely defects, that is detected or “covered” by tests of analog and mixed-signal circuits depends on many factors, which this standard considers, such as detectability, process variations, defect characteristics, and redundancy. The contents of a defect coverage summary are specified and dozens of commonly used terms are clearly defined to aid communication about the quality of tested ICs."
+ },
+ {
+  "id": "W4399108477",
+  "doi": "https://doi.org/10.1109/lats62223.2024.10534606",
+  "year": 2024,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Analog Fault Simulation: Trends and Perspectives in Analog Hardware Description Languages",
+  "abstract": "Analog Hardware Description Languages (AHDLs) provide a valuable alternative to existing proprietary means of implementing defect models and generic templates. Analog defect modeling in SPICE engines and in event-driven digital simulators is discussed, with a review of the state-of-the-art, an analysis of possibilities, and proposals for future enhancements of tools and standards to meet the challenges of achieving good coverage estimations at the system level. Moreover, we discuss the possibilities of using the EDACurry open-source framework to instrument transistor-level analog circuits to support defects templates written through AHDL, e.g., Verilog-A."
+ },
+ {
+  "id": "W2066710830",
+  "doi": "https://doi.org/10.1109/vlsid.2015.67",
+  "year": 2015,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 5,
+  "title": "New Methods for Simulation Speed-up and Test Qualification with Analog Fault Simulation",
+  "abstract": "With SOCs being increasingly designed for communication and embedded processing applications, the content of analog, mixed-signal (AMS) and RF components in them has increased. Large SOCs are often dominated by these components, which in turn also contribute to the overall incurred test time, attainable test quality and time required for silicon debug and characterisation. Existing test methods based on the use of specification based tests and use of design verification test-benches are increasingly difficult to adopt in such SOCs (as compared to standalone IP chips) since a large number of such modules and their interactions must be tested in the budgeted test time. The paper describes the practical use of fault simulation for AMS circuits to address the above issues. The main contributions of this paper are two-fold. (i) Enhancements are proposed to a commercially available analog fault simulation flow to handle specific SOC requirements of accuracy and speed, using smart management of models and/or fault lists across different fault conditions and fault sites. (ii) Efficient test generation methods targeting the analog -- digital interface are built by identifying uncovered regions/operating modes of the circuit. These are novel extensions to the commercial analog EDA tools supporting regular fault simulation. Experiments are performed on industrial designs and benefits are highlighted. It is expected that such techniques will be increasingly required to be integrated into the design flows for mixed-signal SOCs."
+ },
+ {
+  "id": "W4236794964",
+  "doi": "https://doi.org/10.1109/dac.1997.597157",
+  "year": 2005,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 16,
+  "title": "Rapid Frequency-domain Analog Fault Simulation Under Parameter Tolerances",
+  "abstract": ""
+ },
+ {
+  "id": "W1683165039",
+  "doi": "https://doi.org/10.1109/test.1999.805791",
+  "year": 2005,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 2,
+  "title": "Analog Fault Simulation: Key to Product Quality, or a Foot in the Door",
+  "abstract": ""
+ },
+ {
+  "id": "W2144689709",
+  "doi": "https://doi.org/10.1109/test.1999.805789",
+  "year": 2005,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 1,
+  "title": "Is Analog Fault Simulation a Key to Product Quality? Practical Considerations",
+  "abstract": ""
+ },
+ {
+  "id": "W2519819295",
+  "doi": "https://doi.org/10.31399/asm.cp.istfa2012p0281",
+  "year": 2012,
+  "type": "conference-paper",
+  "venue": "Proceedings - International Symposium for Testing and Failure Analysis",
+  "cited_by": 0,
+  "title": "Improved Parasitic Fault Modeling for Automatic Analog Fault Simulation",
+  "abstract": "Abstract Analog simulation combined with Time Resolved Light Emission (TRE) can be used to evaluate different fault possibilities and to isolate the most likely fault candidate. In this paper we will describe an improved fault model derived from parasitic layout extraction."
+ },
+ {
+  "id": "W2807591199",
+  "doi": "https://doi.org/10.1109/dtis.2018.8368549",
+  "year": 2018,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 3,
+  "title": "Analog fault simulation automation at schematic level with random sampling techniques",
+  "abstract": "This paper presents an approach for analog fault effect simulation automation based on random fault selection with a high fault coverage of the circuit under test by means of fault injection and simulation based on advanced sampling techniques. The random fault selection utilizes the likelihood of the fault occurrence of different electrical components in the circuit with a confidence level. Defect models of different devices are analyzed for the calculation of the fault probability. A case study with our implemented tool demonstrates that likelihood calculation and fault simulation provides means for efficient fault effect simulation automation."
+ },
+ {
+  "id": "W4320712918",
+  "doi": "https://doi.org/10.1109/tcad.2023.3244892",
+  "year": 2023,
+  "type": "article",
+  "venue": "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems",
+  "cited_by": 14,
+  "title": "Boosting Latent Defect Coverage in Automotive Mixed-Signal ICs Using SVM Classifiers",
+  "abstract": "In industry-scale integrated circuit (IC) production, continuous improvements in processing and testing have resulted in defect test escape rates gradually reaching levels below 100 PPB for analog and mixed-signal (AMS) ICs. Newer methodologies are needed to reduce these rates even further in light of the ever-tightening reliability requirements in the automotive industry while minimizing additional costs. Detecting latent defects is a major challenge today. A research experiment was conducted to assess and improve the latent defect test escape rate of industry-scale AMS testing at test time. This experiment altered the IC production process to artificially introduce latent gate oxide defects of different sizes and locations in a commercially available automotive IC in a 350-nm high-voltage BCD process currently in production. The standard industrial test program was able to detect 58.4% of the latent defects at a yield loss of 6.2%. The latent defect detection rate has been improved to 95.5% at an additional yield loss of only 0.8% using support vector machine (SVM) classifiers on the dataset of measurements resulting from the standard test program. This type of classifier is chosen for its optimal use of available data. The results show that a significant gain in coverage is possible without adding extra tests. In the experiment, testing at high temperatures (HOT) proved crucial in achieving this coverage benefit. Furthermore, while traditional tests mainly detect latent defects close to the source of transistors, the SVM approach significantly improves the detection of pinhole latent defects closer to the drain."
+ },
+ {
+  "id": "W4388048181",
+  "doi": "https://doi.org/10.36227/techrxiv.24438487",
+  "year": 2023,
+  "type": "preprint",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Digital-Like Built-In Defect-Oriented Test for Analog-Mixed Signal Circuits",
+  "abstract": "In this paper, we present a novel digital-like defect-oriented Built-In Self-Test (BIST) methodology for Analog and Mixed-Signal (AMS) circuits. The core idea of this approach centers around the segmentation of complex AMS circuits into smaller, more manageable units for analysis. Emphasizing resource utilization efficiency, we highlight the necessity of employing purely digital circuits for both injectors and monitors within the BIST framework. We demonstrate the effectiveness of this approach through the development of a BIST system for a 12-bit Successive Approximation Register Analog-to-Digital Converter (SAR ADC). Notably, our methodology achieves 100% defect coverage without introducing additional BIST circuitry for subcircuit testing, relying solely on digital monitors for sampling switch evaluation. Furthermore, our proposed approach incurs minimal area overhead, resulting in a fast and comprehensive defect-oriented BIST solution. This versatile test method can be deployed post-manufacturing or in-field, offering flexibility in its application timing."
+ },
+ {
+  "id": "W4388048109",
+  "doi": "https://doi.org/10.36227/techrxiv.24438487.v1",
+  "year": 2023,
+  "type": "preprint",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Digital-Like Built-In Defect-Oriented Test for Analog-Mixed Signal Circuits",
+  "abstract": "In this paper, we present a novel digital-like defect-oriented Built-In Self-Test (BIST) methodology for Analog and Mixed-Signal (AMS) circuits. The core idea of this approach centers around the segmentation of complex AMS circuits into smaller, more manageable units for analysis. Emphasizing resource utilization efficiency, we highlight the necessity of employing purely digital circuits for both injectors and monitors within the BIST framework. We demonstrate the effectiveness of this approach through the development of a BIST system for a 12-bit Successive Approximation Register Analog-to-Digital Converter (SAR ADC). Notably, our methodology achieves 100% defect coverage without introducing additional BIST circuitry for subcircuit testing, relying solely on digital monitors for sampling switch evaluation. Furthermore, our proposed approach incurs minimal area overhead, resulting in a fast and comprehensive defect-oriented BIST solution. This versatile test method can be deployed post-manufacturing or in-field, offering flexibility in its application timing."
+ },
+ {
+  "id": "W4404615395",
+  "doi": "https://doi.org/10.36922/dp.4351",
+  "year": 2024,
+  "type": "article",
+  "venue": "Design+",
+  "cited_by": 0,
+  "title": "Digital-like built-in defect-oriented test for analog-mixed signal circuits",
+  "abstract": "In this paper, we present a novel digital-like defect-oriented built-in self-test (BIST) methodology for analog and mixed-signal (AMS) circuits. The core idea of this approach centers around the segmentation of complex AMS circuits into smaller, more manageable units for analysis. Emphasizing resource utilization efficiency, we highlight the necessity of employing purely digital circuits for both injectors and monitors within the BIST framework. We demonstrate the effectiveness of this approach through the development of a BIST system for a 12-bit successive approximation register analog-to-digital converter (SAR ADC). Notably, our methodology achieves 100% defect coverage without introducing additional BIST circuitry for subcircuit testing, relying solely on digital monitors for sampling switch evaluation. Furthermore, our proposed approach incurs minimal area overhead, resulting in a fast and comprehensive defect-oriented BIST solution. This versatile test method can be deployed post-manufacturing or in-field, offering flexibility in its application timing."
+ },
+ {
+  "id": "W4312470641",
+  "doi": "https://doi.org/10.1109/itc50671.2022.00051",
+  "year": 2022,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 5,
+  "title": "Application of Sampling in Industrial Analog Defect Simulation",
+  "abstract": "In this paper, practical usage methodology of sampling technologies in industrial analog circuits is presented. We provide answers to common questions - e.g., how to select sample size, how to verify accuracy of sampling algorithms, and what savings may be achieved by using sampling technologies - by means of running a state-of-the-art commercial analog defect simulator on a few recently provided, industrial-sized analog circuits. We demonstrate our recommended flow and present results for a PLL, a SARADC, and a PHY circuit - with transistor counts ranging approximately between 3000 and 30000."
+ },
+ {
+  "id": "W4401329672",
+  "doi": "https://doi.org/10.1109/iolts60994.2024.10616082",
+  "year": 2024,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Assessing Robustness of Smart Systems via Multi-domain Analog Fault Simulation",
+  "abstract": "Smart systems contain digital and analog components of several physical domains, e.g., electrical and mechanical During the design phase, the fault injection, which checks the system functionality following the guidelines of ISO standard 26262, enhances the system’s robustness. Unfortunately, fault injection and simulation on the analog side are i) not fully standardized compared to their digital counterparts, ii) highly domain-dependent, and iii) performed separately from the digital. This article proposes to improve the design of smart systems by generating faulty scenarios through analog fault injection across several physical domains. By exploiting these faulty scenarios it is possible to improve the robustness of the analog part and simultaneously improve the quality of the digital part that controls the system functionality."
+ },
+ {
+  "id": "W4385237263",
+  "doi": "https://doi.org/10.1109/tcad.2023.3298698",
+  "year": 2023,
+  "type": "review",
+  "venue": "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems",
+  "cited_by": 18,
+  "title": "Analog Defect Injection and Fault Simulation Techniques: A Systematic Literature Review",
+  "abstract": "Since the last century, the exponential growth of the semiconductor industry has led to the creation of tiny and complex integrated circuits, e.g., sensors, actuators, and smart power. Innovative techniques are needed to ensure the correct functionality of analog devices that are ubiquitous in every smart system. The ISO 26262 standard for functional safety in the automotive context specifies that fault injection is necessary to validate all electronic devices. For decades, standardization of defect modeling and injection mainly focused on digital circuits and, in a minor part, on analog ones. An initial attempt is being made with the IEEE P2427 draft standard that started to give a structured and formal organization to the analog testing field. Various methods have been proposed in the literature to speed up the fault simulation of the defect universe for an analog circuit. A more limited number of papers seek to reduce the overall simulation time by reducing the number of defects to be simulated. This literature survey describes the state-of-the-art of analog defect injection and fault simulation methods. The survey is based on the Preferred Reporting Items for Systematic Reviews and Meta-Analyses (PRISMA) methodological flow, allowing for a systematic and complete literature survey. Each selected paper has been categorized and presented to provide an overview of all the available approaches. In addition, the limitations of the various approaches are discussed by showing possible future directions."
+ },
+ {
+  "id": "W4400034162",
+  "doi": "https://doi.org/10.1109/ets61313.2024.10567699",
+  "year": 2024,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "A Concept of Provably Detected Defects for Analog Defect Simulation Campaign Improvement",
+  "abstract": "This paper introduces a concept of provably detected defects that are identified through topology analysis and AMS verification database inquiry. The main purpose is to associate detected status to such defect without simulation, thereby reducing the size of defect simulation campaign. The proposed approach is a combination of fundamental and empirical rule-based set targeting relevant steps that are part of regular design sign-off. The feasibility is illustrated on an industrial product that is currently undergoing final stages of the tape-out, with the results complying to the current status of upcoming IEEE P2427 standard in development."
+ },
+ {
+  "id": "W4386414654",
+  "doi": "https://doi.org/10.1109/itcindia59034.2023.10235531",
+  "year": 2023,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Unified Analog Mixed-Signal Defect Simulation and Applications",
+  "abstract": "Ensuring test program readiness, efficiency of post-fabrication debug/diagnostics, test cost and quality entitlement are critical vectors contributing to the success of analog and mixed-signal (AMS) ICs, In this paper we will discuss some of the impactful recent developments in analog defect/fault simulation (AFS) that is at the center of all of these vectors. The features that we will discuss include the following: a) Unified analog and digital fault simulation framework to enable holistic and efficient analysis of AMS designs; b) Utilising physical design i.e., layout information to improve practicality and efficiency of AFS campaign. The need, application challenges, solutions to overcome them and possible future directions will be highlighted through appropriate industrial case studies."
+ },
+ {
+  "id": "W3080588109",
+  "doi": "https://doi.org/10.1145/3408063",
+  "year": 2020,
+  "type": "article",
+  "venue": "ACM Transactions on Design Automation of Electronic Systems",
+  "cited_by": 5,
+  "title": "Machine Learning-based Defect Coverage Boosting of Analog Circuits under Measurement Variations",
+  "abstract": "Safety-critical and mission-critical systems, such as airplanes or (semi-)autonomous cars, are relying on an ever-increasing number of embedded integrated circuits. Consequently, there is a need for complete defect coverage during the testing of these circuits to guarantee their functionality in the field. In this context, reducing the escape rate of defects during production testing is crucial, and significant progress has been made to this end. However, production testing using automatic test equipment is subject to various measurement parasitic variations, which may have a negative impact on the testing procedure and therefore limit the final defect coverage. To tackle this issue, this article proposes an improved test flow targeting increased analog defect coverage, both at the system and block levels, by analyzing and improving the coverage of typical functional and structural tests under these measurement variations. To illustrate the flow, the technique of inserting a pseudo-random signal at available circuit nodes and applying machine learning techniques to its response is presented. A DC-DC converter, derived from an industrial product, is used as a case study to validate the flow. In short, results show that system-level tests for the converter suffer strongly from the measurement variations and are limited to just under 80% coverage, even when applying the proposed test flow. Block-level testing, however, can achieve only 70% fault coverage without improvements but is able to consistently achieve 98% of fault coverage at a cost of at most 2% yield loss with the proposed machine learning–based boosting technique."
+ },
+ {
+  "id": "W4297984689",
+  "doi": "https://doi.org/10.1109/sbcci55532.2022.9893224",
+  "year": 2022,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 9,
+  "title": "A Time-Efficient Defect Simulation Framework for Analog and Mixed Signal (AMS) Circuits",
+  "abstract": "Defect simulation time in AMS circuits is rapidly growing due to increasing circuit complexity, especially in safety-critical automotive applications which needs to meet very high defect coverage (usually >90%). Reduction in defect simulation time directly translates into reduction in overall development time. In this work, we propose a time-efficient framework to simulate various defects during pre-silicon testing of AMS circuits. The proposed method uses Verilog-A modules to realize a given defect model and tests nearly all the defects in a circuit with a single test run (for a given test condition) depending on the defect-detection scheme. To strongly validate our framework, we use two distinct defect detection schemes for operational amplifiers. The first detection scheme is the intentional offset injection (IOI) method which, predominantly, is a DC testing scheme. For this scheme, the proposed framework achieved a time-saving factor of more than 10X compared to the conventional framework. The second scheme is the oscillation test method (OTM) which is a transient testing scheme. For this OTM scheme, we show that the proposed framework can reduce the simulation time to less than 50% of the conventional simulation time. We also show that the proposed framework has no negative impact on defect coverage."
+ },
+ {
+  "id": "W2171869881",
+  "doi": "https://doi.org/10.1109/ats.2007.93",
+  "year": 2007,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 9,
+  "title": "Implementation of Defect Oriented Testing and ICCQ testing for industrial mixed-signal IC",
+  "abstract": "In the era of Zero Defects, ICCQ is one of the powerful non-specification based testing methods to achieve high test coverage and supreme product quality. Within this project, based on the fault simulation with Defect Oriented Test (DOT) technique, the current tests with the most efficient coverage improvements have been selected and implemented in the production testing flow."
+ },
+ {
+  "id": "W4235181214",
+  "doi": "https://doi.org/10.1109/ats.2007.4388046",
+  "year": 2007,
+  "type": "conference-paper",
+  "venue": "Proceedings - Asian Test Symposium/Proceedings",
+  "cited_by": 0,
+  "title": "Implementation of Defect Oriented Testing and ICCQ testing for industrial mixed-signal IC",
+  "abstract": "In the era of Zero Defects, ICCQ is one of the powerful non-specification based testing methods to achieve high test coverage and supreme product quality. Within this project, based on the fault simulation with Defect Oriented Test (DOT) technique, the current tests with the most efficient coverage improvements have been selected and implemented in the production testing flow."
+ },
+ {
+  "id": "W4364295880",
+  "doi": "https://doi.org/10.1109/vlsid57277.2023.00072",
+  "year": 2023,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 1,
+  "title": "Accelerating Defect Simulation in Analog and Mixed-Signal Circuits by Parallel Defect Injection",
+  "abstract": "Parallel defect simulation has been popular in the digital domain due to its ability to reduce the time taken to reach the target percentage of defect coverage. One important requirement for such techniques is to identify non-interfering defects, that is, the presence of one defect does not interfere with the detection of the other. Due to the more complex relationship among analog nets, finding non-interfering defects is significantly difficult in the analog domain. In this paper, we bridge this gap by proposing an approach for identifying independent sub-circuits by exploring channel-connected sub-graphs in analog circuit netlists, thereby enabling parallel defect simulation in AMS circuits. We establish the benefits of our approach on industrial AMS circuits."
+ },
+ {
+  "id": "W4415822016",
+  "doi": "https://doi.org/10.1109/itc58126.2025.00006",
+  "year": 2025,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 2,
+  "title": "Scan Test for 99% Defect Coverage of R-2R DACs",
+  "abstract": "Digital scan-based automatic test pattern generation (ATPG) was recently described for ‘random analog’ circuits with >95% likelihood-weighted coverage of the shorts and opens prescribed by IEEE P2427, with test times99% coverage in <20 µs is possible for DACs that have a binary R-2R and/or unary segment resistor structure, and possibly other structures, with simple design-for-scan-test circuit changes that do not significantly affect performance or area. These DAC types are used in many applications because of their simplicity, speed, and area."
+ },
+ {
+  "id": "W2039267132",
+  "doi": "https://doi.org/10.1109/date.2011.5763065",
+  "year": 2011,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 26,
+  "title": "Test time reduction in analogue/mixed-signal devices by defect oriented testing: An industrial example",
+  "abstract": "We present an application of Defect Oriented Testing (DOT1) to an industrial mixed signal device to reduce test time and maintain quality. The device is an automotive IC product with stringent quality requirements and a mature test program that is already in volume production. A complete flow is presented including defect extraction, defect simulation, test selection, and validation. A major challenge of DOT for mixed signal devices is the simulation time. We address this challenge with a new fault simulation algorithm that provides significant speedup in the DOT process. Based on the fault simulations, we determine a minimal set of tests which detects all defects. The proposed minimal test set is compared with the actual test results of more than a million ICs. We prove that the production tests of the device can be reduced by at least 35%."
+ },
+ {
+  "id": "W4412963540",
+  "doi": "https://doi.org/10.1109/i2mtc62753.2025.11078967",
+  "year": 2025,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 1,
+  "title": "Digital Defect Oriented Test Method for Phase Locked Loops with High Coverage",
+  "abstract": "In applications where safety and reliability are of utmost importance, such as in the automotive and aerospace industries, the standards for defect coverage are exceptionally stringent. These high standards are necessary to ensure that systems function correctly under all conditions and to prevent failures that could lead to significant losses. Such rigorous requirements are further reinforced by various industry regulations, including ISO 26262 for automotive safety and AEC-Q100 for the qualification of automotive components. A particularly pressing challenge is that nearly 80% of automotive integrated circuit (IC) failures are due to analog defects, highlighting the need for specialized and effective defect detection techniques for analog circuits. This paper introduces a robust and efficient defect detection methodology for Phase-Locked Loops (PLLs), which are key components in analog and mixed-signal (AMS) systems. By leveraging the capabilities of digital control and observer circuits, the proposed method offers key advantages, including enhanced robustness and operational simplicity. Overall, using transistor-level simulations in conjunction with traditional defect models, the proposed methods achieves a high defect coverage of over 97.5% with minimal (< 0.1%) area overhead."
+ },
+ {
+  "id": "W2763550765",
+  "doi": "https://doi.org/10.1109/tcsi.2017.2751561",
+  "year": 2017,
+  "type": "article",
+  "venue": "IEEE Transactions on Circuits and Systems I Regular Papers",
+  "cited_by": 24,
+  "title": "Improving Time-Efficiency of Fault-Coverage Simulation for MOS Analog Circuit",
+  "abstract": "In analog fault simulation, the number one challenge is that simulation time could grow rapidly and become prohibitive as the circuit size becomes large. This paper proposes a systematic method to significantly improve the time efficiency in estimating the fault coverage for analog fault simulation. In the proposed method, a circuit under test (CUT) is first partitioned into independent sub-circuits. This is accomplished through mapping the circuit into a graph, decomposing the graph into strongly connected components (SCCs), and generating a sub-circuit for each SCC. The impacts of potential faults directly entering a sub-circuit are then simulated and recorded using the sub-circuits, which is expected to be much more time efficient than fault simulation using the whole circuit, which is much larger in size. Finally, the fault detectability at the given test points is evaluated based on the fault impacts and sensitivity among different sub-circuits. As a first step toward quick estimation of fault coverage, this paper focuses on dc tests. Simulation results show that the fault coverage of dc tests can be estimated sufficiently accurately with simulation time being reduced by 10X for the benchmark circuit, or by approximately the number of SCCs. For a much larger circuit, the number of SCCs is expected to be much larger and the time-saving factor will be much larger."
+ },
+ {
+  "id": "W4384199505",
+  "doi": "https://doi.org/10.1007/s10470-023-02167-7",
+  "year": 2023,
+  "type": "article",
+  "venue": "Analog Integrated Circuits and Signal Processing",
+  "cited_by": 11,
+  "title": "Low-cost defect simulation framework for analog and mixed signal (AMS) circuits with enhanced time-efficiency",
+  "abstract": ""
+ },
+ {
+  "id": "W4309968124",
+  "doi": "https://doi.org/10.21203/rs.3.rs-2299488/v1",
+  "year": 2022,
+  "type": "preprint",
+  "venue": "Research Square",
+  "cited_by": 0,
+  "title": "Low-Cost Defect Simulation Framework for Analog and Mixed Signal (AMS) Circuits with Enhanced Time-Efficiency",
+  "abstract": "Abstract Defect-oriented testing is becoming increasingly popular in recent times, especially in safety-critical applications in automotive, space and medical industries. The stringent quality requirements from these industries such as zero defective parts per million (DPPM) necessities a need to have efficient defect testing methods. Furthermore, the overall development time of integrated circuit can be reduced by reducing the defect simulation time. In this work, we present a simple and time-efficient defect simulation framework for pre-silicon testing of AMS circuits. In our method, a given defect model is realized using Verilog-A modules and tests multiple defects in a circuit in a single-run simulation. In contrast to the conventional defect simulation framework, our method saves simulation time by avoiding the repetitive work of generating a netlist for each defect and by reducing the time overhead for the simulator to interface with data/file-handling system. To strongly validate our proposed framework, we use diverse AMS circuits such as operational amplifier (op amp), fast transient flipped-voltage follower based low-dropout regulator (FVF LDO) and Successive-approximation-register (SAR) analog-to-digital converters (ADC). For DC testing schemes used for op amp and LDO testing, we show that our proposed framework reduces the simulation time to less than one-tenth (1/10th) in comparison with conventional framework. On the other hand, for the transient testing scheme, the proposed framework reduces the simulation time to less than 50% of the conventional framework. Furthermore, we also show that there is no negative impact on the defect coverage using the proposed framework."
+ },
+ {
+  "id": "W4393306319",
+  "doi": "https://doi.org/10.31274/td-20240329-729",
+  "year": 2023,
+  "type": "dissertation",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Techniques for efficient and robust defect detection in analog and mixed signal circuits",
+  "abstract": "The demand for reliable and defect-free electronics is growing steadily, driven by the requirements of mission-critical industries like automotive, space, and medical sectors. While defect detection in digital circuits has been extensively studied and advanced over the past four decades, analog defect detection has not received the same level of attention. A significant turning point occurred during the 2014 International Test Conference when ON Semiconductor revealed previously confidential data, indicating that 80% of integrated circuit (IC) failures were attributed to analog faults. This revelation was particularly noteworthy considering that analog components constitute a relatively small fraction of the overall IC composition. As a result, the reliability of analog components often becomes the bottleneck in ensuring the overall reliability of the chip and the system it is in. In addition to this, the automotive integrated circuit (IC) market experienced swift expansion, emerging as a significant catalyst for the semiconductor industry. The stringent reliability and safety standards imposed on automotive electronics prompted a pressing demand and rapid growth in the field of analog defect detection. Furthermore, given that the automotive industry operates at high volume, the cost pressure on automotive ICs is exceedingly significant, necessitating the urgent reduction of IC costs to the greatest extent possible. Hence, the need to meet these rigorous requirements led to intensified research and development efforts in studying and addressing analog defects within automotive electronics, all while striving to minimize costs. Apart from detecting manufacturing defects during production testing, it is equally crucial to ensure the chip’s reliability even after its deployment. This involves testing for latent and aging-induced defects, even when the circuits are in their final application. The research work presented here in this dissertation is dedicated to developing approaches and methodologies that cater to the pressing needs of the industry, aiming to enhance the detection of analog defects while also providing reliable simulation techniques to assess defect coverage. The first few chapters of the dissertation delve into defect detection for multiple analog and mixed-signal (AMS) circuits, specifically focusing on operational amplifiers, conventional LDOs (low-dropout regulators), and fast transient FVF LDOs (flipped voltage follower LDO). The dissertation offers extensive discussions and in-depth analysis focusing on the defect detection methods employed for the aforementioned circuits. It not only explores and presents novel defect detection techniques but also provides a comprehensive comparison with state-of-the-art methods currently used in the field. By evaluating and contrasting these approaches, the dissertation aims to highlight the strengths and weaknesses of various defect detection methods, offering valuable insights for researchers and industry professionals in selecting the most effective strategies for detecting defects in these circuits. In addition to this, all the defect detection methods proposed in this dissertation fulfill all the requirements necessary for performing online health monitoring. The utilization of digital control and monitor circuits ensures minimal intrusion into the main circuit. Moreover, the testing circuitry occupies minimal silicon area, making the approach highly cost-effective. As a result, the methods presented in this dissertation can be effectively employed for online health monitoring during power-on testing and periodic reliability checks. In addition to the comprehensive discussions on defect detection for analog and mixed-signal (AMS) circuits, this dissertation also introduces a time-efficient defect simulation methodology. The proposed methodology's primary objective is to improve the speed and efficiency of defect coverage simulations while ensuring accurate evaluation of \"true\" defect coverage. The emphasis is placed on developing an approach that not only accelerates the simulation process but also ensures that the simulated defects accurately represent real-world scenarios. By focusing on optimizing the defect simulation process, the frameworks proposed in this dissertation aims to reduce computational time and resources required for evaluating defect coverage in AMS circuits ultimately resulting in a more cost-effective approach."
+ },
+ {
+  "id": "W3147604431",
+  "doi": "https://doi.org/10.1109/tcsi.2021.3067180",
+  "year": 2021,
+  "type": "article",
+  "venue": "IEEE Transactions on Circuits and Systems I Regular Papers",
+  "cited_by": 48,
+  "title": "SymBIST: Symmetry-Based Analog and Mixed-Signal Built-In Self-Test for Functional Safety",
+  "abstract": "We propose a Built-In Self-Test (BIST) paradigm for analog and mixed-signal (A/M-S) Integrated Circuits (ICs), called symmetry-based BIST (SymBIST). SymBIST exploits inherent symmetries in an A/M-S IC to construct signals that are invariant by default, and subsequently checks those signals against a tolerance window. Violation of invariant properties points to the occurrence of a defect or abnormal operation. SymBIST is designed to serve as a functional safety mechanism. It is reusable ranging from post-manufacturing test, where it targets defect detection, to on-line test in the field of operation, where it targets low-latency detection of transient failures and degradation due to aging. We demonstrate SymBIST on a Successive Approximation Register (SAR) Analog-to-Digital Converter (ADC). SymBIST features high defect coverage, short test time, low overhead, zero performance penalty, and has a fully digital interface making it compatible with modern digital test access mechanisms."
+ },
+ {
+  "id": "W4231025771",
+  "doi": "https://doi.org/10.7873/date.2013.125",
+  "year": 2013,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 25,
+  "title": "Fault Analysis and Simulation of Large Scale Industrial Mixed-Signal Circuits",
+  "abstract": "High test quality can be achieved through defect oriented testing using analog fault modeling approach. However, this approach is computationally demanding and typically hard to apply to large scale circuits. In this work, we use an improved inductive fault analysis approach to locate potential faults at layout level and calculate the relative probability of each fault. Our proposed method yields actionable results such as fault coverage of each test, potential faults, and probability of each fault. We show that the computational requirement can be significantly reduced by incorporating fault probabilities. These results can be used to improve fault coverage or to improve defect resilience of the circuit."
+ },
+ {
+  "id": "W2000811372",
+  "doi": "https://doi.org/10.1007/s10836-005-6144-3",
+  "year": 2005,
+  "type": "article",
+  "venue": "Journal of Electronic Testing",
+  "cited_by": 26,
+  "title": "Defect Oriented Testing of Analog Circuits Using Wavelet Analysis of Dynamic Supply Current",
+  "abstract": ""
+ },
+ {
+  "id": "W2020582671",
+  "doi": "https://doi.org/10.1007/s00167-011-1763-y",
+  "year": 2011,
+  "type": "article",
+  "venue": "Knee Surgery Sports Traumatology Arthroscopy",
+  "cited_by": 39,
+  "title": "The combination of microfracture and a cell‐free polymer‐based implant immersed with autologous serum for cartilage defect coverage",
+  "abstract": "PURPOSE: The purpose of this short-term pilot study was to determine the clinical and MRI outcome of a combination of microfracture with a cell-free polymer-based matrix for the treatment of cartilage defects in the knee. METHODS: The technique was used for treatment of symptomatic cartilage defects in the knee. Five patients were prospectively evaluated during 2 years with use of the Knee injury and Osteoarthritis Outcome Score (KOOS), the Tegner activity scale and the visual analog scale (VAS). MRI data were analyzed based on the original and modified MOCART (Magnetic Resonance Observation of Cartilage Repair Tissue) scoring system at 6, 12 and 24 months of follow-up. RESULTS: A gradual clinical improvement was observed during the follow-up. Adverse reactions to the matrix were not observed. The scaffold was firmly fixed with the use of bioresorbable pins. Both MOCART scoring systems revealed no significant deterioration or improvement in the repair tissue during the follow-up period. However, the majority of the patients exhibited subchondral lamina and bone changes. The formation of an intralesional osteophyte was observed in one case. CONCLUSIONS: The key finding in this study was that this procedure is safe for the treatment of cartilage defects in the knee. The patients showed a gradual clinical improvement postoperatively. Sixty percent (3/5) of the defects were adequately (complete or hypertrophic) filled with repair tissue at 2 years of follow-up. LEVEL OF EVIDENCE: IV."
+ },
+ {
+  "id": "W4388214490",
+  "doi": "https://doi.org/10.1109/ewdts59469.2023.10297056",
+  "year": 2023,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 1,
+  "title": "Graph Theory Based Defect Simulation Framework for Analog and Mixed Signal (AMS) Circuits with Improved Time-Efficiency",
+  "abstract": "In AMS circuits, the defect simulation time is increasing prohibitively as the circuits are becoming more and more complex. In addition to this, as the need for high defect coverage is increasing due to standards such as ISO26262, the defect simulation time is further increasing. In this paper, we present an ultra-fast defect simulation framework to test defects in pre-silicon testing of AMS circuits. We achieve time efficiency by means of two methods: (1) Improving the defect injection mechanism and (2) Circuit partition. To realize a given defect model, we use Verilog-A modules using which we can inject nearly all the defects in a circuit with a single test run (for a given test condition) which reduces the average defect simulation time. In addition to this, we also incorporate partitioning of the circuit under test into sub circuits using graph theory. The main idea here is that testing individual strongly connected components (SCCs) separately is comparatively more time-efficient rather than testing the entire circuit together. For robust framework validation, we utilize a benchmark circuit containing common analog circuits like operational amplifiers, bandgap references, Widlar current references, and bias generation circuits designed in UMC65nm technology. For the defect detection, we consider the voltage values at strategically chosen voltage nodes in the circuit and compare them with the values expected from a defect-free circuit. Using extensive simulations, we show that using our method, the defect simulation time can be improved by 17X in comparison with conventional methods. Additionally, the proposed method is independent of defect model or detection method."
+ },
+ {
+  "id": "W2014417962",
+  "doi": "https://doi.org/10.5555/2485288.2485427",
+  "year": 2013,
+  "type": "article",
+  "venue": "Design, Automation, and Test in Europe",
+  "cited_by": 16,
+  "title": "Fault analysis and simulation of large scale industrial mixed-signal circuits",
+  "abstract": "High test quality can be achieved through defect oriented testing using analog fault modeling approach. However, this approach is computationally demanding and typically hard to apply to large scale circuits. In this work, we use an improved inductive fault analysis approach to locate potential faults at layout level and calculate the relative probability of each fault. Our proposed method yields actionable results such as fault coverage of each test, potential faults, and probability of each fault. We show that the computational requirement can be significantly reduced by incorporating fault probabilities. These results can be used to improve fault coverage or to improve defect resilience of the circuit."
+ },
+ {
+  "id": "W2553580748",
+  "doi": "https://doi.org/10.1109/tcsi.2016.2616159",
+  "year": 2016,
+  "type": "article",
+  "venue": "IEEE Transactions on Circuits and Systems I Regular Papers",
+  "cited_by": 37,
+  "title": "Using Mixed-Signal Defect Simulation to Close the Loop Between Design and Test",
+  "abstract": "By the time volume production test statistics are known, it is usually uneconomical to significantly modify a mixed-signal design to improve test cost or coverage, or to add redundancy to improve yield or reliability. Fault simulation could provide immediate feedback to designers about the impact of design on test time, test cost, and test coverage of manufacturing defects, but simulating all potential defects in a mixed-signal circuit is usually not practical. This paper first summarizes previous fault simulators and likelihood-weighted random sampling theory. It then describes a defect simulator developed for industrial mixed-signal circuits. The mixed-mode simulator simulates realistic random defectivity, and reports likelihood-weighted defect coverage based on user-provided likelihoods for opens, shorts, and excessive variations, and for user-defined defects. A variety of techniques is described that reduces total defect simulation time. We provide two small circuit examples to illustrate how test coverage was measured for circuits in pre-production ICs. An additional benefit of defect simulation is measurement of a circuit's defect tolerance, whether the tolerance is added to improve reliability or yield."
+ },
+ {
+  "id": "W4255888515",
+  "doi": "https://doi.org/10.7873/date.2015.0617",
+  "year": 2015,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "A Method for the Estimation of Defect Detection Probability of Analog/RF Defect-Oriented Tests",
+  "abstract": "A method to realistically estimate the defect detection probability achieved by defect-oriented analog/RF integrated circuit tests at the circuit design level is presented in this paper. The proposed method also provides insight to the efficiency of the various available defect-oriented testing techniques, thus allowing the selection of the most suitable for a specific circuit. The effect of structural defects in the presence of process variations and device mismatches is taken into account, by the exploitation of the defect probability distributions and the statistical models of the used technology. Although the proposed methodology is generally applicable to the entire class of analog circuits, its application to simple RF circuits which consist of a few elements seems to be more practical, due to the affordable computational cost implied by circuits with shorter defect dictionaries. In order to obtain results without a reliability compromise, the number of required statistical simulation runs is reduced through regression. The application of the proposed method on a typical RF mixer, designed in a 0.18μm CMOS technology, is also presented."
+ },
+ {
+  "id": "W2010187163",
+  "doi": "https://doi.org/10.5555/2755753.2757136",
+  "year": 2015,
+  "type": "article",
+  "venue": "Design, Automation, and Test in Europe",
+  "cited_by": 0,
+  "title": "A method for the estimation of defect detection probability of analog/RF defect-oriented tests",
+  "abstract": "A method to realistically estimate the defect detection probability achieved by defect-oriented analog/RF integrated circuit tests at the circuit design level is presented in this paper. The proposed method also provides insight to the efficiency of the various available defect-oriented testing techniques, thus allowing the selection of the most suitable for a specific circuit. The effect of structural defects in the presence of process variations and device mismatches is taken into account, by the exploitation of the defect probability distributions and the statistical models of the used technology. Although the proposed methodology is generally applicable to the entire class of analog circuits, its application to simple RF circuits which consist of a few elements seems to be more practical, due to the affordable computational cost implied by circuits with shorter defect dictionaries. In order to obtain results without a reliability compromise, the number of required statistical simulation runs is reduced through regression. The application of the proposed method on a typical RF mixer, designed in a 0.18μm CMOS technology, is also presented."
+ },
+ {
+  "id": "W2044500680",
+  "doi": "https://doi.org/10.1109/ets.2014.6847817",
+  "year": 2014,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 18,
+  "title": "Optimization of analog fault coverage by exploiting defect-specific masking",
+  "abstract": "A new method is presented to detect catastrophic defects from the signal analysis of dynamic current consumption waveforms of analog circuits. While other techniques use the whole information in a Root-Mean-Square computation or in black-box techniques such as a neural network, the central point of this work resides in the selection of waveform samples to create a signature able to discriminate a defective circuit from a fault-free circuit. The selection of samples is implemented by the introduction of binary vectors to partially mask the data. Confronted with process variations, this technique offers the advantage of being straightforward and simple to implement in Automated Test Equipments. The generation of the masks is optimized to improve the defect coverage by means of a genetic algorithm maximizing the distance between the signature of the fault-free circuit and a faulty circuit. Results from simulations on industrial circuits show that the number of detected defects can be nearly doubled for specific stimuli."
+ },
+ {
+  "id": "W4404847783",
+  "doi": "https://doi.org/10.1109/itc51657.2024.00065",
+  "year": 2024,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 2,
+  "title": "TEACH: Outlier Oriented Testing of Analog/Mixed-Signal Circuits Using One-class Hyperdimensional Clustering",
+  "abstract": "Process variability effects and subtle defect mechanisms in deeply scaled analog/mixed-signal/RF (AMS) silicon technologies combine in malicious ways to increase DPPMs of mixed-signal Systems-on-Chips (SoCs). This has driven the need to increase defect coverage while minimizing testing costs. However, testing embedded AMS components in mixed-signal SoCs has always been a challenge due to test access limitations and requirement for labeled data. In this work, we focus on eliminating the requirement for labeled data. As such, rather than measuring the specification values of embedded AMS components, it is more expedient to devise tests using on- chip resources along with low cost mechanisms for identifying outlier behaviors in measured data to identify devices with parametric and catastrophic defects. To resolve this, what is needed are : (a) a test generation methodology that separates outlier from inlier device behaviors making them easily detectable and (b) a response analysis approach that can draw boundaries between multi-dimensional \"good\" and \"outlier\" behaviors with such computational ease that it can be invoked in each test generation iteration to quantify the quality of the test being considered. In this context, a novel test stimulus generation approach using clustering of test data in hyperdimensional spaces is developed that maximizes the similarities of inlier devices in the hyperdimensional space thereby allowing outlier devices to be identified easily by their corresponding hypervector representations from their dissimilarity with hypervectors of inlier devices. Such an approach overcomes the major drawback of prior approaches by eliminating the requirement for labeled data. For decision-making, a one-class hyperdimensional classifier that relies on a single cluster boundary (as opposed to complex boundaries in nonlinear spaces), is used to separate \"good\" vs. \"bad\" devices. The classifier is computationally efficient, outperforms existing techniques for defect coverage, and drives the search for the optimal test stimulus. Simulation results on test circuits prove the benefits of the proposed approach over prior testing methods."
+ },
+ {
+  "id": "W4200144194",
+  "doi": "https://doi.org/10.1109/tcad.2021.3139311",
+  "year": 2021,
+  "type": "article",
+  "venue": "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems",
+  "cited_by": 5,
+  "title": "DDtM: Increasing Latent Defect Detection in Analog/Mixed-Signal ICs Using the Difference in Distance to Mean Value",
+  "abstract": "With quality and reliability requirements moving toward the ppb level, latent defects have become a major bottleneck. This article introduces a new metric, called difference in the distance to mean value (DDtM), that exploits the latent defect information present in measurements of an integrated circuit (IC) carried out under more than one operating condition. The use of this metric improves the latent defect coverage provided by post-processing (PP) techniques at no additional cost. The DDtM tracks, for each measured variable, shift in the distance from the IC’s measured value to the population mean value when the conditions applied to the IC change. To demonstrate the effectiveness of the DDtM metric, two circuits that are part of an industrial mixed-signal IC are used as case studies. The results show that the use of the DDtM metric improves latent defect coverage regardless of the PP technique used, providing up to a 60% improvement in coverage compared to the results obtained using the same measurement data but without DDtM."
+ },
+ {
+  "id": "W2480236156",
+  "doi": "https://doi.org/10.1109/ets.2016.7519320",
+  "year": 2016,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Measuring defect tolerance within mixed-signal ICs",
+  "abstract": "We presented a simple definition for defect tolerance in mixed-signals circuits, along with various defect coverages. These allow defect tolerance techniques to be objectively compared for any type of circuit, using automated analog defect simulation."
+ },
+ {
+  "id": "W3035722655",
+  "doi": "https://doi.org/10.1109/tcad.2020.3001259",
+  "year": 2020,
+  "type": "article",
+  "venue": "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems",
+  "cited_by": 33,
+  "title": "Defect-Oriented Test: Effectiveness in High Volume Manufacturing",
+  "abstract": "This article describes a defect-oriented test (DOT) approach, which enables a complete physical defect-based automatic test pattern generation (ATPG) for the digital logic area of CMOS-based designs. Total critical area (TCA)-based methods are presented for the generation of needed DOT views to enable the generation of complete DOT-based patterns for detecting all cell-internal and as well all cell-external physical defects. The major aim of these new methods and patterns is to further reduce the defect rate of manufactured ICs, in addition to what is already achieved with traditional and cell-aware test (CAT) fault models. We present test results, including achieved defect rate reduction in defective parts per million (DPPM), from a large 14-nm FinFET design, including a correlation to system-level-test (SLT) fails. For a second, mature 160-nm automotive mixed-signal sensor we present high-volume production test results, again measured in DPPM, and we provide test coverage figures moving away from counting detected faults to calculating detected TCA which is reported as the chip level TCA coverage."
+ },
+ {
+  "id": "W2810737259",
+  "doi": "https://doi.org/10.1109/ets.2018.8400688",
+  "year": 2018,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 15,
+  "title": "Measuring mixed-signal test stimulus quality",
+  "abstract": "The percentage of circuit elements stimulated by a test stimulus applied to a mixed-signal circuit is analogous to the toggle coverage of a test pattern applied to a digital circuit and can serve as an estimate of the quality of, or maximum test coverage achievable with, that stimulus. This paper proposes a novel definition for analog activity coverage and how to measure it in a defect-free circuit for any potential defects (shorts, opens, and parametric). Results are provided for the ITC'17 analog benchmark circuits and show that activity coverage is an approximate upper limit for defect coverage. Other uses for measuring test stimulus quality are discussed, such as assessing burn-in and over-voltage stress stimuli, and ensuring defect tolerance measured for ISO 26262 is accurate."
+ },
+ {
+  "id": "W1992984946",
+  "doi": "https://doi.org/10.1109/ets.2012.6233046",
+  "year": 2012,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 50,
+  "title": "Introduction to the defect-oriented cell-aware test methodology for significant reduction of DPPM rates",
+  "abstract": "This tutorial will give an introduction to a new defect-oriented test method called cell-aware. This new cell-aware method takes the layout of standard library cells into account when creating the cell-aware ATPG library view. The tutorial will cover the whole cell-aware library characterization flow consisting of a layout extraction step, an analog fault simulation step of all cell-internal bridges and opens and the cell-aware synthesis step to create the new cell-aware ATPG library views, which finally can be used in a normal chip design flow to generate production test patterns. These cell-aware production test patterns have a significantly higher quality than state-of-the-art patterns. Finally, production test results from several hundred thousand tested IC's are presented showing significant reduction of DPPM rates."
+ },
+ {
+  "id": "W4249701547",
+  "doi": "https://doi.org/10.1007/1-4020-8159-6_7",
+  "year": 2006,
+  "type": "book-chapter",
+  "venue": "Kluwer Academic Publishers eBooks",
+  "cited_by": 3,
+  "title": "Test and Design-for-Test of Mixed-Signal Integrated Circuits",
+  "abstract": "Although most electronic circuits are almost entirely digital, many include at least a small part that is essentially analog. This is due to the need to interface with the real physical world, that is analog in nature. As demanding market segments require ever more complex mixed-signal solutions, high quality tests become essential to meet circuit design specifications in terms of reliability, time-to-market, costs, etc. In order to lower costs associated to traditional specification-driven tests and, additionally, achieve acceptable fault coverages for analog and mixed-signal circuits, it is reasonable to expect that no other solution than a move towards defect-oriented design-for-test methods will be applicable in the near future. Therefore, testing tends to be dominated by embedded mechanisms to allow for accessibility to internal test points, to achieve on-chip test generation, on-chip test response evaluation, or even to make it possible the detection of errors concurrently to the circuit application. Within this context, an overview of existing test methods is given in this chapter, focusing on design-for-testability, built-in self-test and self-checking techniques suitable for the detection of realistic defects in analog and mixed-signal integrated circuits."
+ },
+ {
+  "id": "W3117360808",
+  "doi": "https://doi.org/10.31399/asm.cp.istfa2010p0384",
+  "year": 2010,
+  "type": "conference-paper",
+  "venue": "Proceedings - International Symposium for Testing and Failure Analysis",
+  "cited_by": 0,
+  "title": "Combining Time Resolved Emission and Analog Simulation for Fault Localization",
+  "abstract": "Abstract In this paper, we describe a fault localization strategy for scan designs based on Time Resolved Photon Emission (TRE) and analog simulation. After characterizing the defect’s electrical footprint using TRE, analog fault simulation is applied. A user - friendly software package with an easy to use interface to scan diagnosis, layout tool and simulator was created."
+ },
+ {
+  "id": "W2508571990",
+  "doi": "https://doi.org/10.1109/iscas.2016.7527385",
+  "year": 2016,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 6,
+  "title": "Closing the loop between analog design and test",
+  "abstract": "By the time volume production test statistics are known, it is usually too late for designers to modify an analog design to improve test cost or coverage, or to add redundancy to improve yield or reliability. Analog fault simulation could provide immediate feedback to designers about the impact of design on production test time, test cost, and test coverage of manufacturing defects, but simulating all such defects is usually not feasible. This paper describes an analog defect simulator developed for industrial mixed-signal circuits. It simulates realistic random defects, and reports likelihood-weighted defect coverage based on user-provided likelihoods for opens, shorts, and excessive variations, and for user-defined defects. An additional benefit of defect simulation is measurement of a circuit's defect tolerance, whether the tolerance is added to improve reliability or yield."
+ },
+ {
+  "id": "W4404848983",
+  "doi": "https://doi.org/10.1109/itc51657.2024.00055",
+  "year": 2024,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 8,
+  "title": "Digital Scan and ATPG for Analog Circuits",
+  "abstract": "Scan-based automatic test pattern generation (ATPG) is commonly used for ‘random logic’ in ICs, but there is no equivalent for analog/mixed-signal (AMS) circuits due to their diversity of functions, stimuli, and responses. As a result, tests are written manually on the intended automatic test equipment (ATE) with (possibly defective) ‘first silicon’ devices, typically requiring months of effort and test times higher than for the digital circuitry. Proving the defect coverage of these tests in simulation is typically impractical, andth-order filter, bandgap + voltage regulator, 8-bit DAC, and industrial 11-bit SAR ADC achieve comparable or higher coverage of IEEE P2427-specified shorts and opens, relative to specification tests, in <1 ms. Defect coverage can be simulated in <1 hour, fast enough to verify before tape-out."
+ },
+ {
+  "id": "W7167941127",
+  "doi": "https://doi.org/10.1109/ets69887.2026.11591727",
+  "year": 2026,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Distributed Delay-Based BIST for Mixed-Signal Circuits in Flexible Electronics",
+  "abstract": "Flexible electronics (FE) based on indium gallium zinc oxide thin-film transistors (IGZO-TFTs) are emerging for ultra-low-power wearable applications. However, lack of packaging, limited pins, and high device variability make conventional Automatic Test Equipment (ATE) impractical for testing analog/mixed-signal circuits in FE. This work presents a dual-purpose ring oscillator (RO) and voltage-controlled oscillator (VCO) serving as functional timing blocks and core structures for a distributed delay-based BIST framework. The oscillators achieve 1100x area reduction and 5600x lower power than previous IGZO-TFT designs. Lightweight digital BIST embedded within each RO stage enables stage-wise delay monitoring for defect detection. The BIST achieves 93% defect coverage for individual defects and 88% for multiple simultaneous defects, with only 3% power overhead"
+ },
+ {
+  "id": "W4384026274",
+  "doi": "https://doi.org/10.1109/ets56758.2023.10173963",
+  "year": 2023,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "High-coverage analog IP block test generation methodology using low-cost signal generation and output response analysis",
+  "abstract": "Today, testing of AMS circuits needs to improve quality towards ppb test escape levels as well as decrease the test development time to reduce the IC lead time. A defect-oriented solution can improve quality by focusing on structural tests that can detect defects more efficiently than traditional functional tests, while test reuse can decrease test development time on ICs built with reusable IP blocks. A defect-oriented built-in self-test (BIST) approach integrates both solutions. This paper proposes a test development methodology for analog IP blocks based on such defect-oriented BIST framework. The methodology allows for achieving the target defect coverage at the lowest possible cost. Co-designing the IP with the DfT structures allows accounting for any non-idealities that the DfT may add to the IP. Test structures cost is limited by using low-cost signal generation and a new output response analyzer (ORA). The proposed methodology is demonstrated on two case studies. The results show that coverages higher than 90% are possible using a simple digital pulse signal and an ORA with only 4 bits of accuracy, while coverages higher than 95% are possible with 6 bits, offering a good trade-off between coverage and cost."
+ },
+ {
+  "id": "W2781952488",
+  "doi": "https://doi.org/10.1109/test.2017.8242056",
+  "year": 2017,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 1,
+  "title": "Non-intrusive detection of defects in mixed-signal integrated circuits using light activation",
+  "abstract": "The quality level of mixed-signal ICs lags behind the below-part-per-million defect test escape rates of digital ICs, as a result of the traditional testing based on performance specifications. Methods increasing the controllability to solve the problem of the low fault coverage of analog and mixed-signal circuits are in practice limited due to the excessive area overhead they require and their impact on the normal circuit operation. This paper presents a non-intrusive method to improve the controllability using light as an activation mechanism. The necessary simulation models are introduced to use the proposed method in the context of a defect-oriented test approach. This work also describes a workflow which enables the application of the method to large-scale industrial circuits. Finally, effective results are shown on an industrial mixed-signal front-end circuit under test (CUT) demonstrating around 27% increase in the number of detectable defects."
+ },
+ {
+  "id": "W2967540737",
+  "doi": "https://doi.org/10.1109/smacd.2019.8795222",
+  "year": 2019,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 14,
+  "title": "Requirements, for Industrial Analog Faulf-Simulator",
+  "abstract": "This article discusses the prerequisites that enable practical EDA solution for analog fault simulation. It shows that a strict and realistic definition set of targets, compliant with emerging IEEE standards for analog test, is crucial for the success of such a product. The Cadence® product for analog fault simulation is presented and options to mitigate the evergreen problem of analog fault simulation adoption in industrial applications is listed."
+ },
+ {
+  "id": "W4411173250",
+  "doi": "https://doi.org/10.1109/vts65138.2025.11022957",
+  "year": 2025,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 1,
+  "title": "Defect Severity Analysis for Analog Circuits Using Zoom Search and Hierarchical Fault Simulation",
+  "abstract": "Integration of analog and RF circuits with advanced node digital systems has leapfrogged analog circuits by several technology nodes. This has resulted in higher defect rates as well as higher process variations. Another point of pressure is that some application domains, such as the automotive industry, require very low defect rates. To ensure that the circuits are thoroughly tested without increasing the test cost severely, test optimization methods can be applied. Examples of test optimization can include the use of alternate tests, reduced test sets, and built-in self-tests. Defect coverage of the optimized tests needs to be evaluated to ensure high-quality products. For analog circuits, defect definitions are generally continuous and minimum detectable deviation (of hard and soft defects) may differ from one test to another. Finding this detectability point is important to compare potential test conditions. In this paper, we propose an algorithm to determine the minimum detectable defect severity for each defect under given test conditions. Ultimately, this information can be used to find the most sensitive test method that already covers the detection limit of other methods. Experiments on an 8-bit ADC circuit show that the proposed algorithm finds the defect detectability limits of different test methods in only a few search steps and yields accurate results."
+ },
+ {
+  "id": "W3048170192",
+  "doi": "https://doi.org/10.1109/iolts50870.2020.9159747",
+  "year": 2020,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 8,
+  "title": "Automatic Fault Simulators for Diagnosis of Analog Systems",
+  "abstract": "The failure analysis in analog and mixed signal products is mainly based on measurements performed in the laboratory without any simulation support. The fault simulators for analog circuits are starting to be available but are not designed for these needs. This work describes the integration of the simulation into the normal failure analysis flow using test software developed for analog fault simulation. We propose an innovative iterative flow for diagnosis of analog IPs and products. The results show how inserting such tools in the fault isolation step, we speed up the whole analysis process, allowing the diagnosis for analog and mixed-signal circuits."
+ },
+ {
+  "id": "W2570705108",
+  "doi": "https://doi.org/10.1109/test.2016.7805867",
+  "year": 2016,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 7,
+  "title": "Automatic test signal generation for mixed-signal integrated circuits using circuit partitioning and interval analysis",
+  "abstract": "A method is presented to address the automatic generation of test signals for analog and mixed-signal integrated circuits. No restriction on the number of inputs or the nonlin-earity of the circuit are made. The circuit under consideration is first decomposed into a set of sub-circuits, called blocks, in order to break down the complexity of the problem. The effect of a targeted fault is then automatically analyzed at the transistor level in a defect-oriented context. From this analysis, the fault sensitization conditions are extracted and then backtraced towards the primary inputs and outputs of the circuit using an algorithm based on the interval analysis theory. The underlying algorithms supporting the automation of the whole procedure are illustrated for basic circuits. Finally, in order to demonstrate the method, an industrial circuit is used as case study. It is shown that test signals can be generated in order to achieve a fault coverage of 98%."
+ },
+ {
+  "id": "W2612538664",
+  "doi": "https://doi.org/10.23919/date.2017.7926996",
+  "year": 2017,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 9,
+  "title": "Analog fault testing through abstraction",
+  "abstract": "Despite analog SPICE-like simulators have reached their maturity, most of them were not originally conceived for simulating faulty circuits. With the advent of smart systems, fault testing has to deal with models encompassing both analog and digital blocks. Due to their complexity, the industry is still lacking of effective testing approaches for these analog and mixed-signal (AMS) models. The current problem is the computational time required for implementing an analog fault simulation campaign. To this end, the work presented in this paper is an automatic procedure which: 1) injects faults in an analog circuit, 2) abstracts both faulty and fault-free models from the circuit to the functional level, 3) builds an efficient fault simulation framework. The processes of fault injection, faulty model abstraction and framework generation are reported in details, as well as how simulation is carried out. This abstraction process, which preserves the faulty behaviors, allows to reach a speed-up of some orders of magnitude and thus, making feasible an extensive analog faults campaign."
+ },
+ {
+  "id": "W4392268055",
+  "doi": "",
+  "year": 2021,
+  "type": "dissertation",
+  "venue": "HAL (Le Centre pour la Communication Scientifique Directe)",
+  "cited_by": 0,
+  "title": "Analog Hardware Fault Diagnosis",
+  "abstract": "The number of integrated circuits (ICs) used in safety- and mission-critical applications is ever increasing. These applications demand that ICs carry functional safety properties. In this thesis, we develop a Built-In Self Test (BIST) approach for Analog and Mixed-Signal (A/M-S) ICs, called Symmetry-Based Built-In Self Test (SymBIST), which achieves several objectives towards the functional safety goal. SymBIST is a generic BIST paradigm based on identifying inherent invariances that should hold true only in error-free operation, while their violation points to abnormal operation. The invariances are being checked using dedicated on-die checkers. SymBIST meets three functional safety objectives: post-manufacturing defect-oriented test, on-line testing, and fault diagnosis. SymBIST is demonstrated on a successive approximation analog-to-digital converter (SAR ADC). The results show that the test coverage and diagnostic accuracy are promising compared to the state of the art."
+ },
+ {
+  "id": "W4378801013",
+  "doi": "https://doi.org/10.1145/3583781.3590317",
+  "year": 2023,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 2,
+  "title": "Verilog-A Implementation of Generic Defect Templates for Analog Fault Injection",
+  "abstract": "With functional safety being increasingly important in the development of mixed-signal products for automotive applications, EDA solutions have appeared striving to help designers in the setup and execution of fault injection campaigns. Despite the ongoing work to standardize the definition of defect models and coverage calculation methods in the IEEE P2427 draft standard, there is a lack of a unified and portable method to define defect templates that can be used to inject in a systematic way defects in an analog circuit. Each of the existing EDA tool sets for fault injection proposes its own proprietary method to specify how defects should be defined and injected. The proposed paper describes a Verilog-A-based approach to coding defect templates, which through compliance with the Verilog-A standard, warrants portability across compatible simulators. The approach has been validated on the circuits from the Analogue Benchmark Circuits made available by the IEEE P2427 working group."
+ },
+ {
+  "id": "W2618497183",
+  "doi": "",
+  "year": 2015,
+  "type": "dissertation",
+  "venue": "HAL (Le Centre pour la Communication Scientifique Directe)",
+  "cited_by": 0,
+  "title": "Test Techniques for Analog Circuits and Systems",
+  "abstract": "The role of nano-electronic systems is rapidly expanding in every facet of modern life. Testing the analog, mixed-signal, and RF (AMS/RF) functions of such systems is considered one of the major bottlenecks and is an area of focus and innovation. Testing is required both in post-manufacturing to guarantee outgoing quality while not sacrificing yield and during the lifetime of operation to detect early reliability hazards and obtain feedback so as to apply corrective actions and continue uninterrupted operation. This talk will cover (a) applications of machine learning and data mining in testing aiming at implicitly predicting AMS/RF performances from low-cost measurements with high confidence; (b) integrated design-for-test and built-in self-test techniques for AMS/RF circuits aiming at reducing the cost of test, facilitating self-calibration and self-healing, and performing on-line test towards achieving fault tolerance; (c) probabilistic test metrics estimation (e.g. defect coverage and yield loss) aiming at evaluating alternative low-cost test solutions during the test development phase before moving to high-volume production; and (d) fault diagnosis for AMS/RF functions aiming at identifying the source of system failure down to transistor level and, thereby, providing feedback for yield enhancement and for avoiding failure reoccurrence. The concepts and methodologies will be demonstrated on industry data sets and on measurements from fabricated circuits."
+ },
+ {
+  "id": "W2567975304",
+  "doi": "https://doi.org/10.1109/test.2016.7805830",
+  "year": 2016,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 26,
+  "title": "Effective DC fault models and testing approach for open defects in analog circuits",
+  "abstract": "The detection level of defects in today's mixed-signal ICs lags behind the extremely high demand of industries such as automotive. This is mainly because analog blocks in these ICs have high test escape rates as a result of the typical testing based on the performance specifications. Defect-oriented techniques have been proposed to solve the problem of this poor fault coverage for analog circuits. Their effectiveness in practice is however still limited due to the inadequate fault models used to represent physical failures. This paper presents a new open-gate DC fault model. Experimental results on fabricated test circuits in 0.35μm BCD technology are used to validate the proposed fault model and the commonly used high-value-resistance model. Finally, a new testing approach to detect the corresponding open defects in analog circuits is discussed, which is based on forcing the transistors outside their designed operation region."
+ },
+ {
+  "id": "W1980151347",
+  "doi": "https://doi.org/10.1109/date.2012.6176730",
+  "year": 2012,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 13,
+  "title": "Advances in variation-aware modeling, verification, and testing of analog ICs",
+  "abstract": "This tutorial paper describes novel scalable, nonlinear/generic, and industrially-oriented approaches to perform variation-aware modeling, verification, fault simulation, and testing of analog/custom ICs. In the first section, Dimitri De Jonghe, Elie Maricau, and Georges Gielen present a new advance in extracting highly nonlinear, variation-aware behavioral models, through the use of data mining and a re-framing of the model-order reduction problem. In the next section, Trent McConaghy describes new statistical machine learning techniques that enable new classes of industrial EDA tools, which in turn are enabling designers to perform fast and accurate PVT / statistical / high-sigma design and verification. In the third section, Bratislav Tasić presents a novel industrially-oriented approach to analog fault simulation that also has applicability to variation-aware design. In the final section, Haralampos Stratigopoulos describes describes state-of-the-art analog testing approaches that address process variability."
+ },
+ {
+  "id": "W3010887939",
+  "doi": "https://doi.org/10.1016/j.vlsi.2020.03.003",
+  "year": 2020,
+  "type": "article",
+  "venue": "Integration",
+  "cited_by": 0,
+  "title": "An adaptive simulation framework for AMS-RF test quality",
+  "abstract": ""
+ },
+ {
+  "id": "W1909547679",
+  "doi": "https://doi.org/10.1109/smacd.2015.7301706",
+  "year": 2015,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 3,
+  "title": "Automatic generation of lightweight controllability and observability structures for analog circuits",
+  "abstract": "In this paper a method is presented to address the automatic testing of analog ICs. Based on Design-for-Testability building blocks offering extra controllability and extra observability, a test infrastructure is generated for a targeted circuit. The selection of the extra blocks and their insertion into the circuit is done automaticaly by a proposed optimization algorithm. Adopting a defect-oriented methodology, this algorithm maximizes the fault coverage and minimizes the silicon area overhead. The proposed method is applied to an industrial circuit to generate an optimal test infrastructure combining controllability and observability. The case study shows that, with a silicon area overhead of less than 10%, a fault coverage of 91% can be reached."
+ },
+ {
+  "id": "W4297337422",
+  "doi": "https://doi.org/10.1109/iolts56730.2022.9897224",
+  "year": 2022,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 15,
+  "title": "All Digital Low-Cost Built-in Defect Testing Strategy for Operational Amplifiers with High Coverage",
+  "abstract": "Backed by standards like ISO26262, achieving near 100% defect coverage is becoming a common reliability requirement in the ever-growing automotive industry. However, achieving high defect coverage in an analog circuit has been proven to be a difficult/expensive task even with sophisticated analog and digital testing circuitry. In this work, we present a simple design for testability (DfT) technique that achieves 98% defect coverage for operational amplifiers including Widlar current reference and biasing circuitry. Our robust testing method utilizes purely digital testing circuits and is extremely time-efficient reducing the test cost. The proposed method can be used both at production test and for on-line health monitoring post-deployment to detect zero-time and latent defects. Also, the digital nature of our method presents a way for defect localization through the recorded bit streams. In this work, we also introduce a simple method to detect defects in the Widlar current reference and the bias current circuit. We validate all our results using extensive transistor-level simulations in UMC65nm technology."
+ },
+ {
+  "id": "W4414647924",
+  "doi": "https://doi.org/10.1109/mdts64924.2025.11177068",
+  "year": 2025,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "\"Pseudo-Soft Defects\": A Critical Examination of Their Effects on Analog Circuit Performance",
+  "abstract": "The growing complexity of analog and mixed-signal (AMS) circuits in critical applications like automotive and aerospace systems underscores the importance of reliable fault detection. While digital defect detection has advanced significantly, AMS circuits testing lags behind, hindered by inconsistent terminologies and limited standardization. This work introduces the concept of Pseudo-soft defects, where catastrophic (hard) defects mimic parametric (soft) defect behavior, complicating traditional classification and testing approaches. This paper critically analyzes the implications of pseudo-soft defects in key classes of AMS circuits, including amplifiers, filters and oscillators. We show that these pseudo-soft defects degrade performance without totally altering circuit connectivity, posing unique challenges for defect detection and classification. Our findings highlight the need for improved methodologies and standardized frameworks to enhance defect coverage and reliability metrics in AMS circuits, bridging the gap between analog and digital testing standards."
+ },
+ {
+  "id": "W2365857479",
+  "doi": "https://doi.org/10.1016/j.vlsi.2016.05.001",
+  "year": 2016,
+  "type": "article",
+  "venue": "Integration",
+  "cited_by": 15,
+  "title": "Automatic generation of test infrastructures for analog integrated circuits by controllability and observability co-optimization",
+  "abstract": ""
+ },
+ {
+  "id": "W2983258159",
+  "doi": "https://doi.org/10.1007/978-3-030-30726-4_17",
+  "year": 2019,
+  "type": "book-chapter",
+  "venue": "Mathematics in industry",
+  "cited_by": 1,
+  "title": "Fast Fault Simulation for Detecting Erroneous Connections in ICs",
+  "abstract": ""
+ },
+ {
+  "id": "W2609933764",
+  "doi": "https://doi.org/10.1109/latw.2017.7906740",
+  "year": 2017,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Low cost automatic test vector generation for structural analog testing",
+  "abstract": "This work presents a low cost automatic method to test vector generation for defect-oriented structural analog testing. An optimal set of analog single tone signals is obtained by computing the frequency response of circuit nodes, while iteratively injecting faults, using a SPICE simulator. The method also allows to identify the nodes of the circuit with higher observabilities to the injected faults, by comparing the obtained fault coverage as a function of frequency. A 130 nm ΣΔ modulator is used as case study to validate the technique under fault injection campaigns. Up to 100% fault coverage is obtained depending on the number of test points. A trade-off is identified, in such a way that a single test point may be used, achieving 95% of fault coverage. The optimized sets of single tone signals can be either combined in a multi-tone testing strategy or sequentially applied during the test application phase."
+ },
+ {
+  "id": "W4388798454",
+  "doi": "https://doi.org/10.1142/s0218126624501469",
+  "year": 2023,
+  "type": "article",
+  "venue": "Journal of Circuits Systems and Computers",
+  "cited_by": 2,
+  "title": "A Defects Classification Algorithm for the Hybrid OBT–IDDQ Fault Diagnosis Technique in Analog CMOS Integrated Circuits",
+  "abstract": "In this paper, a robust fault detection methodology for complex analog CMOS integrated filters is presented. It is based on combining the two types of testing methodologies, Oscillation-Based Testing (OBT) and IDDQ testing, i.e., measuring of the power-supply current ([Formula: see text]). The proposed methodology is applied to the Bi-quad Sallen–Key band-pass (BP) filter cell with relatively complex, two-stage, class-AB-output, operational amplifier (opamp) topology. The filter is custom designed targeting the 180-nm CMOS technology. Hundreds of time-domain simulations and analyses of the circuit output signal are performed in order to obtain the fault dictionary. The presented results show that the proposed hybrid OBT–IDDQ methodology is significantly more efficient in the defects coverage than any of the particular test methodologies alone. Subsequently, the specific algorithm for the defects classification is proposed. Based on the classification, certain degree of diagnosis of the individual defect, or a group of defects, can be achieved."
+ },
+ {
+  "id": "W1982268872",
+  "doi": "https://doi.org/10.1007/s10836-006-9318-8",
+  "year": 2006,
+  "type": "article",
+  "venue": "Journal of Electronic Testing",
+  "cited_by": 21,
+  "title": "Defect Simulation Methodology for iDDT Testing",
+  "abstract": ""
+ },
+ {
+  "id": "W7163054516",
+  "doi": "https://doi.org/10.1016/j.aeue.2026.156416",
+  "year": 2026,
+  "type": "article",
+  "venue": "AEU - International Journal of Electronics and Communications",
+  "cited_by": 0,
+  "title": "Optimal DfT test-transistor insertion for neural-network-classification-boosted latent pinhole detection and monitoring in Analog circuits",
+  "abstract": ""
+ },
+ {
+  "id": "W4411172889",
+  "doi": "https://doi.org/10.1109/vts65138.2025.11022865",
+  "year": 2025,
+  "type": "conference-abstract",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Hardware Security and Test for AMS Circuits",
+  "abstract": "With the analog defect modeling and coverage standard, IEEE P2427, coming close to being published, analog circuit testing seems poised to kick into high gear. Working backwards from the goal of lowering analog DPPM, in this talk we will present a practical workflow with emphasis on a few key components – systematic analysis of defect detectability, stimulus quality assessment, and analog test generation – and how these can be applied effectively."
+ },
+ {
+  "id": "W4376135190",
+  "doi": "https://doi.org/10.21203/rs.3.rs-2890198/v1",
+  "year": 2023,
+  "type": "preprint",
+  "venue": "Research Square",
+  "cited_by": 3,
+  "title": "Defect Detection and Localization in Operational Amplifiers using Digital Control and Monitor Circuits",
+  "abstract": "Abstract Operational amplifiers (op amps) are fundamental blocks that find wide application both as stand-alone devices and as crucial building blocks embedded in various Systems on Chips (SoCs). Achieving high defect coverage as well as performing diagnosis and defect localization in these circuits has been proven to be a difficult/expensive task even with sophisticated analog and digital testing circuitry. ISO26262 Standard for functional safety (FuSa) places stringent requirement that an automotive IC must have a very high defect coverage (usually greater than 90%). This reinforce the need to improve the robustness in the design of analog and mixed signal (AMS) circuits to ensure their reliability especially if they are used in mission critical industries. This paper presents a simple defect detection, diagnosis, and localization method for op amps including Widlar current reference and biasing circuitry and can be used both for production and in-field tests for online health monitoring to ensure continued reliability during integrated circuits’ (IC) lifetime. We rigorously validate all our results using extensive transistor-level simulations of two op amps architectures (folded cascode and telescopic) designed in MUSE TSMC 180nm technology. For the folded cascode op amp, the proposed method achieves a worst-case defect coverage of 94.5% and a best-case coverage of 98%. Similarly for the telescopic op amp, the proposed method attains a worst- and best-case defect coverage of 97% and 99% respectively. Furthermore, in this work, we also propose a defect diagnosis and localization strategy using recorded bit streams from states of digital injectors and detectors."
+ },
+ {
+  "id": "W4283739058",
+  "doi": "https://doi.org/10.1109/ets54262.2022.9810365",
+  "year": 2022,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "ETS 2022 Panel Discussion",
+  "abstract": "Estimation of Defective Parts Per Million (DPPM) for digital circuits is no longer a straightforward task for nanotechnologies, even with the help of Williams-Brown or Seth-Agrawal formulas, well-established fault models and cell-aware automatic test pattern generation (ATPG).For analog and mixed-signal (AMS) circuits, the problem has additional dimensions of complexity because defect coverage can be obtained only with realistic defect models and a defect simulation campaign.For practical reasons, a defect campaign cannot be exhaustive for state-of-the art ICs with AMS modules, implying that at least defect selection, defect likelihoods and coverage estimate precision will have to be considered.Experts from industry and academia shared their views about DPPM estimation."
+ },
+ {
+  "id": "W2564408197",
+  "doi": "https://doi.org/10.1109/ats.2016.33",
+  "year": 2016,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 11,
+  "title": "Efficient Cell-Aware Fault Modeling by Switch-Level Test Generation",
+  "abstract": "This paper proposes methods to drastically reduce the expensive analog fault simulation currently used to create cell-aware fault models. By exploiting low-power properties of common CMOS designs, most defects in the transistor-level netlist containing parasitics can be represented by just two canonical fault classes. Via simple circuit analysis, we show that faulty behaviors are completely predictable as the defect resistance parameter value varies from zero to infinity, thus eliminating the need for circuit simulation at multiple parameter values. The two canonical fault classes can be modeled by transistor switch stuck-open and stuck-closed faults. Rather than enumerating the full combination cell input patterns to search for defect detection conditions by analog fault simulation, switch-level test generation can obtain those input conditions directly, thereby reducing significantly the role of analog simulation to that of ranking conditions in terms of detection effectiveness."
+ },
+ {
+  "id": "W4411724779",
+  "doi": "https://doi.org/10.1109/iscas56072.2025.11044075",
+  "year": 2025,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 1,
+  "title": "Robust Defect Detection for Phase-Locked Loops using All-Digital Built-In Self-Test (BIST) Circuitry",
+  "abstract": "The rising demand for defect-free integrated circuits (ICs), especially in the mission-critical automotive industry, has stimulated the development of more efficient defect detection methods. Currently, defect testing methods for digital circuits are far more advanced than for analog circuits, largely due to the greater functional complexity of analog designs. However, in the automotive industry, almost 80% of IC failures stem from defects in analog circuits, creating an urgent need for robust and cost-effective defect detection techniques for analog and mixed-signal (AMS) circuits. This paper presents an all-digital defect detection approach for charge-pump phase-locked loops (CP-PLLs). The proposed Design for Test (DFT) strategy harnesses the robustness of digital control and monitoring circuits to improve detection accuracy, minimizing false failures. Through extensive transistor-level simulations, we demonstrate that the proposed method achieves a high defect coverage of over 97.5% with minimal chip area (< 0.1%) requirements for the BIST circuits."
+ },
+ {
+  "id": "W2082783753",
+  "doi": "https://doi.org/10.1109/vts.2014.6818759",
+  "year": 2014,
+  "type": "conference-abstract",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Innovative practices session 4C: Disruptive solutions in the non-digital world",
+  "abstract": "Achieving automotive quality requires IC tests that achieve 100% coverage of potential defects. With new cell-aware digital test pattern generation techniques and the simple stuck-at fault model, this has proven practical for digital circuitry, but there is no equivalent for mixed-signal circuitry. A simple but realistic analog defect model is described, based on industrial observations and theory. It is consistent with previous proposals, but has novel differences that make it suitable for schematic and layout-extracted netlists and more efficient to simulate. A couple of examples show its effectiveness."
+ },
+ {
+  "id": "W3139465983",
+  "doi": "https://doi.org/10.1109/date.2007.364400",
+  "year": 2007,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 4,
+  "title": "Test Quality Analysis and Improvement for an Embedded Asynchronous FIFO",
+  "abstract": "Embedded first-in first-out (FIFO) memories are increasingly used in many IC designs. We have created a new full-custom embedded FIFO module with asynchronous read and write clocks, which is at least a factor two smaller and also faster than SRAM-based and standard-cell-based counterparts. The detection qualities of the FIFO test for both hard and weak resistive shorts and opens have been analyzed by an IFA-like method based on analog simulation. The defect coverage of the initial FIFO test for shorts in the bit-cell matrix has been improved by inclusion of an additional data background and low-voltage testing; for low-resistant shorts, 100% defect coverage is obtained. The defect coverage for opens has been improved by a new test procedure which includes waiting periods"
+ },
+ {
+  "id": "W2956965484",
+  "doi": "https://doi.org/10.1109/vts.2019.8758629",
+  "year": 2019,
+  "type": "conference-abstract",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Innovative Practices on IEEE 1687.xyz",
+  "abstract": "The IEEE 1687-2014 standard introduced the concept of portable, retargetable tests for digital circuits and taught how to apply them via a JTAG Test Access Port. Two follow-on standardization efforts address the topics of portable, retargetable analog tests (IEEE P1687.2) and applying analog or digital tests via non-TAP interfaces (IEEE P1687.1). IEEE P2427 complements these efforts by defining how to measure and report coverage of analog tests. This session will use a running example to show how all three initiatives play together."
+ },
+ {
+  "id": "W2100157586",
+  "doi": "https://doi.org/10.1109/vlsi-soc.2013.6673230",
+  "year": 2013,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 1,
+  "title": "Embedded tutorials: Embedded tutorial 1: Cell-aware test-from gates to transistors",
+  "abstract": "Devices manufactured in 20 nm and smaller geometry technologies will potentially be very large by today's standards, they will also have new characteristics implied by things like process variability and adoption of FinFET transistors. The industry has cumulatively adopted more and more sophisticated fault models that use timing as well as layout information. There is a growing body of experimental data showing it is still insufficient. The next area of focus will be the quality of test. Cell-aware test is one of the most promising approaches developed over the last five years aimed at improving the quality of test while maintaining the efficiency of gate-level approach. This approach combines two levels of abstraction to provide trade-offs between accuracy and efficiency. The first step creates the cell-aware test library models. It starts with standard cell libraries and performs layout extraction. Realistic defects (bridges and opens) are injected into the SPICE netlist, and analog fault simulation is performed to determine the conditions under which the defects are detected. Those conditions are aggregated to create a compact and efficient representation of the libraries for ATPG done at the gate-level. Generation of library views for cell-aware test is performed only once for a given standard cell library. The final cell-aware ATPG generates the high quality test patterns based on the cell-aware library views. This guarantees that the investment in gate-level ATPG infrastructure could be efficiently utilized. The technology has been used on a number of high-volume industrial designs. The experimental data show a significant increase of defect coverage and the corresponding improvement of defect rate."
+ },
+ {
+  "id": "W4400877876",
+  "doi": "https://doi.org/10.3390/electronics13142871",
+  "year": 2024,
+  "type": "article",
+  "venue": "Electronics",
+  "cited_by": 3,
+  "title": "Operational Amplifiers Defect Detection and Localization Using Digital Injectors and Observer Circuits",
+  "abstract": "Operational amplifiers (op amps) are fundamental blocks that find wide application both as stand-alone devices and as crucial blocks embedded in various Systems on Chips (SoCs). Achieving high defect coverage, as well as performing defect localization in these circuits, has proven to be a difficult/expensive task, even with sophisticated testing circuitry. The ISO 26262 standard for functional safety (FuSa) includes the stringent requirement that an automotive IC must have a very high defect coverage. This reinforces the need to ensure the functionality of analog and mixed (AMS) circuits, especially in mission critical applications. This paper presents an all-digital op amp defect detection, diagnosis, and localization method that can be used both for production and in-field tests and discusses various implementation of the proposed method. We validated our results using extensive transistor-level simulations of multiple op amp architectures using TSMC 180 nm technology. Across op amp architectures and multiple implementation approaches, we achieved a worst-case and best-case defect coverage of 94.5% and 99%, respectively. Furthermore, in this work, we also propose a defect diagnosis and localization strategy using recorded bit streams from states of digital injectors and detectors."
+ },
+ {
+  "id": "W3046774195",
+  "doi": "https://doi.org/10.1109/jestpe.2020.3013229",
+  "year": 2020,
+  "type": "article",
+  "venue": "IEEE Journal of Emerging and Selected Topics in Power Electronics",
+  "cited_by": 7,
+  "title": "Assessing the Effectiveness of Different Test Approaches for Power Devices in a PCB",
+  "abstract": "Power electronic systems using printed circuit boards (PCBs) are broadly used in many applications, including some safety-critical ones. Several standards (e.g., ISO26262 for the automotive sector and DO-178 for avionics) mandate the adoption of effective test procedures for all electronic systems. However, the metrics to be used to compute the effectiveness of the adopted test procedures are not so clearly defined for power devices and systems. In the past years, some commercial fault simulation tools (e.g., DefectSim by Mentor Graphics and TestMAX by Synopsys) for analog circuits have been introduced, together with some new fault models. With these new tools, systematic analog fault simulation finally became practically feasible. The aim of this article is twofold: first, we propose a method to extend the usage of the new analog fault models to power devices, thus allowing to compute a fault coverage figure for a given test. Second, we adopt the method on a case study, for which we quantitatively evaluate the effectiveness of some test procedures commonly used at the PCB level for the detection of faults inside power devices. A typical power supply unit (PSU) used in industrial products, including power transistors and power diodes, is considered. The analysis of the gathered results shows that using the new method we can identify the main points of strength/weakness of the different test solutions in a quantitative and deterministic manner and pinpoint the faults escaping to each one."
+ },
+ {
+  "id": "W4312893281",
+  "doi": "https://doi.org/10.1109/iscas48785.2022.9937644",
+  "year": 2022,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 12,
+  "title": "Robust Built-in Defect-Detection for Low Drop-Out Regulators using Digital Mismatch Injection",
+  "abstract": "The number of electronic components in mission-critical applications is increasing rapidly and, with the dawn of electric vehicles, this increase is expected to accelerate in the near future. As functional safety (FuSa) is of utmost importance in these applications, the increasing demand for integrated circuits with zero defective parts per million (DPPM) is pressing the chip industry to achieve high defect coverage. In this paper, simple digital Design for Test (DfT) techniques are presented to detect defects in Low Drop-Out Regulators (LDO). The proposed method uses digital mismatch injection and digital-like detectors to detect various defects in an LDO. The digital nature of the proposed method can help reduce the test cost by avoiding expensive and time-consuming analog testing circuitry. Using spice simulations, we show that our method can detect up to 97.5% of the defects providing high defect-coverage. Additionally, as our injectors and detectors are simple in nature, they are not only area-efficient and easy-to-design but also easily scalable. Furthermore, in this work, we also introduce a simple and robust dual-threshold detector that can be used to monitor faults in biasing circuits."
+ },
+ {
+  "id": "W2151337473",
+  "doi": "https://doi.org/10.1109/tcad.2008.923247",
+  "year": 2008,
+  "type": "article",
+  "venue": "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems",
+  "cited_by": 32,
+  "title": "Bridging Fault Test Method With Adaptive Power Management Awareness",
+  "abstract": "A key design constraint of circuits used in hand-held devices is the power consumption, mainly due to battery-life limitations. Adaptive power management (APM) techniques aim at increasing the battery life of such devices by adjusting the supply voltage and operating frequency, and thus the power consumption, according to the workload. Testing for resistive bridging defects in APM-enabled designs raises a number of challenges due to their complex analog behavior. Testing at more than one supply voltage setting can be employed to improve defect coverage in such systems; however, switching between several supply voltage settings has a detrimental impact on the overall cost of test. This paper proposes a multi- automatic test generation method which delivers 100% resistive bridging defect coverage and also a way of reducing the number of supply voltage settings required during test through test point insertion. The proposed techniques have been experimentally validated using a number of benchmark circuits."
+ },
+ {
+  "id": "W2991965607",
+  "doi": "https://doi.org/10.1109/vlsi-soc.2019.8920306",
+  "year": 2019,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 7,
+  "title": "Software-Based Self-Test for Transition Faults: a Case Study",
+  "abstract": "Scan chain-based testing is a de facto standard for guaranteeing quality of manufactured digital circuits. However, functional approaches are often used to complement test suites, especially when analog circuitry is integrated in the chip. Software-Based Self-Test (SBST) can be used to increase defect coverage also in digital parts, or to replace part of the scan pattern set to reduce tester requirements, or to complement the defect coverage achieved by structural techniques when advanced semiconductor technologies introduce new defect types. This paper deals with SBST targeting transition delay faults, and describes a case of study based on a peripheral module integrated in a System on Chip (SoC). A method to develop an effective functional test is first described. A comparative analysis of the delay faults detected by scan and SBST is then presented, together with some discussion about the obtained results."
+ },
+ {
+  "id": "W4404848953",
+  "doi": "https://doi.org/10.1109/itc51657.2024.00048",
+  "year": 2024,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Diagnosis of intermittent faults and corresponding algorithm development beyond 5nm technologies",
+  "abstract": "Scaling down the transistor size enables a cost-effective high-performing solution in modern semiconductor designs. However, the added complexity of process and extremely small critical three-dimensional spacing of the transistor structure make it more challenging to maintain precise variation control. Defects introduced here can lead to different intermittent behaviors, some of which might not appear as fails during traditional testing procedures but might manifest as a system failure in the field. The emergence of artificial intelligence chip design has introduced high demands for a massive number of multi-cores connected in parallel with a huge memory array size in a chip. This further increases the importance of identifying rare tail events through in-depth diagnosis in advanced nodes. Various sophisticated algorithms have been proposed to improve defect coverage. However, the addition of algorithms may increase test cost tremendously while providing limited benefits for specific fault types which may not happen. Therefore, selecting a smart combination of algorithms that provide enough coverage for the specific product application is essential for cost-effective testing. In this paper, we review the electrical properties of marginal defects inserted in an SRAM device to evaluate test escapes in the latest technology. We also present a new algorithm to improve test coverage efficiency. A commercially available memory BIST tool was used to load a DFT compatible algorithm and operation set for memory test. A commercially available analog simulation tool was used in combination with a novel defect simulation flow to evaluate digital and analog behavior of the device."
+ },
+ {
+  "id": "W6999731052",
+  "doi": "https://doi.org/10.70675/59d53a95ze3b3z4f2ez9b8cz391f6237574a",
+  "year": 2021,
+  "type": "dissertation",
+  "venue": "HAL (Le Centre pour la Communication Scientifique Directe)",
+  "cited_by": 0,
+  "title": "Développement d’outils de diagnostic pour l’analyse des défaillances des circuits intégrés analogiques et mixtes",
+  "abstract": "The automobile industry nowadays is in constant developments in all branches of this sector. Electronics is also involved in this evolution. The latest technological nodes are used in many automotive applications today. New challenges are thus faced to ensure the safety and reliability of these circuits. One of these is the fault diagnosis of analog and mixed-signal circuits. Performing failure analysis is today very difficult, due to the lack of standard automated diagnosis method. Standard techniques do not always provide a conclusive analysis due to the safety controls. These are required for such applications. It is thus common not to directly analyze the failure state of the circuit, that cannot be activated for safety reasons. Only the consequences of such a state are analyzed, causing an unacceptable analysis time with a low success rate. The goal of this thesis is to provide a robust diagnosis solution for analog circuits, with simulation and design solutions for analysis. This allows the analyst to overcome the highlighted limitations. To achieve this goal, this work proposes developments in three main areas. The first is the simulation to reproduce the images of the most used microscopy techniques for fault isolation. They are photoemission microscopy and thermal laser stimulation. The goal of the simulation is to speed up the inspections with such tools. Moreover they are used to reproduce the images of defective units to validate fault hypotheses. In this context we developed an automatic simulation tool for photoemission. Besides, we propose an innovative simulation method for thermal laser stimulation techniques. The benefits of both solutions are proven by real analyses solved with these solutions.The second area of development is the accessibility to the internal signals. Full measurement of internal device signals implies better fault diagnosis. In this work we propose a new solution for inspect the internal signals by light emitting elementary components. They are connected to the main functionalities and report their state through their light emitted. Such solution is implemented in a real silicon analog device showing an improved fault detection. Another technique explored in this work is the use of the eBeam dynamic voltage contrast to access the lowest level of metals.The third area concern the fault diagnosis using analog simulation. We propose a solution to find the relevant signals and devices of an integrated circuit. This method helps the analyst to focus only on the list of circuit features that are relevant respect to the failure. We developed it, using standard analog simulators. Besides we also introduce the use of modern analog fault simulation available on the market. The exploitation of such simulators along with standard failure analysis techniques is presented. We developed a new workflow for fault diagnosis and applied to real cases. Thanks to this method, a list of candidates to look at is available during the analyses. Finally, we propose a robust diagnosis flow, in which all the techniques and innovations presented in this thesis are mixed. Its application allows the analyst to solve critical cases with a multitude of solutions. The analyses become faster and more accurate."
+ },
+ {
+  "id": "W2162433349",
+  "doi": "https://doi.org/10.1109/iccd.2008.4751867",
+  "year": 2008,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 50,
+  "title": "Test cost minimization through adaptive test development",
+  "abstract": "The ever-increasing complexity of mixed-signal circuits imposes an increasingly complicated and comprehensive parametric test requirement, resulting in a highly lengthened manufacturing test phase. Attaining parametric test cost reduction with no test quality degradation constitutes a critical challenge during test development. The capability of parametric test data to capture systematic process variations engenders a highly accurate prediction of the efficiency of each test for a particular lot of chips even on the basis of a small quantity of characterized data. The predicted test efficiency further enables the adjustment of the test set and test order, leading to an early detection of faults. We explore such an adaptive strategy, by introducing a technique that prunes the test set based on a test correlation analysis. A test selection algorithm is proposed to identify the minimum set of tests that delivers a satisfactory defect coverage. A probabilistic measure that reflects the defect detection efficiency is used to order the test set so as to enhance the probability of an early detection of faulty chips. The test sequence is further optimized during the testing process by dynamically adjusting the initial test order to adapt to the local defect pattern fluctuations in the lot of chips under test. Experimental results show that the proposed technique delivers significant test time reductions while attaining higher test quality compared to previous adaptive test methodologies."
+ },
+ {
+  "id": "W2087825164",
+  "doi": "https://doi.org/10.1016/j.vlsi.2005.08.002",
+  "year": 2005,
+  "type": "article",
+  "venue": "Integration",
+  "cited_by": 8,
+  "title": "Automatic generation of defect injectable VHDL fault models for ASIC standard cell libraries",
+  "abstract": ""
+ },
+ {
+  "id": "W4415822155",
+  "doi": "https://doi.org/10.1109/itc58126.2025.00076",
+  "year": 2025,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Combined Array and ADC Structural Test for RRAM-based Multiply-and-Accumulate Circuits",
+  "abstract": "Compute-in-memory (CIM) AI accelerators using non-volatile memories like RRAM enable energy-efficient edge inference by executing Multiply-Accumulate (MAC) operations directly in memory in a single cycle. These designs modify memory cells and analog-to-digital converters (ADCs), introducing faults not seen in standard memories. We present the first structural testing methodology and framework for RRAM-based CIM MAC circuits, including defect and fault models for memory cells and ADCs. Our robust inference-driven tests exercise full MAC functionality, significantly reducing test time compared to traditional methods, and integrating cell and peripheral testing to ensure high reliability, defect coverage, and operational efficiency."
+ },
+ {
+  "id": "W2468361032",
+  "doi": "",
+  "year": 2016,
+  "type": "dissertation",
+  "venue": "OpenCommons at University of Connecticut (University of Connecticut)",
+  "cited_by": 6,
+  "title": "Establishment of Trust and Integrity in Modern Supply Chain from Design to Resign",
+  "abstract": "With the advent of globalization and the resulting horizontal integration, present-day electronic component supply chain has become extremely complex and called for immediate solutions to eliminate counterfeit integrated circuits (ICs). Such counterfeit ICs have raised serious concerns regarding the safety and security of military systems, financial infrastructures, transportation, communication, household appliances, and many more applications. Various types of counterfeit ICs - recycled, remarked, overproduced, out-of-spec/defective, cloned, forged documentation, and tampered - have made the supply chain vulnerable to various attacks. However, due to the lack of efficient detection and avoidance techniques, many more instances of counterfeit ICs evade detection than those that are actually detected. Over the past few years, standards and programs have been put in place throughout the supply chain that outline testing, documenting, and reporting procedures for counterfeit IC detection. However, these test methods are mostly designed to detect only recycled and remarked ICs. Moreover, there is little uniformity in the test results among the various entities involved in the test process. Currently, there are no metrics for evaluating counterfeit detection methods. In addition, excessive cost and time to implement these tests make the detection process even challenging. In this research, we have addressed the aforementioned issues by assessing existing test methods with newly developed test metrics, and developing different design-for-anti-counterfeit (DfAC) measures.\\nFor the assessment of test methods, we have proposed taxonomies for (i) all different counterfeit IC types currently infiltrating the electronic component supply chain, (ii) defects present in different counterfeit ICs, and (iii) currently available test methods for detecting these ICs. Based on these taxonomies, we have introduced relevant and novel test metrics to evaluate the effectiveness of test methods. We have developed a comprehensive framework (i) for assessing a set of test methods to evaluate their effectiveness based on the newly developed metrics, (ii) selecting a set of test methods to maximize counterfeit defect coverage considering test cost and time budget, and (iii) deciding on the best set of test methods for achieving maximum counterfeit defect coverage (CDC).\\nDue to the sheer number of different component types (digital, analog, and mixed-signal) and sizes (large or small), it becomes extremely difficult to develop a one-size-fits-all DfAC measure to detect and prevent counterfeit ICs. Thus, we have proposed a suite of DfAC measures, which can help us to detect these counterfeit ICs without the need for conventional test methods. First, we propose a group of solutions for combating die and IC recycling (CDIR). These solutions include light-weight, on-chip structures based on ring oscillators (RO-CDIR), and semiconductor fuses (F-CDIR). Each structure meets the unique needs and limitations of different part types and sizes, providing excellent coverage for recycled ICs. Recycled digital ICs can be effectively detected by using RO-CDIR. Any recycled ICs, specifically analog and mixed-signal ICs, can be identified by testing our F-CDIR with very low cost measurement devices, e.g., a multimeter. Second, we have proposed two improved versions of RO-CDIR as it is extremely challenging to detect a recycled IC that has been used for a very short period of time. These versions address the fact that process variations outpace the degradation caused by aging especially in lower technology nodes, making it harder to detect potential recycling by aging degradation. Simulation results demonstrate that these CDIRs can detect ICs used even for a few hours. Finally, we present FORTIS: a comprehensive solution for protecting semiconductor intellectual properties (IPs) and ICs by ensuring forward trust between all entities involved in the system-on-chip (SoC) design and fabrication process. FORTIS is designed to prevent IC overproduction; however, it can be used to prevent other counterfeit types (except recycled ones). FORTIS uses an existing logic encryption technique to obfuscate the netlist of a SoC or a third party IP and allows manufacturing tests before the activation of chips, a feature that is lacking in other competing techniques. In addition, we also propose to attach an IP digest to the IP header to prevent modification of an IP by the SoC designers. We have shown that our approach is resistant to various attacks with the cost of minimal area overhead."
+ },
+ {
+  "id": "W2054222051",
+  "doi": "https://doi.org/10.1016/j.jse.2011.07.030",
+  "year": 2011,
+  "type": "article",
+  "venue": "Journal of Shoulder and Elbow Surgery",
+  "cited_by": 55,
+  "title": "Early clinical and structural results after autologous chondrocyte transplantation at the glenohumeral joint",
+  "abstract": ""
+ },
+ {
+  "id": "W2493669808",
+  "doi": "https://doi.org/10.1201/b17555-24",
+  "year": 2014,
+  "type": "book-chapter",
+  "venue": "",
+  "cited_by": 0,
+  "title": "Logic Testing based Hardware Trojan Detection",
+  "abstract": "In this chapter, we propose a novel testing methodology, referred to asMERO (Multiple Excitation of Rare Occurence) protection against hardware Trojans. MERO comprises of a statistical test generation approach for Trojan detection and a coverage determination approach for quantifying the level of trust. The main objective of the proposed methodology is to derive a set of test patterns that is compact (minimizing test time and cost), while maximizing the Trojan detection coverage. The basic concept is to detect rare or low probability conditions at the internal nodes, and then derive an optimal set of vectors than can trigger each of the selected low probability nodes individually to their rare logic values multiple times (e.g. at least N times, where N is a given parameter). As analyzed in Section 14.2.1, this increases the probability of detection of an arbitrary Trojan instance. By increasing the toggling of nodes that are random-pattern resistant, it improves the probability of activating an unknown Trojan compared to purely random patterns. The proposed methodology is conceptually similar to the N-detect test [31, 302] used in stuck-at ATPG (automatic test pattern generation), where a test set is generated to detect each single stuck-at fault in a circuit by at least N diﬀerent patterns to improve test quality and defect coverage [302]. In this chapter, we focus on digital Trojans [408], which can be inserted into a design either in a design house (e.g. by untrusted CAD tool or IP) or in a foundry. We do not consider the Trojans where the triggering mechanism and/or eﬀect are analog in nature (e.g. thermal ﬂuctuations)."
+ },
+ {
+  "id": "W2165973438",
+  "doi": "https://doi.org/10.1016/j.arthro.2013.05.021",
+  "year": 2013,
+  "type": "article",
+  "venue": "Arthroscopy The Journal of Arthroscopic and Related Surgery",
+  "cited_by": 134,
+  "title": "Preliminary Results of a Novel Single‐Stage Cartilage Restoration Technique: Particulated Juvenile Articular Cartilage Allograft for Chondral Defects of the Patella",
+  "abstract": "PURPOSE: To evaluate outcomes and magnetic resonance imaging (MRI) findings after use of particulated juvenile cartilage for the treatment of focal Outerbridge grade 4 articular cartilage defects of the patella. METHODS: From 2007 to 2011, 16 patients (2 bilateral) underwent a novel single-stage articular cartilage restoration procedure using particulated juvenile articular cartilage allograft. We enrolled 15 knees (13 patients) in this study. The mean age at surgery was 26.4 ± 9.1 years, and the mean postoperative follow-up was 28.8 ± 10.2 months. A musculoskeletal radiologist evaluated each knee with postoperative MRI for the International Cartilage Repair Society cartilage repair assessment score, graft hypertrophy, bony changes around the graft, and percent fill of the defect. All patients also completed the Knee Injury and Osteoarthritis Outcome Score, International Knee Documentation Committee Subjective Knee Evaluation, and Kujala clinical outcome survey (scale, 0 to 100), as well as the Tegner activity scale and visual analog pain scale (scale, 0 to 10). RESULTS: The mean International Cartilage Repair Society cartilage repair assessment score on MRI was 8.0 ± 2.8, a nearly normal assessment. Of 15 knees, 11 (73%) were found to have normal or nearly normal cartilage repair. Three patients had mild graft hypertrophy whereas 2 had gross graft hypertrophy, 2 of whom required arthroscopic debridement because of symptoms. The mean fill of the defect at follow-up was 89% ± 19.6%, with 12 of 15 knees (80%) showing at least 90% defect coverage. The mean clinical outcome score at follow-up was 73.3 ± 17.6 for the International Knee Documentation Committee evaluation, and the mean scores for each subdomain of the Knee Injury and Osteoarthritis Outcome Score were as follows: 84.2 ± 14.2 for pain, 85.0 ± 12.3 for symptoms and stiffness, 88.9 ± 12.9 for activities of daily living, 62.0 ± 25.1 for sports and recreation, and 60.8 ± 28.6 for quality of life. The median score for the Kujala survey was 79 (range, 55 to 99). The median score on the Tegner activity scale was 5 (range, 3 to 9), and the mean score on the visual analog scale was 1.9 ± 1.4, indicating minimal pain. CONCLUSIONS: Preliminary results suggest that cartilage restoration using particulated juvenile articular cartilage allograft offers a viable option for patients with focal grade 4 articular cartilage defects of the patella."
+ },
+ {
+  "id": "W2974755124",
+  "doi": "https://doi.org/10.1016/j.jse.2019.07.030",
+  "year": 2019,
+  "type": "article",
+  "venue": "Journal of Shoulder and Elbow Surgery",
+  "cited_by": 36,
+  "title": "Autologous chondrocyte implantation for treatment of focal articular cartilage defects of the humeral head",
+  "abstract": ""
+ },
+ {
+  "id": "W7134897210",
+  "doi": "https://doi.org/10.1109/asp-dac66049.2026.11420683",
+  "year": 2026,
+  "type": "conference-paper",
+  "venue": "",
+  "cited_by": 0,
+  "title": "PV-ReCAM: Process Variation-Aware Testing for ReRAM-based Content Addressable Memory",
+  "abstract": "Computation-in-Memory (CiM) is a promising solution to reduce the energy and latency caused by frequent data transfers between the processor and memory, a problem commonly referred to as the memory wall. For instance, comparing binary patterns to measure similarity is a common and challenging task in today’s emerging artificial intelligence applications. This can be implemented efficiently using Content Addressable Memory (CAM), which is well-suited for CiM-based acceleration of such tasks. To improve energy efficiency and performance, non-volatile memories (NVM) such as ReRAM (Redox-based RAM) can be utilized for the realization of CiMbased CAM. However, ReRAM is highly susceptible to process variations (PV), due to the immaturity of its process and inherent stochasticity. Moreover, the analog realization of CAM functionality using NVMs makes it more sensitive to these non-idealities. Conventional March tests, originally designed for memory fault detection, become ineffective in the presence of PV, which can alter ReCAM behavior and lead to test escapes. To address these challenges, this work systematically analyzes the impact of PV on ReCAM functionality. It proposes a generalized PV-aware March test that optimizes test patterns for both hard and PV-induced soft defects, achieving 100% defect coverage."
+ },
+ {
+  "id": "W4243462010",
+  "doi": "https://doi.org/10.1111/jcpe.64_12916",
+  "year": 2018,
+  "type": "conference-abstract",
+  "venue": "Journal Of Clinical Periodontology",
+  "cited_by": 0,
+  "title": "PC065: Clinical management of gingival recessions with laterally moved, coronally advanced flap and connective tissue graft: a case series",
+  "abstract": "S. Kayaalti-Yuksek, B. Karaduman, N.G. Kınoğlu Istanbul/Turkey Background: Periodontal plastic surgery has become a predictable method of managing gingival recession defects. The highest successful outcomes can be achieved with subepithelial connective tissue grafts (CTG). The significant advantage of CTG is providing the graft with an increased blood supply from the recipient bed and the pedicle flap. In the cases of deep gingival recession with absence apical keratinized tissue or shallow vestibule depth, laterally advanced flap can be used as pedicle flap. This report describes Miller class III gingival recession defects treated with a combination procedure of Laterally Moved, Coronally Advanced Flap (L,CAF) and Subepithelial Connective Tissue Graft (CTG). Clinical Procedure: A total of 3 deep buccal localize recession defects were associated with ≥5 mm buccal recession depth and no keratinized tissue in the anterior mandibular teeth. All patients were systemically healthy. Plaque index, gingival index, probing depth, recession depth, width of KT, clinical attachment level (CAL) and mean defect coverage were evaluated at baseline and 6 months after surgery. Patient satisfaction, hypersensitivity and root coverage esthetic scores were also assessed with Visual Analog Scale. Recession sites were treated with L,CPF with CTG. Coronal advancement of the lateral moved flap was the main modification of pedicle flap. Outcomes: 6 months after the surgery, clinically significant root coverage and CAL gain were achieved for all three cases. Mean CAL gain of recessions were 5.4 mm. Clinically significant increase of KT was observed. The position of gingival margin at the lateral donor site were not changed. The results demonstrated that the combination of L,CAF with CTG is promising for treating these advanced cases with Miller Class III gingival recessions. L,CAP technique showed successful mean root coverage and was able to increase the amount of KT. In addition, it was possible to obtain aesthetic result by providing texture, contour adaptation and color harmony."
+ },
+ {
+  "id": "W7170951433",
+  "doi": "https://doi.org/10.3390/biomedicines14081664",
+  "year": 2026,
+  "type": "article",
+  "venue": "Biomedicines",
+  "cited_by": 0,
+  "title": "Leukocyte-Rich Platelet-Rich Plasma Improves Cartilage Repair After High Tibial Osteotomy: A Second-Look Arthroscopic Study",
+  "abstract": "Background: High tibial osteotomy (HTO) is commonly performed to manage medial compartment knee osteoarthritis by correcting mechanical alignment; however, the role of adjunctive regenerative therapies remains uncertain. Methods: This retrospective study compared leukocyte-rich platelet-rich plasma (LR-PRP) with leukocyte-poor PRP (LP-PRP) in patients undergoing HTO. Forty patients were allocated into three groups: HTO alone (n = 10), HTO with LR-PRP (n = 20), and HTO with LP-PRP (n = 10). Clinical outcomes were assessed preoperatively and at 12 months using the Visual Analog Scale, Oxford Knee Score, and Western Ontario and McMaster Universities Osteoarthritis Index. Cartilage repair appearance was evaluated through second-look arthroscopy using the ICRS grading and Koshino staging systems. Multivariable analysis of covariance (ANCOVA), adjusting for baseline imbalances, was employed to evaluate postoperative outcomes. Results: All groups demonstrated significant improvements in pain and function (p < 0.05), with no significant differences among groups. However, Group B exhibited a greater shift toward lower ICRS grades than Group A (p < 0.05), whereas no significant difference was found between Groups C and A. Arthroscopic findings revealed more complete defect coverage and improved structural integrity in the LR-PRP group. Conclusions: These findings demonstrate a clear discrepancy exists between clinical and structural outcomes; while HTO drives substantial and comparable short-term functional improvements across all cohorts, adjunctive LR-PRP is positively associated with a significantly enhanced arthroscopic cartilage repair appearance compared to LP-PRP or HTO alone. Further prospective studies are needed to validate these findings and elucidate the underlying biological mechanisms."
+ }
+]
