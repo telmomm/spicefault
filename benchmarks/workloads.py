@@ -1,28 +1,21 @@
 """The workloads of the benchmarks.
 
-- `rc`: an RC low-pass filter with 30 faults. It needs nothing but ngspice.
-- `ecg`: the self-test measurements of the ECG front-end study, the realistic case. It
-  needs the `ecgfd` package, and comes with the same work done by the code of that
-  study, as the baseline to compare the framework with.
+For now there is one, an RC low-pass filter with 30 faults. It only checks that the
+benchmarks work: a simulation takes about 15 ms, so starting processes weighs as much
+as simulating. The validation circuits of docs/SCIENTIFIC_SCOPE.md, section 8, are to
+be added here as they are written.
 """
 
 from __future__ import annotations
 
-import importlib.util
-import sys
 from pathlib import Path
 
-import numpy as np
-
-from spicefault import Circuit, Experiment, Measurement, SimulationConfig, Waveform
+from spicefault import Circuit, Experiment, Measurement, SimulationConfig, VariationSet, Waveform
 from spicefault.faults import FaultUniverse, open_rule, parametric_rule, short_rule
 from spicefault.variation import tolerances
 
 REPO = Path(__file__).resolve().parents[1]
-WORKLOADS = ("rc", "ecg", "ecg-reference")
-HAS_ECGFD = importlib.util.find_spec("ecgfd") is not None
-# the ECG study written with spicefault lives with the equivalence tests for now
-sys.path.insert(0, str(REPO / "tests" / "regression"))
+WORKLOADS = ("rc",)
 
 RC_DEVIATIONS = [-0.5, -0.2, -0.1, -0.05, 0.05, 0.1, 0.2, 0.5]
 
@@ -36,6 +29,10 @@ def rc_universe(circuit: Circuit | None = None) -> FaultUniverse:
     return FaultUniverse(circuit, [open_rule(), short_rule(), parametric_rule(RC_DEVIATIONS)])
 
 
+def rc_tolerances(circuit: Circuit | None = None) -> VariationSet:
+    return tolerances(circuit or rc_circuit(), {"R": 0.01, "C": 0.05})
+
+
 def rc_experiment(n_samples: int, seed: int = 42) -> Experiment:
     """About `n_samples` simulations: half healthy, half spread over the 30 faults."""
     circuit = rc_circuit()
@@ -46,7 +43,7 @@ def rc_experiment(n_samples: int, seed: int = 42) -> Experiment:
         faults=faults,
         samples=per_fault,
         healthy_samples=max(n_samples - per_fault * len(faults), 1),
-        variations=tolerances(circuit, {"R": 0.01, "C": 0.05}),
+        variations=rc_tolerances(circuit),
         config=SimulationConfig(("op", "ac dec 20 1 1e5", "tran 10u 10m"), outputs=("v(out)",)),
         measurements=[
             Measurement.value("v(out)", name="dc"),
@@ -57,73 +54,11 @@ def rc_experiment(n_samples: int, seed: int = 42) -> Experiment:
         ],
         waveform=Waveform("v(out)", fs=10e3, duration=10e-3),
         seed=seed,
+        seeding="content",
     )
-
-
-def ecg_config(circuit: str, n_samples: int) -> dict:
-    """Configuration of the ECG study with one sample per fault and the rest healthy."""
-    from ecgfd.config import DEFAULT_CONFIG, load_config
-    from ecgfd.faults import fault_catalogue
-    from ecgfd.specs import with_nominal_gain
-
-    cfg = with_nominal_gain(load_config(DEFAULT_CONFIG, circuit))
-    n_faults = len(fault_catalogue(cfg))
-    cfg["dataset"] = {"n_healthy": max(n_samples - n_faults, 1), "n_per_fault": 1}
-    return cfg
-
-
-def ecg_experiment(circuit: str, n_samples: int) -> Experiment:
-    from ecg_adapter import service_experiment
-
-    return service_experiment(ecg_config(circuit, n_samples))
 
 
 def experiment(workload: str, n_samples: int) -> Experiment:
     if workload == "rc":
         return rc_experiment(n_samples)
-    if workload in ("ecg", "ecg-reference"):
-        if not HAS_ECGFD:
-            raise RuntimeError("the ECG workload needs the ecgfd package")
-        return ecg_experiment("integrated" if workload == "ecg" else "reference", n_samples)
     raise ValueError(f"unknown workload {workload!r}; available: {WORKLOADS}")
-
-
-# --- the same ECG work, done by the code of the ECG study -------------------------------
-
-
-def ecg_baseline_tasks(cfg: dict) -> list:
-    from ecgfd.dataset import build_tasks
-
-    return build_tasks(cfg)
-
-
-def ecg_baseline_worker(task, cfg: dict) -> tuple[dict, np.ndarray | None]:
-    """One case with `ecgfd`: draw, inject, simulate the self-test and extract its features.
-
-    The first of the two ngspice runs of `ecgfd.dataset.simulate_task`, which is the
-    work the spicefault experiment does.
-    """
-    from ecgfd.dataset import sample_rng
-    from ecgfd.sampling import instance_parameters, sample_instance
-    from ecgfd.simulate import measure, scalar_features
-    from ecgfd.spice import SimulationError
-
-    index, fault, replica = task
-    inst = fault.apply(sample_instance(cfg, sample_rng(cfg, index, replica)), cfg)
-    row = {
-        "condition": fault.id,
-        "condition_index": index,
-        "kind": fault.kind,
-        "target": fault.target,
-        "level": fault.level,
-        "replica": replica,
-        "sim_ok": True,
-        **instance_parameters(inst),
-    }
-    try:
-        m = measure(inst, cfg)
-    except SimulationError:
-        row["sim_ok"] = False
-        return row, None
-    row.update(scalar_features(m, cfg))
-    return row, m.pulse.astype(np.float32)

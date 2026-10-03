@@ -1,13 +1,15 @@
 """Runtime and parallel scalability (docs/EXPERIMENT_PLAN.md, experiment C).
 
-    python -m benchmarks.scalability.run --workload ecg --workers 1 2 4 8
+    python -m benchmarks.scalability.run --workers 1 2 4 8
 
 A fixed workload is simulated to disk with each number of workers, several times. The
 result holds every timing, and per number of workers the median throughput, the
 speed-up S(N) = T1 / TN and the efficiency E(N) = S(N) / N. It also holds the time of
 one sample split by phase, the peak memory, the bytes written and the cost of resuming
-a campaign. With the ECG workload, the same work is also done by the code of the ECG
-study, to measure what the framework costs.
+a campaign.
+
+The comparison with a script written directly against ngspice for the same task, which
+measures what the framework costs, is not implemented yet (docs/EXPERIMENT_PLAN.md).
 
 The protocol asks for an idle machine on mains power, at least 5 repetitions and 2000
 samples; those are the defaults. Smaller runs are for checking that the benchmark works.
@@ -117,19 +119,12 @@ def run(
     repetitions: int = 5,
     n_samples: int = 2000,
     chunk: int = 500,
-    baseline: bool = True,
 ) -> dict:
     experiment = workloads.experiment(workload, n_samples)
     experiment.check_picklable()
     plan = experiment.plan()
     n_points = None if experiment.waveform is None else experiment.waveform.n_points
     implementations = {"spicefault": (plan, simulate_sample, experiment)}
-    if baseline and workload.startswith("ecg"):
-        circuit = "integrated" if workload == "ecg" else "reference"
-        cfg = workloads.ecg_config(circuit, n_samples)
-        tasks = workloads.ecg_baseline_tasks(cfg)
-        assert len(tasks) == len(plan)
-        implementations["ecgfd"] = (tasks, workloads.ecg_baseline_worker, cfg)
 
     result = {
         "benchmark": "scalability",
@@ -144,14 +139,13 @@ def run(
         },
         "runs": [],
     }
-    last = {}
     for tasks, worker, context in implementations.values():  # warm-up, discarded
         timed_campaign(tasks[: min(len(tasks), 40)], worker, context, n_points, workers[-1], chunk)
     for repetition in range(repetitions):
         for n_workers in workers:
             for name, (tasks, worker, context) in implementations.items():
                 measured = timed_campaign(tasks, worker, context, n_points, n_workers, chunk)
-                last[name] = measured.pop("samples")
+                measured.pop("samples")
                 result["runs"].append(
                     {
                         "implementation": name,
@@ -183,22 +177,6 @@ def run(
     )
     result["bytes_per_sample"] = result["bytes_written"] / len(plan)
 
-    if "ecgfd" in implementations:
-        features = [m.name for m in experiment.measurements]
-        ours, theirs = last["spicefault"], last["ecgfd"]
-        # the value injected by an ina_cmrr fault is built per sample by the adapter
-        same = (theirs["kind"] != "ina_cmrr").to_numpy()
-        result["relative_throughput"] = {
-            str(n): summary["spicefault"][str(n)]["sims_per_s"]["median"]
-            / summary["ecgfd"][str(n)]["sims_per_s"]["median"]
-            for n in workers
-        }
-        result["outputs_identical_to_baseline"] = bool(
-            np.array_equal(
-                ours.loc[same, features].to_numpy(), theirs.loc[same, features].to_numpy()
-            )
-        )
-
     result["phase_breakdown"] = phase_breakdown(experiment, min(100, len(plan)))
     result["resume_overhead"] = resume_overhead(experiment, n_points, workers[-1], chunk)
     result["peak_memory"] = peak_memory_mb()
@@ -218,10 +196,6 @@ def report(result: dict) -> str:
                 f" {n:>7} {row['wall_s']['median']:>10.2f} {row['sims_per_s']['median']:>8.1f} "
                 f"{row['speedup']:>10.2f} {row['efficiency']:>12.2f}"
             )
-    if "relative_throughput" in result:
-        ratio = ", ".join(f"{n}: {r:.3f}" for n, r in result["relative_throughput"].items())
-        lines.append(f"\nthroughput relative to ecgfd, by workers: {ratio}")
-        lines.append(f"outputs identical to ecgfd: {result['outputs_identical_to_baseline']}")
     phases = result["phase_breakdown"]["ms_per_sample"]
     lines.append(
         "\ntime of one sample [ms]: " + ", ".join(f"{k} {v:.2f}" for k, v in phases.items())
@@ -239,11 +213,9 @@ def main() -> None:
     parser.add_argument("--repetitions", type=int, default=5)
     parser.add_argument("--samples", type=int, default=2000)
     parser.add_argument("--chunk", type=int, default=500)
-    parser.add_argument("--no-baseline", action="store_true")
     parser.add_argument("--label", default="", help="added to the name of the result file")
     args = parser.parse_args()
-    result = run(args.workload, tuple(args.workers), args.repetitions, args.samples, args.chunk,
-                 not args.no_baseline)  # fmt: skip
+    result = run(args.workload, tuple(args.workers), args.repetitions, args.samples, args.chunk)
     print(report(result))
     print("\nsaved to", save("scalability", result, args.label or args.workload))
 

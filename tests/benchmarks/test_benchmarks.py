@@ -8,7 +8,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # the repository root
 
-from benchmarks import common, workloads  # noqa: E402
+from benchmarks import common  # noqa: E402
 from benchmarks.fault_coverage import run as fault_coverage  # noqa: E402
 from benchmarks.reproducibility import run as reproducibility  # noqa: E402
 from benchmarks.scalability import run as scalability  # noqa: E402
@@ -31,7 +31,7 @@ def test_environment_record():
 
 
 def test_fault_coverage(results):
-    result = fault_coverage.run(include_ecg=False)
+    result = fault_coverage.run()
     rc = result["circuits"]["rc"]
     assert (rc["n_components"], rc["n_components_with_faults"]) == (4, 3)
     assert rc["components_without_faults"] == ["V1"]
@@ -45,16 +45,6 @@ def test_fault_coverage(results):
     assert path.parent == results / "fault_coverage" and path.name.endswith("_test.json")
     assert json.loads(path.read_text())["benchmark"] == "fault_coverage"
     assert "30 fault conditions" in fault_coverage.report(result)
-
-
-@pytest.mark.ecgfd
-def test_fault_coverage_of_the_ecg_circuits():
-    circuits = fault_coverage.run()["circuits"]
-    for name, n in (("ecg_integrated", 293), ("ecg_reference", 307)):
-        assert circuits[name]["n_fault_conditions"] == n
-        baseline = circuits[name]["baseline_catalogue"]
-        assert baseline == {"n_fault_conditions": n, "same_conditions": True}
-    assert circuits["ecg_integrated"]["inside_tolerance"]["n_fault_conditions"] == 24
 
 
 @pytest.mark.ngspice
@@ -73,7 +63,6 @@ def test_scalability(results):
     assert phases["fraction"]["simulator_process"] > 0.5  # the simulator dominates
     assert result["resume_overhead"]["simulations_repeated"] == 0
     assert result["bytes_per_sample"] > 0 and result["peak_memory"]["largest_child_mb"] > 0
-    assert "relative_throughput" not in result  # no baseline for this workload
     saved = json.loads(common.save("scalability", result, "test").read_text())
     assert saved["summary"]["spicefault"]["2"]["speedup"] == table["2"]["speedup"]
     assert "speed-up" in scalability.report(result)
@@ -94,13 +83,3 @@ def test_reproducibility(results):
     again = result["simulated_again_from_the_folder"]
     assert again["drawn_values_identical"] and again["max_abs_diff"] == 0.0
     json.loads(common.save("reproducibility", result, "test").read_text())
-
-
-@pytest.mark.ecgfd
-@pytest.mark.ngspice
-def test_ecg_workload_and_its_baseline_do_the_same_work(results):
-    result = scalability.run("ecg", workers=(4,), repetitions=1, n_samples=300, chunk=150)
-    assert set(result["summary"]) == {"spicefault", "ecgfd"}
-    assert result["outputs_identical_to_baseline"] is True
-    assert 0.5 < result["relative_throughput"]["4"] < 2.0
-    assert workloads.HAS_ECGFD

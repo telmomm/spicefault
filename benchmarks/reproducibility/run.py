@@ -1,6 +1,6 @@
 """Reproducibility of a campaign (docs/EXPERIMENT_PLAN.md, experiment B).
 
-    python -m benchmarks.reproducibility.run --workload ecg --workers 8
+    python -m benchmarks.reproducibility.run --workers 8
 
 The same campaign, with the same seed, is run with one worker, with several, twice
 with several, and interrupted and resumed. Each run is compared with the first:

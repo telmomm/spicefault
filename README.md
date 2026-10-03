@@ -17,22 +17,25 @@ sample can be traced and regenerated.
 
 ## Status
 
-| Phase | State |
-|---|---|
-| 0. Scientific specification | Drafted, open decisions listed at the end of each document |
-| 1. Extraction from the ECG project | Done: the generic parts of `ecgfd` live here and are checked against it |
-| 2. Core abstractions | Done: `Circuit`, `Fault`, `VariationSet`, `OperatingCondition`, `Simulator`, `SimulationResult`, `Experiment` |
-| 3. Fault framework | Done: `OpenCircuit`, `ShortCircuit`, `LeakageFault`, `ParametricFault`, `CompositeFault`, `FaultSeverity`, `FaultSet`, `FaultUniverse` |
-| 4. Uncertainty framework | Done: tolerance, normal, log-normal, uniform, log-uniform, fixed, custom and joint variations; three seeding schemes |
-| 5. Experiment engine | Done: `FaultCampaign` (to disk, in chunks, resumable, every simulation accounted for) and the `Measurement` API |
-| 6. Reliability analysis | Done: detectability, failure probability and diagnostic coverage, sensitivity, robustness, separability, with confidence intervals |
-| 7. Dataset layer | Done: `Dataset`, `Manifest`, `Provenance`; a dataset folder can be verified, traced sample by sample, and simulated again |
-| 8. Benchmarking | Done: automated benchmarks of scalability, reproducibility and fault coverage, with results stored as JSON |
-| 9. ECG validation (the whole ECG study reproduced with `spicefault`) | Not started |
+The framework is implemented and tested. What remains is its validation on a set of
+circuits and the experiments of the manuscript.
 
-The first application is the ECG front-end study
-([ecg-frontend-fault-diagnosis](https://github.com/telmomm/ecg-frontend-fault-diagnosis)),
-whose generic code was extracted into this package.
+| Part | State |
+|---|---|
+| Fault model: fault types, severity, fault sets, fault universe and coverage | Done |
+| Uncertainty: distributions of the healthy population, seeding schemes | Done |
+| Simulation: ngspice backend, explicit status of every simulation | Done |
+| Experiments: in memory, and campaigns to disk, resumable | Done |
+| Measurements and waveforms | Done |
+| Reliability analysis, with confidence intervals | Done |
+| Dataset: integrity, provenance, reproduction from the folder | Done |
+| Benchmarks: scalability, reproducibility, fault coverage | Written; timing runs pending |
+| Validation circuits (two filters from the literature, a voltage regulator) | Not started |
+| Experiments on them: tolerance, operating conditions, separability | Not started |
+| Comparison with existing tools, and literature review | Not started |
+| Release: licence, citation file, archive with DOI | Not started |
+
+The plan is in [docs/EXPERIMENT_PLAN.md](docs/EXPERIMENT_PLAN.md), section 6.
 
 | Module | Content |
 |---|---|
@@ -180,7 +183,7 @@ number of workers or on the order of execution.
 
 | Scheme | Key | Consequence |
 |---|---|---|
-| `positional` (default) | fault index, replica | As in the ECG baseline. Adding or reordering faults changes the samples of the others |
+| `positional` (default) | fault index, replica | The simplest. Adding or reordering faults changes the samples of the others |
 | `content` | hash of the fault identifier, replica | A fault has the same samples in every experiment that contains it |
 | `common` | replica | Every fault is applied to the same drawn circuits: paired comparisons, but the conditions are not independent |
 
@@ -341,37 +344,22 @@ the tolerances takes the detection of the ±5 % resistor faults from 100 % to be
 plan and stores each result as JSON under `benchmarks/results/`:
 
 ```bash
-python -m benchmarks.scalability.run --workload ecg --workers 1 2 4 8   # runtime, speed-up, memory, I/O
-python -m benchmarks.reproducibility.run --workload ecg --workers 8     # 1 worker against several, resumed runs
-python -m benchmarks.fault_coverage.run                                 # coverage matrices of the circuits
+python -m benchmarks.scalability.run --workers 1 2 4 8   # runtime, speed-up, memory, I/O
+python -m benchmarks.reproducibility.run --workers 8     # 1 worker against several, resumed runs
+python -m benchmarks.fault_coverage.run                  # coverage matrix of each circuit
 ```
 
-The timing benchmarks need an idle machine. Only the fault-coverage result, which
-simulates nothing, is stored in the repository so far.
+The timing benchmarks need an idle machine, and their only workload so far is the
+small RC filter of the examples.
 
-## Equivalence with the ECG baseline
+## Origin and use
 
-`tests/regression/` compares this package with `ecgfd`, the code it was extracted
-from. These tests run only if `ecgfd` is installed:
+The library was extracted from the simulation code of a study on self-diagnosis of
+ECG analog front-ends
+([ecg-frontend-fault-diagnosis](https://github.com/telmomm/ecg-frontend-fault-diagnosis)),
+which uses it for its simulations. Nothing in the library is specific to that study
+or to biomedical circuits.
 
-```bash
-pip install -e ../ecg-frontend-fault-diagnosis
-pytest tests/regression
-```
-
-| Test | What is compared | Criterion |
-|---|---|---|
-| `test_ecg_runner.py` | Output of the same decks through both ngspice runners | Identical vectors |
-| `test_ecg_sampling.py` | Random streams and tolerance draws | Identical numbers |
-| `test_ecg_variation.py` | The whole healthy population (passives, amplifiers, electrodes) drawn by a `VariationSet`, and the netlists `Experiment` builds from it | Identical text |
-| `test_ecg_injection.py` | Netlist of every fault condition of both ECG circuits, in service and on the test bench, built by `ecgfd` and by `Fault` plus `OperatingCondition` | Identical text |
-| `test_ecg_universe.py` | Fault universe generated from rules against the fault catalogue of `ecgfd`: 293 and 307 conditions | Same conditions, identical netlists |
-| `test_ecg_experiment.py` | Self-test measurement of faulty circuits through `Circuit`, `Fault` and `Simulator` | Identical vectors |
-| `test_ecg_service_dataset.py` | The self-test half of `data/v1` (features and waveforms) regenerated with spicefault objects only | Tolerances of docs/EXPERIMENT_PLAN.md §3; no difference found |
-| `test_ecg_reliability.py` | Fault dictionary, separation, ambiguity groups, limit test, escape and false-reject rates, sensitivities, on `data/v1`, against `ecgfd.ambiguity` and `ecgfd.evaluation` | Identical results |
-| `test_ecg_dataset.py` | A campaign over the whole fault catalogue (one sample per fault) written as a dataset, against the same samples of `data/v1`; then verified and reproduced from its folder | No difference found |
-| `test_ecg_campaign.py` | A reduced campaign run by both engines, with 1 and with several workers | Identical tables and waveforms |
-| `test_ecg_baseline_data.py` | Cases regenerated here against the published dataset `data/v1` | Tolerances of docs/EXPERIMENT_PLAN.md §3 |
-
-The last one needs the dataset; its location is taken from the `ECGFD_DATA`
-environment variable and defaults to `data/v1` in the ECG repository.
+During development the library was checked against that original code: identical
+netlists, random numbers, measurements and datasets. Those tests are optional and are
+described in [tests/regression/README.md](tests/regression/README.md).

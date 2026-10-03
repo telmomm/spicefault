@@ -16,7 +16,7 @@ from benchmarks import workloads
 from benchmarks.common import environment, save
 from spicefault import Circuit
 from spicefault.faults import FaultUniverse
-from spicefault.variation import VariationSet, tolerances
+from spicefault.variation import VariationSet
 
 
 def describe(
@@ -58,29 +58,10 @@ def describe(
     }
 
 
-def run(include_ecg: bool = True) -> dict:
+def run() -> dict:
     circuits = {}
     rc = workloads.rc_circuit()
-    circuits["rc"] = describe(rc, workloads.rc_universe(rc), tolerances(rc, {"R": 0.01, "C": 0.05}))
-    if include_ecg and workloads.HAS_ECGFD:
-        from ecgfd.circuit import build_netlist, nominal_instance
-        from ecgfd.config import DEFAULT_CONFIG, load_config
-        from ecgfd.faults import fault_catalogue
-
-        from ecg_adapter import fault_rules, passive_variations
-
-        for name in ("integrated", "reference"):
-            cfg = load_config(DEFAULT_CONFIG, name)
-            netlist = build_netlist(nominal_instance(cfg), cfg, ["op"])
-            circuit = Circuit(netlist, f"ecg_{name}")
-            universe = FaultUniverse(circuit, fault_rules(cfg))
-            entry = describe(circuit, universe, passive_variations(cfg))
-            baseline = {f.id for f in fault_catalogue(cfg)}
-            entry["baseline_catalogue"] = {
-                "n_fault_conditions": len(baseline),
-                "same_conditions": baseline == set(universe.faults.ids()),
-            }
-            circuits[f"ecg_{name}"] = entry
+    circuits["rc"] = describe(rc, workloads.rc_universe(rc), workloads.rc_tolerances(rc))
     return {"benchmark": "fault_coverage", "environment": environment(), "circuits": circuits}
 
 
@@ -94,17 +75,14 @@ def report(result: dict) -> str:
             f"{c['inside_tolerance']['n_fault_conditions']} partly inside tolerance"
         )
         lines.append(f"   per fault type: {c['conditions_per_fault_type']}")
-        if "baseline_catalogue" in c:
-            lines.append(f"   baseline catalogue: {c['baseline_catalogue']}")
     return "\n".join(lines)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    parser.add_argument("--no-ecg", action="store_true")
     parser.add_argument("--label", default="")
     args = parser.parse_args()
-    result = run(not args.no_ecg)
+    result = run()
     print(report(result))
     print("\nsaved to", save("fault_coverage", result, args.label))
 

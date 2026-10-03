@@ -1,10 +1,8 @@
 # Reliability metrics
 
-Phase 0 deliverable 3 of 4. Status: the metrics marked for the first release in §11 are implemented in `spicefault.reliability` (Phase 6). An example of each one, on an RC filter, is in `examples/filter/reliability.py`.
+Status: the metrics marked as implemented in §11 are in `spicefault.reliability`. An example of each one, on an RC filter, is in `examples/filter/reliability.py`.
 
 This document defines the quantities `spicefault` computes from a campaign: what each one means, how it is estimated, with what uncertainty, and which ones belong to the first release. Notation follows [SCIENTIFIC_SCOPE.md](SCIENTIFIC_SCOPE.md) §2.
-
-Several definitions generalise what the ECG repository already does in `ambiguity.py` and `evaluation.py`; where this document departs from that code, it says so.
 
 ## 1. Data
 
@@ -19,11 +17,11 @@ Every metric below is conditional on the feature set, the measurement model $M$,
 
 **Failed simulations.** Metrics are computed on successful samples and always reported with $n_k / N_k$. Failures are not missing at random: a fault that prevents convergence is probably a severe one. When $n_k < N_k$, proportions are also reported as bounds, counting all failed samples first as detected and then as undetected.
 
-**Reference population.** Thresholds are derived from one part of the healthy samples and the false-alarm rate is measured on another (`healthy_split`, half and half by default). The ECG code computes both on the same samples. That estimate stays close to the target whatever the true rate is, because the limits were placed on those very samples; on new healthy samples the rate is higher when the limits rest on few samples. With 60 healthy samples, two features and a target of 0.05, the in-sample estimate averages about 0.05 and the held-out one is more than 0.02 higher (this is a unit test).
+**Reference population.** Thresholds are derived from one part of the healthy samples and the false-alarm rate is measured on another (`healthy_split`, half and half by default). Measuring both on the same samples is common and misleading: that estimate stays close to the target whatever the true rate is, because the limits were placed on those very samples; on new healthy samples the rate is higher when the limits rest on few samples. With 60 healthy samples, two features and a target of 0.05, the in-sample estimate averages about 0.05 and the held-out one is more than 0.02 higher (this is a unit test).
 
 **Uncertainty.** Every proportion carries a 95 % interval (Wilson by default, Clopper–Pearson where a conservative bound is needed). Other statistics carry a percentile bootstrap interval over samples.
 
-**Robust statistics.** Centre and spread are the median and $\hat\sigma = \text{IQR}/1.349$ by default. Faults that saturate an output give heavy-tailed clouds, for which mean and standard deviation hide an obvious shift; this was observed in the ECG study.
+**Robust statistics.** Centre and spread are the median and $\hat\sigma = \text{IQR}/1.349$ by default. Faults that saturate an output give heavy-tailed clouds, for which mean and standard deviation hide an obvious shift.
 
 ## 3. Detectability
 
@@ -87,7 +85,7 @@ At the nominal circuit, by central differences with relative step $h$ (default 1
 
 $$S_{j,i} = \frac{m_j(x_i(1+h)) - m_j(x_i(1-h))}{2h},$$
 
-reported per 1 % change, and normalised by the healthy spread, $Z_{j,i} = 0.01\, S_{j,i} / \hat\sigma_{0,j}$. A value of 1 means that a 1 % deviation of the component moves the feature by one healthy standard deviation. Two derived quantities, both from the ECG code:
+reported per 1 % change, and normalised by the healthy spread, $Z_{j,i} = 0.01\, S_{j,i} / \hat\sigma_{0,j}$. A value of 1 means that a 1 % deviation of the component moves the feature by one healthy standard deviation. Two derived quantities:
 
 - **testability rank**: the number of singular values $\sigma_r$ of $Z$ with $\sigma_r \cdot \Delta \geq \tau$, for a deviation of $\Delta$ per cent and threshold $\tau$ (defaults 10 and 3). It bounds how many components can be told apart by deviations of that size;
 - **collinear groups**: components whose columns of $Z$ have absolute cosine above a threshold (default 0.99), which cannot be distinguished by small deviations.
@@ -162,7 +160,7 @@ Indicative figures for planning, at 95 % confidence:
 
 The last row is a reason to measure the false-alarm rate on held-out healthy samples, and to prefer a larger healthy population than fault populations.
 
-A design choice affects all comparisons between conditions: whether replica $r$ of every condition uses the same draw $\theta_r$ (common random numbers) or an independent one. Common draws give paired comparisons and lower variance for differences; independent draws are what the ECG baseline uses. The seeding scheme must support both; see EXPERIMENT_PLAN.md §2.
+A design choice affects all comparisons between conditions: whether replica $r$ of every condition uses the same draw $\theta_r$ (common random numbers) or an independent one. Common draws give paired comparisons and lower variance for differences; independent draws are what the intervals of this document assume. The seeding schemes support both; see EXPERIMENT_PLAN.md §2.
 
 ## 11. First release
 
@@ -183,7 +181,7 @@ A design choice affects all comparisons between conditions: whether replica $r$ 
 | M10 coverage | Implemented | `FaultUniverse.coverage`, `coverage_matrix` |
 | M11 operating-condition dependence | Implemented | `ReliabilityAnalysis.by`, `detectability_across` |
 
-Each implemented metric has its definition in its documentation, unit tests against populations with known answers (normal clouds, tables with known counts, a resistive divider), and an example. M2, M5, M6, M7a, M9 and the limit test of M1 are also checked against the ECG code they were generalised from, on the dataset `data/v1`: the results are identical.
+Each implemented metric has its definition in its documentation, unit tests against populations with known answers (normal clouds, tables with known counts, a resistive divider), and an example. M2, M5, M6, M7a, M9 and the limit test of M1 are also tested against the independent implementation in the project the library was extracted from, with identical results (`tests/regression/`).
 
 What the tests do not establish: that the limit test is a good detector, that equal weights are meaningful, or that the thresholds (α, β, τ) are the right ones. Those are choices of a study.
 
@@ -191,5 +189,5 @@ What the tests do not establish: that the limit test is a good detector, that eq
 
 1. **`failure_rate()` is implemented as `failure_probability()`.** To confirm, or to add the other name as an alias.
 2. **Default false-alarm rate** $\alpha$ (proposed 0.01) and miss level $\beta$ (proposed 0.1).
-3. **Default separation threshold** $\tau = 3$, as in the ECG study.
-4. **Common or independent random numbers** for comparisons between fault conditions. Both are implemented (`seeding="common"` against `"positional"` or `"content"`); independent is the default and is needed for Phase 1 equivalence. Still to decide: which one Experiments E to G use. Operating conditions and tolerance levels are always compared on the same circuits.
+3. **Default separation threshold** $\tau = 3$.
+4. **Common or independent random numbers** for comparisons between fault conditions. Both are implemented (`seeding="common"` against `"positional"` or `"content"`); independent is the default. Still to decide: which one Experiments E to G use. Operating conditions and tolerance levels are always compared on the same circuits.

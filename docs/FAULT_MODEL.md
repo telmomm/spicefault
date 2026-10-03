@@ -1,6 +1,6 @@
 # Fault model
 
-Phase 0 deliverable 2 of 4. Status: implemented in `spicefault.faults` (Phase 3), except where a section says otherwise. The open decisions at the end still stand.
+Status: implemented in `spicefault.faults`, except where a section says otherwise. The open decisions at the end still stand.
 
 This document defines what a fault is in `spicefault`, which fault types the first release contains, how each one changes the netlist, and what is recorded about it. Notation follows [SCIENTIFIC_SCOPE.md](SCIENTIFIC_SCOPE.md) §2.
 
@@ -20,7 +20,7 @@ Consequences:
 
 - Every fault can be audited by listing its primitives, and two faults are identical if their primitive lists are.
 - The topology of the circuit is never edited by free text.
-- $x_\theta$ is the realised value after normal variation. `relative`, `scale` and `divide` compound with the Monte Carlo draw; `absolute` overwrites it. Both behaviours exist in the ECG code and both must be available (§6).
+- $x_\theta$ is the realised value after normal variation. `relative`, `scale` and `divide` compound with the Monte Carlo draw; `absolute` overwrites it. Both behaviours are needed: a drifted resistor keeps its own manufacturing deviation, while an offset voltage that is replaced does not.
 - `divide(k)` is not redundant with `scale(1/k)`: the two can differ in the last bit in floating point, and exact equivalence with existing results needs the operation that was actually used.
 
 ## 2. Order of operations
@@ -40,7 +40,7 @@ For every sample: draw $\theta$; build the realised circuit; apply $I_f$; apply 
 
 Notes on each type.
 
-**Open and short are modelled with finite resistances.** An ideal open leaves nodes floating and makes the DC operating point singular. `r_open` and `r_short` are therefore model parameters, recorded with every sample, and results may depend on them. The ECG study uses `r_open = 1 GΩ` and `r_short = 1 Ω`, and an earlier version used 10 MΩ for opens. The effect of `r_open` relative to the impedances of the circuit should be checked once per circuit: an open in series with a 10 MΩ bias resistor is not well represented by 10 MΩ.
+**Open and short are modelled with finite resistances.** An ideal open leaves nodes floating and makes the DC operating point singular. `r_open` and `r_short` are therefore model parameters, recorded with every fault, and results may depend on them. The defaults are 1 GΩ and 1 Ω. The effect of `r_open` relative to the impedances of the circuit should be checked once per circuit: an open in series with a 10 MΩ bias resistor is not well represented by 10 MΩ.
 
 **Open on a two-terminal component** is electrically the same at either terminal. For components with more terminals the terminal must be named, and each terminal is a different fault.
 
@@ -48,7 +48,7 @@ Notes on each type.
 
 **DriftFault is a ParametricFault with a provenance.** It is not implemented (open decision 1). Its only addition is that the deviation is computed from a law, such as $x(t) = x_0 (1 + a\,t^{b})$, whose form, coefficients and source are recorded. It should be implemented only when at least one law with a citable source is available for the case study; otherwise it adds a name without physical content. See open decision 1.
 
-**CompositeFault is not a multiple fault.** It represents one defect with several electrical consequences. The ECG example is electrolytic capacitor degradation, which lowers capacitance and raises series resistance together. Several independent defects at once (`MultipleFault`) remain out of scope.
+**CompositeFault is not a multiple fault.** It represents one defect with several electrical consequences. The usual example is the degradation of an electrolytic capacitor, which lowers capacitance and raises series resistance together. Several independent defects at once (`MultipleFault`) remain out of scope.
 
 Fault types deferred: `IntermittentFault`, `StuckAtFault`, `BridgingFault` between arbitrary nodes, `MultipleFault`. A bridge between two nodes that do not belong to the same component is not expressible with the primitives above, which are component-centred; adding it needs a fourth primitive `insert_between(node_a, node_b, R)`.
 
@@ -59,7 +59,7 @@ A parametric deviation is a fault only relative to a declared tolerance. Let $t$
 - A relative fault of size $δ$ applied to a realised value gives a total deviation from nominal between $(1-t)(1+δ) - 1$ and $(1+t)(1+δ) - 1$.
 - If that interval overlaps $\pm t$, some faulty samples are healthy by definition and no method can detect them.
 
-This already happens in the ECG catalogue: capacitors have a 5 % tolerance and the smallest parametric faults are ±5 % and ±10 %. For `δ = +0.05` the total deviation ranges from −0.25 % to +10.25 %. With the uniform tolerance of that study, half of the ±5 % capacitor faults and 1 in 22 of the +10 % ones lie inside the healthy band; the −10 % ones never do, and neither does any resistor fault (1 % tolerance). This is deliberate there, because small deviations are what separates percentage severity from functional severity, but it must be visible.
+This happens with ordinary choices. Take capacitors with a 5 % tolerance, drawn uniformly, and parametric faults of ±5 % and ±10 %. For `δ = +0.05` the total deviation ranges from −0.25 % to +10.25 %. Half of the ±5 % faults and 1 in 22 of the +10 % ones lie inside the healthy band; the −10 % ones never do, because 0.9 × 1.05 < 0.95. The same deviations on 1 % resistors are always outside. The campaign on the RC filter of `examples/filter` shows the consequence: its ±5 % capacitor faults are detected about half of the time. Small deviations are legitimate objects of study, but the overlap must be visible.
 
 Rule for the framework: catalogue validation computes this overlap for every parametric fault condition and reports it. It does not reject the condition. This is `FaultSet.tolerance_overlap`, which gives the deviation interval and the fraction of the fault population inside the band, for uniform and truncated-normal tolerances.
 
@@ -82,34 +82,19 @@ Two different quantities, both optional except where noted.
 
 Severity as defined here describes what was injected. It is distinct from **functional severity**, which is whether and by how much the circuit violates its specifications, and is a result of the experiment, not a property of the fault. The framework must keep both and never derive one from the other.
 
-## 6. Mapping of the ECG fault catalogue
+## 6. What applications need from a fault
 
-Phase 1 must reproduce the ECG results unchanged, so every `ecgfd` fault kind needs an exact equivalent.
+A fault list written for a real study needs more than the types of §3 taken literally. Three requirements came out of the first application of the library, and the types meet them:
 
-| `ecgfd` kind | `spicefault` type | Primitives | Remark |
-|---|---|---|---|
-| `open` | `OpenCircuit` | `insert_series` at the second terminal, 1 GΩ | |
-| `short` | `ShortCircuit` | `insert_parallel`, 1 Ω | |
-| `parametric` | `ParametricFault` | `relative(δ)`, δ ∈ {±0.05, ±0.1, ±0.2, ±0.5} | Compounds with the draw |
-| `cap_degradation` | `CompositeFault` | `scale(1 − loss)` and `insert_series(ESR)` | Two fixed pairs (loss, ESR) |
-| `opamp_vos`, `ina_vos` | `ParametricFault` | `absolute(v)` | Overwrites the drawn offset; only positive values are injected |
-| `opamp_aol` | `ParametricFault` | `scale(k)` | Compounds with the draw |
-| `ina_cmrr` | `ParametricFault` | `absolute(ratio)` | The netlist parameter is a signed ratio, sign × 10^(dB/20), and the sign is part of the Monte Carlo draw. The value to inject therefore depends on the drawn circuit, which a fault record written in advance cannot express. The adapter builds this fault per sample. A clean solution is to give the subcircuit separate magnitude and sign parameters, which changes the netlist text but not the results |
-| `ina_gain` | `ParametricFault` | `absolute(error)` | |
-| `electrode_off` | `ParametricFault` labelled as an open | `absolute(1 GΩ)` on the electrode series resistance | Replaces the value instead of inserting a resistance. Using `insert_series` would give a slightly different resistance (by less than 1 part in 10⁶) and break exact equivalence |
-| `electrode_high_z` | `CompositeFault` | `scale(k)` on Rd and `divide(k)` on Cd, on one or two electrodes | The condition `la+ra` affects two components with one cause |
+- **A reported type different from the class.** An application names its faults in its own terms. A detached lead is physically an open, yet a study may model it by replacing a resistance and report it as "lead off". Every type accepts a `fault_type`, recorded next to the `class` that built it.
+- **One fault over several components.** A cause can act on more than one component at once, such as two contacts that degrade together. `CompositeFault` spans components.
+- **Application labels.** Where a fault is, or what kind of cause it has, is something the application wants to group by. Faults carry free-form `tags`; the framework does not interpret them.
 
-This mapping is implemented in `tests/regression/ecg_adapter.py` with the fault types of §3, and checked on every fault condition of both circuits: the netlists are identical, character by character, to those of `ecgfd`. The same file states the catalogue as applicability rules; the universe they generate (§8) is the catalogue of `ecgfd`, 293 and 307 conditions.
-
-Three requirements follow:
-
-- a fault must be able to carry a reported type different from its primitive (the `electrode_off` case);
-- a composite must be able to span several components;
-- faults need free-form tags for application labels. The ECG `origin` label (circuit or electrode) is such a tag, not a framework concept.
+One limitation also came out of it. **The value of a fault cannot depend on the drawn circuit.** A fault record is written before any sample is drawn. If the netlist parameter to set is computed from quantities that are themselves drawn (a magnitude and a random sign combined into one signed parameter, for example), a fixed record cannot express the fault. The remedy is in the circuit description: expose the drawn quantities as separate netlist parameters, so that the fault sets one of them.
 
 ## 7. Identity, metadata and serialisation
 
-Every fault condition has a stable identifier, built from its content and independent of its position in a list. Proposed form: `<location>:<type>[:<magnitude>]`, for example `R17:open`, `R11:parametric:+0.2`, as in the ECG code.
+Every fault condition has a stable identifier, built from its content and independent of its position in a list. Proposed form: `<location>:<type>[:<magnitude>]`, for example `R17:open`, `R11:parametric:+0.2`.
 
 `fault.metadata()` returns a JSON-serialisable record. `class` is the type of §3 that built the fault and `fault_type` the type it is reported as; they differ when an application uses its own names. Severity is recorded with its scale and the parameters of the scale.
 
@@ -168,5 +153,4 @@ The coverage matrix (components × fault types) and the structural coverage figu
 
 1. **DriftFault in the first release or deferred** until a drift law with a source is available. Recommended: deferred.
 2. **Node-to-node bridging** (fourth primitive) in the first release or deferred. Recommended: deferred.
-3. **Default `r_open`.** 1 GΩ as in the ECG study, with a per-circuit check against the largest impedance in the circuit.
-4. **Negative offsets.** The ECG catalogue injects only positive offset faults; listed as pending there. It affects the fault universe, not the model.
+3. **Default `r_open`.** 1 GΩ, with a per-circuit check against the largest impedance in the circuit.

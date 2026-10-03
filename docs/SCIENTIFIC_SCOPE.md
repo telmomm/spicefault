@@ -1,10 +1,10 @@
 # Scientific scope
 
-Phase 0 deliverable 1 of 4. Status: draft for review, nothing here is implemented yet.
+Status: revised. The first version took an ECG front-end as its main case study; this one is about the framework alone, validated on generic circuits. The framework is implemented (phases 1 to 8); the validation circuits and the experiments on them are not.
 
 Companion documents: [FAULT_MODEL.md](FAULT_MODEL.md), [RELIABILITY_METRICS.md](RELIABILITY_METRICS.md), [EXPERIMENT_PLAN.md](EXPERIMENT_PLAN.md).
 
-This document fixes what `spicefault` is meant to demonstrate, in terms precise enough that each later phase can be checked against it. The target venue is *IEEE Transactions on Reliability*, so the contribution is a reliability methodology; the software is the instrument that makes it reproducible.
+This document fixes what `spicefault` is meant to demonstrate, in terms precise enough that the work can be checked against it. The target venue is *IEEE Transactions on Reliability*, so the contribution is a reliability methodology; the software is the instrument that makes it reproducible.
 
 ## 1. Problem statement
 
@@ -17,7 +17,7 @@ Simulation-based fault studies of electronic circuits are usually built as proje
 
 Without these, the resulting fault-response distributions cannot be audited or regenerated, and figures such as detectability or diagnostic coverage cannot be compared between studies.
 
-`spicefault` treats the combination of circuit, normal variation, operating condition and fault as one structured experiment, and defines the reliability quantities that are computed from it.
+`spicefault` treats the combination of circuit, normal variation, operating condition and fault as one structured experiment, and defines the reliability quantities that are computed from it. It is independent of the kind of circuit: nothing in it is specific to an application domain.
 
 ## 2. Formal setting
 
@@ -30,16 +30,16 @@ Without these, the resulting fault-response distributions cannot be audited or r
 | $I_f$ | Injection operator: $I_f(C, \theta)$ is the netlist of the realised circuit with the fault applied |
 | $y = S(I_f(C,\theta), u)$ | Noise-free simulator output (vectors and waveforms) |
 | $m = g(y)$ | Measurements: deterministic functionals of $y$ |
-| $z = M(m; \varepsilon)$, $\varepsilon \sim P_\varepsilon$ | Measurements as the instrument would observe them (noise, quantisation, clipping) |
+| $z = M(m; \varepsilon)$, $\varepsilon \sim P_\varepsilon$ | Measurements as an instrument would observe them (noise, quantisation, clipping) |
 | $c = \mathbb{1}[m_\text{spec} \in A]$ | Compliance with a set of specification limits $A$, when the application defines one |
 
 The objects of study are the conditional distributions $P(z \mid f, u)$, obtained by marginalising over $\theta$ and $\varepsilon$, and their comparison with $P(z \mid \varnothing, u)$.
 
-Three choices in this setting come from the ECG study and are kept because they have scientific consequences:
+Three design choices have scientific consequences:
 
 - **Variation first, then fault.** A fault is injected into an already realised circuit, so every other component keeps its spread. A fault is never simulated on the nominal circuit alone, except in sensitivity analysis.
 - **Simulation and observation are separate.** The simulator output is stored noise-free and $M$ is applied afterwards. Measurement noise and resolution are then study parameters that do not require new simulations.
-- **Injected fault and functional failure are separate.** $f \neq \varnothing$ states what was injected; $c = 0$ states that the circuit no longer meets its specification. In the ECG baseline dataset, 50,236 of 63,600 cases of the integrated circuit are compliant although only 5,000 are fault-free, so most injected faults there do not cause a specification failure.
+- **Injected fault and functional failure are separate.** $f \neq \varnothing$ states what was injected; $c = 0$ states that the circuit no longer meets its specification. An injected fault does not imply a failure, and how often it does is a result of the experiment.
 
 ## 3. Terminology
 
@@ -59,19 +59,19 @@ Working definitions, used consistently in code, documentation and manuscript. Th
 
 ## 4. Research questions
 
-Each question is tied to a quantity, an experiment and a criterion. Metric identifiers refer to RELIABILITY_METRICS.md, experiment letters to EXPERIMENT_PLAN.md.
+Each question is tied to a quantity, an experiment and a criterion. Metric identifiers refer to RELIABILITY_METRICS.md, experiment letters to EXPERIMENT_PLAN.md, circuits to §8.
 
 | RQ | Question | Quantity | Experiment | Evidence that answers it |
 |---|---|---|---|---|
-| RQ1 Fault coverage | Does a formal fault abstraction give systematic, auditable coverage of the failure modes of a circuit? | Coverage matrix and structural coverage (M10) | D | Every applicable (component, fault type) pair is either simulated or excluded with a recorded reason, for three circuits |
-| RQ2 Variability | How do tolerance and operating variation change detectability? | Detection probability and standardised shift against tolerance scale (M1, M2, M8) | E, F | Detectability curves with confidence intervals; faults whose detectability falls below a stated level are identified |
+| RQ1 Fault coverage | Does a formal fault abstraction give systematic, auditable coverage of the failure modes of a circuit? | Coverage matrix and structural coverage (M10) | D | Every applicable (component, fault type) pair is either simulated or excluded with a recorded reason, for every validation circuit |
+| RQ2 Variability | How do tolerance and operating variation change detectability? | Detection probability and standardised shift against tolerance scale and operating condition (M1, M2, M8, M11) | E, F | Detectability curves with confidence intervals; faults whose detectability falls below a stated level are identified |
 | RQ3 Reproducibility | Can a campaign be reproduced exactly, or within stated tolerances? | Identity of sample definitions; numerical difference of outputs | A, B | Identical sample definitions for any worker count; output differences within the tolerances of EXPERIMENT_PLAN.md §3 |
-| RQ4 Scalability | How efficiently do large campaigns run? | Throughput, speed-up $S(N)$, efficiency $E(N)$, overhead against the baseline | C | Measured curves with repetitions; overhead of the abstraction against the project-specific baseline |
-| RQ5 Separability | How distinguishable are different faults from the observable response? | Pairwise separability, ambiguity groups (M9) | G | Ambiguity structure reported for measurements and for waveforms |
-| RQ6 Reliability assessment | Do fault-response distributions give useful quantitative evidence of robustness and diagnostic coverage? | Failure probability per fault, diagnostic coverage, escape and false-reject rates (M5, M6) | E, F, ECG case study | Figures with confidence intervals that change a design or test decision in the case study |
-| RQ7 Generalisation | Does the method apply to another circuit without rewriting the infrastructure? | Lines of circuit-specific code; framework code changed | D, independent circuit | The independent circuit runs with no change to framework code |
+| RQ4 Scalability | How efficiently do large campaigns run? | Throughput, speed-up $S(N)$, efficiency $E(N)$, overhead against direct scripting | C | Measured curves with repetitions; overhead of the abstraction against a script written for the same task |
+| RQ5 Separability | How distinguishable are different faults from the observable response? | Pairwise separation, ambiguity groups (M9) | G | Ambiguity structure reported for measurements and for waveforms, and compared with what local sensitivity predicts |
+| RQ6 Reliability assessment | Do fault-response distributions give useful quantitative evidence of robustness and diagnostic coverage? | Failure probability per fault, diagnostic coverage, escape and false-reject rates (M5, M6), against tolerance | E, F | Figures with confidence intervals that would change a design or test decision: which faults a given set of measurements cannot cover, and at what tolerance it stops covering others |
+| RQ7 Generalisation | Does the method apply to different circuits without rewriting the infrastructure? | Circuit-specific code per circuit; framework code changed | all | Circuits of different kind and size run with no change to the framework; what each one needs is its netlist, rules, measurements and specifications |
 
-RQ6 is the weakest as written: "useful" is not measurable. The criterion proposed above (the figures change a decision in the case study) should be replaced by a sharper one once the ECG results are reproduced. A candidate already visible in the baseline is the gap between percentage severity and functional severity.
+RQ6 remains the weakest as written: "useful" is not measurable. The criterion above is a proposal and should be sharpened once Experiments E and F have results.
 
 ## 5. Claims and non-claims
 
@@ -81,7 +81,8 @@ The manuscript may claim, if the experiments support it:
 - campaigns whose sample definitions are identical for any degree of parallelism;
 - an experimental record in which failed simulations are kept and counted;
 - reliability metrics with stated definitions, estimators and confidence intervals;
-- the same infrastructure applied to at least three circuits.
+- the same infrastructure applied to circuits of different kind, with nothing specific to one application domain;
+- use in an independent published study (§9).
 
 It must not claim:
 
@@ -93,14 +94,14 @@ It must not claim:
 
 ## 6. Scope
 
-Included in the first release: SPICE netlists as circuit description; single faults at component level (open, short, parametric, leakage, and composite degradation); tolerance distributions; operating conditions; deterministic sampling; local parallel execution; resumable campaigns; explicit simulation status; measurements; the metrics marked "first release" in RELIABILITY_METRICS.md; dataset export with provenance.
+Included in the first release: SPICE netlists as circuit description; single faults at component level (open, short, parametric, leakage, and composite degradation); tolerance distributions; operating conditions; deterministic sampling; local parallel execution; resumable campaigns; explicit simulation status; measurements; the metrics marked as implemented in RELIABILITY_METRICS.md; dataset export with provenance.
 
 Excluded: a numerical solver; schematic capture; a graphical interface; FMEA or FTA engines; reliability prediction standards; machine-learning models; cluster execution; GPU solving; multiple simultaneous independent faults; intermittent and time-dependent faults.
 
-Two boundaries need to be stated because the ECG code crosses them:
+Two boundaries with the applications that use the framework:
 
-- **Specification compliance is an application concern.** The framework provides the mechanism (measurements, a compliance predicate, labels). The limits and test set-ups of IEC 60601-2-25 stay in the ECG repository.
-- **Machine learning is downstream.** The framework exports features, waveforms and labels; classifiers stay in the application.
+- **Specification compliance is an application concern.** The framework provides the mechanism (measurements, a compliance column, the metrics that use it). The limits and the test set-ups belong to the application.
+- **Machine learning is downstream.** The framework exports features, waveforms and labels; models stay in the application.
 
 ## 7. Comparison with existing approaches
 
@@ -108,60 +109,48 @@ The comparison is functional and must be reproducible. Nothing in the table belo
 
 | Class | Candidates to examine | What to establish |
 |---|---|---|
-| Project-specific scripting around ngspice | `ecgfd` (the baseline), other published scripts | Measured: effort, throughput, reproducibility, behaviour on failure |
+| Direct scripting around ngspice | A script written for the benchmark task, with no framework | Measured: effort, throughput, reproducibility, behaviour on failure |
 | Python/SPICE interfaces | PySpice; spicelib / PyLTSpice | Which of fault abstraction, tolerance analysis, campaign orchestration, resumption and provenance they provide. spicelib is reported to include Monte Carlo, worst-case and failure-mode analyses; this must be read from its documentation and tested |
 | Simulator-native statistics | ngspice control-language Monte Carlo; LTspice `.step` with `mc()`; Spectre Monte Carlo | What is expressible, and what record is left of each sample |
 | Commercial analog fault simulation | Cadence Legato Reliability, Siemens Tessent DefectSim, Synopsys TestMAX CustomFault | Scope (transistor-level defect-oriented test of integrated circuits, IEEE 2427) and how it differs from board-level reliability experiments. Likely not runnable; compare from documentation and state so |
-| Academic fault-injection and diagnosis workflows | The works collected in the ECG literature review (`docs/SOTA/` of the ECG repository), plus a dedicated search for SPICE fault-injection frameworks | Whether fault definitions, seeds and failed simulations are reported, and whether code is available |
+| Academic fault-injection and diagnosis workflows | To be collected in a dedicated search for SPICE fault-injection frameworks and analog fault-diagnosis datasets | Whether fault definitions, seeds and failed simulations are reported, and whether code is available |
 
 Criteria, one row per tool in the final table: fault abstraction; separation of variation and fault; operating conditions; campaign definition; coverage report; parallel execution; resumption; simulation status; provenance per sample; determinism under parallelism; measurement extraction; reliability metrics; dataset export; backend independence.
 
-Method: one benchmark task (Experiment D circuit, a fixed fault list, a fixed number of samples) is implemented with direct scripting, with one Python/SPICE interface and with `spicefault`. Reported: lines of task-specific code, whether each criterion is met, and how. Lines of code is a weak measure of effort and is reported as such.
+Method: one benchmark task (one validation circuit, a fixed fault list, a fixed number of samples) is implemented with direct scripting, with one Python/SPICE interface and with `spicefault`. Reported: lines of task-specific code, whether each criterion is met, and how. Lines of code is a weak measure of effort and is reported as such.
 
-A dedicated literature search for SPICE-based fault-injection frameworks has not been done. It is a prerequisite for the novelty claim and belongs to Phase 11 at the latest; it would be safer to do it before Phase 2.
+The dedicated literature search has not been done. It is a prerequisite for the novelty claim and should come before any writing: a comparable framework would change the positioning of the paper.
 
 ## 8. Validation circuits
 
+The circuits are generic and of increasing size. None belongs to a particular application domain. The set below is a proposal (open decision 1); the benchmark status of the two filters in the fault-diagnosis literature must be confirmed in the literature search.
+
 | Circuit | Role | Why |
 |---|---|---|
-| Resistive divider and RC low-pass | Analytical reference | Closed-form response and closed-form distributions under tolerance, so the metric estimators can be tested against known values |
-| ECG front-end, `integrated` | Main case study | Realistic mixed discrete and integrated design with clinical specifications |
-| ECG front-end, `reference` | Second architecture | Same signal chain, discrete instrumentation amplifier |
-| Independent circuit | Generalisation (RQ7) | Not derived from the ECG work |
+| Resistive divider and RC low-pass | Analytical reference | Closed-form response and closed-form distributions under tolerance: the estimators are tested against known values. Already in the unit tests and in `examples/filter` |
+| Sallen–Key band-pass filter, one op-amp | Small benchmark | A circuit used in the analog fault-diagnosis literature, so results can be set beside published ones. Natural specifications: centre frequency, gain, quality factor |
+| State-variable (biquad) filter, three or four op-amps | Larger benchmark | More components than independent measurements: the case where ambiguity groups appear. The full ambiguity analysis of the manuscript goes here |
+| Linear voltage regulator with device-level models | Realistic, not a filter | Transistors and a reference with real temperature behaviour, so temperature is a meaningful operating condition, together with line and load. Specifications with engineering meaning: output voltage, line and load regulation, dropout |
 
-The specification proposes an instrumentation amplifier as the independent circuit. The `reference` ECG circuit already contains a discrete three-op-amp instrumentation amplifier, so that choice would be a weak test of generalisation. See open decision 3.
+Each circuit needs four things, and only these are specific to it: its netlist, its fault rules, its measurements, and its specification limits. How little that is, is the evidence for RQ7.
 
-## 9. Relationship with the ECG study
+## 9. Relationship with the application study
 
-The ECG front-end study is an independent piece of research and will be an independent paper. It will probably not be published in final form when this manuscript is submitted. Three consequences follow.
+`spicefault` was extracted from the simulation code of a study on self-diagnosis of ECG analog front-ends, and that study now uses the library for its simulations. It is independent research with its own paper, which is to be published before this manuscript.
 
-**This manuscript must stand without it.** A reviewer cannot be sent to an unpublished paper. The ECG circuits, the fault catalogue, the measurements and the specification tests are described here to the extent the case study needs, and no conclusion of this manuscript may rest on a result reported only there.
+Consequences:
 
-**The two manuscripts must not report the same results.** Division of content:
-
-| | ECG study | This manuscript |
-|---|---|---|
-| Question | Can a front-end diagnose itself in service, against its clinical specifications? | How are fault-injection experiments defined, run and analysed reproducibly? |
-| Owns | Hypotheses H1 to H5: prediction of specifications, functional against percentage severity, localisation, circuit against electrode, effect of the architecture; the machine-learning models | The framework; equivalence with the project-specific code; scalability; reproducibility; fault coverage; detectability against tolerance and operating conditions; faults inside the tolerance band |
-| ECG circuit | The object of study | One of the case studies |
-
-The overlap to resolve is testability: the ambiguity groups of the ECG circuits at the declared tolerances are a result of the ECG study (its experiments E2 and E9), and Experiment G here computes the same quantities. In this manuscript, separability on the ECG circuits is reported only as it changes with tolerance and operating conditions, and the full ambiguity analysis is shown on the independent circuit.
-
-**The relationship must be visible to editors and readers.** Options, to be checked against the current IEEE policy on preprints and on related manuscripts under review before either submission:
-
-- deposit a preprint of the ECG study, and the dataset `data/v1`, with a DOI before this manuscript is submitted, so that both can be cited;
-- declare the other manuscript to the editor of each journal and offer it as supplementary material for review;
-- publish the dataset once, and cite it from both manuscripts.
-
-The order of publication favours this manuscript first: the ECG study can then cite `spicefault` as the tool that generated its data, which requires the ECG dataset to be generated by `spicefault` (Phase 9, complete option).
+- **This manuscript cites it as an application** of the framework, in one or two sentences. It reports none of its results and does not use its circuits as case studies.
+- **Nothing in this manuscript depends on it.** Every result here comes from the validation circuits of §8.
+- **Equivalence with the original code is a matter of software quality, not a result.** The library is tested against the code it was extracted from (`tests/regression/`): identical netlists, random numbers, measurements and datasets. That is how correctness was established during development; the manuscript may mention it in a sentence. Those tests are tied to the version of the application before it adopted the library.
 
 ## 10. Limitations to declare
 
-Dependence on an external simulator and its version; convergence failures under hard faults; computational cost; fidelity of behavioural device models; incompleteness of any fault taxonomy; single-fault assumption; no physical validation; detectability figures depend on the chosen measurements and decision rule.
+Dependence on an external simulator and its version; convergence failures under hard faults; computational cost; fidelity of device models; incompleteness of any fault taxonomy; single-fault assumption; no physical validation; detectability figures depend on the chosen measurements and decision rule; validation on a small number of circuits.
 
 ## 11. Open decisions
 
-1. **Sharper criterion for RQ6** (§4).
-2. **Literature search on SPICE fault-injection frameworks**: before Phase 2, or at Phase 11.
-3. **Independent circuit.** Recommended: a filter from the analog fault-diagnosis benchmark literature (a Sallen–Key band-pass or a state-variable filter), because published results exist for comparison, plus one circuit with transistor-level models if temperature is to be studied (see EXPERIMENT_PLAN.md, Experiment F).
-4. **Licence**: MIT, as in the ECG repository, or BSD-3-Clause.
+1. **Validation circuits** (§8): confirm the set, and for the regulator, the topology and the device models.
+2. **Sharper criterion for RQ6** (§4).
+3. **Literature search** on SPICE fault-injection frameworks: before any writing.
+4. **Licence**: MIT or BSD-3-Clause.

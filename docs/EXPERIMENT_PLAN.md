@@ -1,35 +1,23 @@
 # Experiment plan
 
-Phase 0 deliverable 4 of 4. Status: draft for review.
+Status: revised for validation on generic circuits. The instruments exist (campaign engine, metrics, benchmarks); the validation circuits and the runs on them do not yet.
 
-This document fixes the protocol of the experiments that the manuscript will report: design, outputs, acceptance criteria and numerical tolerances. Research questions are those of [SCIENTIFIC_SCOPE.md](SCIENTIFIC_SCOPE.md) §4, metrics those of [RELIABILITY_METRICS.md](RELIABILITY_METRICS.md).
+This document fixes the protocol of the experiments that the manuscript will report: design, outputs, acceptance criteria and numerical tolerances. Research questions are those of [SCIENTIFIC_SCOPE.md](SCIENTIFIC_SCOPE.md) §4, validation circuits those of its §8, metrics those of [RELIABILITY_METRICS.md](RELIABILITY_METRICS.md).
 
 Thresholds marked *proposed* are starting values. They are to be confirmed or replaced when the experiment is first run, and the final values reported with the results.
 
-## 1. Baseline
+## 1. Circuits and workloads
 
-The baseline is the ECG repository `ecg-frontend-fault-diagnosis` (package `ecgfd` 0.1.0) and its dataset `data/v1`, as recorded in the dataset manifests:
-
-| | `integrated` | `reference` |
+| Circuit | Used in | Role in the experiments |
 |---|---|---|
-| Cases | 63,600 | 66,400 |
-| Conditions, including healthy | 294 | 308 |
-| Failed simulations | 0 | 0 |
-| Compliant cases | 50,236 | 46,367 |
-| Elapsed time of the last run | 4,625.6 s | 4,819.0 s |
-| Master seed | 20261002 | 20261002 |
-| Simulator | ngspice-44.2 | ngspice-44.2 |
-| Code commit | `93a40d8` | `93a40d8` |
+| Resistive divider, RC low-pass | A | Closed-form answers for correctness and for the metric estimators |
+| Sallen–Key band-pass filter | A, B, D, E, G | Small benchmark; comparison task of the state-of-the-art study |
+| State-variable filter | A, C, D, E, G | Larger benchmark; workload of the scalability measurements; ambiguity analysis |
+| Linear voltage regulator | A, D, E, F | Device-level models; operating conditions, temperature included |
 
-Each case is two ngspice runs (self-test measurements, then specification tests). The machine is an Apple M2 with 8 cores.
+Every circuit comes with its netlist, its fault rules, its measurements and its specification limits. Until the three validation circuits exist, the RC low-pass of `examples/filter` stands in for them in the benchmarks. It is too small to be a workload: one simulation takes about 15 ms, so starting processes weighs as much as simulating.
 
-Three caveats about using these figures as a performance baseline:
-
-- the manifest does not record the number of workers;
-- the elapsed time covers only the last run, so it is too low if the generation was resumed;
-- the repository has moved on since the dataset (commit `6a49f58` at the time of writing). Between `93a40d8` and that commit, the only change under `src/` and `configs/` is in `ambiguity.py`, so the simulation pipeline that produced the dataset is unchanged.
-
-The baseline timing must therefore be measured again under the protocol of §4 and not taken from the manifests. That the manifest lacks these fields is itself a finding for the provenance design: the manifest of `spicefault` records the number of workers, the chunk size, whether the run was resumed, and the time spent over all the runs of a campaign as well as in the last one.
+The reference for what the framework costs is a script written directly against ngspice for the same task (Experiment C and the comparison of SCIENTIFIC_SCOPE.md §7). It is written once, frozen, and kept in the repository.
 
 ## 2. Reproducibility levels and seeding
 
@@ -41,12 +29,12 @@ The baseline timing must therefore be measured again under the protocol of §4 a
 
 L1 is a property of the framework and must hold exactly. L2 and L3 depend on the simulator; the framework's role is to measure and report the differences. `Dataset.reproduce` is the instrument for the three: it simulates samples of a stored dataset again and reports, per sample, whether the definition and the drawn values are identical (L1) and the largest difference in measurements and waveform (L2 on the same platform, L3 on another).
 
-Seeding. The baseline derives each stream from `SeedSequence(master, spawn_key=(condition_index, replica))`. This makes results independent of execution order, but the stream of a condition depends on its position in the catalogue, so adding or reordering faults changes the samples of the others. `Experiment` therefore has three schemes (`spicefault.experiments.seeding`):
+Seeding. Each sample has its own random stream, derived from the master seed and a key. `Experiment` has three schemes for the key (`spicefault.experiments.seeding`):
 
 | Scheme | Key of the stream | Use |
 |---|---|---|
-| `positional` | (fault index, replica) | Identical to the baseline; required for Phase 1 and Phase 9 equivalence |
-| `content` | (hash of the fault identifier, replica) | A condition has the same samples in any experiment that contains it. Recommended for new studies |
+| `positional` | (fault index, replica) | The stream of a fault depends on its place in the fault list: adding or reordering faults changes the samples of the others. Kept for datasets generated this way |
+| `content` | (hash of the fault identifier, replica) | A condition has the same samples in any experiment that contains it. Used in the experiments of this plan |
 | `common` | (replica) | Common random numbers: every fault, and the healthy case, on the same drawn circuits |
 
 The operating condition is never part of the key: one drawn circuit is simulated under every operating condition, so comparisons between operating conditions are always paired.
@@ -62,134 +50,125 @@ Tolerance levels (Experiment E) are compared on the same circuits by constructio
 | Comparison | Quantity | Criterion |
 |---|---|---|
 | Same deck, direct ngspice against `spicefault`, same machine | Raw vectors | Exact equality expected. Any difference is investigated, not tolerated |
+| Closed-form circuits | Measurements against theory | Within the simulator tolerances in force (`reltol`, `abstol`, `vntol`), which are recorded |
 | L1 | Sample definitions | Exact equality |
 | L2, 1 worker against $N$ workers | Measurements (float64) | Exact equality expected; accept relative difference ≤ 1e-12 |
-| Phase 1 and 9, `spicefault` against `data/v1` | Realised parameters | Exact equality |
-| | Scalar features and specification values | Relative difference ≤ 1e-9, absolute floor 1e-15 |
-| | Waveforms (stored as float32) | Exact equality after the same cast |
-| | Labels (compliance, violated specifications) | Exact equality |
-| L3 | Measurements | No criterion set in advance: measure the distribution of differences and report it, together with the number of labels that change |
-
-If the netlist text generated by `spicefault` is byte-identical to the baseline's, outputs should be identical on the same machine. Phase 1 should therefore compare netlist text first; it is the cheapest and strictest check.
+| L2 | Waveforms (stored as float32) | Exact equality |
+| L3 | Measurements | No criterion set in advance: measure the distribution of differences and report it, together with the number of statuses and labels that change |
 
 ## 4. Environment and timing protocol
 
-Recorded for every run: `spicefault` version and commit, Python and dependency versions, simulator name and version, operating system, processor model, number of physical and logical cores, number of workers, chunk size, start and end time, and whether the run was resumed.
+Recorded for every run: `spicefault` version and commit, Python and dependency versions, simulator name and version, operating system, processor model, number of physical and logical cores, number of workers, chunk size, start and end time, and whether the run was resumed. The manifest of a dataset and the result files of the benchmarks hold these.
 
-Timing: fixed workload; at least 5 repetitions per configuration; report median and range; machine otherwise idle and on mains power; one discarded warm-up run; output written to local disk.
+Timing: fixed workload; at least 5 repetitions per configuration; report median and range; machine otherwise idle and on mains power; one discarded warm-up run; output written to local disk. A machine that is running anything else gives timings that must not be reported.
 
 ## 5. Experiments
 
 ### A. Correctness
 
 - **Question:** does the framework change what the simulator computes? (RQ3)
-- **Design:** for each validation circuit, a set of decks covering every fault type is run directly with `ngspice -b` and through `spicefault`. For the analytical circuits, results are also compared with the closed-form response.
+- **Design:** for each validation circuit, a set of decks covering every fault type is run directly with `ngspice -b` and through `spicefault`. For the closed-form circuits, results are also compared with theory.
 - **Output:** maximum absolute and relative difference per vector.
-- **Acceptance:** §3, first row; analytical circuits agree with theory within the simulator tolerances in force (`reltol`, `abstol`, `vntol`), which are recorded.
-- **Available after:** Phase 2.
+- **Acceptance:** §3, first two rows.
+- **State:** the unit tests do this for the closed-form circuits; the validation circuits are pending.
 
 ### B. Reproducibility
 
 Automated as `python -m benchmarks.reproducibility.run`.
 
 - **Question:** are results independent of parallelism and repeatable? (RQ3)
-- **Design:** the same campaign with seed 42 run with 1 worker and with the maximum available; run twice with the same worker count; run interrupted and resumed. A subset rerun on a second platform for L3.
-- **Size:** *proposed* 5,000 cases on the ECG `integrated` circuit, covering every fault type.
-- **Output:** L1 comparison; distribution of L2 and L3 differences; number of changed labels.
+- **Design:** the same campaign with a fixed seed run with 1 worker and with the maximum available; run twice with the same worker count; with another chunk size; interrupted and resumed; then samples simulated again from the dataset folder. A subset rerun on a second platform for L3.
+- **Size:** *proposed* 5,000 samples, covering every fault type.
+- **Output:** L1 comparison; distribution of L2 and L3 differences; number of changed statuses.
 - **Acceptance:** L1 exact in all cases, including the resumed run; L2 as in §3.
-- **Available after:** Phase 5.
 
-The specification asks for 16 workers. The available machine has 8 cores; 16 workers there would test oversubscription, not parallelism. A 16-core run needs another machine (open decision 1).
+The project specification asks for 16 workers. The development machine has 8 cores; 16 workers there would test oversubscription, not parallelism. A 16-core run needs another machine (open decision 1).
 
 ### C. Parallel scalability
 
 Automated as `python -m benchmarks.scalability.run`.
 
 - **Question:** how does throughput scale, and what does the abstraction cost? (RQ4)
-- **Design:** fixed workload at 1, 2, 4, 8 workers, and 16 where the hardware allows. The same workload with the baseline code.
-- **Size:** *proposed* 2,000 cases of the ECG `integrated` circuit.
-- **Output:** wall time, simulations per second, $S(N) = T_1 / T_N$, $E(N) = S(N)/N$, peak memory, bytes written, and a breakdown of time per case into netlist generation, simulator process, output parsing and storage.
-- **Acceptance:** none on speed-up, which is reported as measured. *Proposed* for overhead: `spicefault` throughput at least 0.95 of the baseline at equal worker count.
-- **Caveat:** the M2 has 4 performance and 4 efficiency cores, so efficiency beyond 4 workers falls for hardware reasons. For the paper the curve should be measured on a machine with homogeneous cores.
-- **Available after:** Phase 5; baseline timing can be measured now.
+- **Design:** fixed workload at 1, 2, 4, 8 workers, and 16 where the hardware allows. The same task with the direct script of §1.
+- **Size:** *proposed* 2,000 samples of the state-variable filter.
+- **Output:** wall time, simulations per second, $S(N) = T_1 / T_N$, $E(N) = S(N)/N$, peak memory, bytes written, and a breakdown of the time of one sample into netlist generation, simulator process, output parsing, measurement and storage.
+- **Acceptance:** none on speed-up, which is reported as measured. *Proposed* for overhead: `spicefault` throughput at least 0.95 of the direct script at equal worker count.
+- **Caveat:** the development machine has 4 performance and 4 efficiency cores, so efficiency beyond 4 workers falls for hardware reasons. For the paper the curve should be measured on a machine with homogeneous cores.
 
-Recovery time, listed in the specification, is measured here as the time from relaunching an interrupted campaign to the first new simulation, and the number of completed simulations that are repeated.
+Recovery time, listed in the project specification, is measured as the time to launch again a campaign whose chunks are complete, and the number of completed simulations that are repeated (none: an interruption loses at most the chunk in progress).
 
 ### D. Fault coverage
 
 Automated as `python -m benchmarks.fault_coverage.run`.
 
 - **Question:** is coverage systematic and auditable? (RQ1, RQ7)
-- **Design:** generate the fault universe of each validation circuit from the applicability rules; build the campaign; produce the coverage matrix and the exclusion list.
-- **Output:** coverage matrix per circuit; counts of components × fault types × magnitudes × operating conditions; structural coverage (M10).
-- **Acceptance:** every pair in the universe is simulated or excluded with a reason; the ECG universes reproduce the 293 and 307 baseline fault conditions.
-- **Available after:** Phase 3.
+- **Design:** generate the fault universe of each validation circuit from its rules; build the campaign; produce the coverage matrix and the exclusion list.
+- **Output:** coverage matrix per circuit; counts of components × fault types × magnitudes × operating conditions; structural coverage (M10); components outside the fault model; parametric faults partly inside the tolerance band.
+- **Acceptance:** every pair in the universe is simulated or excluded with a reason.
 
 ### E. Impact of variability
 
-- **Question:** how does tolerance degrade detectability? (RQ2, RQ6)
-- **Design:** tolerance of all passives set to 0, 1, 5 and 10 %, same fault catalogue, same measurement model. Healthy reference recomputed at each level. Common random numbers across levels.
-- **Size:** *proposed* 5,000 healthy and 200 per fault condition at each level, as in the baseline. For the `integrated` circuit this is about four times the baseline dataset; restricting the catalogue to graded faults is an alternative.
-- **Output:** M1, M2 and M8 per fault condition with intervals; yield against tolerance; the list of faults whose detection probability falls below $1 - \beta$ and the tolerance at which it happens.
-- **Acceptance:** none; this is the main reliability result. The 0 % level requires the measurement model, otherwise populations are degenerate.
-- **Decision needed:** whether the spread of active-device parameters and electrodes scales with the same factor or stays fixed (open decision 2).
-- **Available after:** Phase 6.
+- **Question:** how does tolerance degrade detectability and diagnostic coverage? (RQ2, RQ6)
+- **Design:** every tolerance scaled by 0, 0.2, 1 and 2 times its declared value (the equivalent, for 5 % parts, of 0, 1, 5 and 10 %), same fault list, same measurement model. Healthy reference recomputed at each level. The same circuits at every level (§2).
+- **Size:** *proposed* 5,000 healthy and 200 per fault condition at each level.
+- **Output:** M1, M2 and M8 per fault condition with intervals; yield and failure probability against tolerance (M5); diagnostic coverage against tolerance (M6); the faults whose detection probability falls below $1 - \beta$ and the tolerance at which it happens.
+- **Acceptance:** none; this is the main reliability result. The zero level requires the measurement model, otherwise the populations are degenerate.
 
 ### F. Impact of operating conditions
 
 - **Question:** does detectability depend on operating conditions? (RQ2)
-- **Design:** one factor at a time around the nominal condition, then the corners.
-- **Factors for the ECG circuit:** supply voltage; electrode family, already sampled in the baseline; stimulus amplitude and frequency of the self-test.
-- **Output:** M11.
-- **Caveat on temperature:** the ECG circuits use behavioural amplifier models and resistors and capacitors without temperature coefficients. Changing the simulation temperature would change almost nothing, and reporting that as robustness to temperature would be wrong. Temperature needs either temperature coefficients with a cited source or a circuit with device-level models (open decision 3).
-- **Available after:** Phase 6.
+- **Circuit:** the linear regulator, whose device models depend on temperature.
+- **Design:** one factor at a time around the nominal condition (input voltage, load current, temperature), then the corners.
+- **Output:** M11: detection probability per fault and condition, worst case, and the conditions under which a fault detectable at the nominal condition stops being so.
+- **Caveat:** a circuit made of behavioural models and passives without temperature coefficients does not change with temperature. Reporting that as robustness to temperature would be wrong, which is why this experiment uses device-level models.
 
 ### G. Fault separability
 
 - **Question:** how distinguishable are faults from each other? (RQ5)
-- **Design:** M9 on the datasets of experiment E at the declared tolerance, once on scalar measurements and once on waveforms. For waveforms the feature vector is the sampled response, reduced to a fixed number of components by a declared method.
-- **Output:** pairwise separation matrix, undetectable conditions, ambiguity groups, confusable components; comparison with the collinear groups predicted by local sensitivity (M7a).
-- **Acceptance:** on the ECG circuits, the framework reproduces the baseline testability results (`results/e2`) from the same data.
-- **Available after:** Phase 6.
+- **Circuit:** the state-variable filter, at the declared tolerance, with the data of Experiment E.
+- **Design:** M9 once on scalar measurements and once on waveforms. For waveforms the feature vector is the sampled response, reduced to a fixed number of components by a declared method.
+- **Output:** pairwise separation matrix, undetectable conditions, ambiguity groups, confusable components; comparison with the collinear groups and the testability rank predicted by local sensitivity (M7a).
+- **Acceptance:** none. The comparison between what local sensitivity predicts and what the campaign finds is the result.
 
 ### H. Machine learning as downstream application
 
 - **Question:** are the generated data usable for automated diagnosis?
-- **Design:** the ECG experiments E3 to E6 run on a dataset exported by `spicefault`. The models and their evaluation stay in the ECG repository.
-- **Output:** the ECG results, obtained through the framework.
-- **Acceptance:** results match those obtained from `data/v1` within the variation between training seeds.
-- **Available after:** Phase 9.
+- **Design:** none in this manuscript. The application study of SCIENTIFIC_SCOPE.md §9 trains diagnosis models on data generated with the library; it is cited as the evidence.
+- **Optional:** a short example with a standard classifier on one validation circuit, to show `Dataset.to_ml`. It would be an example of use, not a result.
 
-## 6. Experiments and phases
+## 6. What remains, in order
 
-| Experiment | Earliest phase | Circuits |
+| Step | Content | Long runs |
 |---|---|---|
-| A | 2 | all |
-| D | 3 | all |
-| B, C | 5 | ECG `integrated` |
-| E, F, G | 6 | ECG both, independent circuit |
-| H | 9 | ECG both |
+| 1 | Literature search and positioning (SCIENTIFIC_SCOPE.md §7) | None |
+| 2 | The three validation circuits: netlist, fault rules, measurements, specifications, and a campaign script each | Short checks only |
+| 3 | The direct ngspice script for the comparison task | Short checks only |
+| 4 | Scripts of Experiments E, F and G | Short checks only |
+| 5 | All campaigns and benchmarks, launched together on an idle machine | A, B, C, D, E, F, G |
+| 6 | State-of-the-art comparison table | None |
+| 7 | Release: licence, citation file, documentation, archive with DOI | None |
+| 8 | Manuscript | None |
 
-Phase 1 (extraction) has its own gate: the Phase 1 code regenerates `data/v1` within the tolerances of §3. A reduced gate for routine use is the baseline smoke configuration, about 1,200 simulations per circuit.
+Steps 1 to 4 need no long simulation and can be done in any order; the methods sections of the manuscript can be drafted alongside them.
 
 ## 7. Threats to validity
 
 | Threat | Mitigation |
 |---|---|
-| Results specific to ngspice 44 | Record the version; L3 comparison on a second version |
-| Behavioural device models | Declared; comparison of the behavioural INA with the vendor macromodel exists in the ECG repository |
+| Results specific to one ngspice version | Record the version; L3 comparison on a second version |
+| Fidelity of the device models | Declared; vendor or published model parameters with their source |
 | Open and short resistances chosen arbitrarily | Recorded; sensitivity of the results to `r_open` checked on one circuit |
 | Detectability depends on the feature set and the decision rule | Both reported with every figure; at least two rules compared |
 | Equal weights across fault conditions | Stated; weighted variant if failure-mode data with a source are available |
-| Convergence failures concentrated in severe faults | Failures counted and bounds reported (RELIABILITY_METRICS.md §2). The baseline had none |
+| Convergence failures concentrated in severe faults | Failures counted and bounds reported (RELIABILITY_METRICS.md §2) |
 | Timing on a machine with heterogeneous cores | Second machine for the scalability figure |
-| Baseline and framework written by the same author | Baseline frozen at a commit before the extraction starts |
-| Generalisation shown on few circuits | Stated as a limitation; the independent circuit is not chosen by convenience |
+| Direct script and framework written by the same author | Script frozen before the measurements; both kept in the repository |
+| Validation circuits chosen by the authors | Two of them taken from the literature; all specifications declared before the campaigns are run |
+| Generalisation shown on few circuits | Stated as a limitation |
 
 ## 8. Open decisions
 
 1. **Second machine** with 16 or more homogeneous cores for experiments B and C, or restrict the claims to 8 workers.
-2. **Experiment E:** scale only passive tolerances, or all sources of normal variation.
-3. **Temperature:** add temperature coefficients to the ECG passives, study temperature only on a device-level independent circuit, or leave temperature out.
-4. **Size of experiment E:** full catalogue at four tolerance levels, or graded faults only.
-5. **Baseline commit to freeze.** Recommended: the current head of the ECG repository, tagged, since its simulation code is the same as at `93a40d8` and `data/v1` remains valid for it.
+2. **Random numbers between fault conditions** in Experiments E to G: independent (`content`) or common. Independent is proposed, because the intervals of the metrics assume it.
+3. **Size of experiment E:** four tolerance levels on all three circuits, or on one.
+4. **Measurement model** for the zero-tolerance level: the noise and resolution assumed for each circuit.

@@ -1,5 +1,18 @@
 # SPICEFAULT
 
+> **Revision note.** This is the original specification of the project and is kept as
+> written. One decision in it has changed since: the ECG front-end is no longer the
+> case study of the manuscript. The framework is validated on generic circuits, and
+> the ECG study, an independent paper published first, is only cited as an application
+> that uses the library.
+>
+> Superseded by that decision: sections 38 (ECG case study) and 39 (additional
+> circuit), the ECG parts of sections 35, 45 (items 10 and 11) and 46 (experiment H),
+> and phases 9 and 10 of the roadmap (sections 56 and 57). Section 48 describes how the
+> library was started, which is done. The current plan is in
+> [docs/SCIENTIFIC_SCOPE.md](docs/SCIENTIFIC_SCOPE.md) and
+> [docs/EXPERIMENT_PLAN.md](docs/EXPERIMENT_PLAN.md).
+
 **SPICE-based Fault Injection and Reliability Assessment Framework**
 
 > A reproducible Python framework for fault injection, uncertainty analysis, large-scale simulation, and reliability-oriented assessment of electronic circuits using SPICE-compatible simulators.

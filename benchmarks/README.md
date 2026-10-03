@@ -7,40 +7,39 @@ Each one prints a summary and writes its full result as JSON under
 Run them from the repository root:
 
 ```bash
-python -m benchmarks.scalability.run --workload ecg --workers 1 2 4 8
-python -m benchmarks.reproducibility.run --workload ecg --workers 8
+python -m benchmarks.scalability.run --workers 1 2 4 8
+python -m benchmarks.reproducibility.run --workers 8
 python -m benchmarks.fault_coverage.run
 ```
 
 | Benchmark | Experiment | What it measures |
 |---|---|---|
-| `scalability` | C | Wall time and simulations per second for each number of workers, speed-up and efficiency; time of one sample by phase; peak memory; bytes written; cost of resuming. With an ECG workload, the same work done by `ecgfd` |
+| `scalability` | C | Wall time and simulations per second for each number of workers, speed-up and efficiency; time of one sample by phase; peak memory; bytes written; cost of resuming |
 | `reproducibility` | B | The same campaign with 1 and with several workers, repeated, with another chunk size, and interrupted and resumed: are the sample definitions identical (L1), and how much do the outputs differ (L2)? Then samples simulated again from the dataset folder |
-| `fault_coverage` | D | For each validation circuit: components, fault types, magnitudes, fault conditions, the coverage matrix, exclusions, components outside the fault model, and faults partly inside the tolerance band |
+| `fault_coverage` | D | For each circuit: components, fault types, magnitudes, fault conditions, the coverage matrix, exclusions, components outside the fault model, and faults partly inside the tolerance band |
 
 ## Workloads
 
 | Name | Circuit | Needs |
 |---|---|---|
 | `rc` | RC low-pass filter, 30 faults, three analyses per simulation (about 15 ms each) | ngspice |
-| `ecg` | Self-test measurements of the ECG front-end, `integrated` circuit, 293 faults (about 0.3 s each) | ngspice and `ecgfd` |
-| `ecg-reference` | The same for the `reference` circuit, 307 faults | ngspice and `ecgfd` |
 
-The ECG workloads are the first of the two ngspice runs that `ecgfd` makes per case.
-Their baseline does exactly that work with the code of `ecgfd`, inside the same
-process pool and chunked storage, so the comparison isolates what differs per sample:
-how the netlist is built, how ngspice is called and how the output is measured.
+The RC filter only checks that the benchmarks work. A simulation of it is so short
+that starting the worker processes takes a large part of the time, so its timings
+say little about the framework. The validation circuits of the experiment plan are
+to be added to `workloads.py` as they are written, and the figures of the manuscript
+come from them.
+
+Not implemented yet: the comparison with a script written directly against ngspice
+for the same task, which measures what the framework costs.
 
 ## Protocol
 
 The defaults follow section 4 of the experiment plan: a fixed workload of 2000
 samples, 5 repetitions, one discarded warm-up run, median and range reported. The
-machine should be idle and on mains power; the result records the load average at
-the start, which is the only evidence of that the benchmark can collect.
-
-Smaller runs are useful to check that a benchmark works, and say little about
-performance: with few samples, the start of the worker processes (about a second)
-is a large part of the time. Result files of such runs are labelled accordingly.
+machine must be idle and on mains power; the result records the load average at the
+start, which is the only evidence of that the benchmark can collect. Timings taken
+while anything else is running must not be kept.
 
 ## Reading the results
 
@@ -55,8 +54,6 @@ is a large part of the time. Result files of such runs are labelled accordingly.
 - **Resume overhead** is the time to launch again a campaign whose chunks are all
   complete. An interruption loses at most the chunk in progress; complete chunks are
   never simulated again.
-- **Relative throughput** is simulations per second of `spicefault` over `ecgfd` at the
-  same number of workers. The experiment plan proposes at least 0.95.
 
 ## Result files
 
