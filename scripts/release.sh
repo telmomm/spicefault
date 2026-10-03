@@ -64,7 +64,8 @@ if [[ "$dry_run" == "--dry-run" ]]; then
 fi
 
 git add src/spicefault/__init__.py CITATION.cff
-git commit -m "Release $version"
+# the files may already say this version, as for the first release: then there is nothing to commit
+git diff --cached --quiet || git commit -m "Release $version"
 git tag -a "v$version" -m "spicefault $version"
 cat <<MSG
 
