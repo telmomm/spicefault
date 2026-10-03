@@ -1,72 +1,122 @@
 # Comparison with existing approaches
 
-Status: first version. It covers what could be established without long runs: what a direct script and two Python libraries provide, and the code each approach needs. The throughput comparison needs the scalability benchmark on an idle machine ([RUNBOOK.md](RUNBOOK.md)).
+Status: second version. spicelib, the closest open library, was read and run. PySpice was only inspected. The throughput comparison with a direct script still needs the scalability benchmark on an idle machine ([RUNBOOK.md](RUNBOOK.md)).
 
-The criteria are those of [SCIENTIFIC_SCOPE.md](SCIENTIFIC_SCOPE.md) §7. This is a comparison of scope. None of the entries says that a tool cannot be used to build the missing part: with any of them one can write what is absent, and the direct script of the first column is exactly that exercise.
+This is a comparison of scope. With any of these tools one can write what is missing; the direct script of §4 is exactly that exercise.
 
 ## 1. What was examined, and how
 
 | Approach | Version | How it was examined |
 |---|---|---|
-| Direct script against ngspice | `validation/direct/sallen_key_direct.py` in this repository | Written for the Sallen–Key campaign, with the same circuit, tolerances, faults, analyses and measurements as the study. Tested to give the same measurements as `spicefault` for every fault |
-| spicelib | 1.6.3 | Installed from PyPI; its modules and classes listed. Not run |
-| PySpice | 1.5 | Installed from PyPI; its modules listed and searched. Not run |
+| spicelib | 1.6.3, GPL-3.0 | Its README (1,395 lines, shipped with the package) was read. Its source was read where the README was silent. It was run with ngspice 44.2 on the Sallen–Key filter of `validation/`: `scripts/spicelib_probe.py` repeats the checks |
+| PySpice | 1.5 | Installed; its modules listed and searched for tolerance, fault and campaign functions. Not run, documentation not read |
+| Direct script against ngspice | `validation/direct/sallen_key_direct.py` | Written for the Sallen–Key campaign; tested to give the same measurements as `spicefault` for every fault |
 | `spicefault` | this repository | Its tests |
 
-Commercial analog fault simulators and the tools of the literature are discussed in [RELATED_WORK.md](RELATED_WORK.md); they could not be examined and are not in the table.
+Limits: one version of spicelib, with one simulator, on one circuit. Its LTspice, QSPICE and Xyce support, its schematic editors and its client–server mode were read about, not used. Commercial fault simulators could not be examined ([RELATED_WORK.md](RELATED_WORK.md)).
 
-**The entries for spicelib and PySpice rest on reading names of modules and classes, not on documentation or use.** A capability provided under a name that was not looked for would be missed. They must be confirmed by reading the documentation and by implementing the benchmark task with each, before any of this goes into the manuscript.
+## 2. spicelib in detail
 
-## 2. Capabilities
+### 2.1 What it is
 
-"Written" means that the script contains code for it; "—" that it does not.
+By its own description, a toolchain to interact with SPICE simulators: read simulation output, edit netlists and schematics, launch simulations in batches, and prepare tolerance analyses. Its author states the needs it answers: use all the processor cores, keep simulation files small, sweep any number of dimensions, compute beyond `.MEAS`, correlate runs, run on several machines, kill stalled simulations, and connect simulation with other algorithms. Faults are not among them.
 
-| Criterion | Direct script | spicelib 1.6.3 | PySpice 1.5 | `spicefault` |
-|---|---|---|---|---|
-| Runs ngspice and reads its output | Written | Yes; also LTspice, QSPICE and Xyce | Yes; also Xyce | Yes, ngspice only |
-| Netlist editing | Written (text template) | Yes (editor classes) | Yes (circuit built in Python) | Yes (three primitives on netlist text) |
-| Tolerance analysis | Written (uniform draws) | Yes: `Montecarlo`, `WorstCaseAnalysis`, `FastWorstCaseAnalysis`, `QuickSensitivityAnalysis` | Not found | Yes: eight kinds of variation, scalable |
-| Fault abstraction | Written (three kinds, hard-coded) | Not found: no module or class for faults | Not found | Yes: five fault types, metadata, serialisation |
-| Variation kept apart from fault, fault applied to a drawn circuit | Written | Not applicable without a fault abstraction | Not applicable | Yes |
-| Operating conditions as objects | — | Not looked for | Not looked for | Yes |
-| Fault universe from rules, coverage report | — | Not found | Not found | Yes |
-| Parallel execution | Written (`multiprocessing`) | Yes (`SimRunner`, `parallel_sims`) | Not found | Yes |
-| Resumable campaign | — | Not found | Not found | Yes |
-| Status of each simulation | Ok or not | Not looked for | Not looked for | Five statuses, with message |
-| Samples independent of the number of workers and of the fault list | Of the workers, yes; of the fault list, no (seed by position) | Not looked for | Not applicable | Yes (`content` seeding) |
-| Per-sample provenance and a record of the definition | — | Not looked for | Not found | Yes |
-| Measurement extraction | Written | Not looked for | Not looked for | Yes |
-| Reliability metrics | — | Not found | Not found | Yes |
-| Dataset with integrity check and reproduction | CSV and array | Not found | Not found | Yes |
+### 2.2 What it does that `spicefault` does not
 
-Two observations, both subject to the caveat of §1:
+| Capability | In spicelib | In `spicefault` |
+|---|---|---|
+| Simulators | LTspice, ngspice, QSPICE, Xyce | ngspice |
+| Schematic files | `AscEditor` and `QschEditor` read and edit LTspice `.asc` and QSPICE `.qsch` files, so that a modified circuit can be opened in the simulator's own editor; a tool converts `.asc` to `.qsch` | None: netlists only |
+| Element types | A documented table of more than thirty element types, per simulator, with what can be edited in each | Two-terminal elements, controlled sources, transistors and subcircuit instances |
+| Hierarchy | Components inside subcircuits can be addressed (`XU1:C2`), and subcircuit definitions edited | Top level only; a subcircuit is reached through its instance parameters |
+| Worst-case analysis | `WorstCaseAnalysis` simulates every combination of minimum and maximum values; `FastWorstCaseAnalysis` and `QuickSensitivityAnalysis` reduce the number | Local sensitivity only; no worst case |
+| Tolerance analysis inside the simulator | With LTspice, the netlist is rewritten with random functions and a `.step`, and can be run from the GUI | Always one process per sample |
+| Reading results | `RawRead` for several raw-file dialects and stepped data; reading of `.MEAS` results from log files | One raw reader, for ngspice binary files |
+| Distributed runs | A server that runs simulations for clients on other machines | Local processes only |
+| Command-line tools | Histograms of measurements, plotting and conversion of raw files | None |
 
-- spicelib is the closest open library: it covers tolerance analysis and parallel batches for four simulators. What was not found in it is the fault side: fault types, a fault universe, and analyses that compare a faulty population with a healthy one.
-- PySpice is an interface to the simulator, as its own description says; campaign-level functions were not found in it.
+It does not draw schematics. What it does with them is read and edit the files of LTspice and QSPICE.
 
-`spicefault` supports one simulator. spicelib supports four, and that is a point in its favour that the manuscript must state.
+### 2.3 What `spicefault` does that spicelib does not
 
-## 3. Code needed for one study
+Each row was checked by running spicelib or by reading its source, as noted.
 
-The Sallen–Key campaign: 58 faults, tolerances on eight parameters, two analyses, ten measurements, a waveform.
+| | spicelib 1.6.3 | `spicefault` | How it was checked |
+|---|---|---|---|
+| Fault model | None. No class, module or example about faults | Fault types with physical interpretation, records, fault sets, a universe generated by rules, coverage matrix | README and module list |
+| Injecting a fault | Possible by hand with the editor: change a value, reassign the nodes of a component, add a resistor | Three primitives, applied and recorded by the fault | Run: an open on R3 written with the editor |
+| Reproducible samples | No. The Monte Carlo draws each value from a new unseeded generator; two runs give different samples, and there is no seed option | A stream per sample from a master seed; same samples for any number of workers | Run twice; source of `montecarlo.py` |
+| Values as drawn | A value given as a number is written with six significant digits (5359.872341 becomes `5.35987k`); given as text it is kept | Written so that they read back as the same number | Run |
+| Failed simulations | Success is the exit code of the simulator. With ngspice, a circuit whose analysis aborts is counted as successful | Five statuses; the plots obtained are checked against the analyses asked for | Run: an unsolvable circuit counted as 1 ok, 0 failed |
+| Record of a campaign | The netlist and output files of each run in a folder | One table with the definition, drawn values, status and measurements of every sample; the experiment definition; file fingerprints | README and run |
+| Interrupted campaign | Starts again | Resumes after the last complete chunk | README: no mention; source: none found |
+| Tolerance analysis with ngspice | Only the variant that draws in Python; the in-simulator testbench raises "Simulator not supported" | The same for every backend | Run |
+| Healthy population | Uniform or normal tolerance per component or parameter | Eight kinds of variation, joint draws, scaling of every spread with the same random numbers | README and source |
+| After the simulation | "It is up to the user to make the statistics on the data" | Detection probability, diagnostic coverage, robustness, ambiguity, with confidence intervals | Docstring of `analyse_measurement` |
+| First line of a netlist | Must start with `*` or `.title`; a plain SPICE title line is rejected | Any | Run |
+
+## 3. Is it worth continuing?
+
+Yes. The two libraries overlap in the plumbing and differ in purpose.
+
+**The overlap is real and is not where the value is.** Running a simulator, reading its output, editing a netlist and drawing tolerances are roughly the first three phases of this project, and spicelib does them for four simulators with years of use. If `spicefault` were only that, it would not be worth continuing.
+
+**What spicelib does not have is what the project is about.** A fault as an object with a record; the population of faulty circuits against the healthy one; which faults were simulated and which left out; samples that can be drawn again; failures that stay in the record; and the reliability quantities computed from all that. None of it is in spicelib, and its stated goals do not point there.
+
+**Two of the differences are not matters of taste.** A Monte Carlo that cannot be repeated and a failed analysis counted as a success are exactly the problems the manuscript says ad-hoc workflows have (SCIENTIFIC_SCOPE.md §1). They can now be cited as observed in the most complete open tool, with the version and the script that shows them. That strengthens the case for the framework; it must be reported as a difference of purpose, and the findings should be sent to its maintainer before being published.
+
+Three ways to go on:
+
+| Option | Gain | Cost |
+|---|---|---|
+| A. Continue independently, as now | Control over reproducibility and records; a permissive licence; few dependencies | One simulator; duplicated plumbing; a reviewer will ask why spicelib was not used |
+| B. Rebuild on top of spicelib | Four simulators, schematic files, its editors | The combined work falls under GPL-3.0; its Monte Carlo cannot be used (no seed) and its success count cannot be trusted with ngspice, so the core would be kept anyway |
+| C. Stop, and propose fault features to spicelib | No duplicated effort | The framework, its metrics and the manuscript are a different project from what spicelib sets out to be |
+
+Recommended: **A, with spicelib offered as an optional backend.** The backend interface already exists (`SimulatorBackend`), and the probe shows what an adapter needs: spicelib runs a netlist file as given and keeps a value passed as text. `spicefault` would still build the netlist, decide the status and record the sample; spicelib would only run LTspice, QSPICE or Xyce and read their files. That answers the reviewer's question with code and adds three simulators without rewriting them.
+
+The licence must be settled first. spicelib is GPL-3.0. An adapter that imports it makes whatever is distributed with it subject to the GPL, which matters if `spicefault` is to be MIT or BSD. Keeping the adapter as a separate optional package is the usual arrangement, but this is a legal question and has not been checked with anyone qualified.
+
+## 4. What is worth taking from spicelib
+
+Ideas, to be implemented independently: its code is GPL-3.0 and cannot be copied into a permissively licensed project.
+
+| Idea | Why it matters here | Effort |
+|---|---|---|
+| **Schematics as input** | Users draw circuits; they do not write netlists. spicelib reads LTspice and QSPICE files. The open route is KiCad, whose command line exports a SPICE netlist from a schematic: `Circuit.from_kicad("x.kicad_sch")` would need no GPL code | Small, plus a dependency on KiCad being installed |
+| **Seeing the fault in the schematic** | spicelib writes its changes back to the schematic file so they can be opened in the GUI. For fault injection, opening the faulty circuit in an editor is a strong way to check and to explain a fault | Larger: it needs a schematic writer. A first step is a diff of the netlist with the fault marked |
+| **Worst-case analysis** | Worst-case circuit analysis is a standard reliability method. The extreme-value envelope of the healthy circuit, next to the Monte Carlo one, belongs in a reliability framework, and fits as one more way to generate the healthy samples | Medium |
+| **Faults inside subcircuits** | A fault on a component of an amplifier model, not only on its parameters. spicelib's `XU1:C2` addressing shows the interface | Medium: the netlist class must enter subcircuit definitions and make them unique per instance |
+| **More element types** | Its table of element syntaxes is a specification of what a netlist editor must parse | Medium, incremental |
+| **`.MEAS` results** | Measurements computed by the simulator, read from its log, for users who already have them in their decks | Small |
+| **More simulators** | Through the optional backend of §3 | Small for the adapter; the licence question first |
+| **Runs on several machines** | Listed as future work in the project specification; spicelib's server is one design for it | Large; not now |
+
+Not worth taking: its tolerance drawing (unseeded, six digits), and success by exit code.
+
+## 5. The direct script
+
+The Sallen–Key campaign written against ngspice without any library: 58 faults, tolerances on eight parameters, two analyses, ten measurements, a waveform.
 
 | | Direct script | `spicefault` |
 |---|---|---|
-| Code specific to the study | 180 lines (`sallen_key_direct.py`) | 59 lines (`validation/sallen_key.py`) and 12 netlist lines |
-| Measurements written for the study | Included in the 180 | 37 lines (`validation/functions.py`), shared by the two filters |
-| Shared by all studies | — | 81 lines (`validation/study.py`) |
+| Code specific to the study | 180 lines | 59 lines and 12 netlist lines |
+| Measurements written for the study | Included in the 180 | 37 lines, shared by the two filters |
+| Shared by all studies | — | 81 lines |
 | Second and third circuit | A new script each | 53 lines (biquad) and 101 lines (regulator) |
 
-Lines counted are lines of code, without blank lines, comments and docstrings. As a measure of effort this is weak: it ignores the time to get a script right, and the study relies on a library that had to be written. What it does show is where the work goes: in the script, most lines are plumbing (building the netlist text, running the simulator, reading its file, the process pool, writing files), repeated for every circuit; in the study, the lines are the definitions of the circuit, its faults and its measurements.
+Lines of code without blank lines, comments and docstrings. As a measure of effort this is weak: it ignores the time to get a script right, and the study relies on a library that had to be written. It shows where the work goes: in the script, most lines are plumbing, repeated for every circuit; in the study, the lines define the circuit, its faults and its measurements.
 
-What the script does not have, and the study gets from the framework, is listed at the top of the script itself: resuming, a status and a message per simulation, the record of the experiment, a seed that does not depend on the position of a fault, and everything after the simulation (integrity, provenance, reproduction, metrics).
+The script does not resume, keeps only "ok or not" per simulation, records no definition of the experiment, and gives a fault different random numbers when the fault list changes. Its throughput against `spicefault` is measured by the scalability benchmark and has not been run at full size.
 
-## 4. Throughput
+## 6. PySpice
 
-Not measured yet. The scalability benchmark runs the same campaign through both, at each number of workers, and reports the ratio. A short run on a loaded machine, in the tests, only shows that both work.
+An interface to ngspice and Xyce in which the circuit is built in Python. In version 1.5 no module for tolerance analysis, faults or campaigns was found by listing and searching its modules. It was not run and its documentation was not read, so this says only that nothing of the kind is exposed under an obvious name.
 
-## 5. Still to do
+## 7. Still to do
 
-1. Read the documentation of spicelib and PySpice, and implement the Sallen–Key task with each.
-2. Run the scalability benchmark with the `sallen_key` workload on an idle machine.
-3. Add the tools of the literature whose full text can be read (RELATED_WORK.md §4).
+1. Send the two findings about spicelib (unseeded Monte Carlo, failed ngspice analyses counted as successful) to its maintainer, and note the answer.
+2. Decide the licence, then write the optional spicelib backend.
+3. Implement the Sallen–Key task with spicelib's own Monte Carlo and compare effort and throughput, as for the direct script.
+4. Read the documentation of PySpice, and repeat the check of spicelib on a newer version before submission.
+5. Run the scalability benchmark on an idle machine.
