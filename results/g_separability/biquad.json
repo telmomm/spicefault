@@ -1,0 +1,520 @@
+{
+  "experiment": "G, fault separability",
+  "circuit": "biquad",
+  "threshold": 3.0,
+  "from_measurements": {
+    "n_features": 10,
+    "n_conditions": 96,
+    "conditions_not_separated_from_healthy": [
+      "R1:parametric:-0.1",
+      "R1:parametric:+0.1",
+      "R2:parametric:-0.25",
+      "R2:parametric:-0.1",
+      "R2:parametric:+0.1",
+      "R2:parametric:+0.25",
+      "R3:parametric:-0.1",
+      "R3:parametric:+0.1",
+      "R4:parametric:-0.25",
+      "R4:parametric:-0.1",
+      "R4:parametric:+0.1",
+      "R4:parametric:+0.25",
+      "R5:parametric:-0.25",
+      "R5:parametric:-0.1",
+      "R5:parametric:+0.1",
+      "R5:parametric:+0.25",
+      "R5:parametric:+0.5",
+      "R6:parametric:-0.1",
+      "R6:parametric:+0.1",
+      "R6:parametric:+0.25",
+      "R7:parametric:-0.25",
+      "R7:parametric:-0.1",
+      "R7:parametric:+0.1",
+      "R7:parametric:+0.25",
+      "R8:parametric:-0.1",
+      "R8:parametric:+0.1",
+      "R9:parametric:-0.1",
+      "R9:parametric:+0.1",
+      "C1:parametric:-0.1",
+      "C1:parametric:+0.1",
+      "C1:parametric:+0.25",
+      "C2:parametric:-0.25",
+      "C2:parametric:-0.1",
+      "C2:parametric:+0.1",
+      "C2:parametric:+0.25",
+      "XU1.aol:parametric:x0.001",
+      "XU2.aol:parametric:x0.001",
+      "XU2.gbw:parametric:x0.01",
+      "XU3.aol:parametric:x0.001",
+      "XU3.gbw:parametric:x0.01",
+      "XU4.aol:parametric:x0.001"
+    ],
+    "components_with_no_detectable_fault": [
+      "XU2",
+      "XU3"
+    ],
+    "among_detectable_conditions": {
+      "n_conditions": 55,
+      "n_ambiguity_groups": 13,
+      "largest_ambiguity_group": 6,
+      "ambiguity_groups": [
+        [
+          "R1:parametric:+0.25",
+          "R1:parametric:+0.5",
+          "R3:parametric:-0.25",
+          "R8:parametric:+0.25",
+          "R8:parametric:+0.5",
+          "R9:parametric:-0.25"
+        ],
+        [
+          "R1:parametric:-0.25",
+          "R3:parametric:+0.25",
+          "R8:parametric:-0.25",
+          "R9:parametric:+0.25",
+          "R9:parametric:+0.5"
+        ],
+        [
+          "R1:open",
+          "R8:open",
+          "R9:short"
+        ],
+        [
+          "R2:parametric:+0.5",
+          "R7:parametric:+0.5",
+          "C2:parametric:+0.5"
+        ],
+        [
+          "R4:parametric:-0.5",
+          "R6:parametric:-0.25",
+          "C1:parametric:-0.25"
+        ],
+        [
+          "R4:open",
+          "R5:short"
+        ],
+        [
+          "R4:short",
+          "R5:open"
+        ],
+        [
+          "R4:parametric:+0.5",
+          "R5:parametric:-0.5"
+        ],
+        [
+          "R6:open",
+          "C1:short"
+        ],
+        [
+          "R6:parametric:-0.5",
+          "C1:parametric:-0.5"
+        ],
+        [
+          "R6:parametric:+0.5",
+          "C1:parametric:+0.5"
+        ],
+        [
+          "R7:open",
+          "C2:short"
+        ],
+        [
+          "R7:parametric:-0.5",
+          "C2:parametric:-0.5"
+        ]
+      ],
+      "confusable_components": {
+        "C1": [
+          "R4",
+          "R6"
+        ],
+        "C2": [
+          "R2",
+          "R7"
+        ],
+        "R1": [
+          "R3",
+          "R8",
+          "R9"
+        ],
+        "R2": [
+          "C2",
+          "R7"
+        ],
+        "R3": [
+          "R1",
+          "R8",
+          "R9"
+        ],
+        "R4": [
+          "C1",
+          "R5",
+          "R6"
+        ],
+        "R5": [
+          "R4"
+        ],
+        "R6": [
+          "C1",
+          "R4"
+        ],
+        "R7": [
+          "C2",
+          "R2"
+        ],
+        "R8": [
+          "R1",
+          "R3",
+          "R9"
+        ],
+        "R9": [
+          "R1",
+          "R3",
+          "R8"
+        ],
+        "XU1": [],
+        "XU4": []
+      },
+      "components_located_without_ambiguity": [
+        "XU1",
+        "XU4"
+      ],
+      "mean_confusable_partners": 2.0,
+      "component_groups": [
+        [
+          "C1",
+          "R4",
+          "R5",
+          "R6"
+        ],
+        [
+          "R1",
+          "R3",
+          "R8",
+          "R9"
+        ],
+        [
+          "C2",
+          "R2",
+          "R7"
+        ],
+        [
+          "XU1"
+        ],
+        [
+          "XU4"
+        ]
+      ]
+    },
+    "over_all_conditions": {
+      "mean_confusable_partners": 14.0,
+      "component_groups": [
+        [
+          "C1",
+          "C2",
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5",
+          "R6",
+          "R7",
+          "R8",
+          "R9",
+          "XU1",
+          "XU2",
+          "XU3",
+          "XU4"
+        ]
+      ]
+    }
+  },
+  "from_waveform": {
+    "n_features": 10,
+    "n_conditions": 96,
+    "conditions_not_separated_from_healthy": [
+      "R1:parametric:-0.1",
+      "R1:parametric:+0.1",
+      "R2:parametric:-0.25",
+      "R2:parametric:-0.1",
+      "R2:parametric:+0.1",
+      "R2:parametric:+0.25",
+      "R3:parametric:-0.1",
+      "R3:parametric:+0.1",
+      "R4:parametric:-0.25",
+      "R4:parametric:-0.1",
+      "R4:parametric:+0.1",
+      "R4:parametric:+0.25",
+      "R5:parametric:-0.25",
+      "R5:parametric:-0.1",
+      "R5:parametric:+0.1",
+      "R5:parametric:+0.25",
+      "R6:parametric:-0.1",
+      "R6:parametric:+0.1",
+      "R6:parametric:+0.25",
+      "R7:parametric:-0.25",
+      "R7:parametric:-0.1",
+      "R7:parametric:+0.1",
+      "R7:parametric:+0.25",
+      "R8:parametric:-0.1",
+      "R8:parametric:+0.1",
+      "R9:parametric:-0.1",
+      "R9:parametric:+0.1",
+      "C1:parametric:-0.1",
+      "C1:parametric:+0.1",
+      "C1:parametric:+0.25",
+      "C2:open",
+      "C2:parametric:-0.25",
+      "C2:parametric:-0.1",
+      "C2:parametric:+0.1",
+      "C2:parametric:+0.25",
+      "XU1.aol:parametric:x0.001",
+      "XU2.aol:parametric:x0.001",
+      "XU2.gbw:parametric:x0.01",
+      "XU3.aol:parametric:x0.001",
+      "XU3.gbw:parametric:x0.01",
+      "XU4.aol:parametric:x0.001"
+    ],
+    "components_with_no_detectable_fault": [
+      "XU2",
+      "XU3"
+    ],
+    "among_detectable_conditions": {
+      "n_conditions": 55,
+      "n_ambiguity_groups": 14,
+      "largest_ambiguity_group": 8,
+      "ambiguity_groups": [
+        [
+          "R1:open",
+          "R2:short",
+          "R3:short",
+          "R6:short",
+          "R7:short",
+          "R8:open",
+          "R9:short",
+          "C1:open"
+        ],
+        [
+          "R1:parametric:+0.25",
+          "R1:parametric:+0.5",
+          "R3:parametric:-0.25",
+          "R8:parametric:+0.25",
+          "R8:parametric:+0.5",
+          "R9:parametric:-0.25"
+        ],
+        [
+          "R1:parametric:-0.25",
+          "R3:parametric:+0.25",
+          "R8:parametric:-0.25",
+          "R9:parametric:+0.25",
+          "R9:parametric:+0.5"
+        ],
+        [
+          "R4:parametric:-0.5",
+          "R5:parametric:+0.5",
+          "R6:parametric:-0.25",
+          "C1:parametric:-0.25"
+        ],
+        [
+          "R2:parametric:+0.5",
+          "R7:parametric:+0.5",
+          "C2:parametric:+0.5"
+        ],
+        [
+          "R4:open",
+          "R5:short"
+        ],
+        [
+          "R4:short",
+          "R5:open"
+        ],
+        [
+          "R4:parametric:+0.5",
+          "R5:parametric:-0.5"
+        ],
+        [
+          "R6:open",
+          "C1:short"
+        ],
+        [
+          "R6:parametric:-0.5",
+          "C1:parametric:-0.5"
+        ],
+        [
+          "R6:parametric:+0.5",
+          "C1:parametric:+0.5"
+        ],
+        [
+          "R7:open",
+          "C2:short"
+        ],
+        [
+          "R7:parametric:-0.5",
+          "C2:parametric:-0.5"
+        ],
+        [
+          "R8:short",
+          "R9:open"
+        ]
+      ],
+      "confusable_components": {
+        "C1": [
+          "R1",
+          "R2",
+          "R3",
+          "R5",
+          "R6",
+          "R7",
+          "R8",
+          "R9"
+        ],
+        "C2": [
+          "R2",
+          "R7"
+        ],
+        "R1": [
+          "C1",
+          "R2",
+          "R3",
+          "R6",
+          "R7",
+          "R8",
+          "R9"
+        ],
+        "R2": [
+          "C1",
+          "C2",
+          "R1",
+          "R3",
+          "R6",
+          "R7",
+          "R8",
+          "R9"
+        ],
+        "R3": [
+          "C1",
+          "R1",
+          "R2",
+          "R6",
+          "R7",
+          "R8",
+          "R9"
+        ],
+        "R4": [
+          "R5"
+        ],
+        "R5": [
+          "C1",
+          "R4",
+          "R6"
+        ],
+        "R6": [
+          "C1",
+          "R1",
+          "R2",
+          "R3",
+          "R5",
+          "R7",
+          "R8",
+          "R9"
+        ],
+        "R7": [
+          "C1",
+          "C2",
+          "R1",
+          "R2",
+          "R3",
+          "R6",
+          "R8",
+          "R9"
+        ],
+        "R8": [
+          "C1",
+          "R1",
+          "R2",
+          "R3",
+          "R6",
+          "R7",
+          "R9"
+        ],
+        "R9": [
+          "C1",
+          "R1",
+          "R2",
+          "R3",
+          "R6",
+          "R7",
+          "R8"
+        ],
+        "XU1": [],
+        "XU4": []
+      },
+      "components_located_without_ambiguity": [
+        "XU1",
+        "XU4"
+      ],
+      "mean_confusable_partners": 5.076923076923077,
+      "component_groups": [
+        [
+          "C1",
+          "C2",
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5",
+          "R6",
+          "R7",
+          "R8",
+          "R9"
+        ],
+        [
+          "XU1"
+        ],
+        [
+          "XU4"
+        ]
+      ]
+    },
+    "over_all_conditions": {
+      "mean_confusable_partners": 14.0,
+      "component_groups": [
+        [
+          "C1",
+          "C2",
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5",
+          "R6",
+          "R7",
+          "R8",
+          "R9",
+          "XU1",
+          "XU2",
+          "XU3",
+          "XU4"
+        ]
+      ]
+    },
+    "method": "10 principal components fitted on the healthy samples"
+  },
+  "predicted_by_local_sensitivity": {
+    "n_components": 11,
+    "n_measurements": 10,
+    "testability_rank": 2,
+    "collinear_groups": [
+      [
+        "R8",
+        "R9"
+      ]
+    ],
+    "insensitive_components": [
+      "R2",
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "C1",
+      "C2"
+    ]
+  }
+}

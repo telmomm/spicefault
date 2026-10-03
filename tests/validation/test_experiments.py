@@ -53,9 +53,15 @@ def test_experiment_g(variability, workspace):
     result = g_separability.analyse("sallen_key", data)
     measured, predicted = result["from_measurements"], result["predicted_by_local_sensitivity"]
     assert measured["n_features"] == 10 and result["from_waveform"]["n_features"] == 10
-    assert set(measured["confusable_components"]) == {
-        "R1", "R2", "R3", "R4", "R5", "C1", "C2", "XU1",
-    }
+    assert measured["n_conditions"] == 58
+    visible = measured["among_detectable_conditions"]
+    hidden = len(measured["conditions_not_separated_from_healthy"])
+    assert visible["n_conditions"] == 58 - hidden
+    components = {"R1", "R2", "R3", "R4", "R5", "C1", "C2", "XU1"}
+    assert set(visible["confusable_components"]) <= components
+    assert set(visible["confusable_components"]) | set(
+        measured["components_with_no_detectable_fault"]
+    ) == components
     assert predicted["n_components"] == 7 and 1 <= predicted["testability_rank"] <= 7
     # the gain resistors only act through their ratio: local sensitivity must say so
     assert any({"R4", "R5"} <= set(group) for group in predicted["collinear_groups"])

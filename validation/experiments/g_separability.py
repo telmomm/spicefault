@@ -24,7 +24,10 @@ import validation
 from spicefault import Dataset
 from spicefault.reliability import (
     ReliabilityAnalysis,
+    ambiguity_groups,
     collinear_groups,
+    component_groups,
+    confusable_components,
     local_sensitivity,
     normalised_sensitivity,
     testability_rank,
@@ -57,20 +60,44 @@ def waveform_analysis(study, path: Path, seed: int = 0) -> ReliabilityAnalysis:
 
 
 def structure(analysis: ReliabilityAnalysis, threshold: float) -> dict:
+    """The ambiguity found, over all the fault conditions and over the detectable ones.
+
+    A fault that is not separated from healthy is close to every other small fault, so
+    over all the conditions each component ends up confusable with almost every other
+    one. The question of interest is the second: once a fault is visible, which
+    component could it be?
+    """
     found = analysis.ambiguity(threshold)
-    groups = [g for g in found.groups if len(g) > 1]
-    located = [c for c, others in found.confusable.items() if not others]
-    partners = [len(others) for others in found.confusable.values()]
+    d = analysis.separation()
+    hidden = set(found.undetectable)
+    component_of = {f: "+".join(r["components"]) for f, r in analysis.records.items()}
+    visible = [f for f in analysis.fault_ids if f not in hidden]
+    among = d.loc[visible, visible]
+    owner = {f: component_of[f] for f in visible}
+    partners = confusable_components(among, owner, threshold)
+    groups = [g for g in ambiguity_groups(among, threshold) if len(g) > 1]
+    every = sorted(set(component_of.values()))
     return {
         "n_features": len(analysis.features),
+        "n_conditions": len(analysis.fault_ids),
         "conditions_not_separated_from_healthy": found.undetectable,
-        "n_ambiguity_groups": len(groups),
-        "largest_ambiguity_group": max((len(g) for g in groups), default=1),
-        "ambiguity_groups": groups,
-        "confusable_components": found.confusable,
-        "components_located_without_ambiguity": located,
-        "mean_confusable_partners": float(np.mean(partners)) if partners else 0.0,
-        "component_groups": found.component_groups,
+        "components_with_no_detectable_fault": [c for c in every if c not in partners],
+        "among_detectable_conditions": {
+            "n_conditions": len(visible),
+            "n_ambiguity_groups": len(groups),
+            "largest_ambiguity_group": max((len(g) for g in groups), default=1),
+            "ambiguity_groups": groups,
+            "confusable_components": partners,
+            "components_located_without_ambiguity": [c for c, o in partners.items() if not o],
+            "mean_confusable_partners": float(np.mean([len(o) for o in partners.values()]))
+            if partners
+            else 0.0,
+            "component_groups": component_groups(among, owner, threshold),
+        },
+        "over_all_conditions": {
+            "mean_confusable_partners": float(np.mean([len(o) for o in found.confusable.values()])),
+            "component_groups": found.component_groups,
+        },
     }
 
 
@@ -108,17 +135,28 @@ def analyse(circuit, data, threshold=THRESHOLD) -> dict:
     path = save("g_separability", circuit, result, tables)
 
     measured = result["from_measurements"]
+    visible = measured["among_detectable_conditions"]
     predicted = result["predicted_by_local_sensitivity"]
     print(study.description)
-    print("  not separated from healthy:", len(measured["conditions_not_separated_from_healthy"]))
-    print("  located without ambiguity:", measured["components_located_without_ambiguity"])
-    print("  component groups:", measured["component_groups"])
     print(
-        f"  testability rank {predicted['testability_rank']} for {predicted['n_components']} "
-        f"components; collinear groups {predicted['collinear_groups']}"
+        f"  {len(measured['conditions_not_separated_from_healthy'])} of "
+        f"{measured['n_conditions']} fault conditions are not separated from healthy"
+    )
+    print("  no detectable fault at all:", measured["components_with_no_detectable_fault"])
+    print("  among the detectable ones:")
+    print("    located without ambiguity:", visible["components_located_without_ambiguity"])
+    print("    component groups:", visible["component_groups"])
+    print(f"    mean confusable partners: {visible['mean_confusable_partners']:.1f}")
+    print(
+        f"  local sensitivity: rank {predicted['testability_rank']} for "
+        f"{predicted['n_components']} components; collinear {predicted['collinear_groups']}; "
+        f"insensitive {predicted['insensitive_components']}"
     )
     if "from_waveform" in result:
-        print("  from the waveform, component groups:", result["from_waveform"]["component_groups"])
+        waves = result["from_waveform"]["among_detectable_conditions"]
+        print("  from the waveform, among the detectable ones:")
+        print("    located without ambiguity:", waves["components_located_without_ambiguity"])
+        print("    component groups:", waves["component_groups"])
     print("saved to", path)
     return result
 

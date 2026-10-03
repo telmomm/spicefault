@@ -1,0 +1,136 @@
+{
+  "experiment": "G, fault separability",
+  "circuit": "regulator",
+  "threshold": 3.0,
+  "from_measurements": {
+    "n_features": 8,
+    "n_conditions": 54,
+    "conditions_not_separated_from_healthy": [
+      "R2:parametric:-0.1",
+      "R2:parametric:+0.1",
+      "C1:open",
+      "C1:parametric:-0.5",
+      "C1:parametric:-0.25",
+      "C1:parametric:-0.1",
+      "C1:parametric:+0.1",
+      "C1:parametric:+0.25",
+      "C1:parametric:+0.5"
+    ],
+    "components_with_no_detectable_fault": [],
+    "among_detectable_conditions": {
+      "n_conditions": 45,
+      "n_ambiguity_groups": 6,
+      "largest_ambiguity_group": 2,
+      "ambiguity_groups": [
+        [
+          "R1:short",
+          "Q1:short:collector-base"
+        ],
+        [
+          "R2:parametric:+0.25",
+          "R2:parametric:+0.5"
+        ],
+        [
+          "R3:parametric:-0.1",
+          "R4:parametric:+0.1"
+        ],
+        [
+          "R3:parametric:+0.1",
+          "R4:parametric:-0.1"
+        ],
+        [
+          "Q1:open:base",
+          "Q1:open:emitter"
+        ],
+        [
+          "Q2:open:base",
+          "Q2:open:emitter"
+        ]
+      ],
+      "confusable_components": {
+        "C1": [],
+        "D1": [],
+        "Q1": [
+          "R1"
+        ],
+        "Q2": [],
+        "R1": [
+          "Q1"
+        ],
+        "R2": [],
+        "R3": [
+          "R4"
+        ],
+        "R4": [
+          "R3"
+        ]
+      },
+      "components_located_without_ambiguity": [
+        "C1",
+        "D1",
+        "Q2",
+        "R2"
+      ],
+      "mean_confusable_partners": 0.5,
+      "component_groups": [
+        [
+          "Q1",
+          "R1"
+        ],
+        [
+          "R3",
+          "R4"
+        ],
+        [
+          "C1"
+        ],
+        [
+          "D1"
+        ],
+        [
+          "Q2"
+        ],
+        [
+          "R2"
+        ]
+      ]
+    },
+    "over_all_conditions": {
+      "mean_confusable_partners": 0.75,
+      "component_groups": [
+        [
+          "C1",
+          "R2"
+        ],
+        [
+          "Q1",
+          "R1"
+        ],
+        [
+          "R3",
+          "R4"
+        ],
+        [
+          "D1"
+        ],
+        [
+          "Q2"
+        ]
+      ]
+    }
+  },
+  "predicted_by_local_sensitivity": {
+    "n_components": 6,
+    "n_measurements": 8,
+    "testability_rank": 3,
+    "collinear_groups": [
+      [
+        "R3",
+        "R4"
+      ]
+    ],
+    "insensitive_components": [
+      "C1"
+    ]
+  }
+}

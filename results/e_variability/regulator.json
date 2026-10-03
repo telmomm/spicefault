@@ -1,0 +1,147 @@
+{
+  "experiment": "E, impact of variability",
+  "circuit": "regulator",
+  "alpha": 0.01,
+  "beta": 0.1,
+  "scales": [
+    0.0,
+    0.2,
+    1.0,
+    2.0
+  ],
+  "declared_tolerances": [
+    {
+      "type": "tolerance",
+      "component": "R1",
+      "parameter": "value",
+      "tolerance": 0.01,
+      "distribution": "uniform",
+      "relative": true
+    },
+    {
+      "type": "tolerance",
+      "component": "R2",
+      "parameter": "value",
+      "tolerance": 0.01,
+      "distribution": "uniform",
+      "relative": true
+    },
+    {
+      "type": "tolerance",
+      "component": "R3",
+      "parameter": "value",
+      "tolerance": 0.01,
+      "distribution": "uniform",
+      "relative": true
+    },
+    {
+      "type": "tolerance",
+      "component": "R4",
+      "parameter": "value",
+      "tolerance": 0.01,
+      "distribution": "uniform",
+      "relative": true
+    },
+    {
+      "type": "tolerance",
+      "component": "C1",
+      "parameter": "value",
+      "tolerance": 0.2,
+      "distribution": "uniform",
+      "relative": true
+    }
+  ],
+  "n_faults": 54,
+  "per_scale": {
+    "0": {
+      "false_alarm": 0.0128,
+      "false_alarm_interval": [
+        0.00908144260706082,
+        0.01801350726754001
+      ],
+      "n_healthy_for_false_alarm": 2500,
+      "yield": 1.0,
+      "mean_failure_probability_of_faults": 0.6296296296296297,
+      "mean_detection_probability": 0.8811111111111111,
+      "faults_detected": 47,
+      "faults_simulated": 54,
+      "failed_simulations": 0,
+      "diagnostic_coverage": 1.0,
+      "diagnostic_coverage_interval": [
+        1.0,
+        1.0
+      ],
+      "escape_rate": 0.0,
+      "false_reject_rate": 0.4227692307692308
+    },
+    "0.2": {
+      "false_alarm": 0.0168,
+      "false_alarm_interval": [
+        0.012452963051438904,
+        0.022629713014667666
+      ],
+      "n_healthy_for_false_alarm": 2500,
+      "yield": 1.0,
+      "mean_failure_probability_of_faults": 0.6296296296296297,
+      "mean_detection_probability": 0.8642592592592593,
+      "faults_detected": 45,
+      "faults_simulated": 54,
+      "failed_simulations": 0,
+      "diagnostic_coverage": 1.0,
+      "diagnostic_coverage_interval": [
+        1.0,
+        1.0
+      ],
+      "escape_rate": 0.0,
+      "false_reject_rate": 0.3963076923076923
+    },
+    "1": {
+      "false_alarm": 0.018,
+      "false_alarm_interval": [
+        0.013479664680750847,
+        0.02399932924280744
+      ],
+      "n_healthy_for_false_alarm": 2500,
+      "yield": 1.0,
+      "mean_failure_probability_of_faults": 0.6303703703703704,
+      "mean_detection_probability": 0.8487037037037036,
+      "faults_detected": 45,
+      "faults_simulated": 54,
+      "failed_simulations": 0,
+      "diagnostic_coverage": 1.0,
+      "diagnostic_coverage_interval": [
+        1.0,
+        1.0
+      ],
+      "escape_rate": 0.0,
+      "false_reject_rate": 0.3701478743068392
+    },
+    "2": {
+      "false_alarm": 0.0148,
+      "false_alarm_interval": [
+        0.01075643929095121,
+        0.020332373679402486
+      ],
+      "n_healthy_for_false_alarm": 2500,
+      "yield": 1.0,
+      "mean_failure_probability_of_faults": 0.6323148148148148,
+      "mean_detection_probability": 0.835925925925926,
+      "faults_detected": 43,
+      "faults_simulated": 54,
+      "failed_simulations": 0,
+      "diagnostic_coverage": 1.0,
+      "diagnostic_coverage_interval": [
+        1.0,
+        1.0
+      ],
+      "escape_rate": 0.0,
+      "false_reject_rate": 0.3455416473497141
+    }
+  },
+  "faults_lost_between_smallest_and_largest_scale": {
+    "R1:parametric:-0.1": 1.0,
+    "R1:parametric:+0.1": 1.0,
+    "R2:parametric:-0.1": 0.0,
+    "R2:parametric:+0.1": 0.0
+  }
+}
