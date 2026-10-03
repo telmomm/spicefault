@@ -15,7 +15,7 @@ Thresholds marked *proposed* are starting values. They are to be confirmed or re
 | Four-op-amp biquad high-pass filter | A, C, D, E, G | Larger benchmark; workload of the scalability measurements; ambiguity analysis |
 | Linear voltage regulator | A, D, E, F | Device-level models; operating conditions, temperature included |
 
-Every circuit comes with its netlist, its fault rules, its measurements and its specification limits. Until the three validation circuits exist, the RC low-pass of `examples/filter` stands in for them in the benchmarks. It is too small to be a workload: one simulation takes about 15 ms, so starting processes weighs as much as simulating.
+Every circuit comes with its netlist, its fault rules, its measurements and its specification limits, in `validation/`. The specification limits of the two filters are the range of the central 99 % of healthy circuits at the declared tolerances: with the tolerances of the literature these filters have no tight specification to meet (the peak gain of healthy Sallen–Key circuits goes from 1 to 23). The limits of the regulator are engineering limits. All were fixed before any fault campaign.
 
 The reference for what the framework costs is a script written directly against ngspice for the same task (Experiment C and the comparison of SCIENTIFIC_SCOPE.md §7). It is written once, frozen, and kept in the repository.
 
@@ -140,12 +140,12 @@ Automated as `python -m benchmarks.fault_coverage.run`.
 
 | Step | Content | Long runs |
 |---|---|---|
-| 1 | Literature search and positioning (SCIENTIFIC_SCOPE.md §7) | None |
-| 2 | The three validation circuits: netlist, fault rules, measurements, specifications, and a campaign script each | Short checks only |
-| 3 | The direct ngspice script for the comparison task | Short checks only |
-| 4 | Scripts of Experiments E, F and G | Short checks only |
-| 5 | All campaigns and benchmarks, launched together on an idle machine | A, B, C, D, E, F, G |
-| 6 | State-of-the-art comparison table | None |
+| 1 | Literature search and positioning: first version in RELATED_WORK.md; full texts pending | None |
+| 2 | The three validation circuits: done, in `validation/`; schematics and device models to be taken from cited sources | Short checks only |
+| 3 | The direct ngspice script for the comparison task: done, `validation/direct/` | Short checks only |
+| 4 | Scripts of Experiments E, F and G: done, `validation/experiments/` | Short checks only |
+| 5 | All campaigns and benchmarks, launched together on an idle machine: commands in RUNBOOK.md | A, B, C, D, E, F, G |
+| 6 | State-of-the-art comparison table: first version in COMPARISON.md; the libraries still to be run | None |
 | 7 | Release: licence, citation file, documentation, archive with DOI | None |
 | 8 | Manuscript | None |
 

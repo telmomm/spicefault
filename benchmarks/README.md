@@ -7,8 +7,8 @@ Each one prints a summary and writes its full result as JSON under
 Run them from the repository root:
 
 ```bash
-python -m benchmarks.scalability.run --workers 1 2 4 8
-python -m benchmarks.reproducibility.run --workers 8
+python -m benchmarks.scalability.run --workload sallen_key --workers 1 2 4 8
+python -m benchmarks.reproducibility.run --workload biquad --workers 8
 python -m benchmarks.fault_coverage.run
 ```
 
@@ -22,16 +22,13 @@ python -m benchmarks.fault_coverage.run
 
 | Name | Circuit | Needs |
 |---|---|---|
-| `rc` | RC low-pass filter, 30 faults, three analyses per simulation (about 15 ms each) | ngspice |
+| `sallen_key`, `biquad`, `regulator` | The validation studies of `validation/` | ngspice |
+| `rc` | RC low-pass filter, 30 faults; only to check that the benchmarks work | ngspice |
 
-The RC filter only checks that the benchmarks work. A simulation of it is so short
-that starting the worker processes takes a large part of the time, so its timings
-say little about the framework. The validation circuits of the experiment plan are
-to be added to `workloads.py` as they are written, and the figures of the manuscript
-come from them.
-
-Not implemented yet: the comparison with a script written directly against ngspice
-for the same task, which measures what the framework costs.
+The figures of the manuscript come from the validation studies. With `sallen_key`,
+the scalability benchmark also runs the campaign with
+`validation/direct/sallen_key_direct.py`, a script written directly against ngspice
+for the same task, and reports the throughput of `spicefault` relative to it.
 
 ## Protocol
 

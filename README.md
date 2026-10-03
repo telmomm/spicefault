@@ -14,11 +14,15 @@ sample can be traced and regenerated.
 - Fault model: [docs/FAULT_MODEL.md](docs/FAULT_MODEL.md)
 - Reliability metrics: [docs/RELIABILITY_METRICS.md](docs/RELIABILITY_METRICS.md)
 - Experiment plan: [docs/EXPERIMENT_PLAN.md](docs/EXPERIMENT_PLAN.md)
+- Related work, from a literature search: [docs/RELATED_WORK.md](docs/RELATED_WORK.md)
+- Comparison with existing approaches: [docs/COMPARISON.md](docs/COMPARISON.md)
+- The long runs, with their commands: [docs/RUNBOOK.md](docs/RUNBOOK.md)
 
 ## Status
 
-The framework is implemented and tested. What remains is its validation on a set of
-circuits and the experiments of the manuscript.
+The framework is implemented and tested, and so are the validation circuits and the
+scripts of the experiments. What remains is to run the campaigns and benchmarks, which
+are long ([docs/RUNBOOK.md](docs/RUNBOOK.md)), and to write the manuscript.
 
 | Part | State |
 |---|---|
@@ -30,9 +34,9 @@ circuits and the experiments of the manuscript.
 | Reliability analysis, with confidence intervals | Done |
 | Dataset: integrity, provenance, reproduction from the folder | Done |
 | Benchmarks: scalability, reproducibility, fault coverage | Written; timing runs pending |
-| Validation circuits (two filters from the literature, a voltage regulator) | Not started |
-| Experiments on them: tolerance, operating conditions, separability | Not started |
-| Comparison with existing tools, and literature review | Not started |
+| Validation circuits: Sallen–Key band-pass, four-op-amp biquad, voltage regulator | Written and tested; schematics and device models to be taken from cited sources |
+| Experiments on them: tolerance, operating conditions, separability | Scripts written and tested at small size; campaigns pending |
+| Literature search and comparison with existing tools | First version; full texts and tool documentation still to be read |
 | Release: licence, citation file, archive with DOI | Not started |
 
 The plan is in [docs/EXPERIMENT_PLAN.md](docs/EXPERIMENT_PLAN.md), section 6.
@@ -338,6 +342,27 @@ predicts (half of that fault population is inside the tolerance band); and doubl
 the tolerances takes the detection of the ±5 % resistor faults from 100 % to between
 72 and 83 %.
 
+## Validation circuits and experiments
+
+[validation/](validation/) holds the circuits the framework is validated on. Each is
+one module with what is specific to the circuit: its netlist, fault rules,
+measurements and specification limits.
+
+| Study | Circuit | Faults |
+|---|---|---|
+| `sallen_key` | Sallen–Key band-pass filter, a benchmark of the fault-diagnosis literature | 58 |
+| `biquad` | Four-op-amp biquad high-pass filter, the other benchmark of that literature | 96 |
+| `regulator` | Discrete series voltage regulator with device-level models; line, load and temperature conditions | 54 |
+
+```bash
+python -m validation.run_campaign --circuit sallen_key --out data/sallen_key
+python -m validation.experiments.e_variability run --circuit sallen_key      # tolerance
+python -m validation.experiments.f_conditions run                            # operating conditions
+python -m validation.experiments.g_separability --circuit biquad             # ambiguity
+```
+
+These are long. [docs/RUNBOOK.md](docs/RUNBOOK.md) lists them in order with their size.
+
 ## Benchmarks
 
 [benchmarks/](benchmarks/README.md) automates the measurements of the experiment
@@ -349,8 +374,9 @@ python -m benchmarks.reproducibility.run --workers 8     # 1 worker against seve
 python -m benchmarks.fault_coverage.run                  # coverage matrix of each circuit
 ```
 
-The timing benchmarks need an idle machine, and their only workload so far is the
-small RC filter of the examples.
+The timing benchmarks need an idle machine. Their workloads are the validation
+circuits; with the Sallen–Key one, the same campaign is also run by a script written
+directly against ngspice, as the reference for what the framework costs.
 
 ## Origin and use
 

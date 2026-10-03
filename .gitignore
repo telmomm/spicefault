@@ -19,3 +19,6 @@ dist/
 
 # Datasets written by the examples
 examples/**/output/
+
+# Datasets of the campaigns (large; regenerated with docs/RUNBOOK.md)
+data/
