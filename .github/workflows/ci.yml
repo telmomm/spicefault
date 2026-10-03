@@ -104,5 +104,5 @@ jobs:
         if: env.SONAR_TOKEN != ''
         with:
           name: coverage
-      - uses: SonarSource/sonarqube-scan-action@v5
+      - uses: SonarSource/sonarqube-scan-action@v8
         if: env.SONAR_TOKEN != ''
