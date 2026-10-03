@@ -71,6 +71,7 @@ def apply_rule(old: float, rule: str, value: float) -> float:
 class Netlist:
     def __init__(self, text: str):
         self.lines = text.split("\n")
+        self._index: dict[str, tuple[int, int]] | None = None
 
     def __str__(self) -> str:
         return "\n".join(self.lines)
@@ -78,7 +79,15 @@ class Netlist:
     # --- reading --------------------------------------------------------------------
 
     def _elements(self) -> dict[str, tuple[int, int]]:
-        """Top-level element name (lower case) -> its lines [start, stop)."""
+        """Top-level element name (lower case) -> its lines [start, stop).
+
+        Kept until a line is inserted: changing a value does not move any element.
+        """
+        if self._index is None:
+            self._index = self._scan()
+        return self._index
+
+    def _scan(self) -> dict[str, tuple[int, int]]:
         found: dict[str, tuple[int, int]] = {}
         depth, in_control, current = 0, False, None
         for i, line in enumerate(self.lines[1:], start=1):  # line 0 is the title
@@ -191,6 +200,7 @@ class Netlist:
             (i for i, h in enumerate(heads) if i and (h.startswith(".control") or h == ".end")),
             len(self.lines),
         )
+        self._index = None
         self.lines.insert(at, line)
 
     # --- primitives -----------------------------------------------------------------
@@ -223,6 +233,7 @@ class Netlist:
         span = self._terminals(component)[terminal - 1]
         original = self._text(span)
         self._replace(span, node)
+        self._index = None
         self.lines.insert(start, f"{name} {node} {original} {format_value(resistance)}")
         return name
 
@@ -244,6 +255,7 @@ class Netlist:
             raise ValueError(f"{name!r} already exists")
         nodes = self.nodes(component)
         _, stop = self._elements()[component.lower()]
+        self._index = None
         self.lines.insert(
             stop,
             f"{name} {nodes[terminal_a - 1]} {nodes[terminal_b - 1]} {format_value(resistance)}",

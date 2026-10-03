@@ -114,8 +114,8 @@ def resume_overhead(experiment, n_points, workers: int, chunk: int) -> dict:
     return {"seconds": timer.seconds, "simulations_repeated": 0, "max_lost_on_interruption": chunk}
 
 
-def direct_script(workload: str, n_samples: int, workers, repetitions: int) -> dict:
-    """The same campaign with the direct script: timings per number of workers.
+def timed_direct(workload: str, n_samples: int, n_workers: int) -> dict:
+    """The same campaign with the direct script: wall time and throughput.
 
     The script does the same simulations and measurements, and writes a CSV and the
     waveforms. It keeps no status, no manifest and cannot resume.
@@ -123,20 +123,10 @@ def direct_script(workload: str, n_samples: int, workers, repetitions: int) -> d
     from validation.direct import sallen_key_direct
 
     per_fault, healthy = workloads.study_sizes(workload, n_samples)
-    table = {}
+    n = healthy + per_fault * len(sallen_key_direct.fault_list())
     with tempfile.TemporaryDirectory(prefix="spicefault_bench_") as tmp:
-        sallen_key_direct.run(Path(tmp) / "warm", 8, 1, workers[-1])  # warm-up, discarded
-        for n_workers in workers:
-            walls = [
-                sallen_key_direct.run(Path(tmp) / f"{n_workers}_{r}", healthy, per_fault, n_workers)
-                for r in range(repetitions)
-            ]
-            n = healthy + per_fault * len(sallen_key_direct.fault_list())
-            table[str(n_workers)] = {
-                "wall_s": spread(walls),
-                "sims_per_s": spread([n / w for w in walls]),
-            }
-    return table
+        wall = sallen_key_direct.run(Path(tmp) / "data", healthy, per_fault, n_workers)
+        return {"wall_s": wall, "sims_per_s": n / wall, "bytes_written": folder_bytes(tmp)}
 
 
 def run(
@@ -165,25 +155,35 @@ def run(
         },
         "runs": [],
     }
+    compare = workload == "sallen_key"  # the circuit the direct script was written for
     for tasks, worker, context in implementations.values():  # warm-up, discarded
         timed_campaign(tasks[: min(len(tasks), 40)], worker, context, n_points, workers[-1], chunk)
+    if compare:
+        timed_direct(workload, 120, workers[-1])
+    names = [*implementations, *(["direct_script"] if compare else [])]
     for repetition in range(repetitions):
         for n_workers in workers:
-            for name, (tasks, worker, context) in implementations.items():
-                measured = timed_campaign(tasks, worker, context, n_points, n_workers, chunk)
-                measured.pop("samples")
+            # both implementations one after the other, so that whatever else the machine
+            # is doing affects them alike
+            for name in names:
+                if name == "direct_script":
+                    measured = timed_direct(workload, len(plan), n_workers)
+                else:
+                    tasks, worker, context = implementations[name]
+                    measured = timed_campaign(tasks, worker, context, n_points, n_workers, chunk)
+                    measured.pop("samples")
                 result["runs"].append(
                     {
                         "implementation": name,
                         "workers": n_workers,
                         "repetition": repetition,
                         **measured,
-                    }  # fmt: skip
+                    }
                 )
 
     runs = pd.DataFrame(result["runs"])
     summary = {}
-    for name in implementations:
+    for name in names:
         table = {}
         mine = runs[runs["implementation"] == name]
         t1 = float(mine.loc[mine["workers"] == workers[0], "wall_s"].median()) * workers[0]
@@ -203,11 +203,16 @@ def run(
     )
     result["bytes_per_sample"] = result["bytes_written"] / len(plan)
 
-    if workload == "sallen_key":
-        result["direct_script"] = direct_script(workload, len(plan), workers, repetitions)
+    if compare:
+        # medians, and the fastest run of each: the least disturbed by anything else
         result["relative_throughput"] = {
             str(n): summary["spicefault"][str(n)]["sims_per_s"]["median"]
-            / result["direct_script"][str(n)]["sims_per_s"]["median"]
+            / summary["direct_script"][str(n)]["sims_per_s"]["median"]
+            for n in workers
+        }
+        result["relative_throughput_of_fastest_runs"] = {
+            str(n): summary["direct_script"][str(n)]["wall_s"]["min"]
+            / summary["spicefault"][str(n)]["wall_s"]["min"]
             for n in workers
         }
 
@@ -231,13 +236,20 @@ def report(result: dict) -> str:
                 f"{row['speedup']:>10.2f} {row['efficiency']:>12.2f}"
             )
     if "relative_throughput" in result:
-        lines.append("\ndirect ngspice script\n workers   wall [s]   sims/s")
-        for n, row in result["direct_script"].items():
-            lines.append(
-                f" {n:>7} {row['wall_s']['median']:>10.2f} {row['sims_per_s']['median']:>8.1f}"
-            )
         ratio = ", ".join(f"{n}: {r:.3f}" for n, r in result["relative_throughput"].items())
-        lines.append(f"throughput of spicefault relative to the direct script, by workers: {ratio}")
+        lines.append(
+            f"\nthroughput of spicefault relative to the direct script, by workers: {ratio}"
+        )
+        fastest = result["relative_throughput_of_fastest_runs"]
+        ratio = ", ".join(f"{n}: {r:.3f}" for n, r in fastest.items())
+        lines.append(f"the same from the fastest run of each: {ratio}")
+    load = result["environment"]["load_average_1min_at_start"]
+    cores = result["environment"]["cpu"]["logical_cores"]
+    if load is not None and load > 0.5 * cores:
+        lines.append(
+            f"\nWARNING: the load average was {load:.1f} on {cores} cores when the benchmark "
+            "started. The machine was not idle: these timings must not be reported."
+        )
     phases = result["phase_breakdown"]["ms_per_sample"]
     lines.append(
         "\ntime of one sample [ms]: " + ", ".join(f"{k} {v:.2f}" for k, v in phases.items())

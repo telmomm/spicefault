@@ -2,7 +2,7 @@
 
 Everything that takes long, in the order to launch it. Run on an idle machine on mains power: the timing results are invalid otherwise, and the campaigns take longer.
 
-All commands are run from the repository root with the project environment. Every campaign resumes if it is interrupted: launch the same command again.
+All commands are run from the repository root with the project environment. The command blocks have no comments, so that they can be pasted into an interactive shell. Launch each block once, in one terminal: a campaign that is already running refuses a second launch. Every campaign resumes if it is interrupted: launch the same command again.
 
 ```bash
 cd /path/to/spicefault
@@ -24,9 +24,9 @@ It has not been run in full since the validation circuits, the experiment script
 Four tolerance scales per circuit, 5000 healthy samples and 200 per fault at each.
 
 ```bash
-python -m validation.experiments.e_variability run --circuit sallen_key --workers 8   #  66,400 simulations
-python -m validation.experiments.e_variability run --circuit biquad     --workers 8   #  96,800 simulations
-python -m validation.experiments.e_variability run --circuit regulator  --workers 8   #  63,200 simulations
+python -m validation.experiments.e_variability run --circuit sallen_key --workers 8
+python -m validation.experiments.e_variability run --circuit biquad     --workers 8
+python -m validation.experiments.e_variability run --circuit regulator  --workers 8
 ```
 
 Datasets go to `data/validation/<circuit>/scale_<k>/`.
@@ -36,8 +36,8 @@ Datasets go to `data/validation/<circuit>/scale_<k>/`.
 The regulator under seven conditions, then under nine.
 
 ```bash
-python -m validation.experiments.f_conditions run --conditions one_factor --workers 8   #  89,600 simulations
-python -m validation.experiments.f_conditions run --conditions corners    --workers 8   # 115,200 simulations
+python -m validation.experiments.f_conditions run --conditions one_factor --workers 8
+python -m validation.experiments.f_conditions run --conditions corners    --workers 8
 ```
 
 ## 3. Analyses (minutes, no campaign)
@@ -57,14 +57,10 @@ Each prints a summary and writes JSON and CSV under `results/`.
 ## 4. Benchmarks (about 1 h 30 min; the machine must be idle)
 
 ```bash
-# scalability, with the direct script as reference: 2000 samples, 5 repetitions, 4 worker counts, twice
 python -m benchmarks.scalability.run --workload sallen_key --workers 1 2 4 8
-# scalability on the larger circuit
 python -m benchmarks.scalability.run --workload biquad --workers 1 2 4 8
-# reproducibility: 5000 samples, five runs of the campaign
 python -m benchmarks.reproducibility.run --workload biquad --workers 8
 python -m benchmarks.reproducibility.run --workload regulator --workers 8
-# fault coverage: seconds
 python -m benchmarks.fault_coverage.run
 ```
 

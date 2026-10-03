@@ -1,0 +1,95 @@
+{
+  "benchmark": "reproducibility",
+  "environment": {
+    "date": "2026-10-03T16:50:58+00:00",
+    "host": "MacBook-Air-de-Telmo.local",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "cpu": {
+      "model": "Apple M2",
+      "logical_cores": 8,
+      "physical_cores": 8,
+      "performance_cores": 4,
+      "efficiency_cores": 4
+    },
+    "python": "3.12.9",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "spicefault_version": "0.1.0",
+    "spicefault_commit": "2f21998e5137b36293485517fc4e9dce0f103d78",
+    "uncommitted_changes": true,
+    "simulator": "ngspice-44.2",
+    "load_average_1min_at_start": 18.51611328125
+  },
+  "protocol": {
+    "workload": "biquad",
+    "n_samples": 5000,
+    "seed": 42,
+    "seeding": "content",
+    "workers": 8,
+    "chunk": 500
+  },
+  "status_counts": {
+    "SUCCESS": 5000
+  },
+  "comparisons_with_one_worker": {
+    "several_workers": {
+      "L1_definitions_identical": true,
+      "L1_drawn_values_identical": true,
+      "labels_identical": true,
+      "status_identical": true,
+      "L2_max_abs_diff": 0.0,
+      "L2_max_rel_diff": 0.0,
+      "L2_measurements_identical": true,
+      "L2_waveforms_identical": true
+    },
+    "several_workers_again": {
+      "L1_definitions_identical": true,
+      "L1_drawn_values_identical": true,
+      "labels_identical": true,
+      "status_identical": true,
+      "L2_max_abs_diff": 0.0,
+      "L2_max_rel_diff": 0.0,
+      "L2_measurements_identical": true,
+      "L2_waveforms_identical": true
+    },
+    "other_chunk_size": {
+      "L1_definitions_identical": true,
+      "L1_drawn_values_identical": true,
+      "labels_identical": true,
+      "status_identical": true,
+      "L2_max_abs_diff": 0.0,
+      "L2_max_rel_diff": 0.0,
+      "L2_measurements_identical": true,
+      "L2_waveforms_identical": true
+    },
+    "resumed": {
+      "L1_definitions_identical": true,
+      "L1_drawn_values_identical": true,
+      "labels_identical": true,
+      "status_identical": true,
+      "L2_max_abs_diff": 0.0,
+      "L2_max_rel_diff": 0.0,
+      "L2_measurements_identical": true,
+      "L2_waveforms_identical": true
+    }
+  },
+  "resumed_run": {
+    "samples_before_interruption": 1500,
+    "manifest_says_resumed": true
+  },
+  "integrity_problems": [],
+  "simulated_again_from_the_folder": {
+    "n_samples": 50,
+    "definitions_identical": true,
+    "drawn_values_identical": true,
+    "status_identical": true,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0,
+    "waveform_max_abs_diff": 0.0
+  },
+  "verdict": {
+    "L1_exact": true,
+    "L2_identical": true,
+    "L2_max_rel_diff": 0.0
+  }
+}

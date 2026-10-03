@@ -94,7 +94,9 @@ def test_reproducibility(results):
 def test_scalability_against_the_direct_script(results):
     result = scalability.run("sallen_key", workers=(2,), repetitions=1, n_samples=120, chunk=60)
     assert result["protocol"]["n_samples"] == 120
-    assert set(result["direct_script"]) == {"2"}
-    assert result["direct_script"]["2"]["sims_per_s"]["median"] > 0
+    assert set(result["summary"]) == {"spicefault", "direct_script"}
+    order = [(r["implementation"], r["workers"]) for r in result["runs"]]
+    assert order == [("spicefault", 2), ("direct_script", 2)]  # one after the other
     assert 0.2 < result["relative_throughput"]["2"] < 5.0
-    assert "direct ngspice script" in scalability.report(result)
+    assert 0.2 < result["relative_throughput_of_fastest_runs"]["2"] < 5.0
+    assert "direct_script" in scalability.report(result)
