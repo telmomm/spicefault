@@ -16,3 +16,6 @@ dist/
 .DS_Store
 .vscode/
 .idea/
+
+# Datasets written by the examples
+examples/**/output/

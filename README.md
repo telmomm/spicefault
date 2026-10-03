@@ -25,7 +25,8 @@ sample can be traced and regenerated.
 | 3. Fault framework | Done: `OpenCircuit`, `ShortCircuit`, `LeakageFault`, `ParametricFault`, `CompositeFault`, `FaultSeverity`, `FaultSet`, `FaultUniverse` |
 | 4. Uncertainty framework | Done: tolerance, normal, log-normal, uniform, log-uniform, fixed, custom and joint variations; three seeding schemes |
 | 5. Experiment engine | Done: `FaultCampaign` (to disk, in chunks, resumable, every simulation accounted for) and the `Measurement` API |
-| 6. Reliability analysis (detectability, sensitivity, robustness, separability) | Not started |
+| 6. Reliability analysis | Done: detectability, failure probability and diagnostic coverage, sensitivity, robustness, separability, with confidence intervals |
+| 7. Dataset layer (`Dataset`, `Manifest`, `Provenance`) | Not started |
 
 The first application is the ECG front-end study
 ([ecg-frontend-fault-diagnosis](https://github.com/telmomm/ecg-frontend-fault-diagnosis)),
@@ -41,6 +42,7 @@ whose generic code was extracted into this package.
 | `spicefault.experiments` | `Experiment` (in memory) and `FaultCampaign` (to disk, resumable); per-sample random streams and seeding schemes |
 | `spicefault.netlist` | Netlist as text and the three fault-injection primitives |
 | `spicefault.measurements` | `Measurement` and `Waveform`: what is read from each simulation; ADC quantisation |
+| `spicefault.reliability` | `ReliabilityAnalysis` and the metrics of docs/RELIABILITY_METRICS.md |
 | `spicefault.dataset` | Dataset directory: `samples.parquet`, `waveforms.npy`, `manifest.json` |
 
 ## Setup
@@ -252,6 +254,48 @@ What the engine guarantees:
 Functions passed to custom or joint variations and to custom measurements must be
 defined at module level, so that worker processes can receive them.
 
+### Reliability analysis
+
+`ReliabilityAnalysis` reads the dataset of a campaign and computes what the fault
+responses say about the circuit:
+
+```python
+from spicefault.reliability import ReliabilityAnalysis, robustness
+
+analysis = ReliabilityAnalysis.from_dataset("data/rc_lowpass")
+
+detection = analysis.detectability(alpha=0.01)   # limit test at 1 % false alarms
+detection.table                                  # per fault: P(detect), interval, bounds
+detection.false_alarm                            # measured on held-out healthy samples
+
+analysis.standardised_shift()     # how far each fault moves the best feature
+analysis.auc()                    # threshold-free view
+analysis.minimum_detectable()     # smallest deviation detected 90 % of the time
+analysis.ambiguity()              # faults and components that cannot be told apart
+```
+
+| Question | Method |
+|---|---|
+| Is the fault detected? | `detectability`, `standardised_shift`, `auc` |
+| Does the circuit still meet its specifications? | `failure_probability` (needs a `compliant` column from the application) |
+| What fraction of the failures is caught? | `diagnostic_coverage`: coverage, escape rate, false-reject rate |
+| How small a deviation is visible? | `severity_response`, `minimum_detectable`, `local_sensitivity` |
+| How does tolerance erode detection? | `robustness`, over campaigns at scaled tolerances |
+| Does it depend on the operating condition? | `analysis.by("condition")`, `detectability_across` |
+| Which faults look alike? | `separation`, `ambiguity` |
+
+Every proportion comes with a confidence interval. When simulations failed, detection
+is also given as bounds, counting the failed ones first as undetected and then as
+detected. Thresholds are set on one half of the healthy samples and the false-alarm
+rate is measured on the other.
+
+[examples/filter/reliability.py](examples/filter/reliability.py) runs every metric on
+the RC filter at three tolerance scales. Among its results: a ±5 % fault of the 5 %
+capacitor is detected about half of the time, which is what the tolerance overlap
+predicts (half of that fault population is inside the tolerance band); and doubling
+the tolerances takes the detection of the ±5 % resistor faults from 100 % to between
+72 and 83 %.
+
 ## Equivalence with the ECG baseline
 
 `tests/regression/` compares this package with `ecgfd`, the code it was extracted
@@ -271,6 +315,7 @@ pytest tests/regression
 | `test_ecg_universe.py` | Fault universe generated from rules against the fault catalogue of `ecgfd`: 293 and 307 conditions | Same conditions, identical netlists |
 | `test_ecg_experiment.py` | Self-test measurement of faulty circuits through `Circuit`, `Fault` and `Simulator` | Identical vectors |
 | `test_ecg_service_dataset.py` | The self-test half of `data/v1` (features and waveforms) regenerated with spicefault objects only | Tolerances of docs/EXPERIMENT_PLAN.md §3; no difference found |
+| `test_ecg_reliability.py` | Fault dictionary, separation, ambiguity groups, limit test, escape and false-reject rates, sensitivities, on `data/v1`, against `ecgfd.ambiguity` and `ecgfd.evaluation` | Identical results |
 | `test_ecg_campaign.py` | A reduced campaign run by both engines, with 1 and with several workers | Identical tables and waveforms |
 | `test_ecg_baseline_data.py` | Cases regenerated here against the published dataset `data/v1` | Tolerances of docs/EXPERIMENT_PLAN.md §3 |
 

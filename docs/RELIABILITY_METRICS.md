@@ -1,6 +1,6 @@
 # Reliability metrics
 
-Phase 0 deliverable 3 of 4. Status: draft for review.
+Phase 0 deliverable 3 of 4. Status: the metrics marked for the first release in §11 are implemented in `spicefault.reliability` (Phase 6). An example of each one, on an RC filter, is in `examples/filter/reliability.py`.
 
 This document defines the quantities `spicefault` computes from a campaign: what each one means, how it is estimated, with what uncertainty, and which ones belong to the first release. Notation follows [SCIENTIFIC_SCOPE.md](SCIENTIFIC_SCOPE.md) §2.
 
@@ -19,7 +19,7 @@ Every metric below is conditional on the feature set, the measurement model $M$,
 
 **Failed simulations.** Metrics are computed on successful samples and always reported with $n_k / N_k$. Failures are not missing at random: a fault that prevents convergence is probably a severe one. When $n_k < N_k$, proportions are also reported as bounds, counting all failed samples first as detected and then as undetected.
 
-**Reference population.** Thresholds are derived from one part of the healthy samples and the false-alarm rate is measured on another. The ECG code computes both on the same samples, which biases the false-alarm rate downwards.
+**Reference population.** Thresholds are derived from one part of the healthy samples and the false-alarm rate is measured on another (`healthy_split`, half and half by default). The ECG code computes both on the same samples. That estimate stays close to the target whatever the true rate is, because the limits were placed on those very samples; on new healthy samples the rate is higher when the limits rest on few samples. With 60 healthy samples, two features and a target of 0.05, the in-sample estimate averages about 0.05 and the held-out one is more than 0.02 higher (this is a unit test).
 
 **Uncertainty.** Every proportion carries a 95 % interval (Wilson by default, Clopper–Pearson where a conservative bound is needed). Other statistics carry a percentile bootstrap interval over samples.
 
@@ -73,11 +73,11 @@ $$\text{DC} = \frac{\sum_k w_k \, P(\text{detected}, c = 0 \mid f_k)}{\sum_k w_k
 
 $$\text{false-reject rate} = P(\text{detected} \mid c = 1).$$
 
-Default weights are equal, which makes DC a statement about the catalogue, not about field behaviour. If the user supplies failure-mode probabilities from a cited source, DC approximates the fraction of dangerous failures detected, in the sense used in functional safety. The weighting must be reported with the figure. The false-reject rate is computed over all compliant samples, faulty or not, and its composition must be stated.
+Default weights are equal, which makes DC a statement about the catalogue, not about field behaviour. If the user supplies failure-mode probabilities from a cited source, DC approximates the fraction of dangerous failures detected, in the sense used in functional safety. The weighting must be reported with the figure. The false-reject rate is computed over all compliant samples, faulty or not, and its composition must be stated: `diagnostic_coverage` returns how many of them are healthy. Healthy samples used to set the thresholds are left out. The interval of DC is a bootstrap over the samples of each fault.
 
 ### On `failure_rate()`
 
-The project specification lists `analysis.failure_rate()`. In reliability engineering a failure rate is an occurrence rate in time, which a fault-injection campaign cannot estimate. The method should be named `failure_probability()` and return $\pi_k$. Recommended; see open decision 1.
+The project specification lists `analysis.failure_rate()`. In reliability engineering a failure rate is an occurrence rate in time, which a fault-injection campaign cannot estimate. The method is implemented as `failure_probability()` and returns $\pi_k$; there is no `failure_rate()`. See open decision 1.
 
 ## 5. Sensitivity
 
@@ -166,28 +166,30 @@ A design choice affects all comparisons between conditions: whether replica $r$ 
 
 ## 11. First release
 
-| Metric | First release | Needs |
+| Metric | State | Where |
 |---|---|---|
-| M1 detection probability | Yes | Healthy split |
-| M2 standardised shift | Yes | Noise floor |
-| M3 AUC | Yes | |
+| M1 detection probability | Implemented | `ReliabilityAnalysis.detectability`, `LimitTest` |
+| M2 standardised shift | Implemented | `standardised_shift` |
+| M3 AUC | Implemented | `auc` |
 | M4 overlap | Deferred | |
-| M5 failure probability, yield | Yes | Compliance predicate |
-| M6 diagnostic coverage, escape, false reject | Yes | Compliance predicate |
-| M7a local sensitivity, rank, collinear groups | Yes | |
-| M7b severity response | Yes | Graded faults |
-| M8 robustness | Yes | Campaigns at several tolerance scales |
-| M9a pairwise separation (univariate) | Yes | |
+| M5 failure probability, yield | Implemented | `failure_probability` |
+| M6 diagnostic coverage, escape, false reject | Implemented | `diagnostic_coverage` |
+| M7a local sensitivity, rank, collinear groups | Implemented | `local_sensitivity`, `normalised_sensitivity`, `testability_rank`, `collinear_groups` |
+| M7b severity response | Implemented | `severity_response`, `minimum_detectable` |
+| M8 robustness | Implemented | `robustness`, with campaigns at `VariationSet.scaled` tolerances |
+| M9a pairwise separation (univariate) | Implemented | `separation` |
 | M9a Mahalanobis | Deferred | |
-| M9b ambiguity structure | Yes | |
-| M10 coverage | Yes | Fault universe |
-| M11 operating-condition dependence | Yes | Campaigns at several conditions |
+| M9b ambiguity structure | Implemented | `ambiguity` |
+| M10 coverage | Implemented | `FaultUniverse.coverage`, `coverage_matrix` |
+| M11 operating-condition dependence | Implemented | `ReliabilityAnalysis.by`, `detectability_across` |
 
-Each implemented metric needs: the definition above in its documentation, unit tests against the analytical circuits of SCIENTIFIC_SCOPE.md §8, and an example.
+Each implemented metric has its definition in its documentation, unit tests against populations with known answers (normal clouds, tables with known counts, a resistive divider), and an example. M2, M5, M6, M7a, M9 and the limit test of M1 are also checked against the ECG code they were generalised from, on the dataset `data/v1`: the results are identical.
+
+What the tests do not establish: that the limit test is a good detector, that equal weights are meaningful, or that the thresholds (α, β, τ) are the right ones. Those are choices of a study.
 
 ## 12. Open decisions
 
-1. **Rename `failure_rate()` to `failure_probability()`.** Recommended.
+1. **`failure_rate()` is implemented as `failure_probability()`.** To confirm, or to add the other name as an alias.
 2. **Default false-alarm rate** $\alpha$ (proposed 0.01) and miss level $\beta$ (proposed 0.1).
 3. **Default separation threshold** $\tau = 3$, as in the ECG study.
 4. **Common or independent random numbers** for comparisons between fault conditions. Both are implemented (`seeding="common"` against `"positional"` or `"content"`); independent is the default and is needed for Phase 1 equivalence. Still to decide: which one Experiments E to G use. Operating conditions and tolerance levels are always compared on the same circuits.
