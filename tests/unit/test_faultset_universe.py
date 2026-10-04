@@ -15,6 +15,7 @@ from spicefault.faults import (
     leakage_rule,
     open_rule,
     parametric_rule,
+    series_rule,
     short_rule,
 )
 from spicefault.variation import ToleranceVariation, VariationSet
@@ -154,6 +155,14 @@ def test_universe_is_generated_from_the_rules():
 def test_rules_can_be_restricted_to_named_components():
     universe = FaultUniverse(CIRCUIT, [open_rule(components=("r2", "C1")), short_rule("C")])
     assert universe.faults.ids() == ["C1:open", "C1:short", "R2:open"]
+
+
+def test_series_resistance_rule():
+    universe = FaultUniverse(CIRCUIT, [series_rule([1.0, 100.0], kinds="C")])
+    assert [fault.fault_id for fault in universe.faults] == [
+        "C1:series_resistance:1", "C1:series_resistance:100",
+    ]
+    assert [fault.severity.value for fault in universe.faults] == [0.0, 1.0]
 
 
 def test_every_excluded_fault_carries_a_reason():

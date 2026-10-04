@@ -125,6 +125,43 @@ class LeakageFault(Fault):
         )
 
 
+@register("series_resistance")
+class SeriesResistanceFault(Fault):
+    """Increased resistance in a conducting path, such as ESR growth or a degraded joint."""
+
+    def __init__(
+        self,
+        component: str,
+        resistance: float,
+        terminal: int = 2,
+        *,
+        r_min: float | None = None,
+        r_max: float | None = None,
+        fault_type: str = "series_resistance",
+        fault_id: str = "",
+        tags: dict[str, str] | None = None,
+    ):
+        resistance = float(resistance)
+        if resistance <= 0:
+            raise ValueError("series resistance must be positive")
+        if (r_min is None) != (r_max is None):
+            raise ValueError("give both r_min and r_max, or neither")
+        where = "" if terminal == 2 else f":t{terminal}"
+        super().__init__(
+            fault_type=fault_type,
+            primitives=(InsertSeries(component, terminal, resistance),),
+            fault_id=fault_id or f"{component}:series_resistance:{resistance:g}{where}",
+            magnitude=resistance,
+            unit="ohm",
+            severity=None
+            if r_min is None
+            else FaultSeverity.log_series_resistance(resistance, r_min, r_max),
+            nominal_state="connected",
+            fault_state=f"{resistance:g} ohm in series",
+            tags=tags or {},
+        )
+
+
 @register("parametric")
 class ParametricFault(Fault):
     """A parameter outside its tolerance band: wrong part fitted, aged or stressed

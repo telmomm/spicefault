@@ -3,13 +3,21 @@
 from .base import Fault, InsertParallel, InsertSeries, Primitive, SetParameter
 from .faultset import FaultSet
 from .severity import FaultSeverity
-from .types import CompositeFault, LeakageFault, OpenCircuit, ParametricFault, ShortCircuit
+from .types import (
+    CompositeFault,
+    LeakageFault,
+    OpenCircuit,
+    ParametricFault,
+    SeriesResistanceFault,
+    ShortCircuit,
+)
 from .universe import (
     FaultRule,
     FaultUniverse,
     leakage_rule,
     open_rule,
     parametric_rule,
+    series_rule,
     short_rule,
 )
 
@@ -27,9 +35,11 @@ __all__ = [
     "ParametricFault",
     "Primitive",
     "SetParameter",
+    "SeriesResistanceFault",
     "ShortCircuit",
     "leakage_rule",
     "open_rule",
     "parametric_rule",
     "short_rule",
+    "series_rule",
 ]

@@ -53,6 +53,21 @@ class FaultSeverity:
             {"r_min": float(r_min), "r_max": float(r_max)},
         )
 
+    @classmethod
+    def log_series_resistance(
+        cls, resistance: float, r_min: float, r_max: float
+    ) -> FaultSeverity:
+        """s = log(r / r_min) / log(r_max / r_min): 0 at r_min, 1 at r_max."""
+        if not 0 < r_min <= resistance <= r_max or r_min == r_max:
+            raise ValueError(
+                f"need 0 < r_min <= resistance <= r_max, got {r_min}, {resistance}, {r_max}"
+            )
+        return cls(
+            math.log(resistance / r_min) / math.log(r_max / r_min),
+            "log_series_resistance",
+            {"r_min": float(r_min), "r_max": float(r_max)},
+        )
+
     def metadata(self) -> dict:
         return {"value": self.value, "scale": self.scale, "parameters": dict(self.parameters)}
 
