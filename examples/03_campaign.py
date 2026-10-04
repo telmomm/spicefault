@@ -1,14 +1,24 @@
-"""A fault campaign: simulated to disk, in chunks, resumable.
-
-    python examples/03_campaign.py
-
-660 simulations of the RC filter. Launch it again and it returns at once: the dataset
-is already there.
-"""
+# %% [markdown]
+# # A resumable fault campaign
+#
+# Runs 660 RC-filter simulations and resumes completed chunks on a second run.
+# Also runnable as `python examples/03_campaign.py`.
+# %%
 
 import shutil
+import sys
+from pathlib import Path
 
-from rc_study import WORKERS, campaign
+examples_dir = next(
+    (root / "examples" for root in (Path.cwd(), *Path.cwd().parents)
+     if (root / "examples" / "rc_study.py").is_file()),
+    None,
+)
+if examples_dir is not None:
+    sys.path.insert(0, str(examples_dir))
+
+# %%
+from rc_study import WORKERS, campaign  # noqa: E402
 
 if __name__ == "__main__":  # workers are processes: needed on macOS and Windows
     run = campaign()

@@ -11,7 +11,7 @@
 [![Documentation](https://readthedocs.org/projects/spicefault/badge/?version=latest)](https://spicefault.readthedocs.io/en/latest/)
 [![Quality gate](https://sonarcloud.io/api/project_badges/measure?project=telmomm_spicefault&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=telmomm_spicefault)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=telmomm_spicefault&metric=coverage)](https://sonarcloud.io/summary/new_code?id=telmomm_spicefault)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=examples%2Fquickstart.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F01_quickstart.ipynb)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 <!-- DOI: after the first release archived by Zenodo, add its badge here:
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX) -->
@@ -129,6 +129,19 @@ Runnable scripts in [examples/](https://github.com/telmomm/spicefault/tree/main/
 | `05_reliability.py` | Detection, minimum detectable deviation, ambiguity, tolerance |
 | `06_operating_conditions.py` | The same circuits under several conditions |
 | `07_custom.py` | Your own distributions and measurements |
+
+Open the executable [Binder notebooks](https://github.com/telmomm/spicefault/tree/main/binder/notebooks)
+for the same examples, paired to the `.py` sources that the documentation includes, or launch one directly:
+
+| Example | Binder notebook |
+|---|---|
+| 01 Quickstart | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F01_quickstart.ipynb) |
+| 02 Faults and coverage | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F02_faults_and_coverage.ipynb) |
+| 03 Fault campaign | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F03_campaign.ipynb) |
+| 04 Dataset | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F04_dataset.ipynb) |
+| 05 Reliability | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F05_reliability.ipynb) |
+| 06 Operating conditions | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F06_operating_conditions.ipynb) |
+| 07 Custom variation | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F07_custom.ipynb) |
 
 ```bash
 git clone https://github.com/telmomm/spicefault.git && cd spicefault

@@ -1,18 +1,30 @@
-"""Your own distributions and measurements.
+# %% [markdown]
+# # Custom variations and measurements
+#
+# Define a joint variation and a measurement function. Functions used by workers must
+# live at module level. Also runnable as `python examples/07_custom.py`.
+# Jupyter uses one worker because functions defined in cells cannot be imported by spawned workers.
+# %%
 
-    python examples/07_custom.py
-
-A joint variation, for parameters that are not independent, and a measurement defined
-by a function. Both functions are at module level: worker processes must be able to
-import them.
-"""
+import sys
+from pathlib import Path
 
 import numpy as np
-from rc_study import circuit, config
 
-from spicefault import Experiment, Measurement
-from spicefault.faults import ParametricFault
-from spicefault.variation import Draw, JointVariation, ToleranceVariation
+examples_dir = next(
+    (root / "examples" for root in (Path.cwd(), *Path.cwd().parents)
+     if (root / "examples" / "rc_study.py").is_file()),
+    None,
+)
+if examples_dir is not None:
+    sys.path.insert(0, str(examples_dir))
+
+# %%
+from rc_study import circuit, config  # noqa: E402
+
+from spicefault import Experiment, Measurement  # noqa: E402
+from spicefault.faults import ParametricFault  # noqa: E402
+from spicefault.variation import Draw, JointVariation, ToleranceVariation  # noqa: E402
 
 
 def matched_resistors(rng, netlist):
@@ -30,6 +42,9 @@ def matched_resistors(rng, netlist):
     return Draw(values, {"resistor_grade": grade})
 
 
+# %% [markdown]
+# ## A custom frequency-response measurement
+# %%
 def corner_frequency(plot):
     """Frequency at which the response has fallen 3 dB from its low-frequency value [Hz]."""
     frequency = plot["frequency"].real
@@ -38,7 +53,9 @@ def corner_frequency(plot):
     return float(frequency[below[0]]) if len(below) else float(frequency[-1])
 
 
+# %%
 if __name__ == "__main__":
+    worker_count = 1 if "ipykernel" in sys.modules else 2
     experiment = Experiment(
         circuit,
         config=config,
@@ -54,7 +71,7 @@ if __name__ == "__main__":
         samples=6,
         seed=3,
     )
-    table = experiment.run(workers=2).to_frame()
+    table = experiment.run(workers=worker_count).to_frame()
     columns = ["fault_id", "resistor_grade", "p_R1_value", "p_R2_value", "dc", "corner"]
     print(table[columns].round(3).to_string(index=False))
     # matched resistors keep the divider ratio, whatever their grade
