@@ -1,13 +1,17 @@
-"""Quickstart: a circuit, one fault, one simulation; then a small experiment.
-
-    python examples/01_quickstart.py
-"""
+# %% [markdown]
+# # Quickstart
+#
+# A circuit, one fault, one simulation; then a small experiment.
+# Run the same source with `python examples/01_quickstart.py` or open its Binder notebook.
+# %%
 
 from spicefault import Circuit, Experiment, Measurement, SimulationConfig, Simulator
 from spicefault.faults import OpenCircuit, ParametricFault
 from spicefault.variation import ToleranceVariation
 
-# --- a circuit is a SPICE netlist -----------------------------------------------------
+# %% [markdown]
+# ## A circuit is a SPICE netlist
+# %%
 circuit = Circuit(
     """resistive divider
 V1 in 0 dc 1
@@ -20,14 +24,18 @@ R2 out 0 10k
 print("components:", [c.name for c in circuit.components()])
 print("parameters:", circuit.parameters())
 
-# --- a fault changes a copy of the netlist --------------------------------------------
+# %% [markdown]
+# ## A fault changes a copy of the netlist
+# %%
 fault = OpenCircuit("R2")
 netlist = circuit.netlist()
 fault.apply(netlist)
 print("\nnetlist with", fault.fault_id, "injected:")
 print(netlist)
 
-# --- one simulation, with an explicit status -------------------------------------------
+# %% [markdown]
+# ## One simulation, with an explicit status
+# %%
 config = SimulationConfig(analyses=("op",), outputs=("v(out)",))
 output = Measurement.value("v(out)", name="vout")
 simulator = Simulator("ngspice")
@@ -35,7 +43,9 @@ for label, text in (("healthy", circuit.to_netlist()), (fault.fault_id, str(netl
     result = simulator.run(text, config)
     print(f"{label}: {result.status.value}, vout = {output(result):.4f} V")
 
-# --- an experiment: tolerances, faults, a seed -----------------------------------------
+# %% [markdown]
+# ## An experiment: tolerances, faults, a seed
+# %%
 experiment = Experiment(
     circuit,
     config=config,

@@ -1,3 +1,4 @@
 #!/bin/bash
 # install the library itself, from the repository Binder has cloned
+python scripts/sync_binder_examples.py
 pip install -e .

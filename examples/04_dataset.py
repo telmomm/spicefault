@@ -1,13 +1,25 @@
-"""The dataset of a campaign: integrity, provenance and reproduction.
+# %% [markdown]
+# # Inspect a campaign dataset
+#
+# Check integrity, provenance, reproduction and model-ready arrays.
+# Also runnable as `python examples/04_dataset.py`.
+# %%
 
-    python examples/04_dataset.py
+import sys
+from pathlib import Path
 
-It uses the dataset written by `03_campaign.py`, and runs that campaign if needed.
-"""
+examples_dir = next(
+    (root / "examples" for root in (Path.cwd(), *Path.cwd().parents)
+     if (root / "examples" / "rc_study.py").is_file()),
+    None,
+)
+if examples_dir is not None:
+    sys.path.insert(0, str(examples_dir))
 
-from rc_study import WORKERS, campaign
+# %%
+from rc_study import WORKERS, campaign  # noqa: E402
 
-from spicefault import Dataset
+from spicefault import Dataset  # noqa: E402
 
 if __name__ == "__main__":
     campaign().run(workers=WORKERS, chunk=200, progress=False)

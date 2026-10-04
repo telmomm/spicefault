@@ -1,1 +1,4 @@
 jupyterlab
+jupytext>=1.18
+nbclient>=0.10
+ipykernel>=6

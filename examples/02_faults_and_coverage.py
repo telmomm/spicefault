@@ -1,15 +1,28 @@
-"""Faults as objects, a fault universe from rules, and what a campaign covers.
-
-    python examples/02_faults_and_coverage.py
-
-Nothing is simulated here.
-"""
+# %% [markdown]
+# # Faults and coverage
+#
+# Faults as objects, a fault universe from rules, and what a campaign covers.
+# Nothing is simulated here. Also runnable as `python examples/02_faults_and_coverage.py`.
+# %%
 
 import json
+import sys
+from pathlib import Path
 
-from rc_study import circuit, population
+examples_dir = next(
+    (root / "examples" for root in (Path.cwd(), *Path.cwd().parents)
+     if (root / "examples" / "rc_study.py").is_file()),
+    None,
+)
+if examples_dir is not None:
+    sys.path.insert(0, str(examples_dir))
 
-from spicefault.faults import (
+# %% [markdown]
+# ## Faults as recorded primitive changes
+# %%
+from rc_study import circuit, population  # noqa: E402
+
+from spicefault.faults import (  # noqa: E402
     CompositeFault,
     Fault,
     FaultSet,
@@ -24,7 +37,6 @@ from spicefault.faults import (
     short_rule,
 )
 
-# --- every fault is a list of primitive changes, with a record ------------------------
 faults = FaultSet(
     [
         OpenCircuit("R1"),
@@ -49,7 +61,9 @@ record = faults["R2:parametric:-0.2"].metadata()
 print(json.dumps(record, indent=2))
 print("rebuilt from its record, it is the same fault:", Fault.from_metadata(record) == faults[3])
 
-# --- a universe generated from rules ---------------------------------------------------
+# %% [markdown]
+# ## A universe generated from rules
+# %%
 universe = FaultUniverse(
     circuit,
     [
@@ -68,7 +82,9 @@ print(universe.exclusions().to_string(index=False))
 print(f"\nstructural coverage: {universe.coverage():.0%}")
 print("components outside the fault model:", universe.metadata()["components_without_faults"])
 
-# --- faults that are not faults: inside the tolerance band ----------------------------
+# %% [markdown]
+# ## Parametric faults inside the tolerance band
+# %%
 overlap = universe.selected().tolerance_overlap(population, circuit)
 inside = overlap[overlap["inside_fraction"] > 0]
 print("\nparametric faults partly inside the tolerance band of their component:")

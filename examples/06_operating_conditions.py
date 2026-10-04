@@ -1,17 +1,35 @@
-"""Operating conditions: the same drawn circuits under different supplies and temperatures.
+# %% [markdown]
+# # Operating conditions
+#
+# Observe the same drawn circuits under different supplies and temperatures.
+# A fault that is plain at room temperature can hide when the circuit is hot.
+# Also runnable as `python examples/06_operating_conditions.py`.
+# %%
 
-    python examples/06_operating_conditions.py
-
-A divider whose upper resistor has a temperature coefficient. A fault that is plain at
-room temperature can hide when the circuit is hot.
-"""
+import sys
+from pathlib import Path
 
 import pandas as pd
 
-from spicefault import Circuit, FaultCampaign, Measurement, OperatingCondition, SimulationConfig
-from spicefault.faults import ParametricFault
-from spicefault.reliability import ReliabilityAnalysis, detectability_across
-from spicefault.variation import tolerances
+examples_dir = next(
+    (root / "examples" for root in (Path.cwd(), *Path.cwd().parents)
+     if (root / "examples" / "rc_study.py").is_file()),
+    None,
+)
+if examples_dir is not None:
+    sys.path.insert(0, str(examples_dir))
+
+# %%
+from spicefault import (  # noqa: E402
+    Circuit,
+    FaultCampaign,
+    Measurement,
+    OperatingCondition,
+    SimulationConfig,
+)
+from spicefault.faults import ParametricFault  # noqa: E402
+from spicefault.reliability import ReliabilityAnalysis, detectability_across  # noqa: E402
+from spicefault.variation import tolerances  # noqa: E402
 
 # R1 grows 0.2 % per kelvin; R2 does not
 circuit = Circuit(

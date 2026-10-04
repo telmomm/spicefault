@@ -1,15 +1,27 @@
-"""Reliability analysis: what the fault responses say about the circuit.
+# %% [markdown]
+# # Reliability analysis
+#
+# Compare detection, minimum detectable deviation, ambiguity and tolerance robustness.
+# Also runnable as `python examples/05_reliability.py`.
+# %%
 
-    python examples/05_reliability.py
-
-Detection of each fault, the smallest deviation that is visible, which faults look
-alike, and how tolerance erodes detection (the same campaign at two tolerance scales).
-"""
+import sys
+from pathlib import Path
 
 import pandas as pd
-from rc_study import WORKERS, campaign
 
-from spicefault.reliability import ReliabilityAnalysis, robustness
+examples_dir = next(
+    (root / "examples" for root in (Path.cwd(), *Path.cwd().parents)
+     if (root / "examples" / "rc_study.py").is_file()),
+    None,
+)
+if examples_dir is not None:
+    sys.path.insert(0, str(examples_dir))
+
+# %%
+from rc_study import WORKERS, campaign  # noqa: E402
+
+from spicefault.reliability import ReliabilityAnalysis, robustness  # noqa: E402
 
 ALPHA = 0.02  # false-alarm rate the detector is set for
 
