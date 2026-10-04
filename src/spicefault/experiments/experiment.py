@@ -121,6 +121,8 @@ class Experiment:
     waveform: Waveform | None = None
 
     def __post_init__(self):
+        if self.config == SimulationConfig() and self.circuit.imported_analyses:
+            self.config = SimulationConfig(analyses=self.circuit.imported_analyses)
         if self.seeding not in SCHEMES:
             raise ValueError(f"unknown seeding scheme {self.seeding!r}; expected one of {SCHEMES}")
         if isinstance(self.conditions, OperatingCondition):
@@ -151,6 +153,22 @@ class Experiment:
 
     def seed_key(self, sample: Sample) -> tuple[int, ...]:
         return seed_key(self.seeding, sample.fault_index, self.fault_id(sample), sample.replica)
+
+    def config_for(self, condition_index: int) -> SimulationConfig:
+        condition = self.conditions[condition_index]
+        return condition.config or self.config
+
+    def measurements_for(self, condition_index: int) -> tuple[Measurement, ...]:
+        condition = self.conditions[condition_index]
+        return condition.measurements if condition.measurements is not None else self.measurements
+
+    @property
+    def measurement_columns(self) -> tuple[str, ...]:
+        return tuple(dict.fromkeys(
+            measurement.name
+            for index in range(len(self.conditions))
+            for measurement in self.measurements_for(index)
+        ))
 
     def plan(self) -> list[Sample]:
         """Every sample, in a fixed order: by fault (healthy first), replica and condition."""
@@ -207,7 +225,11 @@ class Experiment:
         a backend other than the built-in ones (`simulator`). The netlist must be the
         one the record was made with.
         """
-        circuit = Circuit(netlist, metadata["circuit"])
+        circuit = Circuit(
+            netlist,
+            metadata["circuit"],
+            imported_analyses=metadata.get("imported_analyses", ()),
+        )
         if circuit.metadata()["netlist_sha256"] != metadata["netlist_sha256"]:
             raise ValueError("the netlist is not the one this experiment was defined with")
         waveform = metadata["waveform"]
@@ -248,18 +270,25 @@ class Experiment:
                 f"function), or run with workers=1. Cause: {type(exc).__name__}: {exc}"
             ) from exc
 
-    def measure(self, result: SimulationResult) -> dict[str, float]:
+    def measure(
+        self, result: SimulationResult, condition_index: int | None = None
+    ) -> dict[str, float]:
         """The measurements of a successful simulation, by name."""
-        return {m.name: m(result) for m in self.measurements}
+        measurements = self.measurements if condition_index is None else self.measurements_for(
+            condition_index
+        )
+        return {measurement.name: measurement(result) for measurement in measurements}
 
     def run_sample(self, sample: Sample) -> SampleResult:
         realised = self.realise(sample)
-        result = self.simulator.run(realised.netlist, self.config)
+        result = self.simulator.run(realised.netlist, self.config_for(sample.condition_index))
         measurements = {}
         if result.ok:
             try:
-                measurements = self.measure(result)
+                measurements = dict.fromkeys(self.measurement_columns, float("nan"))
+                measurements.update(self.measure(result, sample.condition_index))
             except Exception as exc:  # the simulation ran but its output cannot be used
+                measurements = {}
                 result = replace(
                     result,
                     status=SimulationStatus.INVALID_OUTPUT,

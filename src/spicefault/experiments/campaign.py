@@ -54,7 +54,7 @@ def simulate_sample(sample: Sample, experiment: Experiment) -> tuple[dict, np.nd
         "sim_ok": False,
         "elapsed_s": 0.0,
     }
-    measurements = dict.fromkeys((m.name for m in experiment.measurements), math.nan)
+    measurements = dict.fromkeys(experiment.measurement_columns, math.nan)
     try:
         realised = experiment.realise(sample)
     except Exception as exc:  # a definition that does not fit the circuit
@@ -63,23 +63,35 @@ def simulate_sample(sample: Sample, experiment: Experiment) -> tuple[dict, np.nd
     row.update(realised.labels)
     row.update({f"p_{c}_{p}": value for (c, p), value in realised.parameters.items()})
 
-    result = experiment.simulator.run(realised.netlist, experiment.config)
+    result = experiment.simulator.run(
+        realised.netlist, experiment.config_for(sample.condition_index)
+    )
     row.update(status=result.status.value, message=result.message, elapsed_s=result.elapsed)
     waveform = None
     if result.ok:
         try:
-            measurements = experiment.measure(result)
+            measurements.update(experiment.measure(result, sample.condition_index))
             if experiment.waveform is not None:
                 waveform = experiment.waveform(result)
-            if not all(math.isfinite(v) for v in measurements.values()):
+            active = experiment.measurements_for(sample.condition_index)
+            if not all(math.isfinite(measurements[m.name]) for m in active):
                 raise ValueError("a measurement is not finite")
             row["sim_ok"] = True
         except Exception as exc:  # the simulation ran but its output cannot be used
-            measurements = dict.fromkeys(measurements, math.nan)
+            measurements = dict.fromkeys(experiment.measurement_columns, math.nan)
             waveform = None
             row["status"] = SimulationStatus.INVALID_OUTPUT.value
             row["message"] = f"measurement failed: {type(exc).__name__}: {exc}"
     return {**row, **measurements}, waveform
+
+
+def _simulate_with_tags(sample: Sample, context) -> tuple[dict, np.ndarray | None]:
+    experiment, tag_columns = context
+    row, waveform = simulate_sample(sample, experiment)
+    fault = experiment.fault(sample)
+    row.update({column: "" if fault is None else fault.tags.get(column, "")
+                for column in tag_columns})  # fmt: skip
+    return row, waveform
 
 
 @dataclass
@@ -109,16 +121,60 @@ class FaultCampaign:
     """
 
     def __init__(
-        self, circuit, faults=(), *, out_dir: str | Path, samples_per_fault: int = 1, **kwargs
+        self,
+        circuit,
+        faults=(),
+        *,
+        out_dir: str | Path,
+        samples_per_fault: int = 1,
+        tag_columns=(),
+        metadata: dict | None = None,
+        **kwargs,
     ):
         self.experiment = Experiment(circuit, faults=faults, samples=samples_per_fault, **kwargs)
         self.out_dir = Path(out_dir)
+        self.tag_columns = tuple(tag_columns)
+        self.user_metadata = dict(metadata or {})
+        json.dumps(self.user_metadata)
+        self._validate_tag_columns()
 
     @classmethod
-    def from_experiment(cls, experiment: Experiment, out_dir: str | Path) -> FaultCampaign:
+    def from_experiment(
+        cls,
+        experiment: Experiment,
+        out_dir: str | Path,
+        *,
+        tag_columns=(),
+        metadata: dict | None = None,
+    ) -> FaultCampaign:
         campaign = object.__new__(cls)
         campaign.experiment, campaign.out_dir = experiment, Path(out_dir)
+        campaign.tag_columns = tuple(tag_columns)
+        campaign.user_metadata = dict(metadata or {})
+        json.dumps(campaign.user_metadata)
+        campaign._validate_tag_columns()
         return campaign
+
+    def _validate_tag_columns(self) -> None:
+        if len(set(self.tag_columns)) != len(self.tag_columns) or any(
+            not isinstance(column, str) or not column for column in self.tag_columns
+        ):
+            raise ValueError("tag_columns must be unique, non-empty strings")
+        parameters = {
+            f"p_{component}_{parameter}"
+            for variation in self.experiment.variations
+            for component, parameter in variation.targets()
+        }
+        protected = {*DEFINITION_COLUMNS, *parameters, *self.experiment.measurement_columns}
+        overlap = protected.intersection(self.tag_columns)
+        if overlap:
+            raise ValueError(f"tag columns conflict with reserved columns: {sorted(overlap)}")
+
+    def _metadata(self) -> dict:
+        record = self.experiment.metadata()
+        if self.tag_columns:
+            record["fault_tag_columns"] = list(self.tag_columns)
+        return record
 
     # --- before running -----------------------------------------------------------------
 
@@ -132,7 +188,7 @@ class FaultCampaign:
         """
         e = self.experiment
         report = ValidationReport()
-        if not e.measurements and e.waveform is None:
+        if not e.measurement_columns and e.waveform is None:
             report.warnings.append("no measurement and no waveform: only the status is recorded")
         try:
             draw = e.variations.sample(sample_stream(e.seed), e.circuit.netlist())
@@ -144,7 +200,7 @@ class FaultCampaign:
                 fault.apply(e.circuit.netlist())
             except Exception as exc:
                 report.errors.append(f"fault {fault.fault_id}: {type(exc).__name__}: {exc}")
-        for condition in e.conditions:
+        for condition_index, condition in enumerate(e.conditions):
             try:
                 netlist = e.circuit.netlist()
                 condition.apply(netlist)
@@ -153,14 +209,15 @@ class FaultCampaign:
                 continue
             if not simulate:
                 continue
-            result = e.simulator.run(str(netlist), e.config)
+            result = e.simulator.run(str(netlist), e.config_for(condition_index))
             if not result.ok:
                 report.errors.append(
                     f"nominal circuit, condition {condition.name}: "
                     f"{result.status.value}: {result.message}"
                 )
                 continue
-            for item in (*e.measurements, *([e.waveform] if e.waveform else [])):
+            measurements = e.measurements_for(condition_index)
+            for item in (*measurements, *([e.waveform] if e.waveform else [])):
                 label = getattr(item, "name", "waveform")
                 try:
                     if not np.all(np.isfinite(item(result))):
@@ -197,7 +254,7 @@ class FaultCampaign:
         """
         e = self.experiment
         if (self.out_dir / MANIFEST).exists():
-            if load_metadata(self.out_dir) != json.loads(json.dumps(e.metadata())):
+            if load_metadata(self.out_dir) != json.loads(json.dumps(self._metadata())):
                 raise FileExistsError(
                     f"{self.out_dir} holds the dataset of another campaign; choose another folder"
                 )
@@ -211,16 +268,17 @@ class FaultCampaign:
                 raise ValueError(f"the campaign is not valid:\n{report}")
         return run_campaign(
             e.plan(),
-            simulate_sample,
-            e,
+            _simulate_with_tags,
+            (e, self.tag_columns),
             self.out_dir,
-            config=e.metadata(),
+            config=self._metadata(),
             n_points=None if e.waveform is None else e.waveform.n_points,
             workers=workers,
             chunk=chunk,
             progress=progress,
             summary=self._summary,
             files={CIRCUIT_FILE: e.circuit.to_netlist()},
+            user_metadata=self.user_metadata,
         )
 
     def _summary(self, df: pd.DataFrame) -> dict:
@@ -228,7 +286,7 @@ class FaultCampaign:
         e = self.experiment
         status = df["status"].value_counts().to_dict()
         targets = [t for v in e.variations for t in v.targets()]
-        measurements = [m.name for m in e.measurements]
+        measurements = list(e.measurement_columns)
         parameters = {f"p_{c}_{p}": [c, p] for c, p in targets}
         known = {*DEFINITION_COLUMNS, *parameters, *measurements}
         return {

@@ -158,6 +158,7 @@ def run_campaign(
     progress: bool = True,
     summary: Callable[[pd.DataFrame], dict] | None = None,
     files: dict[str, str] | None = None,
+    user_metadata: dict | None = None,
 ) -> Path:
     """Simulate every task and write the dataset to `out_dir`.
 
@@ -206,6 +207,7 @@ def run_campaign(
         elapsed_last_run_s=round(time.time() - t0, 1),
         elapsed_total_s=round(elapsed_so_far(parts_dir), 1),
         files={name: file_record(out_dir / name) for name in [*written, METADATA, *(files or {})]},
+        user=dict(user_metadata or {}),
         summary=summary(df) if summary is not None else {},
     )
     manifest.write(out_dir)  # last: its presence marks a complete dataset

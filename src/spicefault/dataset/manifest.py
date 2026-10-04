@@ -45,6 +45,7 @@ class Manifest:
     files: dict[str, dict] = field(default_factory=dict)
     summary: dict = field(default_factory=dict)
     schema_version: int = SCHEMA_VERSION
+    user: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         record = asdict(self)

@@ -227,6 +227,60 @@ def test_campaign_from_an_experiment(tmp_path):
     assert len(df) == 6 and waveforms is None and load_metadata(c.out_dir)["waveform"] is None
 
 
+def test_condition_can_override_config_and_measurements(tmp_path):
+    bench = OperatingCondition(
+        "bench",
+        config=SimulationConfig(analyses=("tran 1u 1m",), outputs=("v(out)",)),
+        measurements=(Measurement.value("v(out)", name="bench_out"),),
+    )
+    c = campaign(
+        tmp_path / "data",
+        conditions=[OperatingCondition(), bench],
+        waveform=None,
+    )
+    c.run(progress=False)
+    dataset = c.dataset()
+    assert dataset.features == ["vout", "final_v(out)", "bench_out"]
+    service = dataset.samples[dataset.samples["condition"] == "nominal"]
+    testbench = dataset.samples[dataset.samples["condition"] == "bench"]
+    assert service["bench_out"].isna().all()
+    assert testbench[["vout", "final_v(out)"]].isna().all().all()
+    assert testbench.loc[testbench["sim_ok"], "bench_out"].notna().all()
+    assert testbench.loc[~testbench["sim_ok"], "bench_out"].isna().all()
+    rebuilt = dataset.experiment(simulator=Simulator(Divider()))
+    assert rebuilt.conditions[1] == bench
+
+
+def test_fault_tags_become_label_columns_and_user_metadata_is_recorded(tmp_path):
+    faults = [
+        OpenCircuit("R2", tags={"origin": "electrode", "part": "lead"}),
+        ShortCircuit("R2"),
+    ]
+    c = FaultCampaign(
+        CIRCUIT,
+        faults,
+        out_dir=tmp_path / "data",
+        samples_per_fault=2,
+        healthy_samples=2,
+        simulator=Simulator(Divider()),
+        measurements=[Measurement.value("v(out)", name="vout")],
+        conditions=[OperatingCondition()],
+        tag_columns=("origin", "part"),
+        metadata={"git_commit": "abc123", "limits": {"vout_max": 1.2}},
+    )
+    c.run(progress=False)
+    dataset = c.dataset()
+    assert dataset.labels == ["origin", "part"]
+    healthy = dataset.samples[dataset.samples["fault_id"] == "healthy"]
+    tagged = dataset.samples[dataset.samples["fault_id"] == "R2:open"]
+    untagged = dataset.samples[dataset.samples["fault_id"] == "R2:short"]
+    assert (healthy[["origin", "part"]] == "").all().all()
+    assert set(tagged["origin"]) == {"electrode"} and set(tagged["part"]) == {"lead"}
+    assert (untagged[["origin", "part"]] == "").all().all()
+    assert dataset.manifest.user == {"git_commit": "abc123", "limits": {"vout_max": 1.2}}
+    assert dataset.verify() == []
+
+
 @pytest.mark.ngspice
 def test_campaign_with_ngspice(tmp_path):
     circuit = Circuit(
