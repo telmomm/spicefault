@@ -1,0 +1,8 @@
+LTspice XVII export
+.param Rload = 10k
+V1 in 0 PULSE(0 1 0 1u 1u 5m 10m)
+R1 in out {Rload}
+C1 out 0 4.7µ
+.include "ltspice_models.lib"
+.ac dec 10 1 10k
+.end

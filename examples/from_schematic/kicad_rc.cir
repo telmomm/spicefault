@@ -1,0 +1,7 @@
+KiCad Eeschema export
+V1 in 0 DC 1 AC 1
+R1 in out 1k
+C1 out 0 100n
+.backanno
+.tran 1u 1m
+.end
