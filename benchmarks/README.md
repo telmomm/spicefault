@@ -34,8 +34,11 @@ for the same task, and reports the throughput of `spicefault` relative to it.
 
 The defaults follow section 4 of the experiment plan: a fixed workload of 2000
 samples, 5 repetitions, one discarded warm-up run, median and range reported. The
-machine must be idle and on mains power; the result records the load average at the
-start, which is the only evidence of that the benchmark can collect. Timings taken
+machine must be idle and on mains power. The scalability benchmark first waits, up to
+four minutes, for the load average to fall below 0.4 per core: a job that has just
+ended is still in that average for about a minute. The result records the load it
+started with and the load before every timed run, which is the only evidence of an
+idle machine the benchmark can collect. Timings taken
 while anything else is running must not be kept.
 
 ## Reading the results

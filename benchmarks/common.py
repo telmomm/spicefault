@@ -74,6 +74,31 @@ def environment() -> dict:
     }
 
 
+def load_average() -> float | None:
+    return os.getloadavg()[0] if hasattr(os, "getloadavg") else None
+
+
+def wait_until_quiet(timeout: float = 240.0, poll: float = 5.0) -> dict:
+    """Wait for the 1-minute load average to fall below 0.4 per core, at most `timeout` s.
+
+    The load average remembers the last minute. A benchmark launched right after
+    another job would start with that job's load in it, and be told that the machine
+    is busy when it no longer is. Returns the seconds waited and the load reached.
+    """
+    quiet = 0.4 * (os.cpu_count() or 1)
+    start = time.perf_counter()
+    while (load := load_average()) is not None and load > quiet:
+        if time.perf_counter() - start >= timeout:
+            break
+        time.sleep(poll)
+    return {
+        "waited_s": round(time.perf_counter() - start, 1),
+        "load_average_1min": load,
+        "quiet_below": quiet,
+        "quiet": load is None or load <= quiet,
+    }
+
+
 def peak_memory_mb() -> dict:
     """Peak resident memory of this process and of its largest finished child process."""
     scale = 1 / 2**20 if sys.platform == "darwin" else 1 / 2**10  # bytes on macOS, kB on Linux

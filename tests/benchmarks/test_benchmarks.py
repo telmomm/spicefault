@@ -54,7 +54,7 @@ def test_fault_coverage(results):
 
 @pytest.mark.ngspice
 def test_scalability(results):
-    result = scalability.run("rc", workers=(1, 2), repetitions=2, n_samples=60, chunk=30)
+    result = scalability.run("rc", workers=(1, 2), repetitions=2, n_samples=60, chunk=30, settle=0)
     assert result["protocol"]["n_samples"] == 60 and len(result["runs"]) == 4
     table = result["summary"]["spicefault"]
     assert table["1"]["speedup"] == 1.0 and table["1"]["efficiency"] == 1.0
@@ -71,6 +71,21 @@ def test_scalability(results):
     saved = json.loads(common.save("scalability", result, "test").read_text())
     assert saved["summary"]["spicefault"]["2"]["speedup"] == table["2"]["speedup"]
     assert "speed-up" in scalability.report(result)
+    assert set(result["machine_before_start"]) == {
+        "waited_s", "load_average_1min", "quiet_below", "quiet",
+    }
+    assert all("load_average_before" in r for r in result["runs"])
+
+
+def test_waiting_for_a_quiet_machine_gives_up_after_the_timeout(monkeypatch):
+    monkeypatch.setattr(common.os, "getloadavg", lambda: (99.0, 99.0, 99.0))
+    busy = common.wait_until_quiet(timeout=0.0)
+    assert busy["quiet"] is False and busy["load_average_1min"] == 99.0
+    monkeypatch.setattr(common.os, "getloadavg", lambda: (0.1, 0.1, 0.1))
+    assert common.wait_until_quiet(timeout=0.0) == {
+        "waited_s": 0.0, "load_average_1min": 0.1, "quiet_below": busy["quiet_below"],
+        "quiet": True,
+    }
 
 
 @pytest.mark.ngspice
@@ -92,7 +107,9 @@ def test_reproducibility(results):
 
 @pytest.mark.ngspice
 def test_scalability_against_the_direct_script(results):
-    result = scalability.run("sallen_key", workers=(2,), repetitions=1, n_samples=120, chunk=60)
+    result = scalability.run(
+        "sallen_key", workers=(2,), repetitions=1, n_samples=120, chunk=60, settle=0
+    )
     assert result["protocol"]["n_samples"] == 120
     assert set(result["summary"]) == {"spicefault", "direct_script"}
     order = [(r["implementation"], r["workers"]) for r in result["runs"]]

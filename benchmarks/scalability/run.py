@@ -29,7 +29,16 @@ import numpy as np
 import pandas as pd
 
 from benchmarks import workloads
-from benchmarks.common import Timer, environment, folder_bytes, peak_memory_mb, save, spread
+from benchmarks.common import (
+    Timer,
+    environment,
+    folder_bytes,
+    load_average,
+    peak_memory_mb,
+    save,
+    spread,
+    wait_until_quiet,
+)
 from spicefault.experiments import run_campaign, run_chunks, simulate_sample
 from spicefault.simulation import RAW_NAME, build_deck, ngspice_path, parse_raw
 
@@ -135,6 +144,7 @@ def run(
     repetitions: int = 5,
     n_samples: int = 2000,
     chunk: int = 500,
+    settle: float = 240.0,
 ) -> dict:
     experiment = workloads.experiment(workload, n_samples)
     experiment.check_picklable()
@@ -142,9 +152,12 @@ def run(
     n_points = None if experiment.waveform is None else experiment.waveform.n_points
     implementations = {"spicefault": (plan, simulate_sample, experiment)}
 
+    # a job that has just ended is still in the load average: let it fade before timing
+    quiet = wait_until_quiet(settle)
     result = {
         "benchmark": "scalability",
         "environment": environment(),
+        "machine_before_start": quiet,
         "protocol": {
             "workload": workload,
             "n_samples": len(plan),
@@ -166,6 +179,7 @@ def run(
             # both implementations one after the other, so that whatever else the machine
             # is doing affects them alike
             for name in names:
+                load_before = load_average()
                 if name == "direct_script":
                     measured = timed_direct(workload, len(plan), n_workers)
                 else:
@@ -177,6 +191,7 @@ def run(
                         "implementation": name,
                         "workers": n_workers,
                         "repetition": repetition,
+                        "load_average_before": load_before,
                         **measured,
                     }
                 )
@@ -243,12 +258,12 @@ def report(result: dict) -> str:
         fastest = result["relative_throughput_of_fastest_runs"]
         ratio = ", ".join(f"{n}: {r:.3f}" for n, r in fastest.items())
         lines.append(f"the same from the fastest run of each: {ratio}")
-    load = result["environment"]["load_average_1min_at_start"]
-    cores = result["environment"]["cpu"]["logical_cores"]
-    if load is not None and load > 0.5 * cores:
+    before = result.get("machine_before_start")
+    if before is not None and not before["quiet"]:
         lines.append(
-            f"\nWARNING: the load average was {load:.1f} on {cores} cores when the benchmark "
-            "started. The machine was not idle: these timings must not be reported."
+            f"\nWARNING: after waiting {before['waited_s']:.0f} s the load average was still "
+            f"{before['load_average_1min']:.1f} (quiet is below {before['quiet_below']:.1f}). "
+            "The machine was not idle: these timings must not be reported."
         )
     phases = result["phase_breakdown"]["ms_per_sample"]
     lines.append(
@@ -267,9 +282,14 @@ def main() -> None:
     parser.add_argument("--repetitions", type=int, default=5)
     parser.add_argument("--samples", type=int, default=2000)
     parser.add_argument("--chunk", type=int, default=500)
+    parser.add_argument(
+        "--settle", type=float, default=240.0, help="seconds to wait for a quiet machine"
+    )
     parser.add_argument("--label", default="", help="added to the name of the result file")
     args = parser.parse_args()
-    result = run(args.workload, tuple(args.workers), args.repetitions, args.samples, args.chunk)
+    result = run(
+        args.workload, tuple(args.workers), args.repetitions, args.samples, args.chunk, args.settle
+    )
     print(report(result))
     print("\nsaved to", save("scalability", result, args.label or args.workload))
 
