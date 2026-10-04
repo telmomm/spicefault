@@ -115,10 +115,37 @@ def test_parameters_and_source_values():
     assert net.parameters("R1") == {"value": 1e4}
     assert net.parameters("XU1") == {"aol": 2e5, "vos": 0.0, "gbw": 1e6}
     assert net.parameters("Vcc") == {"dc": 5.0} and net.parameters("V2") == {"dc": 3.3}
-    assert net.parameters("I1") == {}
+    assert net.parameters("I1") == {"ac": 1.0}
     net.set_parameter("Vcc", "dc", "absolute", 3.0)
     net.set_parameter("V2", "dc", "relative", -0.1)
     assert "Vcc vcc 0 dc 3.0\n" in str(net) and net.value("V2", "dc") == 3.3 * (1.0 - 0.1)
+
+
+def test_source_function_parameters_and_constant_param_expressions():
+    text = (
+        "sources\n.param Rload = 10k\nR1 in out {Rload}\n"
+        "Vcal cal 0 pulse(0 1 0 1u 1u 5m 10m)\n"
+        "Vsin sin 0 sin(0 10 60)\nVac ac 0 ac 1 90\n"
+        "XU1 out fb o opamp aol = 2e5\n.end\n"
+    )
+    net = Netlist(text)
+    assert net.value("R1") == 1e4
+    assert net.value("Vcal", "pulse.v2") == 1.0
+    assert net.value("Vsin", "sin.va") == 10.0
+    assert net.value("Vac", "ac") == 1.0
+    assert net.value("Vac", "acphase") == 90.0
+    assert net.value("XU1", "aol") == 2e5
+    net.set_parameter("R1", "value", "absolute", 12e3)
+    net.set_parameter("Vcal", "pulse.v2", "absolute", 2.0)
+    net.set_parameter("Vsin", "sin.freq", "scale", 2.0)
+    net.set_parameter("Vac", "ac", "absolute", 0.5)
+    net.set_parameter("XU1", "aol", "scale", 0.5)
+    assert "R1 in out 12000.0" in str(net)
+    assert "pulse(0 2.0 0" in str(net)
+    assert "sin(0 10 120.0)" in str(net)
+    assert "ac 0.5 90" in str(net)
+    assert "aol = 100000.0" in str(net)
+    assert Netlist(text).parameters("Vcal")["pulse.v2"] == 1.0
 
 
 def test_add_directive_goes_before_the_control_block():
