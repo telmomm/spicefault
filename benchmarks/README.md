@@ -43,6 +43,15 @@ while anything else is running must not be kept.
 
 ## Reading the results
 
+- **Range** is the difference between the slowest and the fastest repetition, relative
+  to the median. It is the evidence that the machine was undisturbed: a few per cent
+  when it was. The load average is recorded too, but on a desktop with an editor and
+  background services it rests well above zero and says less.
+- **A laptop slows down as it warms up.** On a fanless machine the later repetitions
+  of a long benchmark are slower than the first. The direct script is timed right
+  after the framework in every repetition, so their ratio is not affected; the absolute
+  throughput is.
+
 - **Speed-up and efficiency** are relative to the run with the fewest workers. On a
   processor with performance and efficiency cores, efficiency falls beyond the number
   of performance cores for hardware reasons; the core counts are in the result.

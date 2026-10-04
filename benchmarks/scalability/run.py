@@ -207,6 +207,8 @@ def run(
             speedup = t1 / float(np.median(walls))
             table[str(n_workers)] = {
                 "wall_s": spread(walls),
+                # how much the repetitions differ: the evidence of an undisturbed machine
+                "relative_range": relative_range(spread(walls)),
                 "sims_per_s": spread([len(plan) / w for w in walls]),
                 "speedup": speedup,
                 "efficiency": speedup / n_workers,
@@ -237,6 +239,11 @@ def run(
     return result
 
 
+def relative_range(wall: dict) -> float:
+    """Slowest minus fastest repetition, over the median."""
+    return (wall["max"] - wall["min"]) / wall["median"]
+
+
 def report(result: dict) -> str:
     protocol = result["protocol"]
     lines = [
@@ -244,10 +251,11 @@ def report(result: dict) -> str:
         f"{protocol['repetitions']} repetitions"
     ]
     for name, table in result["summary"].items():
-        lines.append(f"\n{name}\n workers   wall [s]   sims/s   speed-up   efficiency")
+        lines.append(f"\n{name}\n workers   wall [s]   range   sims/s   speed-up   efficiency")
         for n, row in table.items():
             lines.append(
-                f" {n:>7} {row['wall_s']['median']:>10.2f} {row['sims_per_s']['median']:>8.1f} "
+                f" {n:>7} {row['wall_s']['median']:>10.2f} {relative_range(row['wall_s']):>6.0%} "
+                f"{row['sims_per_s']['median']:>8.1f} "
                 f"{row['speedup']:>10.2f} {row['efficiency']:>12.2f}"
             )
     if "relative_throughput" in result:
@@ -261,9 +269,10 @@ def report(result: dict) -> str:
     before = result.get("machine_before_start")
     if before is not None and not before["quiet"]:
         lines.append(
-            f"\nWARNING: after waiting {before['waited_s']:.0f} s the load average was still "
+            f"\nNOTE: after waiting {before['waited_s']:.0f} s the load average was still "
             f"{before['load_average_1min']:.1f} (quiet is below {before['quiet_below']:.1f}). "
-            "The machine was not idle: these timings must not be reported."
+            "Something else was using the machine, or its load average rests high. Judge the "
+            "timings by the range between repetitions, and do not report them if it is wide."
         )
     phases = result["phase_breakdown"]["ms_per_sample"]
     lines.append(

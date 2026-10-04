@@ -1,0 +1,578 @@
+{
+  "benchmark": "scalability",
+  "environment": {
+    "date": "2026-10-04T08:07:51+00:00",
+    "host": "MacBook-Air-de-Telmo.local",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "cpu": {
+      "model": "Apple M2",
+      "logical_cores": 8,
+      "physical_cores": 8,
+      "performance_cores": 4,
+      "efficiency_cores": 4
+    },
+    "python": "3.12.9",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "spicefault_version": "0.1.0",
+    "spicefault_commit": "9a59f7d4389d25699e04187ddb074354920c9178",
+    "uncommitted_changes": false,
+    "simulator": "ngspice-44.2",
+    "load_average_1min_at_start": 9.94580078125
+  },
+  "machine_before_start": {
+    "waited_s": 240.3,
+    "load_average_1min": 9.94580078125,
+    "quiet_below": 3.2,
+    "quiet": false
+  },
+  "protocol": {
+    "workload": "sallen_key",
+    "n_samples": 2000,
+    "workers": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "repetitions": 5,
+    "chunk": 500,
+    "warm_up": "one discarded run of each implementation"
+  },
+  "runs": [
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 0,
+      "load_average_before": 9.62939453125,
+      "wall_s": 34.61314899998251,
+      "sims_per_s": 57.78150956450135,
+      "bytes_written": 1602017
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 1,
+      "repetition": 0,
+      "load_average_before": 7.38330078125,
+      "wall_s": 32.26793545897817,
+      "sims_per_s": 61.98103385147077,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 0,
+      "load_average_before": 5.36669921875,
+      "wall_s": 17.774685417010915,
+      "sims_per_s": 112.51957224997857,
+      "bytes_written": 1601209
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 2,
+      "repetition": 0,
+      "load_average_before": 4.70654296875,
+      "wall_s": 17.404181124991737,
+      "sims_per_s": 114.91491530894703,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 0,
+      "load_average_before": 4.8642578125,
+      "wall_s": 10.47009087499464,
+      "sims_per_s": 191.02030955400127,
+      "bytes_written": 1601743
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 4,
+      "repetition": 0,
+      "load_average_before": 4.884765625,
+      "wall_s": 9.9788933750242,
+      "sims_per_s": 200.42302536328583,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 0,
+      "load_average_before": 4.98193359375,
+      "wall_s": 7.454115250031464,
+      "sims_per_s": 268.308167088181,
+      "bytes_written": 1602547
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 8,
+      "repetition": 0,
+      "load_average_before": 5.51904296875,
+      "wall_s": 7.219562790996861,
+      "sims_per_s": 277.02508557638635,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 1,
+      "load_average_before": 6.11767578125,
+      "wall_s": 31.875608333968557,
+      "sims_per_s": 62.74390057267331,
+      "bytes_written": 1601373
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 1,
+      "repetition": 1,
+      "load_average_before": 4.55224609375,
+      "wall_s": 31.480555165966507,
+      "sims_per_s": 63.53128111800873,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 1,
+      "load_average_before": 3.74365234375,
+      "wall_s": 17.832581874972675,
+      "sims_per_s": 112.15425864983247,
+      "bytes_written": 1601456
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 2,
+      "repetition": 1,
+      "load_average_before": 3.99658203125,
+      "wall_s": 17.541835125011858,
+      "sims_per_s": 114.01315687594847,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 1,
+      "load_average_before": 3.70703125,
+      "wall_s": 10.48377208301099,
+      "sims_per_s": 190.7710301372357,
+      "bytes_written": 1601821
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 4,
+      "repetition": 1,
+      "load_average_before": 4.052734375,
+      "wall_s": 10.217857541982085,
+      "sims_per_s": 195.73574908268247,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 1,
+      "load_average_before": 4.20458984375,
+      "wall_s": 7.891074834042229,
+      "sims_per_s": 253.45089763589195,
+      "bytes_written": 1602696
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 8,
+      "repetition": 1,
+      "load_average_before": 4.345703125,
+      "wall_s": 7.241131708025932,
+      "sims_per_s": 276.1999202118142,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 2,
+      "load_average_before": 4.79833984375,
+      "wall_s": 32.032902500010096,
+      "sims_per_s": 62.435803311903115,
+      "bytes_written": 1601474
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 1,
+      "repetition": 2,
+      "load_average_before": 3.77685546875,
+      "wall_s": 32.168613207992166,
+      "sims_per_s": 62.17240348748101,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 2,
+      "load_average_before": 3.19482421875,
+      "wall_s": 19.01091145799728,
+      "sims_per_s": 105.2027413003738,
+      "bytes_written": 1601651
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 2,
+      "repetition": 2,
+      "load_average_before": 5.134765625,
+      "wall_s": 17.975655999965966,
+      "sims_per_s": 111.26158622549222,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 2,
+      "load_average_before": 5.10400390625,
+      "wall_s": 11.457287500030361,
+      "sims_per_s": 174.56138723888182,
+      "bytes_written": 1602099
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 4,
+      "repetition": 2,
+      "load_average_before": 5.81787109375,
+      "wall_s": 11.11383616598323,
+      "sims_per_s": 179.95586493541424,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 2,
+      "load_average_before": 6.46044921875,
+      "wall_s": 8.832458666991442,
+      "sims_per_s": 226.43751591777902,
+      "bytes_written": 1602927
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 8,
+      "repetition": 2,
+      "load_average_before": 9.025390625,
+      "wall_s": 8.458349582972005,
+      "sims_per_s": 236.45274771171864,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 3,
+      "load_average_before": 10.62451171875,
+      "wall_s": 32.725586709042545,
+      "sims_per_s": 61.11425954809151,
+      "bytes_written": 1601769
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 1,
+      "repetition": 3,
+      "load_average_before": 8.544921875,
+      "wall_s": 32.46846629102947,
+      "sims_per_s": 61.59822832631206,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 3,
+      "load_average_before": 7.13623046875,
+      "wall_s": 18.847674417018425,
+      "sims_per_s": 106.11388735546646,
+      "bytes_written": 1601729
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 2,
+      "repetition": 3,
+      "load_average_before": 6.91455078125,
+      "wall_s": 18.4503469170304,
+      "sims_per_s": 108.39904577370959,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 3,
+      "load_average_before": 6.5302734375,
+      "wall_s": 11.32423754199408,
+      "sims_per_s": 176.61233196348343,
+      "bytes_written": 1601899
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 4,
+      "repetition": 3,
+      "load_average_before": 6.916015625,
+      "wall_s": 11.202917000046,
+      "sims_per_s": 178.5249323896435,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 3,
+      "load_average_before": 8.7412109375,
+      "wall_s": 8.960450707993004,
+      "sims_per_s": 223.20305810241632,
+      "bytes_written": 1602986
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 8,
+      "repetition": 3,
+      "load_average_before": 11.21826171875,
+      "wall_s": 8.607900667004287,
+      "sims_per_s": 232.3446886029225,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 4,
+      "load_average_before": 13.04833984375,
+      "wall_s": 32.4152117499616,
+      "sims_per_s": 61.699427275910644,
+      "bytes_written": 1601733
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 1,
+      "repetition": 4,
+      "load_average_before": 10.5927734375,
+      "wall_s": 33.17178200004855,
+      "sims_per_s": 60.29220860058325,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 4,
+      "load_average_before": 8.5,
+      "wall_s": 19.244921042001806,
+      "sims_per_s": 103.92352328362503,
+      "bytes_written": 1601750
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 2,
+      "repetition": 4,
+      "load_average_before": 7.9892578125,
+      "wall_s": 18.33399637497496,
+      "sims_per_s": 109.08696386184006,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 4,
+      "load_average_before": 7.48681640625,
+      "wall_s": 11.288173999986611,
+      "sims_per_s": 177.1765743513851,
+      "bytes_written": 1602083
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 4,
+      "repetition": 4,
+      "load_average_before": 7.4638671875,
+      "wall_s": 10.972692084033042,
+      "sims_per_s": 182.27067566311354,
+      "bytes_written": 1941803
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 4,
+      "load_average_before": 8.09326171875,
+      "wall_s": 8.656586499942932,
+      "sims_per_s": 231.0379501219314,
+      "bytes_written": 1602868
+    },
+    {
+      "implementation": "direct_script",
+      "workers": 8,
+      "repetition": 4,
+      "load_average_before": 12.17822265625,
+      "wall_s": 8.553098667005543,
+      "sims_per_s": 233.83338341637582,
+      "bytes_written": 1941803
+    }
+  ],
+  "summary": {
+    "spicefault": {
+      "1": {
+        "wall_s": {
+          "median": 32.4152117499616,
+          "min": 31.875608333968557,
+          "max": 34.61314899998251,
+          "n": 5
+        },
+        "sims_per_s": {
+          "median": 61.699427275910644,
+          "min": 57.78150956450135,
+          "max": 62.74390057267331,
+          "n": 5
+        },
+        "speedup": 1.0,
+        "efficiency": 1.0
+      },
+      "2": {
+        "wall_s": {
+          "median": 18.847674417018425,
+          "min": 17.774685417010915,
+          "max": 19.244921042001806,
+          "n": 5
+        },
+        "sims_per_s": {
+          "median": 106.11388735546646,
+          "min": 103.92352328362503,
+          "max": 112.51957224997857,
+          "n": 5
+        },
+        "speedup": 1.719852064119509,
+        "efficiency": 0.8599260320597545
+      },
+      "4": {
+        "wall_s": {
+          "median": 11.288173999986611,
+          "min": 10.47009087499464,
+          "max": 11.457287500030361,
+          "n": 5
+        },
+        "sims_per_s": {
+          "median": 177.1765743513851,
+          "min": 174.56138723888182,
+          "max": 191.02030955400127,
+          "n": 5
+        },
+        "speedup": 2.8716080873664818,
+        "efficiency": 0.7179020218416204
+      },
+      "8": {
+        "wall_s": {
+          "median": 8.656586499942932,
+          "min": 7.454115250031464,
+          "max": 8.960450707993004,
+          "n": 5
+        },
+        "sims_per_s": {
+          "median": 231.0379501219314,
+          "min": 223.20305810241632,
+          "max": 268.308167088181,
+          "n": 5
+        },
+        "speedup": 3.7445720377397365,
+        "efficiency": 0.46807150471746706
+      }
+    },
+    "direct_script": {
+      "1": {
+        "wall_s": {
+          "median": 32.26793545897817,
+          "min": 31.480555165966507,
+          "max": 33.17178200004855,
+          "n": 5
+        },
+        "sims_per_s": {
+          "median": 61.98103385147077,
+          "min": 60.29220860058325,
+          "max": 63.53128111800873,
+          "n": 5
+        },
+        "speedup": 1.0,
+        "efficiency": 1.0
+      },
+      "2": {
+        "wall_s": {
+          "median": 17.975655999965966,
+          "min": 17.404181124991737,
+          "max": 18.4503469170304,
+          "n": 5
+        },
+        "sims_per_s": {
+          "median": 111.26158622549222,
+          "min": 108.39904577370959,
+          "max": 114.91491530894703,
+          "n": 5
+        },
+        "speedup": 1.795090841693859,
+        "efficiency": 0.8975454208469295
+      },
+      "4": {
+        "wall_s": {
+          "median": 10.972692084033042,
+          "min": 9.9788933750242,
+          "max": 11.202917000046,
+          "n": 5
+        },
+        "sims_per_s": {
+          "median": 182.27067566311354,
+          "min": 178.5249323896435,
+          "max": 200.42302536328583,
+          "n": 5
+        },
+        "speedup": 2.9407491991808454,
+        "efficiency": 0.7351872997952114
+      },
+      "8": {
+        "wall_s": {
+          "median": 8.458349582972005,
+          "min": 7.219562790996861,
+          "max": 8.607900667004287,
+          "n": 5
+        },
+        "sims_per_s": {
+          "median": 236.45274771171864,
+          "min": 232.3446886029225,
+          "max": 277.02508557638635,
+          "n": 5
+        },
+        "speedup": 3.8149210011298926,
+        "efficiency": 0.4768651251412366
+      }
+    }
+  },
+  "bytes_written": 1602868,
+  "bytes_per_sample": 801.434,
+  "relative_throughput": {
+    "1": 0.995456568597501,
+    "2": 0.9537333679605017,
+    "4": 0.9720519974307676,
+    "8": 0.9770998745322726
+  },
+  "relative_throughput_of_fastest_runs": {
+    "1": 0.9876064116529799,
+    "2": 0.9791555077726105,
+    "4": 0.9530856507517476,
+    "8": 0.9685338298152
+  },
+  "phase_breakdown": {
+    "n_samples": 100,
+    "ms_per_sample": {
+      "netlist_generation": 0.2308924327371642,
+      "simulator_process": 15.096445468370803,
+      "output_parsing": 0.36283041059505194,
+      "measurement": 0.557847970048897,
+      "storage": 0.022529999841935933
+    },
+    "fraction": {
+      "netlist_generation": 0.01419082240639717,
+      "simulator_process": 0.9278388818111623,
+      "output_parsing": 0.02229982966248072,
+      "measurement": 0.034285755400847585,
+      "storage": 0.0013847107191123093
+    }
+  },
+  "resume_overhead": {
+    "seconds": 0.025127917004283518,
+    "simulations_repeated": 0,
+    "max_lost_on_interruption": 500
+  },
+  "peak_memory": {
+    "parent_mb": 93.3,
+    "largest_child_mb": 94.7
+  }
+}
