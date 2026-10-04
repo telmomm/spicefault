@@ -11,6 +11,7 @@ from spicefault.faults import (
     LeakageFault,
     OpenCircuit,
     ParametricFault,
+    SeriesResistanceFault,
     SetParameter,
     ShortCircuit,
 )
@@ -89,6 +90,15 @@ def test_leakage_is_a_graded_short():
         LeakageFault("C1", 1e6, r_min=1e3)
     with pytest.raises(ValueError, match="r_min <= resistance <= r_max"):
         LeakageFault("C1", 1e2, r_min=1e3, r_max=1e9)
+
+
+def test_series_resistance_is_a_graded_open():
+    faults = [SeriesResistanceFault("C1", r, r_min=1, r_max=100) for r in (1, 10, 100)]
+    assert [fault.severity.value for fault in faults] == pytest.approx([0, 0.5, 1])
+    assert faults[1].magnitude == 10 and faults[1].unit == "ohm"
+    assert faults[1].fault_state == "10 ohm in series"
+    assert "Rser_C1 C1_x 0 10.0\nC1 out C1_x" in injected(faults[1])
+    assert Fault.from_metadata(json.loads(json.dumps(faults[1].metadata()))) == faults[1]
 
 
 @pytest.mark.parametrize(

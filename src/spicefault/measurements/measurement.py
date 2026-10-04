@@ -137,9 +137,11 @@ class Measurement:
     vector: str
     analysis: str | int
     parameters: dict = field(default_factory=dict)
-    function: Callable[[Plot], float] | None = field(default=None, compare=False)
+    function: Callable[[Plot | SimulationResult], float] | None = field(default=None, compare=False)
 
     def __call__(self, result: SimulationResult) -> float:
+        if self.kind == "custom_result":
+            return float(self.function(result))
         plot = select_plot(result, self.analysis)
         if self.function is not None:
             return float(self.function(plot))
@@ -255,6 +257,13 @@ class Measurement:
     def custom(cls, name: str, function: Callable[[Plot], float], analysis: str | int = 0):
         """`function(plot)` on one plot. Only its name is kept in the provenance."""
         return cls(name, "custom", "", analysis, {}, function)
+
+    @classmethod
+    def custom_result(
+        cls, name: str, function: Callable[[SimulationResult], float]
+    ) -> Measurement:
+        """`function(result)` on the complete simulation result."""
+        return cls(name, "custom_result", "", 0, {}, function)
 
 
 @dataclass(frozen=True)

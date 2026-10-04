@@ -41,18 +41,68 @@ class SimulationConfig:
     empty for a netlist that brings its own `.control` block writing to `out.raw`.
     """
 
-    analyses: tuple[str, ...] = ()
+    analyses: tuple[
+        str | tuple[str, tuple[str, ...]] | tuple[str, tuple[str, ...], str], ...
+    ] = ()
     outputs: tuple[str, ...] = ("all",)
     timeout: float = 120.0
     spiceinit: str | None = None
+    expected_plots: tuple[str, ...] = ()
 
     def __post_init__(self):
-        object.__setattr__(self, "analyses", tuple(self.analyses))
+        analyses = tuple(self._normalise_analysis(item) for item in self.analyses)
+        object.__setattr__(self, "analyses", analyses)
         object.__setattr__(self, "outputs", tuple(self.outputs))
+        object.__setattr__(self, "expected_plots", tuple(self.expected_plots))
+        for analysis in self.analyses:
+            self._validate_analysis(analysis)
+
+    @staticmethod
+    def _normalise_analysis(item):
+        if isinstance(item, list):
+            item = tuple(item)
+        if isinstance(item, tuple) and len(item) in (2, 3):
+            command, outputs, *selector = item
+            if not isinstance(outputs, (tuple, list)):
+                raise ValueError("analysis outputs must be a sequence of vector names")
+            return (command, tuple(outputs), *selector)
+        return item
+
+    @staticmethod
+    def _validate_analysis(analysis):
+        if isinstance(analysis, str):
+            return
+        if (
+            not isinstance(analysis, tuple)
+            or len(analysis) not in (2, 3)
+            or not isinstance(analysis[0], str)
+        ):
+            raise ValueError("an analysis must be a command or (command, outputs[, plot])")
+        if len(analysis) == 2:
+            return
+        words = analysis[0].split()
+        if not words or words[0].lower() != "noise":
+            raise ValueError("plot selection is only supported for noise analyses")
+        if analysis[2] not in ("noise1", "noise2", "spectrum", "integrated"):
+            raise ValueError("noise plot must be noise1/spectrum or noise2/integrated")
+
+    def analysis_specs(self) -> list[tuple[str, tuple[str, ...], str | None]]:
+        """Commands, vectors to save after them and optional ngspice plot selectors."""
+        specs = []
+        for item in self.analyses:
+            if isinstance(item, str):
+                specs.append((item, self.outputs, None))
+            else:
+                command, outputs, *selector = item
+                specs.append((command, tuple(outputs), selector[0] if selector else None))
+        return specs
 
     def plots(self) -> list[str]:
         """The analysis command behind each expected plot, in order."""
-        return [a for a in self.analyses if a.split()[0].lower() in _ANALYSIS_COMMANDS]
+        return [
+            command for command, _, _ in self.analysis_specs()
+            if command.split()[0].lower() in _ANALYSIS_COMMANDS
+        ]
 
     def metadata(self) -> dict:
         return {
@@ -60,6 +110,7 @@ class SimulationConfig:
             "outputs": list(self.outputs),
             "timeout": self.timeout,
             "spiceinit": self.spiceinit,
+            "expected_plots": list(self.expected_plots),
         }
 
     @classmethod
@@ -105,6 +156,7 @@ _PLOT_NAMES = {
     "ac": "AC Analysis",
     "tran": "Transient Analysis",
     "dc": "DC transfer characteristic",
+    "noise": "Noise Spectral Density",
 }
 # messages of ngspice when the solver gives up, lower case
 _CONVERGENCE = (
@@ -127,10 +179,16 @@ def build_deck(netlist: str, config: SimulationConfig) -> str:
     while lines and lines[-1].strip().lower() in ("", ".end"):
         lines.pop()
     lines += [".control", "set noaskquit", "set appendwrite"]
-    write = f"write {RAW_NAME} " + " ".join(config.outputs)
     saved = config.plots()
-    for command in config.analyses:
-        lines += [command, write] if command in saved else [command]
+    for command, outputs, selector in config.analysis_specs():
+        if command not in saved:
+            lines.append(command)
+            continue
+        lines.append(command)
+        if selector is not None:
+            selected = {"spectrum": "noise1", "integrated": "noise2"}.get(selector, selector)
+            lines.append(f"setplot {selected}")
+        lines.append(f"write {RAW_NAME} " + " ".join(outputs))
     return "\n".join([*lines, ".endc", ".end", ""])
 
 
@@ -178,12 +236,30 @@ class NgspiceBackend:
         """Reason why the output cannot be trusted, or None."""
         if plots is None:
             return "ngspice produced no output"
-        if config.analyses:
-            # a failed analysis leaves the previous plot current, and `write` saves it again
-            expected = [_PLOT_NAMES.get(a.split()[0].lower(), "") for a in config.plots()]
-            names = [p.name for p in plots]
-            if len(names) != len(expected) or not all(map(str.startswith, names, expected)):
-                return f"expected plots {expected}, got {names}"
+        problem = NgspiceBackend._plot_problem(plots, config)
+        if problem:
+            return problem
+        return NgspiceBackend._vector_problem(plots)
+
+    @staticmethod
+    def _plot_problem(plots: list[Plot], config: SimulationConfig) -> str | None:
+        if not config.expected_plots and not config.analyses:
+            return None
+        # A failed analysis leaves the previous plot current, and `write` saves it again.
+        expected = list(config.expected_plots) or [
+            "Integrated Noise"
+            if selector in ("noise2", "integrated")
+            else _PLOT_NAMES.get(command.split()[0].lower(), "")
+            for command, _, selector in config.analysis_specs()
+            if command.split()[0].lower() in _ANALYSIS_COMMANDS
+        ]
+        names = [plot.name for plot in plots]
+        if len(names) != len(expected) or not all(map(str.startswith, names, expected)):
+            return f"expected plots {expected}, got {names}"
+        return None
+
+    @staticmethod
+    def _vector_problem(plots: list[Plot]) -> str | None:
         for plot in plots:
             for name, vector in plot.vectors.items():
                 if not vector.size:

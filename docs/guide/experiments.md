@@ -49,6 +49,7 @@ average of its points is not the average of the signal.
 | `peak`, `minimum`, `peak_to_peak` | Largest, smallest, and their difference |
 | `magnitude`, `phase` | \|H(f)\| (optionally in dB) and its phase in degrees, interpolated over log-frequency |
 | `custom` | Any function of one plot |
+| `custom_result` | Any function of the complete result, including multiple plots |
 
 `Waveform` stores a transient vector resampled on a uniform grid, one row per sample.
 
@@ -59,6 +60,22 @@ changed between two sweeps:
 ```python
 SimulationConfig(("op", "alter @v1[acmag]=1", "ac dec 20 1 1e5"), outputs=("v(out)",))
 ```
+
+Outputs can be selected per analysis, and `expected_plots` validates plot order even when
+the netlist owns its `.control` block. Noise supports selecting ngspice's spectrum or
+integrated-noise plot:
+
+```python
+SimulationConfig(
+    analyses=(("op", ("v(out)", "v(ref)")),
+              ("noise v(out) V1 dec 20 1 1e5", ("onoise_spectrum",), "integrated")),
+    expected_plots=("Operating Point", "Integrated Noise"),
+)
+```
+
+An `OperatingCondition` can override `config` and `measurements`; measurements not declared
+for a condition are stored as `NaN` in their dataset columns. See
+[From a schematic](from-schematic.md) for imported netlists.
 
 ## Fault campaign
 

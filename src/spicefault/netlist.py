@@ -40,6 +40,11 @@ _SUFFIX = {
     "f": 1e-15,
 }
 _NUMBER = re.compile(r"([+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?)(meg|mil|[tgkmunpf])?[a-z]*", re.I)
+_PARAM_ASSIGNMENT = re.compile(r"([A-Za-z_]\w*)\s*=\s*([^\s,]+)")
+_SOURCE_FUNCTIONS = {
+    "pulse": ("v1", "v2", "td", "tr", "tf", "pw", "per"),
+    "sin": ("vo", "va", "freq", "td", "theta", "phase"),
+}
 
 
 def parse_value(token: str) -> float:
@@ -145,7 +150,13 @@ class Netlist:
             return spans[1 : 1 + _TERMINALS[kind]]
         if kind == "x":
             first_param = next(
-                (k for k, s in enumerate(spans) if "=" in self._text(s)), len(spans)
+                (
+                    k
+                    for k, span in enumerate(spans)
+                    if "=" in self._text(span)
+                    or (k + 1 < len(spans) and self._text(spans[k + 1]) == "=")
+                ),
+                len(spans),
             )
             return spans[1 : first_param - 1]  # the last one is the subcircuit name
         raise NotImplementedError(f"terminals of {component!r}: element type not supported")
@@ -158,33 +169,128 @@ class Netlist:
         """(span of the value text, value text) of a parameter of a component."""
         _, spans = self._tokens(component)
         kind = component[0].lower()
+        parameter = parameter.lower()
         if parameter == "value":
             if kind not in "rcl":
                 raise NotImplementedError(f"{component!r} has no positional value")
             return spans[3], self._text(spans[3])
         if parameter == "dc" and kind in "vi":
-            # `V1 a b dc 5 ...` or the bare form `V1 a b 5`
-            texts = [self._text(s).lower() for s in spans]
-            k = texts.index("dc") + 1 if "dc" in texts else 3
-            if k >= len(spans):
-                raise KeyError(f"{component!r} has no DC value")
-            return spans[k], self._text(spans[k])
-        prefix = parameter.lower() + "="
-        for line, a, b in spans:
-            token = self.lines[line][a:b]
-            if token.lower().startswith(prefix):
-                return (line, a + len(prefix), b), token[len(prefix) :]
+            return self._dc_parameter(component, spans)
+        if kind in "vi":
+            if parameter in ("ac", "acmag", "acphase"):
+                return self._source_ac_parameter(component, spans, parameter)
+            if "." in parameter:
+                return self._source_function_parameter(component, spans, parameter)
+        return self._named_parameter(component, spans, parameter)
+
+    def _dc_parameter(self, component, spans):
+        texts = [self._text(span).lower() for span in spans[3:]]
+        index = texts.index("dc") + 4 if "dc" in texts else 3
+        if index >= len(spans):
+            raise KeyError(f"{component!r} has no DC value")
+        return spans[index], self._text(spans[index])
+
+    def _source_ac_parameter(self, component, spans, parameter):
+        wanted = int(parameter == "acphase")
+        for index, span in enumerate(spans[3:], start=3):
+            token = self._text(span)
+            if token.lower() == "ac" and index + 1 + wanted < len(spans):
+                value_span = spans[index + 1 + wanted]
+                return value_span, self._text(value_span).rstrip(")")
+            if token.lower().startswith("ac=") and wanted == 0:
+                return (span[0], span[1] + 3, span[2]), token[3:]
         raise KeyError(f"{component!r} has no parameter {parameter!r}")
 
+    def _source_function_parameter(self, component, spans, parameter):
+        function, argument = parameter.split(".", 1)
+        names = _SOURCE_FUNCTIONS.get(function)
+        if names is None or argument not in names:
+            raise KeyError(f"unsupported source parameter {parameter!r}")
+        for index, span in enumerate(spans):
+            if self._text(span).lower().startswith(f"{function}("):
+                values = self._function_arguments(spans, index, function)
+                position = names.index(argument)
+                if position < len(values):
+                    return values[position]
+                break
+        raise KeyError(f"{component!r} has no {parameter!r} parameter")
+
+    def _function_arguments(self, spans, index, function):
+        values = []
+        for arg_index in range(index, len(spans)):
+            span = spans[arg_index]
+            text = self._text(span)
+            start = span[1] + (len(function) + 1 if arg_index == index else 0)
+            stop = span[2] - int(text.endswith(")"))
+            if stop > start:
+                values.append(((span[0], start, stop), self.lines[span[0]][start:stop]))
+            if text.endswith(")"):
+                break
+        return values
+
+    def _named_parameter(self, component, spans, parameter):
+        for index, span in enumerate(spans):
+            token = self._text(span)
+            lowered = token.lower()
+            prefix = parameter + "="
+            if lowered.startswith(prefix):
+                return (span[0], span[1] + len(prefix), span[2]), token[len(prefix) :]
+            if (
+                lowered == parameter
+                and index + 2 < len(spans)
+                and self._text(spans[index + 1]) == "="
+            ):
+                return spans[index + 2], self._text(spans[index + 2])
+        raise KeyError(f"{component!r} has no parameter {parameter!r}")
+
+    def _numeric_parameter(self, text: str) -> float:
+        try:
+            return parse_value(text)
+        except ValueError:
+            expression = text.strip().strip("{}").strip()
+            try:
+                return parse_value(expression)
+            except ValueError:
+                pass
+            definitions = {}
+            active = False
+            for line in self.lines:
+                head = line.strip()
+                if head.startswith("+") and active:
+                    head = head[1:].strip()
+                else:
+                    active = head.lower().startswith(".param")
+                if active:
+                    definitions.update(
+                        {name.lower(): value for name, value in _PARAM_ASSIGNMENT.findall(head)}
+                    )
+            value = definitions.get(expression.lower())
+            if value is not None:
+                return parse_value(value)
+            raise
+
     def value(self, component: str, parameter: str = "value") -> float:
-        return parse_value(self._parameter(component, parameter)[1])
+        return self._numeric_parameter(self._parameter(component, parameter)[1])
 
     def parameters(self, component: str) -> dict[str, float]:
         """Numeric parameters of a component: `value`, `dc` and its `name=value` pairs."""
         _, spans = self._tokens(component)
-        names = ["value", "dc"] + [
-            self._text(s).partition("=")[0] for s in spans if "=" in self._text(s)
-        ]
+        kind = component[0].lower()
+        names = ["value", "dc", "ac", "acphase"]
+        for index, span in enumerate(spans):
+            token = self._text(span)
+            if "=" in token:
+                names.append(token.partition("=")[0])
+            elif index + 1 < len(spans) and self._text(spans[index + 1]) == "=":
+                names.append(token)
+        if kind in "vi":
+            for span in spans:
+                token = self._text(span).lower()
+                function = next(
+                    (name for name in _SOURCE_FUNCTIONS if token.startswith(f"{name}(")), None
+                )
+                if function is not None:
+                    names.extend(f"{function}.{name}" for name in _SOURCE_FUNCTIONS[function])
         found = {}
         for name in names:
             try:
@@ -208,7 +314,7 @@ class Netlist:
     def set_parameter(self, component: str, parameter: str, rule: str, value: float) -> float:
         """Change a parameter (`"value"` for R, C and L) and return its new value."""
         span, text = self._parameter(component, parameter)
-        new = apply_rule(0.0 if rule == "absolute" else parse_value(text), rule, value)
+        new = apply_rule(0.0 if rule == "absolute" else self._numeric_parameter(text), rule, value)
         self._replace(span, format_value(new))
         return new
 

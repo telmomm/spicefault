@@ -84,6 +84,15 @@ def test_custom_measurement_and_missing_data():
         Measurement.value("v(out)", analysis="dc")(RESULT)
 
 
+def test_custom_result_measurement_reads_multiple_plots():
+    ratio = Measurement.custom_result(
+        "sweep_ratio",
+        lambda result: abs(result.plot(1)["v(out)"][300])
+        / abs(result.plot(4)["v(out)"][300]),
+    )
+    assert ratio(RESULT) == pytest.approx(0.5)
+
+
 def test_names_and_metadata():
     assert Measurement.rms("V(out)").name == "rms_v(out)"
     m = Measurement.magnitude("v(out)", 50.0, analysis=4, name="gain_50", db=True)

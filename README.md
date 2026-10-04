@@ -1,5 +1,9 @@
 # spicefault
 
+<p align="center">
+  <img src="docs/assets/branding/github-banner.png" alt="spicefault: reproducible fault injection for electronic circuits" width="100%">
+</p>
+
 [![PyPI](https://img.shields.io/pypi/v/spicefault)](https://pypi.org/project/spicefault/)
 [![Python](https://img.shields.io/pypi/pyversions/spicefault)](https://pypi.org/project/spicefault/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/telmomm/spicefault/blob/main/LICENSE)

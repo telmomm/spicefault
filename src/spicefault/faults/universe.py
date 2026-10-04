@@ -16,7 +16,7 @@ import pandas as pd
 from ..circuit import Circuit, Component
 from .base import Fault
 from .faultset import FaultSet
-from .types import LeakageFault, OpenCircuit, ParametricFault, ShortCircuit
+from .types import LeakageFault, OpenCircuit, ParametricFault, SeriesResistanceFault, ShortCircuit
 
 
 @dataclass(frozen=True)
@@ -66,6 +66,18 @@ def leakage_rule(resistances: Sequence[float], kinds: str = "C", **kwargs) -> Fa
     span = {} if r_min == r_max else {"r_min": r_min, "r_max": r_max}
     return FaultRule(
         "leakage", lambda c: [LeakageFault(c.name, r, **span) for r in resistances], kinds, **kwargs
+    )
+
+
+def series_rule(resistances: Sequence[float], kinds: str = "RCL", **kwargs) -> FaultRule:
+    """One graded series-resistance fault per magnitude; severity grows with resistance."""
+    r_min, r_max = min(resistances), max(resistances)
+    span = {} if r_min == r_max else {"r_min": r_min, "r_max": r_max}
+    return FaultRule(
+        "series_resistance",
+        lambda c: [SeriesResistanceFault(c.name, r, **span) for r in resistances],
+        kinds,
+        **kwargs,
     )
 
 

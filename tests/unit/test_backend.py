@@ -1,8 +1,10 @@
+import json
+
 import numpy as np
 import pytest
 
 from spicefault import SimulationConfig, SimulationStatus, Simulator
-from spicefault.simulation import NgspiceBackend, build_deck, run_deck
+from spicefault.simulation import NgspiceBackend, Plot, build_deck, run_deck
 
 DIVIDER = "divider\nV1 in 0 dc 1 ac 1\nR1 in out 10k\nR2 out 0 10k\nC1 out 0 100n\n.end\n"
 OP_AC = SimulationConfig(analyses=("op", "ac dec 10 1 1e4"), outputs=("v(out)",))
@@ -18,6 +20,29 @@ def test_build_deck_adds_one_write_per_analysis():
     assert build_deck(DIVIDER, SimulationConfig()) == DIVIDER
     with pytest.raises(ValueError, match="already has a .control block"):
         build_deck(deck, OP_AC)
+
+
+def test_analysis_specific_outputs_and_noise_plot_selection():
+    config = SimulationConfig(
+        analyses=(
+            ("op", ("v(out)", "v(ref)")),
+            ("noise v(out) V1 dec 10 1 1k", ("onoise_spectrum",), "integrated"),
+        ),
+        expected_plots=("Operating Point", "Integrated Noise"),
+    )
+    deck = build_deck(DIVIDER, config)
+    assert "op\nwrite out.raw v(out) v(ref)\n" in deck
+    assert "noise v(out) V1 dec 10 1 1k\nsetplot noise2\n" in deck
+    assert "write out.raw onoise_spectrum\n" in deck
+    record = json.loads(json.dumps(config.metadata()))
+    assert SimulationConfig.from_metadata(record) == config
+
+
+def test_expected_plots_check_custom_control_blocks():
+    config = SimulationConfig(expected_plots=("AC Analysis",))
+    assert NgspiceBackend._check([Plot("AC Analysis", {})], config) is None
+    problem = NgspiceBackend._check([Plot("Operating Point", {})], config)
+    assert problem == "expected plots ['AC Analysis'], got ['Operating Point']"
 
 
 def test_unknown_backend():

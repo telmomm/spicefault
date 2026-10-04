@@ -1,0 +1,137 @@
+:root {
+  --spicefault-navy: #0b1f35;
+  --spicefault-cyan: #00c2e8;
+  --spicefault-cyan-dark: #007c99;
+  --spicefault-ice: #e6f7ff;
+  --spicefault-amber: #ffb301;
+  --spicefault-muted: #7a90a8;
+  --spicefault-canvas: #f4f7f9;
+}
+
+body {
+  color: var(--spicefault-navy);
+  background: var(--spicefault-canvas);
+}
+
+a,
+.rst-content a {
+  color: var(--spicefault-cyan-dark);
+}
+
+a:hover,
+.rst-content a:hover {
+  color: var(--spicefault-navy);
+}
+
+.wy-nav-side {
+  background: var(--spicefault-navy);
+}
+
+.wy-side-nav-search,
+.wy-nav-top {
+  background: var(--spicefault-navy);
+}
+
+.wy-side-nav-search > a,
+.wy-nav-top a {
+  color: #fff;
+}
+
+.wy-side-nav-search img,
+.wy-nav-top img {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
+.wy-side-nav-search > a img.logo {
+  width: 52px;
+  height: 52px;
+  max-width: 52px;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
+.wy-side-nav-search input[type="text"] {
+  border-color: var(--spicefault-cyan);
+}
+
+.wy-menu-vertical header,
+.wy-menu-vertical p.caption {
+  color: var(--spicefault-cyan);
+}
+
+.wy-menu-vertical a:hover,
+.wy-menu-vertical li.current > a,
+.wy-menu-vertical li.on > a {
+  color: var(--spicefault-navy);
+  background: var(--spicefault-ice);
+}
+
+.wy-menu-vertical li.current > a {
+  border-right: 3px solid var(--spicefault-amber);
+}
+
+.wy-nav-content-wrap {
+  background: var(--spicefault-canvas);
+}
+
+.wy-nav-content {
+  background: #fff;
+  border-top: 3px solid var(--spicefault-cyan);
+}
+
+.rst-content h1,
+.rst-content h2,
+.rst-content h3 {
+  color: var(--spicefault-navy);
+}
+
+.rst-content h2 {
+  border-bottom: 1px solid #dce7ee;
+  padding-bottom: 0.25em;
+}
+
+.rst-content div[class^="highlight"],
+.rst-content pre.literal-block {
+  border-color: #dce7ee;
+  border-left: 3px solid var(--spicefault-amber);
+}
+
+.rst-content .admonition-title,
+.wy-alert-title {
+  background: var(--spicefault-cyan-dark);
+}
+
+.rst-content .warning .admonition-title,
+.rst-content .caution .admonition-title {
+  background: #a66e00;
+}
+
+.rst-content table.docutils thead th {
+  border-bottom-color: var(--spicefault-cyan);
+}
+
+.rst-footer-buttons .btn,
+.rst-content .btn {
+  background: var(--spicefault-navy);
+  border-color: var(--spicefault-cyan);
+}
+
+.rst-footer-buttons .btn:hover,
+.rst-content .btn:hover {
+  background: var(--spicefault-cyan-dark);
+}
+
+@media screen and (max-width: 768px) {
+  .wy-nav-top {
+    border-bottom: 2px solid var(--spicefault-cyan);
+  }
+
+  .wy-nav-content {
+    border-top: 0;
+  }
+}
