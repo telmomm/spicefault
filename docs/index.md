@@ -1,5 +1,7 @@
 # spicefault
 
+![spicefault documentation banner](assets/branding/documentation-banner.png)
+
 **Reproducible SPICE-based fault injection and reliability assessment of electronic
 circuits.**
 
