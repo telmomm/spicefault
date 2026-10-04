@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -14,7 +15,7 @@ from ..circuit import Circuit
 from ..conditions import OperatingCondition
 from ..faults import FaultSet
 from ..variation import VariationSet
-from .manifest import Manifest
+from .manifest import Manifest, file_record
 from .store import SAMPLES, WAVEFORMS, load_metadata
 
 CIRCUIT_FILE = "circuit.cir"
@@ -86,7 +87,11 @@ class Dataset:
 
     @property
     def circuit(self) -> Circuit:
-        return Circuit((self.path / CIRCUIT_FILE).read_text(), self.metadata["circuit"])
+        return Circuit(
+            (self.path / CIRCUIT_FILE).read_text(),
+            self.metadata["circuit"],
+            imported_analyses=self.metadata.get("imported_analyses", ()),
+        )
 
     @property
     def faults(self) -> FaultSet:
@@ -101,14 +106,36 @@ class Dataset:
         row per planned sample, and failed samples must carry no result.
         """
         problems = self.manifest.verify(self.path)
+        problems.extend(self._verify_table())
+        problems.extend(self._verify_circuit_and_includes())
+        problems.extend(self._verify_results())
+        return problems
+
+    def _verify_table(self) -> list[str]:
+        problems = []
         df = self.samples
         if len(df) != self.manifest.n_samples:
             problems.append(f"{len(df)} rows, the manifest says {self.manifest.n_samples}")
         if list(df["sample_id"]) != list(range(len(df))):
             problems.append("sample_id is not the row number")
+        return problems
+
+    def _verify_circuit_and_includes(self) -> list[str]:
+        problems = []
         netlist = (self.path / CIRCUIT_FILE).read_bytes()
         if hashlib.sha256(netlist).hexdigest() != self.metadata["netlist_sha256"]:
             problems.append(f"{CIRCUIT_FILE} is not the netlist of the experiment")
+        for include in self.metadata.get("includes", []):
+            path = Path(include["path"])
+            if not path.is_file():
+                problems.append(f"included file is missing: {path}")
+            elif hashlib.sha256(path.read_bytes()).hexdigest() != include["sha256"]:
+                problems.append(f"included file differs from the experiment: {path}")
+        return problems
+
+    def _verify_results(self) -> list[str]:
+        problems = []
+        df = self.samples
         defined = {HEALTHY_ID, *(f["fault_id"] for f in self.metadata["faults"])}
         unknown = set(df["fault_id"]) - defined
         if unknown:
@@ -124,6 +151,50 @@ class Dataset:
             elif np.isnan(self.waveforms[ok]).any() or not np.isnan(self.waveforms[~ok]).all():
                 problems.append("waveforms do not match the status of the samples")
         return problems
+
+    def update_columns(self, frame: pd.DataFrame, note: str = "") -> None:
+        """Add or replace derived label columns without invalidating dataset integrity."""
+        if frame.empty or len(frame.columns) == 0:
+            raise ValueError("frame must contain at least one derived column")
+        if not frame.index.equals(self.samples.index):
+            raise ValueError("frame rows must have the same index and order as dataset.samples")
+        if not frame.columns.is_unique:
+            raise ValueError("frame column names must be unique")
+        reserved = {
+            *self.manifest.summary.get("columns", {}).get("definition", []),
+            *self.parameters,
+            *self.features,
+        }
+        protected = reserved.intersection(frame.columns)
+        if protected:
+            raise ValueError(f"cannot update definition, parameter or measurement columns: "
+                             f"{sorted(protected)}")
+        existing = set(self.samples.columns) - set(self.labels)
+        conflicts = existing.intersection(frame.columns)
+        if conflicts:
+            raise ValueError(f"columns are not derived labels: {sorted(conflicts)}")
+
+        updated = self.samples.copy()
+        for column in frame.columns:
+            updated[column] = frame[column]
+        path = self.path / SAMPLES
+        temporary = path.with_suffix(".tmp")
+        updated.to_parquet(temporary, index=False)
+        temporary.replace(path)
+        self.samples = updated
+        self.labels = list(dict.fromkeys([*self.labels, *frame.columns]))
+        columns = self.manifest.summary.setdefault("columns", {})
+        columns["labels"] = list(self.labels)
+        self.manifest.summary.setdefault("history", []).append(
+            {
+                "type": "derived_columns",
+                "updated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                "columns": list(frame.columns),
+                "note": note,
+            }
+        )
+        self.manifest.files[SAMPLES] = file_record(path)
+        self.manifest.write(self.path)
 
     # --- traceability -------------------------------------------------------------------
 

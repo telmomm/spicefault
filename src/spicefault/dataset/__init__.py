@@ -2,6 +2,7 @@
 
 from .dataset import Dataset, Provenance
 from .manifest import MANIFEST, Manifest, file_record
+from .splits import split_by_magnitude, split_by_replica
 from .store import METADATA, SAMPLES, WAVEFORMS, assemble, load_dataset, load_metadata
 
 __all__ = [
@@ -16,4 +17,6 @@ __all__ = [
     "file_record",
     "load_dataset",
     "load_metadata",
+    "split_by_magnitude",
+    "split_by_replica",
 ]

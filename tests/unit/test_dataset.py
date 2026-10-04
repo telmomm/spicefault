@@ -16,6 +16,8 @@ from spicefault import (
     Simulator,
     VariationSet,
     Waveform,
+    split_by_magnitude,
+    split_by_replica,
 )
 from spicefault.dataset import Manifest
 from spicefault.experiments import run_chunks, simulate_sample
@@ -134,6 +136,47 @@ def test_verify_detects_altered_files(run, tmp_path):
     assert "waveforms and samples have different lengths" in problems
     (copy / "waveforms.npy").unlink()
     assert "waveforms.npy: missing" in Dataset(copy).verify()
+
+
+def test_update_derived_columns_keeps_dataset_verifiable(run, tmp_path):
+    import shutil
+
+    copy = tmp_path / "derived"
+    shutil.copytree(run.out_dir, copy)
+    dataset = Dataset(copy)
+    derived = pd.DataFrame(
+        {"pass_limit": dataset.samples["vout"].fillna(0.0) < 0.6},
+        index=dataset.samples.index,
+    )
+    dataset.update_columns(derived, note="limits/default.yaml")
+    assert dataset.verify() == []
+    assert dataset.labels == ["pass_limit"]
+    assert dataset.manifest.summary["history"][-1]["columns"] == ["pass_limit"]
+    with pytest.raises(ValueError, match="measurement columns"):
+        dataset.update_columns(dataset.samples[["vout"]])
+
+
+def test_splits_keep_fault_replicas_and_magnitudes_together():
+    samples = pd.DataFrame(
+        {
+            "fault_id": ["a", "a", "a", "a", "b", "b", "b", "b"],
+            "replica": [0, 0, 1, 1, 0, 0, 1, 1],
+            "condition": ["service", "bench"] * 4,
+            "fault_magnitude": [1, 1, 2, 2, 1, 1, 2, 2],
+        }
+    )
+    train, test = split_by_replica(samples, 0.5, seed=5)
+    assert set(train).isdisjoint(test)
+    for fault_id in samples["fault_id"].unique():
+        fault_train = train[samples.iloc[train]["fault_id"].to_numpy() == fault_id]
+        fault_test = test[samples.iloc[test]["fault_id"].to_numpy() == fault_id]
+        assert len(fault_train) == len(fault_test) == 2
+        assert samples.iloc[fault_train]["replica"].nunique() == 1
+        assert samples.iloc[fault_test]["replica"].nunique() == 1
+    train, test = split_by_magnitude(samples, [2.0])
+    assert set(samples.iloc[test]["fault_magnitude"]) == {2.0}
+    assert set(samples.iloc[train]["fault_magnitude"]) == {1.0}
+    assert len(test) == 4
 
 
 def test_elapsed_time_adds_up_over_interrupted_runs(tmp_path):

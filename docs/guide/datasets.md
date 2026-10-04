@@ -34,6 +34,14 @@ analysis = dataset.analysis()                       # a ReliabilityAnalysis
   custom measurements, pass it again: `dataset.reproduce(experiment=experiment)`.
 - The library has no ML dependency: `to_ml` returns NumPy arrays.
 
+`split_by_replica(samples, test_fraction, seed)` returns train/test row positions while
+keeping all conditions of each replica together and stratifying by `fault_id`.
+`split_by_magnitude(samples, test_magnitudes)` holds out every row at the selected fault
+magnitudes. Both return NumPy index arrays. Derived labels can be added with
+`dataset.update_columns(frame, note=...)`; it updates the sample fingerprint and appends
+the operation to manifest history, while definitions, parameters and measurements remain
+protected.
+
 ## Columns of the samples table
 
 | Columns | Content |
