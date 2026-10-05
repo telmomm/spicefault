@@ -25,6 +25,11 @@ from spicefault.reliability import ReliabilityAnalysis, robustness  # noqa: E402
 
 ALPHA = 0.02  # false-alarm rate the detector is set for
 
+# %% [markdown]
+# ## Build reliability analyses at two tolerance scales
+#
+# Compare the declared tolerance population with one three times wider.
+# %%
 if __name__ == "__main__":
     pd.set_option("display.width", 160)
     pd.set_option("display.float_format", "{:.3g}".format)
@@ -36,6 +41,10 @@ if __name__ == "__main__":
         analyses[scale] = ReliabilityAnalysis.from_dataset(run.out_dir)
     analysis = analyses[1.0]
 
+# %% [markdown]
+# ## Measure false alarms and detection
+# %%
+if __name__ == "__main__":
     detection = analysis.detectability(alpha=ALPHA)
     low, high = detection.false_alarm_interval
     print(f"limit test set for a false-alarm rate of {ALPHA}")
@@ -48,6 +57,10 @@ if __name__ == "__main__":
     print("\ndetection probability, with its interval; shift of the best feature; AUC:")
     print(table)
 
+# %% [markdown]
+# ## Find limits and ambiguous faults
+# %%
+if __name__ == "__main__":
     print("\nsmallest deviation detected at least 90 % of the time:")
     print(analysis.minimum_detectable(alpha=ALPHA).drop(columns="grid").to_string(index=False))
 
@@ -55,5 +68,9 @@ if __name__ == "__main__":
     print("\nfaults not separated from the healthy circuits:", ambiguity.undetectable)
     print("components that can be mistaken for each other:", ambiguity.confusable)
 
+# %% [markdown]
+# ## Compare robustness against tolerance
+# %%
+if __name__ == "__main__":
     print("\ndetection against the tolerance scale (1 = the declared tolerances):")
     print(robustness(analyses, alpha=ALPHA))

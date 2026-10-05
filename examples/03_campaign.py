@@ -20,6 +20,13 @@ if examples_dir is not None:
 # %%
 from rc_study import WORKERS, campaign  # noqa: E402
 
+from spicefault.experiments import run_chunks, simulate_sample  # noqa: E402
+
+# %% [markdown]
+# ## Validate and run the campaign
+#
+# The campaign contains 660 simulations. Validation checks definitions before ngspice runs.
+# %%
 if __name__ == "__main__":  # workers are processes: needed on macOS and Windows
     run = campaign()
 
@@ -39,11 +46,15 @@ if __name__ == "__main__":  # workers are processes: needed on macOS and Windows
     print("written by", manifest["spicefault_version"], "with", manifest["simulator"],
           "on", manifest["workers"], "workers")  # fmt: skip
 
-    # --- an interrupted run resumes -----------------------------------------------------
+# %% [markdown]
+# ## Resume an interrupted campaign
+#
+# Simulate two chunks, then resume the remaining samples. The resumed dataset should match
+# the uninterrupted dataset apart from wall-clock timing.
+# %%
+if __name__ == "__main__":
     interrupted = campaign("rc_interrupted")
     shutil.rmtree(interrupted.out_dir, ignore_errors=True)
-    from spicefault.experiments import run_chunks, simulate_sample
-
     experiment = interrupted.experiment
     first = experiment.plan()[:400]  # two chunks of 200 are completed, then it stops
     run_chunks(first, simulate_sample, experiment, interrupted.out_dir / "parts",

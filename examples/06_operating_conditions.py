@@ -20,6 +20,8 @@ if examples_dir is not None:
     sys.path.insert(0, str(examples_dir))
 
 # %%
+from rc_study import OUTPUT, WORKERS  # noqa: E402
+
 from spicefault import (  # noqa: E402
     Circuit,
     FaultCampaign,
@@ -41,9 +43,12 @@ conditions = [
     OperatingCondition("hot", temperature=85.0),
 ]
 
+# %% [markdown]
+# ## Run one drawn circuit under three conditions
+#
+# Pairing by replica keeps the same component draw across nominal, low-supply and hot cases.
+# %%
 if __name__ == "__main__":
-    from rc_study import OUTPUT, WORKERS
-
     campaign = FaultCampaign(
         circuit,
         [ParametricFault("R1", deviation=d) for d in (0.02, 0.05, 0.2)],
@@ -59,11 +64,19 @@ if __name__ == "__main__":
     campaign.run(workers=WORKERS, progress=False)
     samples = campaign.dataset().samples
 
+# %% [markdown]
+# ## Inspect the paired samples
+# %%
+if __name__ == "__main__":
     # one drawn circuit is simulated under every condition
     first = samples[(samples["fault_id"] == "healthy") & (samples["replica"] == 0)]
     print("the first healthy circuit, under each condition:")
     print(first[["condition", "p_R1_value", "p_R2_value", "vout"]].round(4).to_string(index=False))
 
+# %% [markdown]
+# ## Assess detection separately by condition
+# %%
+if __name__ == "__main__":
     # each condition is judged against the healthy circuits under that same condition
     parts = ReliabilityAnalysis.from_dataset(campaign.out_dir).by("condition")
     pd.set_option("display.width", 160)
