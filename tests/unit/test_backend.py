@@ -117,6 +117,8 @@ class TestNgspice:
         assert result.status is SimulationStatus.FAILED and "no output" in result.message
 
     def test_missing_simulator(self, monkeypatch):
-        monkeypatch.setattr("spicefault.simulation.ngspice.shutil.which", lambda name: None)
+        monkeypatch.setattr(
+            "spicefault.simulation.ngspice.shutil.which", lambda name, path=None: None
+        )
         result = NgspiceBackend().run(DIVIDER, OP_AC)
         assert result.status is SimulationStatus.FAILED and "not found" in result.message

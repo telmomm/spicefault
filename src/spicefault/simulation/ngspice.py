@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import tempfile
@@ -28,8 +29,12 @@ class Plot:
         return self.vectors[key]
 
 
+# GUI-launched kernels (VS Code, Jupyter) often lack the Homebrew directories in PATH
+_FALLBACK_DIRS = os.pathsep.join(["/opt/homebrew/bin", "/usr/local/bin", "/usr/bin"])
+
+
 def ngspice_path() -> str | None:
-    return shutil.which("ngspice")
+    return shutil.which("ngspice") or shutil.which("ngspice", path=_FALLBACK_DIRS)
 
 
 def ngspice_version() -> str:
