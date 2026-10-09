@@ -6,6 +6,7 @@ import pytest
 from campaign_backend import Divider
 
 from spicefault import (
+    Campaign,
     Circuit,
     Experiment,
     FaultCampaign,
@@ -214,6 +215,43 @@ def test_a_fault_that_cannot_be_injected_does_not_stop_the_run(tmp_path):
     assert (broken["status"] == "FAILED").all() and len(broken) == 6
     assert broken["message"].str.startswith("could not build the netlist: KeyError").all()
     assert df[df["fault_id"] != "R7:open"]["status"].isin(["SUCCESS", "INVALID_OUTPUT"]).all()
+
+
+def test_campaign_without_faults_is_a_monte_carlo_of_the_healthy_circuit(tmp_path):
+    def monte_carlo(out_dir, **kwargs):
+        return Campaign(
+            CIRCUIT, out_dir=out_dir, samples=40, variations=tolerances(CIRCUIT, {"R": 0.01}),
+            simulator=Simulator(Divider()), seed=3,
+            measurements=[Measurement.value("v(out)", name="vout")], **kwargs,
+        )  # fmt: skip
+
+    c = monte_carlo(tmp_path / "data")
+    assert Campaign is FaultCampaign and c.experiment.faults == ()
+    assert len(c.experiment.plan()) == 40
+    report = c.validate()
+    assert report.ok and report.warnings == []  # nothing to say about having no fault
+    c.run(workers=2, chunk=15, progress=False)
+    dataset = c.dataset()
+    assert len(dataset) == 40 and set(dataset.samples["fault_id"]) == {"healthy"}
+    assert dataset.verify() == [] and dataset.metadata["faults"] == []
+    assert c.status() == {"total": 40, "completed": int(dataset.ok.sum()), "pending": 0,
+                          "failed": int((~dataset.ok).sum())}  # fmt: skip
+    assert list(c.summary().index) == ["healthy"] and c.summary().loc["healthy", "samples"] == 40
+    ok = dataset.samples[dataset.ok]
+    assert len(ok) > 20 and ok["vout"].between(0.495, 0.505).all() and ok["vout"].std() > 0
+    assert dataset.netlist(3) == c.experiment.realise(c.experiment.plan()[3]).netlist
+
+    # the same for any number of workers, and resumed after an interruption
+    other = monte_carlo(tmp_path / "other")
+    other.run(workers=1, chunk=40, progress=False)
+    assert reproducible(other.load(False)[0]).equals(reproducible(c.load(False)[0]))
+    # in a study with faults `samples` is the number of circuits each fault is injected into
+    faulty = Campaign(CIRCUIT, FAULTS, out_dir=tmp_path / "f", samples=2, healthy_samples=5)
+    assert len(faulty.experiment.plan()) == 5 + 3 * 2
+    assert len(FaultCampaign(CIRCUIT, FAULTS, out_dir=tmp_path / "g",
+                             samples_per_fault=2).experiment.plan()) == 4 * 2  # fmt: skip
+    with pytest.raises(ValueError, match="the same argument"):
+        Campaign(CIRCUIT, out_dir=tmp_path / "h", samples=2, samples_per_fault=2)
 
 
 def test_campaign_from_an_experiment(tmp_path):

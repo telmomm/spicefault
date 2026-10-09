@@ -1,4 +1,4 @@
-"""Fault campaign: an experiment simulated to disk, in chunks, resumable, with every
+"""Campaign: an experiment simulated to disk, in chunks, resumable, with every
 simulation accounted for.
 """
 
@@ -111,12 +111,18 @@ class ValidationReport:
         return "\n".join(lines) or "no problems found"
 
 
-class FaultCampaign:
-    """A systematic set of simulations: every fault, `samples_per_fault` times, under
-    every operating condition, plus the fault-free circuit.
+class Campaign:
+    """A systematic set of simulations written to a dataset: the fault-free circuit and
+    every fault, `samples` times each, under every operating condition.
 
-    It takes the arguments of `Experiment` (with `samples_per_fault` for `samples`), or
-    an experiment already built through `from_experiment`. The results go to
+    Without faults it is a Monte Carlo study of the healthy population: `samples`
+    circuits drawn from the variations. With faults, each one is injected into
+    `samples` drawn circuits (`samples_per_fault` is the same argument under the name
+    it has always had), and `healthy_samples` sets the size of the fault-free
+    population. `FaultCampaign` is this class.
+
+    It takes the arguments of `Experiment`, or an experiment already built through
+    `from_experiment`. The results go to
     `out_dir` as a dataset: `samples.parquet`, `waveforms.npy` if a waveform is
     declared, and `manifest.json`. `waveforms.npy` has one row per sample of the
     conditions that store a waveform; the manifest names them under
@@ -129,12 +135,18 @@ class FaultCampaign:
         faults=(),
         *,
         out_dir: str | Path,
-        samples_per_fault: int = 1,
+        samples: int | None = None,
+        samples_per_fault: int | None = None,
         tag_columns=(),
         metadata: dict | None = None,
         **kwargs,
     ):
-        self.experiment = Experiment(circuit, faults=faults, samples=samples_per_fault, **kwargs)
+        if samples is not None and samples_per_fault is not None:
+            raise ValueError("samples and samples_per_fault are the same argument: give one")
+        count = samples if samples is not None else samples_per_fault
+        self.experiment = Experiment(
+            circuit, faults=faults, samples=1 if count is None else count, **kwargs
+        )
         self.out_dir = Path(out_dir)
         self.tag_columns = tuple(tag_columns)
         self.user_metadata = dict(metadata or {})
@@ -149,7 +161,7 @@ class FaultCampaign:
         *,
         tag_columns=(),
         metadata: dict | None = None,
-    ) -> FaultCampaign:
+    ) -> Campaign:
         campaign = object.__new__(cls)
         campaign.experiment, campaign.out_dir = experiment, Path(out_dir)
         campaign.tag_columns = tuple(tag_columns)
@@ -369,3 +381,5 @@ class FaultCampaign:
         """(samples, waveforms, manifest) of the finished campaign."""
         return load_dataset(self.out_dir, drop_failed)
 
+
+FaultCampaign = Campaign  # the name of a campaign in a study with faults
