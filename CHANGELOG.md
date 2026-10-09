@@ -38,6 +38,12 @@ public interface may change between minor versions.
 - `Instrument` and `Reading`: noise, resolution and range applied to the stored
   measurements after the simulation. `Dataset.observe`, and `instrument=` in
   `Dataset.statistics`, `Dataset.yield_report` and `Dataset.analysis`.
+- `sampling="lhs"` and `sampling="sobol"` on `Experiment` and `Campaign`: Latin
+  hypercube and scrambled Sobol designs, the same for any number of workers and recorded
+  with the dataset. For these datasets the statistics and the yield give no interval
+  that assumes independent samples; `spicefault.statistics.replicated_interval` gives
+  the interval from independent replications. Sobol uses SciPy, through the optional
+  extra `sampling`. Benchmark `benchmarks.sampling`.
 - Page *Scope of the library*: the criterion for what belongs in it, and recipes for what
   is left to pandas, SciPy, SALib and scikit-learn.
 

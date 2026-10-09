@@ -5,13 +5,16 @@ not need faults. Definitions and estimators are in docs/STATISTICS.md.
 """
 
 from .describe import describe, ecdf, quantile_interval
+from .replication import replicated_interval, student_t_quantile
 from .yields import samples_for_half_width, yield_report, zero_failure_bound
 
 __all__ = [
     "describe",
     "ecdf",
     "quantile_interval",
+    "replicated_interval",
     "samples_for_half_width",
+    "student_t_quantile",
     "yield_report",
     "zero_failure_bound",
 ]

@@ -447,6 +447,23 @@ class Dataset:
                 })  # fmt: skip
         return pd.DataFrame(rows).set_index(["fault_id", "condition", "measurement"])
 
+    def _stratified(self) -> str | None:
+        """The sampling method, if the samples of a population were chosen jointly."""
+        method = self.metadata.get("sampling", {}).get("method", "random")
+        return None if method == "random" else method
+
+    def _without_intervals(self, table: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
+        """Blank the intervals that assume independent samples, and say why."""
+        method = self._stratified()
+        if method is not None:
+            table[list(columns)] = np.nan
+            table.attrs["intervals"] = (
+                f"the samples of a {method} design are not independent, so no interval that "
+                "assumes it is given; repeat the campaign with other seeds and use "
+                "spicefault.statistics.replicated_interval on the estimates"
+            )
+        return table
+
     def statistics(
         self,
         features: Sequence[str] | None = None,
@@ -459,6 +476,8 @@ class Dataset:
         """The distribution of each measurement: one row per fault, operating condition
         and measurement, with the mean, the spread, the quantiles and their intervals
         (see `spicefault.statistics.describe`), and the failed simulations counted.
+        For a dataset sampled by Latin hypercube or Sobol sequence the estimates are
+        given and the intervals are left empty: see `attrs["intervals"]`.
 
         With `by_case` the rows are per fault, over one row per drawn circuit (see
         `cases`), which a dataset whose conditions measure different things needs for
@@ -479,7 +498,8 @@ class Dataset:
             table = describe(samples, features or self.features, ("fault_id", "condition"),
                              "sim_ok", quantiles, confidence)  # fmt: skip
         table.attrs["instrument"] = record
-        return table
+        intervals = [c for c in table.columns if c.endswith(("_low", "_high"))]
+        return self._without_intervals(table, intervals)
 
     def yield_report(
         self,
@@ -522,7 +542,7 @@ class Dataset:
             chosen, specifications, chosen["sim_ok"].to_numpy(dtype=bool), confidence, interval
         )
         report.attrs["instrument"] = record
-        return report
+        return self._without_intervals(report, ["ci_low", "ci_high"])
 
     # --- traceability -------------------------------------------------------------------
 
@@ -722,6 +742,11 @@ class Dataset:
         from ..reliability import ReliabilityAnalysis
 
         self._require_random("a reliability analysis")
+        if self._stratified():
+            raise ValueError(
+                f"the intervals of a reliability analysis assume independent samples, and "
+                f"those of this dataset come from a {self._stratified()} design"
+            )
         samples, record = self._observed(instrument, seed)
         default = self.features
         if by_case:

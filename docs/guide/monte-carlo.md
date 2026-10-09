@@ -96,6 +96,54 @@ samples_for_half_width(0.005, p=0.95)       # 7299 circuits for a yield near 0.9
 - The intervals assume circuits drawn independently and at random. They are refused
   for a dataset of designed samples, such as tolerance corners.
 
+## Fewer simulations: Latin hypercube and Sobol sampling
+
+By default every circuit is drawn from its own independent stream. `sampling="lhs"` or
+`"sobol"` instead chooses the circuits of a population jointly, so that they cover the
+tolerances more evenly:
+
+```python
+campaign = Campaign(circuit, out_dir="data/rc_lhs", samples=256, sampling="lhs", ...)
+```
+
+On the RC low-pass of the validation, at equal numbers of simulations and over 16
+repetitions (`python -m benchmarks.sampling.run`):
+
+| Simulations | Method | Error of the mean gain | Error of the yield |
+|---|---|---|---|
+| 64 | random | 4.8e-3 | 0.026 |
+| 64 | Latin hypercube | 2.0e-4 | 0.019 |
+| 64 | Sobol | 2.1e-4 | 0.014 |
+| 256 | random | 1.8e-3 | 0.017 |
+| 256 | Latin hypercube | 6.3e-5 | 0.010 |
+| 256 | Sobol | 6.1e-5 | 0.003 |
+
+The mean is estimated about 25 times better; a proportion such as the yield gains less,
+between a quarter and four fifths of the random error here. The price:
+
+- **No interval that assumes independent samples.** The circuits of such a design are
+  not independent, so `statistics` and `yield_report` give the estimates and leave
+  their intervals empty, and `analysis` refuses the dataset. The uncertainty comes from
+  repeating the campaign with other seeds:
+
+    ```python
+    from spicefault.statistics import replicated_interval
+
+    yields = [campaign_with(seed).dataset().yield_report(limits).loc["all", "yield"]
+              for seed in range(8)]
+    replicated_interval(yields)      # mean, low, high
+    ```
+
+- **Every variation needs a quantile function.** Custom, joint, catalogue, correlated
+  and lot variations are refused.
+- **Sobol needs SciPy** (`pip install "spicefault[sampling]"`), works best with a number
+  of samples that is a power of two, and its points depend on the version of SciPy,
+  which the dataset records. The Latin hypercube needs nothing.
+
+The design of a population is a function of the seed, the population and its size, so
+the dataset is still the same for any number of workers, and each fault has its own
+design. The method is recorded in the metadata of the dataset.
+
 The definitions and estimators are in
 [Statistics of a population](../STATISTICS.md), and their check against circuits with a
 known distribution in [Validation of the statistics](../validation.md).

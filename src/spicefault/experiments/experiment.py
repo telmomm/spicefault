@@ -18,7 +18,8 @@ from ..conditions import OperatingCondition
 from ..faults import Fault, FaultSet
 from ..measurements import Measurement, Waveform
 from ..simulation import SimulationConfig, SimulationResult, SimulationStatus, Simulator
-from ..variation import VariationSet
+from ..variation import Variation, VariationSet
+from . import sampling as designs
 from .design import Design
 from .seeding import SCHEMES, sample_stream, seed_key
 
@@ -107,6 +108,12 @@ class Experiment:
     of workers. The operating condition is never part of the key, so one drawn circuit
     is observed under all the conditions.
 
+    `sampling` chooses how the circuits of a population are drawn: `random`, each from
+    its own independent stream; `lhs`, a Latin hypercube; or `sobol`, a scrambled Sobol
+    sequence (see `experiments.sampling`). The last two decide the points of each
+    population jointly, through the quantile function of every variation, and their
+    samples are not independent.
+
     With a `design`, the circuits are not drawn: each row of the design is a circuit
     with the parameter values it gives, simulated without and with each fault, under
     every condition. There are then no variations and no sample counts to give.
@@ -125,8 +132,14 @@ class Experiment:
     measurements: Sequence[Measurement] = ()
     waveform: Waveform | None = None
     design: Design | None = None
+    sampling: str = "random"
 
     def __post_init__(self):
+        self._designs: dict[tuple, object] = {}
+        if self.sampling not in designs.METHODS:
+            raise ValueError(
+                f"unknown sampling method {self.sampling!r}; expected one of {designs.METHODS}"
+            )
         if self.config == SimulationConfig() and self.circuit.imported_analyses:
             self.config = SimulationConfig(analyses=self.circuit.imported_analyses)
         if self.seeding not in SCHEMES:
@@ -147,6 +160,19 @@ class Experiment:
             ):  # fmt: skip
                 raise ValueError("a design has one sample per row: do not give sample counts")
             self.samples, self.healthy_samples = len(self.design), None
+        if self.sampling != "random":
+            if self.design is not None:
+                raise ValueError("a design gives the parameter values: it is not sampled")
+            for variation in self.variations:
+                if type(variation).quantile is Variation.quantile:
+                    raise ValueError(
+                        f"{self.sampling} sampling turns uniform numbers into values through the "
+                        f"quantile function of each variation, and the "
+                        f"{type(variation).__name__} of "
+                        f"{getattr(variation, 'component', None) or variation.name} has none"
+                    )
+            if self.sampling == "sobol":
+                designs.record("sobol")  # fails here, not in a worker, if SciPy is missing
         if not self.conditions:
             raise ValueError("an experiment needs at least one operating condition")
         for label, names in (
@@ -237,17 +263,39 @@ class Experiment:
         """Draw the circuit, inject the fault, then set the operating condition."""
         netlist = self.circuit.netlist()
         key = self.seed_key(sample)
-        if self.design is None:
+        if self.design is not None:
+            values, labels = self.design.row(sample.replica)
+        elif self.sampling == "random":
             draw = self.variations.sample(sample_stream(self.seed, *key), netlist)
             values, labels = draw.values, draw.labels
         else:
-            values, labels = self.design.row(sample.replica)
+            row, labels = self._points(sample)[sample.replica], {}
+            values = {
+                variation.targets()[0]: variation.quantile(float(u), variation.nominal(netlist))
+                for variation, u in zip(self.variations, row, strict=True)
+            }
         self.variations.apply(netlist, values)
         fault = self.fault(sample)
         if fault is not None:
             fault.apply(netlist)
         self.conditions[sample.condition_index].apply(netlist)
         return Realisation(str(netlist), values, labels, key)
+
+    def _points(self, sample: Sample):
+        """The design of the population of a sample: one row per replica, one column per
+        variation. A population is the fault-free circuits, or those with one fault.
+        """
+        population = self.seed_key(sample)[:-1]
+        size = self.samples
+        if sample.fault_index == 0 and self.healthy_samples is not None:
+            size = self.healthy_samples
+        found = self._designs.get((population, size))
+        if found is None:
+            found = designs.uniforms(
+                self.sampling, self.seed, population, size, len(self.variations)
+            )
+            self._designs[population, size] = found
+        return found
 
     def parameter_targets(self) -> tuple[tuple[str, str], ...]:
         """The parameters whose value every sample records: those drawn or designed."""
@@ -265,6 +313,8 @@ class Experiment:
         n_healthy = self.samples if self.healthy_samples is None else self.healthy_samples
         # only when there is one, so that the record of a drawn experiment does not change
         design = {} if self.design is None else {"design": self.design.metadata()}
+        if self.sampling != "random":
+            design["sampling"] = designs.record(self.sampling)
         return {
             **design,
             "spicefault_version": __version__,
@@ -320,6 +370,7 @@ class Experiment:
             circuit,
             samples=metadata["samples"],
             healthy_samples=None if built["design"] is not None else metadata["healthy_samples"],
+            sampling=metadata.get("sampling", {}).get("method", "random"),
             seed=metadata["seed"],
             seeding=metadata["seeding"],
             **built,

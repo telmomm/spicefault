@@ -77,6 +77,12 @@ is what the yield measures.
 
 ## Sampling other than independent draws
 
-The intervals of S1 to S3 assume independent samples. Stratified and quasi-random
-designs are not independent, and their interval comes from independent replications of
-the whole design.
+The intervals of S1 to S3 assume independent samples. The circuits of a Latin hypercube
+or a Sobol design are not independent, and those intervals are not given for them.
+Their uncertainty comes from $k$ independent replications of the whole design, with
+different seeds: each gives one estimate $\hat e_i$, the estimates are independent, and
+
+$$\bar e \pm t_{k-1}\, \frac{s_e}{\sqrt{k}}$$
+
+is the interval (`spicefault.statistics.replicated_interval`), with the Student $t$ of
+$k - 1$ degrees of freedom. It assumes that the estimates are roughly normal.

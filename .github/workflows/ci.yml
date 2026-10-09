@@ -61,8 +61,9 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ngspice
       - run: pip install -e ".[dev,recipes]"
       - run: pytest tests/validation tests/benchmarks
-      # the recipes need SciPy and SALib, which the other jobs do not install
-      - run: pytest tests/examples/test_recipes.py
+      # the recipes and the Sobol sequence need SciPy and SALib, which the other jobs do
+      # not install
+      - run: pytest tests/examples/test_recipes.py tests/unit/test_sampling_designs.py
 
   docs:
     runs-on: ubuntu-latest

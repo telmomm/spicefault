@@ -10,6 +10,7 @@ Run them from the repository root:
 python -m benchmarks.scalability.run --workload sallen_key --workers 1 2 4 8
 python -m benchmarks.reproducibility.run --workload biquad --workers 8
 python -m benchmarks.fault_coverage.run
+python -m benchmarks.sampling.run --sizes 64 256 --repetitions 16 --workers 8
 ```
 
 | Benchmark | Experiment | What it measures |
@@ -17,6 +18,8 @@ python -m benchmarks.fault_coverage.run
 | `scalability` | C | Wall time and simulations per second for each number of workers, speed-up and efficiency; time of one sample by phase; peak memory; bytes written; cost of resuming |
 | `reproducibility` | B | The same campaign with 1 and with several workers, repeated, with another chunk size, and interrupted and resumed: are the sample definitions identical (L1), and how much do the outputs differ (L2)? Then samples simulated again from the dataset folder |
 | `fault_coverage` | D | For each circuit: components, fault types, magnitudes, fault conditions, the coverage matrix, exclusions, components outside the fault model, and faults partly inside the tolerance band |
+
+| `sampling` | - | Error of the mean and of the yield for random, Latin hypercube and Sobol sampling at equal numbers of simulations, on a circuit with a known answer |
 
 ## Workloads
 

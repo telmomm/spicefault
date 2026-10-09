@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # the repository r
 from benchmarks import common  # noqa: E402
 from benchmarks.fault_coverage import run as fault_coverage  # noqa: E402
 from benchmarks.reproducibility import run as reproducibility  # noqa: E402
+from benchmarks.sampling import run as sampling  # noqa: E402
 from benchmarks.scalability import run as scalability  # noqa: E402
 
 
@@ -117,3 +118,17 @@ def test_scalability_against_the_direct_script(results):
     assert 0.2 < result["relative_throughput"]["2"] < 5.0
     assert 0.2 < result["relative_throughput_of_fastest_runs"]["2"] < 5.0
     assert "direct_script" in scalability.report(result)
+
+
+@pytest.mark.ngspice
+def test_sampling_benchmark_compares_the_methods_at_equal_cost(results):
+    pytest.importorskip("scipy")  # for the Sobol sequence
+    assert sampling.exact_mean_gain() == pytest.approx(0.7046, abs=2e-3)
+    result = sampling.run(sizes=(32,), repetitions=4)
+    rows = {row["method"]: row for row in result["rows"]}
+    assert set(rows) == {"random", "lhs", "sobol"} and rows["random"]["mean_error_vs_random"] == 1
+    assert all(row["simulations"] == 32 and row["rmse_mean"] > 0 for row in rows.values())
+    assert rows["lhs"]["rmse_mean"] < rows["random"]["rmse_mean"]
+    path = common.save("sampling", result, "test")
+    assert json.loads(path.read_text())["exact"]["yield"] == 0.9
+    assert "rmse(mean)" in sampling.report(result)

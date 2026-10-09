@@ -8,4 +8,6 @@
 
 ::: spicefault.experiments.seeding
 
+::: spicefault.experiments.sampling
+
 ::: spicefault.experiments.engine
