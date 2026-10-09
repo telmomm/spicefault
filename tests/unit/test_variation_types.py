@@ -308,13 +308,17 @@ def test_catalogue_is_rebuilt_from_its_record_scaled_and_recorded():
 
 
 def test_default_sampling_draws_what_it_always_drew():
-    """Datasets written by earlier versions must reproduce: these are the draws of 0.3.0."""
+    """Datasets written by earlier versions must reproduce: these are the draws of 0.3.0.
+
+    The same random numbers on every platform; the last digit of a value that goes
+    through an exponential depends on the mathematical library, hence the tolerance.
+    """
     net = Netlist(TEXT.replace(" gain={g}", ""))
     drawn = EVERY_TYPE.sample(sample_stream(7, 2, 3), net).values
-    assert list(drawn.values()) == [
+    assert list(drawn.values()) == pytest.approx([
         10067.624534800983, 20196.43060149748, 8.866211030821741e-07, 1.0009378667121047,
         -0.00017741698482862955, 215122.0758449274,
-    ]  # fmt: skip
+    ], rel=1e-12)  # fmt: skip
 
 
 def test_quantiles_match_their_closed_forms():
