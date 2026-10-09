@@ -7,6 +7,8 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-09
+
 ### Added
 
 - `Measurement.group`: several named values from one function, called once per
@@ -37,6 +39,7 @@ public interface may change between minor versions.
 - `Dataset.to_ml(waveforms=True)` returns only the samples of the conditions that store
   a waveform.
 - `parametric_rule` names its rule after `fault_type`, and its `deviations` are optional.
+- The Binder examples are split into guided notebook steps, stored with their outputs.
 
 ### Fixed
 
@@ -45,15 +48,6 @@ public interface may change between minor versions.
   reports a value in a column the condition does not declare.
 - `Dataset.netlist()` works for a condition with custom measurements: it no longer
   rebuilds them to write the netlist.
-
-## [0.2.1] - 2026-10-09
-
-### Changed
-
-- The Binder examples are split into guided notebook steps, stored with their outputs.
-
-### Fixed
-
 - ngspice is found in the common installation folders when it is not on `PATH`.
 - The banner of the README is shown on PyPI.
 
@@ -108,7 +102,7 @@ First version.
   probability, diagnostic coverage, severity response, robustness against tolerance,
   dependence on operating conditions, separability and ambiguity.
 
-[Unreleased]: https://github.com/telmomm/spicefault/compare/v0.2.1...HEAD
-[0.2.1]: https://github.com/telmomm/spicefault/compare/v0.2.0...v0.2.1
+[Unreleased]: https://github.com/telmomm/spicefault/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/telmomm/spicefault/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/telmomm/spicefault/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/telmomm/spicefault/releases/tag/v0.1.0
