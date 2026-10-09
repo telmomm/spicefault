@@ -300,3 +300,62 @@ def test_catalogue_is_rebuilt_from_its_record_scaled_and_recorded():
         CatalogueVariation("XE1", {"gel": {"r": 1.0}}, spread=0.5)
     with pytest.raises(TypeError, match="drawn as a whole"):
         ELECTRODE.sample(sample_stream(0), 1.0)
+
+
+# --- quantile functions ----------------------------------------------------------------
+
+
+def test_default_sampling_draws_what_it_always_drew():
+    """Datasets written by earlier versions must reproduce: these are the draws of 0.3.0."""
+    net = Netlist(TEXT.replace(" gain={g}", ""))
+    drawn = EVERY_TYPE.sample(sample_stream(7, 2, 3), net).values
+    assert list(drawn.values()) == [
+        10067.624534800983, 20196.43060149748, 8.866211030821741e-07, 1.0009378667121047,
+        -0.00017741698482862955, 215122.0758449274,
+    ]  # fmt: skip
+
+
+def test_quantiles_match_their_closed_forms():
+    phi = 0.8413447460685429  # the standard normal below one sigma
+    assert ToleranceVariation("R1", 0.1).quantile(0.75, 100.0) == pytest.approx(105.0)
+    assert ToleranceVariation("R1", 0.5, relative=False).quantile(0.25, 100.0) == 99.75
+    assert UniformVariation("R1", 2.0, 6.0).quantile(0.25, 0.0) == 3.0
+    assert NormalVariation("R1", 10.0, 2.0).quantile(phi, 0.0) == pytest.approx(12.0)
+    assert NormalVariation("R1", None, 2.0).quantile(0.5, 7.0) == pytest.approx(7.0)
+    assert LogNormalVariation("R1", None, 0.1).quantile(phi, 5.0) == pytest.approx(5 * np.exp(0.1))
+    assert LogUniformVariation("R1", 4.0).quantile(0.75, 10.0) == pytest.approx(20.0)
+    assert LogUniformVariation("R1", 4.0, median=1.0).quantile(0.5, 10.0) == pytest.approx(1.0)
+    assert FixedVariation("R1", 3.0).quantile(0.9, 0.0) == 3.0
+    # truncation keeps the value inside its band, however close to 0 or 1 the probability
+    truncated = NormalVariation("R1", 0.0, 1.0, truncate=2.0)
+    assert -2.0 < truncated.quantile(1e-12, 0.0) < -1.999
+    assert truncated.quantile(0.5, 0.0) == pytest.approx(0.0, abs=1e-12)
+    band = ToleranceVariation("R1", 0.01, "truncnorm")
+    assert 99.0 < band.quantile(1e-12, 100.0) < 99.001 and band.quantile(0.5, 100.0) == 100.0
+    for wrong in (0.0, 1.0, -0.1):
+        with pytest.raises(ValueError, match="probability in \\(0, 1\\)"):
+            UniformVariation("R1", 0.0, 1.0).quantile(wrong, 0.0)
+
+
+@pytest.mark.parametrize("variation", list(EVERY_TYPE), ids=lambda v: type(v).__name__)
+def test_quantile_of_uniform_numbers_is_the_distribution_that_sample_draws(variation):
+    """Two samples of 20,000: one drawn, one through the quantile function. The largest
+    distance between their empirical distributions is below the 0.1 % point of the
+    Kolmogorov-Smirnov statistic, 1.95 * sqrt(2 / n).
+    """
+    net = Netlist(TEXT.replace(" gain={g}", ""))
+    nominal = variation.nominal(net)
+    drawn = np.sort(draws(variation))
+    uniform = sample_stream(99).random(N)
+    through = np.sort([variation.quantile(u, nominal) for u in uniform])
+    grid = np.concatenate([drawn, through])
+    distance = np.abs(
+        np.searchsorted(drawn, grid, side="right") - np.searchsorted(through, grid, side="right")
+    ).max() / N
+    assert distance < 1.95 * (2 / N) ** 0.5
+
+
+def test_variations_that_hold_a_function_or_a_choice_have_no_quantile():
+    for variation in (JOINT, CustomVariation("R1", lambda rng, nominal: nominal), ELECTRODE):
+        with pytest.raises(NotImplementedError, match="has no quantile function"):
+            variation.quantile(0.5, 1.0)

@@ -38,6 +38,10 @@ fault is injected into a circuit already drawn from it. `scaled` multiplies ever
 spread while using the same random numbers, so a study of detectability against
 tolerance compares the same circuits at each tolerance level.
 
+Every variation except the custom, joint and catalogue ones also has a quantile
+function, `variation.quantile(u, nominal)`: the value at probability `u`. Sampling does
+not use it; the designs that choose their uniform numbers jointly do.
+
 ## Parameters that are not independent
 
 `JointVariation` draws several parameters together: the parameters of a part whose

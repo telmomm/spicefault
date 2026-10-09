@@ -21,6 +21,9 @@ public interface may change between minor versions.
 - Page *Statistics of a population*, with the definitions and estimators, and page
   *Validation of the statistics*: the estimates against two circuits whose distribution
   has a closed form (`validation/statistical.py`).
+- `Variation.quantile`: the value at a given probability, for the tolerance, uniform,
+  normal, log-normal, log-uniform and fixed variations. The default sampling is
+  unchanged, so earlier datasets reproduce exactly.
 - Page *Scope of the library*: the criterion for what belongs in it, and recipes for what
   is left to pandas, SciPy, SALib and scikit-learn.
 

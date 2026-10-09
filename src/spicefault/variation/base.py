@@ -38,12 +38,28 @@ class Variation(ABC):
     def sample(self, rng: np.random.Generator, nominal: float) -> float:
         """Draw the realised value; `nominal` is the value written in the netlist."""
 
-    def draw(self, rng: np.random.Generator, netlist: Netlist) -> Draw:
+    def quantile(self, u: float, nominal: float) -> float:
+        """The value at probability `u` in (0, 1): the inverse of the distribution function.
+
+        `sample` draws from a random stream; this turns a given uniform number into a
+        value of the same distribution. Designs that choose their uniform numbers
+        jointly (correlated populations, stratified sampling) are built on it. A
+        variation that holds a function or a discrete choice has none.
+        """
+        where = getattr(self, "component", None) or getattr(self, "name", "")
+        raise NotImplementedError(
+            f"the {type(self).__name__} of {where} has no quantile function"
+        )
+
+    def nominal(self, netlist: Netlist) -> float:
+        """The value written in the netlist; NaN if it is an expression, not a number."""
         try:
-            nominal = netlist.value(self.component, self.parameter)
-        except ValueError:  # an expression, not a number
-            nominal = float("nan")
-        return Draw({(self.component, self.parameter): self.sample(rng, nominal)})
+            return netlist.value(self.component, self.parameter)
+        except ValueError:
+            return float("nan")
+
+    def draw(self, rng: np.random.Generator, netlist: Netlist) -> Draw:
+        return Draw({(self.component, self.parameter): self.sample(rng, self.nominal(netlist))})
 
     @abstractmethod
     def scaled(self, factor: float) -> Variation:

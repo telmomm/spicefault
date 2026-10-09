@@ -14,7 +14,14 @@ import numpy as np
 from ..circuit import Circuit
 from ..netlist import Netlist
 from .base import Draw, Target, Variation, VariationSet
-from .distributions import DISTRIBUTIONS, log_uniform_factor, unit_deviation
+from .distributions import (
+    DISTRIBUTIONS,
+    check_probability,
+    log_uniform_factor,
+    truncated_normal_quantile,
+    unit_deviation,
+    unit_deviation_quantile,
+)
 
 
 def _callable_name(function) -> str:
@@ -35,6 +42,10 @@ class FixedVariation(Variation):
     parameter: str = "value"
 
     def sample(self, rng, nominal):
+        return float(self.value)
+
+    def quantile(self, u, nominal):
+        check_probability(u)
         return float(self.value)
 
     def scaled(self, factor):
@@ -68,6 +79,10 @@ class ToleranceVariation(Variation):
         deviation = self.tolerance * unit_deviation(rng, self.distribution)
         return nominal * (1.0 + deviation) if self.relative else nominal + deviation
 
+    def quantile(self, u, nominal):
+        deviation = self.tolerance * unit_deviation_quantile(u, self.distribution)
+        return nominal * (1.0 + deviation) if self.relative else nominal + deviation
+
     def scaled(self, factor):
         return replace(self, tolerance=self.tolerance * factor)
 
@@ -96,6 +111,9 @@ class UniformVariation(Variation):
 
     def sample(self, rng, nominal):
         return float(rng.uniform(self.low, self.high))
+
+    def quantile(self, u, nominal):
+        return self.low + check_probability(u) * (self.high - self.low)
 
     def scaled(self, factor):
         middle, half = 0.5 * (self.low + self.high), 0.5 * (self.high - self.low)
@@ -128,6 +146,10 @@ class NormalVariation(Variation):
             z = rng.normal(0.0, 1.0)
             if self.truncate is None or abs(z) <= self.truncate:
                 return float(_centre(self.mean, nominal) + self.sigma * z)
+
+    def quantile(self, u, nominal):
+        z = truncated_normal_quantile(u, self.truncate)
+        return float(_centre(self.mean, nominal) + self.sigma * z)
 
     def scaled(self, factor):
         return replace(self, sigma=self.sigma * factor)
@@ -162,6 +184,10 @@ class LogNormalVariation(Variation):
     def sample(self, rng, nominal):
         return float(_centre(self.median, nominal) * np.exp(self.sigma_log * rng.normal(0.0, 1.0)))
 
+    def quantile(self, u, nominal):
+        z = truncated_normal_quantile(u, None)
+        return float(_centre(self.median, nominal) * np.exp(self.sigma_log * z))
+
     def scaled(self, factor):
         return replace(self, sigma_log=self.sigma_log * factor)
 
@@ -192,6 +218,10 @@ class LogUniformVariation(Variation):
 
     def sample(self, rng, nominal):
         return _centre(self.median, nominal) * log_uniform_factor(rng, self.spread)
+
+    def quantile(self, u, nominal):
+        exponent = (2.0 * check_probability(u) - 1.0) * np.log(float(self.spread))
+        return float(_centre(self.median, nominal) * np.exp(exponent))
 
     def scaled(self, factor):
         return replace(self, spread=self.spread**factor)
