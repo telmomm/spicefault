@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from ..measurements import Measurement
+from ..measurements import Measurement, Waveform
 from ..netlist import Netlist
 from ..simulation import SimulationConfig
 
@@ -17,6 +17,12 @@ class OperatingCondition:
     `{("Vcc", "dc"): 3.0}` for a supply or `{("Rload", "value"): 1e3}` for a load.
     `temperature` is the simulation temperature in degrees Celsius; it only has an
     effect on devices whose model depends on temperature.
+
+    `config` and `measurements` replace those of the experiment for this condition.
+    `waveform` does the same for the stored waveform: None keeps the waveform of the
+    experiment, a `Waveform` stores that one, and False stores none, so the rows of
+    the condition hold NaN. Every waveform of an experiment has the same number of
+    points, since they share one array.
     """
 
     name: str = "nominal"
@@ -24,8 +30,11 @@ class OperatingCondition:
     settings: dict[tuple[str, str], float] = field(default_factory=dict)
     config: SimulationConfig | None = None
     measurements: tuple[Measurement, ...] | None = None
+    waveform: Waveform | bool | None = None
 
     def __post_init__(self):
+        if self.waveform is True:
+            raise ValueError("waveform is a Waveform, False for none, or None for the default")
         if self.measurements is not None:
             object.__setattr__(self, "measurements", tuple(self.measurements))
 
@@ -47,6 +56,8 @@ class OperatingCondition:
             record["config"] = self.config.metadata()
         if self.measurements is not None:
             record["measurements"] = [measurement.metadata() for measurement in self.measurements]
+        if self.waveform is not None:
+            record["waveform"] = self.waveform.metadata() if self.waveform else False
         return record
 
     @classmethod
@@ -54,6 +65,7 @@ class OperatingCondition:
         settings = {(s["component"], s["parameter"]): s["value"] for s in record["settings"]}
         config = record.get("config")
         measurements = record.get("measurements")
+        waveform = record.get("waveform")
         return cls(
             record["name"],
             record["temperature"],
@@ -62,4 +74,5 @@ class OperatingCondition:
             None
             if measurements is None
             else tuple(Measurement.from_metadata(m) for m in measurements),
+            Waveform.from_metadata(waveform) if waveform else waveform,
         )

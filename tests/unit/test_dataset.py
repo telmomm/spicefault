@@ -194,6 +194,42 @@ def test_verify_expects_only_the_measurements_of_each_condition(setups, tmp_path
     ]
 
 
+def test_waveform_is_stored_for_the_conditions_that_declare_one(tmp_path):
+    service, bench = two_setups(tmp_path / "unused").experiment.conditions
+    stored = Waveform("v(out)", fs=10.0, duration=1.0)
+    conditions = [
+        OperatingCondition("service", measurements=service.measurements, waveform=stored),
+        bench,
+    ]
+    c = two_setups(tmp_path / "data", conditions=conditions)
+    assert c.experiment.waveform_for(0) == stored and c.experiment.waveform_for(1) is None
+    c.run(progress=False)
+    dataset = c.dataset()
+    in_service = (dataset.samples["condition"] == "service").to_numpy()
+    assert dataset.waveforms.shape == (len(dataset), 10) and dataset.verify() == []
+    assert np.isfinite(dataset.waveforms[dataset.ok & in_service]).all()
+    assert np.isnan(dataset.waveforms[~in_service]).all() and dataset.ok[~in_service].any()
+    x, y = dataset.to_ml(waveforms=True)
+    assert len(x) == len(y) == (dataset.ok & in_service).sum() and np.isfinite(x).all()
+    record = dataset.metadata["conditions"]
+    assert record[0]["waveform"]["n_points"] == 10 and "waveform" not in record[1]
+    rebuilt = dataset.experiment(simulator=SIMULATOR, conditions=conditions)
+    assert dataset.reproduce(n=12, experiment=rebuilt)["waveform_abs_diff"].dropna().max() == 0.0
+
+    # the waveform of the experiment is the default, and a condition can decline it
+    silent = OperatingCondition("bench", settings={("V1", "dc"): 2.0}, waveform=False)
+    e = Experiment(CIRCUIT, conditions=[OperatingCondition("service"), silent], waveform=stored)
+    assert e.waveform_for(0) == stored and e.waveform_for(1) is None and e.waveform_points == 10
+    assert OperatingCondition.from_metadata(json.loads(json.dumps(silent.metadata()))) == silent
+    with_one = conditions[0]
+    assert OperatingCondition.from_metadata(json.loads(json.dumps(with_one.metadata()))) == with_one
+    other = OperatingCondition("bench", waveform=Waveform("v(out)", fs=10.0, duration=2.0))
+    with pytest.raises(ValueError, match="same number of points, not \\[10, 20\\]"):
+        Experiment(CIRCUIT, conditions=[with_one, other])
+    with pytest.raises(ValueError, match="False for none"):
+        OperatingCondition("x", waveform=True)
+
+
 def test_update_derived_columns_keeps_dataset_verifiable(run, tmp_path):
     import shutil
 

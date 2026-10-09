@@ -53,7 +53,8 @@ class Dataset:
     """A dataset folder written by `FaultCampaign`.
 
     `samples` has one row per simulation, failed ones included; `waveforms`, if any,
-    is aligned with it row by row. `metadata` is the definition of the experiment and
+    is aligned with it row by row, with NaN where a simulation failed or its
+    operating condition stores no waveform. `metadata` is the definition of the experiment and
     `manifest` the record of the run.
     """
 
@@ -155,8 +156,11 @@ class Dataset:
         if self.waveforms is not None:
             if len(self.waveforms) != len(df):
                 problems.append("waveforms and samples have different lengths")
-            elif np.isnan(self.waveforms[ok]).any() or not np.isnan(self.waveforms[~ok]).all():
-                problems.append("waveforms do not match the status of the samples")
+            else:
+                stored = ok & self._stores_waveform()
+                missing = np.isnan(self.waveforms[stored]).any()
+                if missing or not np.isnan(self.waveforms[~stored]).all():
+                    problems.append("waveforms do not match the status of the samples")
         return problems
 
     def _measured(self) -> dict[str, list[str]]:
@@ -174,6 +178,16 @@ class Dataset:
             ]
             for condition in self.metadata.get("conditions", [])
         }
+
+    def _stores_waveform(self) -> np.ndarray:
+        """True for the rows whose operating condition stores a waveform."""
+        default = self.metadata.get("waveform")
+        stores = {
+            condition["name"]: bool(condition.get("waveform", default))
+            for condition in self.metadata.get("conditions", [])
+        }
+        condition = self.samples["condition"].to_numpy()
+        return np.array([stores.get(name, True) for name in condition], dtype=bool)
 
     def _expected_measurements(self) -> np.ndarray:
         """[samples, features]: True where the condition of the row fills the column."""
@@ -374,15 +388,18 @@ class Dataset:
         """(X, y) for a statistical or machine-learning model.
 
         X is the table of measurements (or of `features`), or the waveforms with
-        `waveforms`. y is a column of the samples, by default the fault identifier
-        (`fault_type` and `fault_location` are the usual alternatives), or the result
+        `waveforms`, for the samples of the conditions that store one. y is a column
+        of the samples, by default the fault identifier (`fault_type` and
+        `fault_location` are the usual alternatives), or the result
         of a function of the samples. The library does not depend on any ML framework.
         """
         keep = self.ok if drop_failed else np.ones(len(self), dtype=bool)
-        samples = self.samples[keep]
         if waveforms:
             if self.waveforms is None:
                 raise ValueError("this dataset has no waveforms")
+            keep = keep & self._stores_waveform()
+        samples = self.samples[keep]
+        if waveforms:
             x = np.asarray(self.waveforms[keep])
         else:
             x = samples[list(features or self.features)].to_numpy(dtype=float)

@@ -149,6 +149,12 @@ class Experiment:
             repeated = [name for name, n in Counter(names).items() if n > 1]
             if repeated:
                 raise ValueError(f"repeated {label} identifiers: {repeated}")
+        points = {w.n_points for w in map(self.waveform_for, range(len(self.conditions))) if w}
+        if len(points) > 1:
+            raise ValueError(
+                "the waveforms of the operating conditions are stored in one array and must "
+                f"have the same number of points, not {sorted(points)}"
+            )
 
     # --- definition -------------------------------------------------------------------
 
@@ -169,6 +175,20 @@ class Experiment:
     def measurements_for(self, condition_index: int) -> tuple[Measurement, ...]:
         condition = self.conditions[condition_index]
         return condition.measurements if condition.measurements is not None else self.measurements
+
+    def waveform_for(self, condition_index: int) -> Waveform | None:
+        """The waveform stored for a condition: its own, or that of the experiment."""
+        own = self.conditions[condition_index].waveform
+        return self.waveform if own is None else own or None
+
+    @property
+    def waveform_points(self) -> int | None:
+        """Points of the stored waveforms; None if no condition stores one."""
+        for index in range(len(self.conditions)):
+            waveform = self.waveform_for(index)
+            if waveform is not None:
+                return waveform.n_points
+        return None
 
     @property
     def measurement_columns(self) -> tuple[str, ...]:

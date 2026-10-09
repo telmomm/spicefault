@@ -30,7 +30,7 @@ CIRCUIT_FILE = "circuit.cir"
 
 
 def simulate_sample(sample: Sample, experiment: Experiment) -> tuple[dict, np.ndarray | None]:
-    """One row of the dataset, and the waveform if the experiment stores one.
+    """One row of the dataset, and the waveform if one is stored for its condition.
 
     Nothing that happens here stops the campaign: a simulation that fails, an output
     that cannot be measured, or an error while building the netlist is recorded in
@@ -71,8 +71,9 @@ def simulate_sample(sample: Sample, experiment: Experiment) -> tuple[dict, np.nd
     if result.ok:
         try:
             measurements.update(experiment.measure(result, sample.condition_index))
-            if experiment.waveform is not None:
-                waveform = experiment.waveform(result)
+            stored = experiment.waveform_for(sample.condition_index)
+            if stored is not None:
+                waveform = stored(result)
             active = experiment.columns_for(sample.condition_index)
             if not all(math.isfinite(measurements[column]) for column in active):
                 raise ValueError("a measurement is not finite")
@@ -188,7 +189,7 @@ class FaultCampaign:
         """
         e = self.experiment
         report = ValidationReport()
-        if not e.measurement_columns and e.waveform is None:
+        if not e.measurement_columns and e.waveform_points is None:
             report.warnings.append("no measurement and no waveform: only the status is recorded")
         try:
             draw = e.variations.sample(sample_stream(e.seed), e.circuit.netlist())
@@ -217,8 +218,9 @@ class FaultCampaign:
                 )
                 continue
             checks = [(m.name, m.values) for m in e.measurements_for(condition_index)]
-            if e.waveform is not None:
-                checks.append(("waveform", e.waveform))
+            waveform = e.waveform_for(condition_index)
+            if waveform is not None:
+                checks.append(("waveform", waveform))
             for label, read in checks:
                 try:
                     found = read(result)
@@ -275,7 +277,7 @@ class FaultCampaign:
             (e, self.tag_columns),
             self.out_dir,
             config=self._metadata(),
-            n_points=None if e.waveform is None else e.waveform.n_points,
+            n_points=e.waveform_points,
             workers=workers,
             chunk=chunk,
             progress=progress,
