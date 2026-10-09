@@ -112,6 +112,15 @@ nominal["bench"].result                       # the complete simulation result
 experiment.nominal(fault="R1:open")           # the nominal circuit with one fault
 ```
 
+`experiment.evaluate(values, fault=None)` is the same with given parameter values, as
+`{(component, parameter): value}`: what an optimiser or a sensitivity method that brings
+its own points needs. The [scope page](../scope.md) has a recipe for each.
+
+```python
+result = experiment.evaluate({("R1", "value"): 10.1e3, ("C1", "value"): 95e-9})
+result["bench"].measurements["gain"]
+```
+
 ## Fault campaign
 
 `FaultCampaign` takes the same definitions as `Experiment` and writes the results to

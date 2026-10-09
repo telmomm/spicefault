@@ -59,8 +59,10 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: sudo apt-get update && sudo apt-get install -y ngspice
-      - run: pip install -e ".[dev]"
+      - run: pip install -e ".[dev,recipes]"
       - run: pytest tests/validation tests/benchmarks
+      # the recipes need SciPy and SALib, which the other jobs do not install
+      - run: pytest tests/examples/test_recipes.py
 
   docs:
     runs-on: ubuntu-latest

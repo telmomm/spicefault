@@ -27,6 +27,10 @@ public interface may change between minor versions.
 - `CorrelatedVariation`: variations that keep their distributions and are joined by a
   Gaussian copula with a stated correlation. `LotVariation`: components that share the
   deviation of their manufacturing lot. Both are rebuilt from the record of a dataset.
+- `Experiment.evaluate`: the circuit with given parameter values, simulated and measured
+  under each condition; `nominal()` is the case with none. Recipes for a worst-case
+  search with SciPy and for sensitivity indices with SALib, in `examples/recipes`, with
+  the optional extra `recipes`.
 - Page *Scope of the library*: the criterion for what belongs in it, and recipes for what
   is left to pandas, SciPy, SALib and scikit-learn.
 

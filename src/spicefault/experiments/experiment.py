@@ -343,12 +343,27 @@ class Experiment:
         No variation is drawn: the circuit has the values of its netlist. It is the
         reference of an experiment, such as the nominal gain against which a gain
         error is defined. With `fault`, a fault or the identifier of one of the
-        experiment, it is the nominal circuit with that fault.
+        experiment, it is the nominal circuit with that fault. See `evaluate`, of
+        which this is the case with no values given.
+        """
+        return self.evaluate({}, fault)
+
+    def evaluate(
+        self, parameters: dict[tuple[str, str], float], fault: Fault | str | None = None
+    ) -> dict[str, SampleResult]:
+        """The circuit with the given parameter values, simulated and measured under
+        each operating condition.
+
+        `parameters` maps (component, parameter) to a value; what is not given keeps
+        the value of the netlist. Nothing is drawn. With `fault`, a fault or the
+        identifier of one of the experiment, it is injected after the values are set,
+        as in a sample. This is what an external algorithm needs to drive the circuit:
+        an optimiser, or a sensitivity method that supplies its own points.
 
         Returns {condition name: SampleResult}, with the measurements of the condition
-        and the complete simulation result. These are not samples of the plan: `sample_id` and
-        `replica` are -1. As in a run, a simulation that fails is returned with its
-        status, not raised.
+        and the complete simulation result. These are not samples of the plan:
+        `sample_id` and `replica` are -1. As in a run, a simulation that fails is
+        returned with its status, not raised.
         """
         if isinstance(fault, str):
             fault = FaultSet(self.faults)[fault]
@@ -356,9 +371,17 @@ class Experiment:
             fault_index = 0
         else:
             fault_index = self.faults.index(fault) + 1 if fault in self.faults else -1
+        values = {(str(c), str(p)): float(value) for (c, p), value in parameters.items()}
         results = {}
         for condition_index, condition in enumerate(self.conditions):
             netlist = self.circuit.netlist()
+            for (component, parameter), value in values.items():
+                try:
+                    netlist.set_parameter(component, parameter, "absolute", value)
+                except (KeyError, IndexError) as exc:
+                    raise KeyError(
+                        f"the circuit has no parameter {component}.{parameter}"
+                    ) from exc
             if fault is not None:
                 fault.apply(netlist)
             condition.apply(netlist)
@@ -371,7 +394,7 @@ class Experiment:
                 fault_id=fault.fault_id if fault else HEALTHY_ID,
                 condition=condition.name,
                 seed_key=(),
-                parameters={},
+                parameters=dict(values),
                 labels={},
                 result=result,
                 measurements=measurements,

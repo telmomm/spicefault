@@ -51,15 +51,26 @@ samples[list(dataset.parameters)].corrwith(samples["gain_db"], method="spearman"
 ```
 
 Variance-based global sensitivity indices need their own sample matrix. The library
-simulates the points that [SALib](https://salib.readthedocs.io) asks for; see
-[issue 42](https://github.com/telmomm/spicefault/issues/42).
+simulates the points that [SALib](https://salib.readthedocs.io) asks for, with
+`Experiment.evaluate`:
+
+```python
+--8<-- "examples/recipes/sensitivity_indices.py"
+```
 
 ### Searching for the worst case
 
 Tolerance corners are inside the library. A search by optimisation is not: it is
-`scipy.optimize` around the simulation of a given parameter vector (the same issue), and
-its result is the worst case *found*, which may be a local extreme. Neither a search
-nor a finite random sample proves a worst case.
+`scipy.optimize` around `Experiment.evaluate`, and its result is the worst case *found*,
+which may be a local extreme. Neither a search nor a finite random sample proves a worst
+case.
+
+```python
+--8<-- "examples/recipes/worst_case.py"
+```
+
+Both recipes are in `examples/recipes/` and run with the tests; their packages come
+with `pip install "spicefault[recipes]"`.
 
 ### Confusion matrices and classifiers
 

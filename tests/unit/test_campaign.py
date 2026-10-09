@@ -357,6 +357,28 @@ def test_nominal_circuit_is_simulated_and_measured_under_each_condition(tmp_path
         e.nominal("R9:open")
 
 
+def test_evaluate_simulates_a_given_parameter_vector(tmp_path):
+    e = campaign(tmp_path / "data").experiment
+    # a divider of 30k over 10k, under 1 V and under 0.5 V
+    found = e.evaluate({("R1", "value"): 30e3})
+    assert found["nominal"].measurements["vout"] == pytest.approx(0.25)
+    assert found["low"].measurements["vout"] == pytest.approx(0.125)
+    assert found["nominal"].parameters == {("R1", "value"): 30e3}
+    assert found["nominal"].sample.sample_id == -1 and found["nominal"].labels == {}
+    both = e.evaluate({("R1", "value"): 5e3, ("R2", "value"): 5e3, ("V1", "dc"): 2.0})
+    assert both["nominal"].measurements["vout"] == pytest.approx(1.0)
+    # the fault is injected into the circuit that has the given values
+    high = e.evaluate({("R1", "value"): 5e3}, fault="R1:parametric:+0.2")["nominal"]
+    assert high.measurements["vout"] == pytest.approx(10 / 16) and high.sample.fault_index == 3
+    # nothing given is the nominal circuit, and the circuit of the experiment is untouched
+    assert e.evaluate({})["nominal"].measurements == e.nominal()["nominal"].measurements
+    assert e.nominal()["nominal"].measurements["vout"] == 0.5
+    with pytest.raises(KeyError, match="no parameter R9.value"):
+        e.evaluate({("R9", "value"): 1.0})
+    with pytest.raises(KeyError, match="no parameter R1.tc1"):
+        e.evaluate({("R1", "tc1"): 1.0})
+
+
 def test_fault_tags_become_label_columns_and_user_metadata_is_recorded(tmp_path):
     faults = [
         OpenCircuit("R2", tags={"origin": "electrode", "part": "lead"}),
