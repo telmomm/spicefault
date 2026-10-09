@@ -49,6 +49,9 @@ class FixedVariation(Variation):
         check_probability(u)
         return float(self.value)
 
+    def bounds(self, nominal):
+        return float(self.value), float(self.value)
+
     def scaled(self, factor):
         return self
 
@@ -84,6 +87,10 @@ class ToleranceVariation(Variation):
         deviation = self.tolerance * unit_deviation_quantile(u, self.distribution)
         return nominal * (1.0 + deviation) if self.relative else nominal + deviation
 
+    def bounds(self, nominal):
+        width = abs(nominal) * self.tolerance if self.relative else self.tolerance
+        return nominal - width, nominal + width
+
     def scaled(self, factor):
         return replace(self, tolerance=self.tolerance * factor)
 
@@ -115,6 +122,9 @@ class UniformVariation(Variation):
 
     def quantile(self, u, nominal):
         return self.low + check_probability(u) * (self.high - self.low)
+
+    def bounds(self, nominal):
+        return float(self.low), float(self.high)
 
     def scaled(self, factor):
         middle, half = 0.5 * (self.low + self.high), 0.5 * (self.high - self.low)
@@ -151,6 +161,14 @@ class NormalVariation(Variation):
     def quantile(self, u, nominal):
         z = truncated_normal_quantile(u, self.truncate)
         return float(_centre(self.mean, nominal) + self.sigma * z)
+
+    def bounds(self, nominal):
+        if self.truncate is None:
+            raise NotImplementedError(
+                f"the normal variation of {self.component} is not truncated: it has no bounds"
+            )
+        centre, width = _centre(self.mean, nominal), self.truncate * self.sigma
+        return centre - width, centre + width
 
     def scaled(self, factor):
         return replace(self, sigma=self.sigma * factor)
@@ -223,6 +241,10 @@ class LogUniformVariation(Variation):
     def quantile(self, u, nominal):
         exponent = (2.0 * check_probability(u) - 1.0) * np.log(float(self.spread))
         return float(_centre(self.median, nominal) * np.exp(exponent))
+
+    def bounds(self, nominal):
+        centre = _centre(self.median, nominal)
+        return tuple(sorted((centre / self.spread, centre * self.spread)))
 
     def scaled(self, factor):
         return replace(self, spread=self.spread**factor)

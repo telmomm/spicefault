@@ -8,17 +8,26 @@ from campaign_backend import Divider
 from spicefault import (
     Campaign,
     Circuit,
+    Design,
     Experiment,
     FaultCampaign,
     Measurement,
     OperatingCondition,
     SimulationConfig,
     Simulator,
+    Specification,
     Waveform,
+    corners,
 )
 from spicefault.dataset import load_metadata
 from spicefault.faults import OpenCircuit, ParametricFault, ShortCircuit
-from spicefault.variation import tolerances
+from spicefault.variation import (
+    LogUniformVariation,
+    NormalVariation,
+    ToleranceVariation,
+    UniformVariation,
+    tolerances,
+)
 
 CIRCUIT = Circuit("divider\nV1 in 0 dc 1\nR1 in out 10k\nR2 out 0 10k\n.end\n", "divider")
 FAULTS = [OpenCircuit("R2"), ShortCircuit("R2"), ParametricFault("R1", deviation=0.2)]
@@ -252,6 +261,104 @@ def test_campaign_without_faults_is_a_monte_carlo_of_the_healthy_circuit(tmp_pat
                              samples_per_fault=2).experiment.plan()) == 4 * 2  # fmt: skip
     with pytest.raises(ValueError, match="the same argument"):
         Campaign(CIRCUIT, out_dir=tmp_path / "h", samples=2, samples_per_fault=2)
+
+
+def off_balance(result):
+    """Largest when the output is 0.5005 V: a response with its extreme inside the band."""
+    return -((float(result.plot("Operating Point")["v(out)"][0].real) - 0.5005) ** 2)
+
+
+def test_corners_are_designed_samples_run_by_the_same_engine(tmp_path):
+    band = tolerances(CIRCUIT, {"R": 0.003})
+    design = corners(band, CIRCUIT)
+    assert design.kind == "corners" and design.targets == (("R1", "value"), ("R2", "value"))
+    assert design.names == ("nominal", "--", "-+", "+-", "++") and len(design) == 5
+    assert design.values[2] == (9970.0, 10030.0)
+
+    def corner_campaign(out_dir, **kwargs):
+        return Campaign(
+            CIRCUIT, [ParametricFault("R1", deviation=0.2)], out_dir=out_dir, design=design,
+            simulator=Simulator(Divider()), conditions=[OperatingCondition(),
+                                                        OperatingCondition("low", settings=LOW)],
+            measurements=[Measurement.value("v(out)", name="vout"),
+                          Measurement.custom_result("balance", off_balance)], **kwargs,
+        )  # fmt: skip
+
+    c = corner_campaign(tmp_path / "data")
+    assert len(c.experiment.plan()) == 5 * 2 * 2 and c.validate().ok
+    c.run(workers=2, chunk=7, progress=False)
+    dataset = c.dataset()
+    assert dataset.verify() == [] and dataset.ok.all() and dataset.labels == ["design_point"]
+    assert list(dataset.parameters) == ["p_R1_value", "p_R2_value"]
+    assert dataset.metadata["design"]["kind"] == "corners"
+    healthy = dataset.samples[(dataset.samples["fault_id"] == "healthy")
+                              & (dataset.samples["condition"] == "nominal")]  # fmt: skip
+    assert list(healthy["design_point"]) == ["nominal", "--", "-+", "+-", "++"]
+    assert healthy["p_R2_value"].tolist() == [10000.0, 9970.0, 10030.0, 9970.0, 10030.0]
+
+    # the ratio is monotonic in each resistor: its extremes over the band are at corners,
+    # R2 / (R1 + R2) with one resistor 0.3 % low and the other 0.3 % high
+    extremes = dataset.extremes().loc[("healthy", "nominal", "vout")]
+    assert extremes["maximum"] == pytest.approx(1.003 / 2) and extremes["minimum"] == 0.997 / 2
+    assert dataset.samples.loc[extremes["maximum_sample"], "design_point"] == "-+"
+    assert dataset.samples.loc[extremes["minimum_sample"], "design_point"] == "+-"
+    faulty = dataset.extremes().loc[("R1:parametric:+0.2", "low", "vout")]
+    assert faulty["maximum"] == pytest.approx(0.5 * 10030 / (1.2 * 9970 + 10030))
+
+    # a response with its extreme inside the band: no corner shows it
+    best_corner = dataset.extremes().loc[("healthy", "nominal", "balance"), "maximum"]
+    inside = c.experiment.evaluate({("R2", "value"): 10020.0})["nominal"].measurements["balance"]
+    assert best_corner == pytest.approx(-(0.0005**2)) and inside > best_corner / 1000
+
+    # the same for any number of workers, resumed, rebuilt and reproduced
+    other = corner_campaign(tmp_path / "other")
+    other.run(workers=1, chunk=20, progress=False)
+    assert reproducible(other.load(False)[0]).equals(reproducible(c.load(False)[0]))
+    rebuilt = dataset.experiment(simulator=Simulator(Divider()),
+                                 measurements=c.experiment.measurements)  # fmt: skip
+    assert rebuilt.design == design
+    assert dataset.reproduce(experiment=rebuilt)["max_abs_diff"].max() == 0.0
+    assert dataset.netlist(7) == c.experiment.realise(c.experiment.plan()[7]).netlist
+
+    # chosen circuits are not a random sample: no probability is estimated from them
+    for refused in (
+        lambda: dataset.statistics(),
+        lambda: dataset.yield_report([Specification("vout", 0.4, 0.6)]),
+        lambda: dataset.analysis(),
+    ):
+        with pytest.raises(ValueError, match="the samples of this dataset were designed"):
+            refused()
+
+
+def test_designs_and_the_bounds_they_are_built_from():
+    table = pd.DataFrame({"R1": [9e3, 11e3], "V1.dc": [1.0, 2.0]})
+    design = Design.from_table(table, description="two set-ups")
+    assert design.targets == (("R1", "value"), ("V1", "dc")) and len(design) == 2
+    assert design.row(1) == ({("R1", "value"): 11e3, ("V1", "dc"): 2.0}, {})
+    assert Design.from_metadata(json.loads(json.dumps(design.metadata()))) == design
+    e = Experiment(CIRCUIT, faults=[ShortCircuit("R2")], design=design)
+    assert e.samples == 2 and len(e.plan()) == 4 and e.parameter_targets() == design.targets
+    assert "dc 2.0" in e.realise(e.plan()[1]).netlist
+
+    assert ToleranceVariation("R1", 0.01).bounds(1e4) == (9900.0, 10100.0)
+    assert ToleranceVariation("V1", 0.5, parameter="dc", relative=False).bounds(1.0) == (0.5, 1.5)
+    assert UniformVariation("R1", 1.0, 3.0).bounds(0.0) == (1.0, 3.0)
+    assert LogUniformVariation("R1", 2.0).bounds(10.0) == (5.0, 20.0)
+    assert NormalVariation("R1", None, 10.0, truncate=3.0).bounds(100.0) == (70.0, 130.0)
+    with pytest.raises(NotImplementedError, match="not truncated: it has no bounds"):
+        corners([NormalVariation("R1", None, 10.0)], CIRCUIT)
+    with pytest.raises(ValueError, match="2 parameters have 4 corners, more than the limit of 2"):
+        corners(tolerances(CIRCUIT, {"R": 0.01}), CIRCUIT, limit=2)
+    assert len(corners(tolerances(CIRCUIT, {"R": 0.01}), CIRCUIT, nominal=False)) == 4
+    with pytest.raises(ValueError, match="cannot be combined with variations"):
+        Experiment(CIRCUIT, design=design, variations=tolerances(CIRCUIT, {"R": 0.01}))
+    with pytest.raises(ValueError, match="do not give sample counts"):
+        Experiment(CIRCUIT, design=design, samples=7)
+    with pytest.raises(ValueError, match="one value per parameter"):
+        Design([("R1", "value")], [[1.0, 2.0]])
+    bad = Campaign(CIRCUIT, out_dir="unused", design=Design([("R9", "value")], [[1.0]]),
+                   simulator=Simulator(Divider()))  # fmt: skip
+    assert any(error.startswith("design:") for error in bad.validate(simulate=False).errors)
 
 
 def test_campaign_from_an_experiment(tmp_path):

@@ -177,8 +177,7 @@ class Campaign:
             raise ValueError("tag_columns must be unique, non-empty strings")
         parameters = {
             f"p_{component}_{parameter}"
-            for variation in self.experiment.variations
-            for component, parameter in variation.targets()
+            for component, parameter in self.experiment.parameter_targets()
         }
         protected = {*DEFINITION_COLUMNS, *parameters, *self.experiment.measurement_columns}
         overlap = protected.intersection(self.tag_columns)
@@ -210,6 +209,11 @@ class Campaign:
             e.variations.apply(e.circuit.netlist(), draw.values)
         except Exception as exc:
             report.errors.append(f"variations: {type(exc).__name__}: {exc}")
+        if e.design is not None:
+            try:
+                e.variations.apply(e.circuit.netlist(), e.design.row(0)[0])
+            except Exception as exc:
+                report.errors.append(f"design: {type(exc).__name__}: {exc}")
         for fault in e.faults:
             try:
                 fault.apply(e.circuit.netlist())
@@ -308,7 +312,7 @@ class Campaign:
         """Counts for the manifest, and the role of each column of the table."""
         e = self.experiment
         status = df["status"].value_counts().to_dict()
-        targets = [t for v in e.variations for t in v.targets()]
+        targets = e.parameter_targets()
         measurements = list(e.measurement_columns)
         parameters = {f"p_{c}_{p}": [c, p] for c, p in targets}
         known = {*DEFINITION_COLUMNS, *parameters, *measurements}

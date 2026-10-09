@@ -51,6 +51,13 @@ class Variation(ABC):
             f"the {type(self).__name__} of {where} has no quantile function"
         )
 
+    def bounds(self, nominal: float) -> tuple[float, float]:
+        """The lowest and the highest value it can give. A distribution without limits,
+        or one that holds a function, has none.
+        """
+        where = getattr(self, "component", None) or getattr(self, "name", "")
+        raise NotImplementedError(f"the {type(self).__name__} of {where} has no bounds")
+
     def nominal(self, netlist: Netlist) -> float:
         """The value written in the netlist; NaN if it is an expression, not a number."""
         try:

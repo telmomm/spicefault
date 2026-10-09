@@ -19,6 +19,7 @@ from ..faults import Fault, FaultSet
 from ..measurements import Measurement, Waveform
 from ..simulation import SimulationConfig, SimulationResult, SimulationStatus, Simulator
 from ..variation import VariationSet
+from .design import Design
 from .seeding import SCHEMES, sample_stream, seed_key
 
 
@@ -105,6 +106,10 @@ class Experiment:
     default (fault index, replica). The result therefore does not depend on the number
     of workers. The operating condition is never part of the key, so one drawn circuit
     is observed under all the conditions.
+
+    With a `design`, the circuits are not drawn: each row of the design is a circuit
+    with the parameter values it gives, simulated without and with each fault, under
+    every condition. There are then no variations and no sample counts to give.
     """
 
     circuit: Circuit
@@ -119,6 +124,7 @@ class Experiment:
     seeding: str = "positional"
     measurements: Sequence[Measurement] = ()
     waveform: Waveform | None = None
+    design: Design | None = None
 
     def __post_init__(self):
         if self.config == SimulationConfig() and self.circuit.imported_analyses:
@@ -131,6 +137,16 @@ class Experiment:
             self.variations = VariationSet(self.variations)
         self.faults, self.conditions = tuple(self.faults), tuple(self.conditions)
         self.measurements = tuple(self.measurements)
+        if self.design is not None:
+            if len(self.variations):
+                raise ValueError(
+                    "a design gives the parameter values: it cannot be combined with variations"
+                )
+            if self.samples not in (1, len(self.design)) or self.healthy_samples not in (
+                None, len(self.design),
+            ):  # fmt: skip
+                raise ValueError("a design has one sample per row: do not give sample counts")
+            self.samples, self.healthy_samples = len(self.design), None
         if not self.conditions:
             raise ValueError("an experiment needs at least one operating condition")
         for label, names in (
@@ -221,13 +237,23 @@ class Experiment:
         """Draw the circuit, inject the fault, then set the operating condition."""
         netlist = self.circuit.netlist()
         key = self.seed_key(sample)
-        draw = self.variations.sample(sample_stream(self.seed, *key), netlist)
-        self.variations.apply(netlist, draw.values)
+        if self.design is None:
+            draw = self.variations.sample(sample_stream(self.seed, *key), netlist)
+            values, labels = draw.values, draw.labels
+        else:
+            values, labels = self.design.row(sample.replica)
+        self.variations.apply(netlist, values)
         fault = self.fault(sample)
         if fault is not None:
             fault.apply(netlist)
         self.conditions[sample.condition_index].apply(netlist)
-        return Realisation(str(netlist), draw.values, draw.labels, key)
+        return Realisation(str(netlist), values, labels, key)
+
+    def parameter_targets(self) -> tuple[tuple[str, str], ...]:
+        """The parameters whose value every sample records: those drawn or designed."""
+        if self.design is not None:
+            return tuple(self.design.targets)
+        return tuple(target for variation in self.variations for target in variation.targets())
 
     def faults_overlapping_tolerance(self) -> int:
         """How many parametric fault conditions lie partly inside the tolerance band."""
@@ -237,7 +263,10 @@ class Experiment:
     def metadata(self) -> dict:
         """Everything needed to regenerate the samples, as JSON-serialisable data."""
         n_healthy = self.samples if self.healthy_samples is None else self.healthy_samples
+        # only when there is one, so that the record of a drawn experiment does not change
+        design = {} if self.design is None else {"design": self.design.metadata()}
         return {
+            **design,
             "spicefault_version": __version__,
             **self.simulator.metadata(),
             **self.circuit.metadata(),
@@ -282,12 +311,15 @@ class Experiment:
                 Measurement.from_metadata(m) for m in metadata["measurements"]
             ],
             "waveform": lambda: None if waveform is None else Waveform.from_metadata(waveform),
+            "design": lambda: (
+                Design.from_metadata(metadata["design"]) if metadata.get("design") else None
+            ),
         }
         built = {name: overrides.get(name) or make() for name, make in parts.items()}
         return cls(
             circuit,
             samples=metadata["samples"],
-            healthy_samples=metadata["healthy_samples"],
+            healthy_samples=None if built["design"] is not None else metadata["healthy_samples"],
             seed=metadata["seed"],
             seeding=metadata["seeding"],
             **built,

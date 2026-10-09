@@ -31,6 +31,10 @@ public interface may change between minor versions.
   under each condition; `nominal()` is the case with none. Recipes for a worst-case
   search with SciPy and for sensitivity indices with SALib, in `examples/recipes`, with
   the optional extra `recipes`.
+- `Design` and `corners`: an experiment simulates chosen parameter values instead of
+  drawn ones, with the same engine and dataset. `Dataset.extremes` gives the lowest and
+  highest value of each measurement and the samples they are in. `Variation.bounds`.
+  The statistics, the yield and the reliability analysis refuse a designed dataset.
 - Page *Scope of the library*: the criterion for what belongs in it, and recipes for what
   is left to pandas, SciPy, SALib and scikit-learn.
 

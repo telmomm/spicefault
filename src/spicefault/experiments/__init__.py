@@ -1,12 +1,14 @@
 """Experiments: deterministic sampling and parallel, resumable execution."""
 
 from .campaign import Campaign, FaultCampaign, ValidationReport, simulate_sample
+from .design import Design, corners
 from .engine import config_key, run_campaign, run_chunks
 from .experiment import Experiment, ExperimentResult, Realisation, Sample, SampleResult
 from .seeding import sample_stream
 
 __all__ = [
     "Campaign",
+    "Design",
     "Experiment",
     "ExperimentResult",
     "FaultCampaign",
@@ -15,6 +17,7 @@ __all__ = [
     "SampleResult",
     "ValidationReport",
     "config_key",
+    "corners",
     "run_campaign",
     "run_chunks",
     "sample_stream",

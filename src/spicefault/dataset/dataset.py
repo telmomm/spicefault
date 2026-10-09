@@ -402,6 +402,31 @@ class Dataset:
                 f"dataset were designed ({design.get('kind', 'design')})"
             )
 
+    def extremes(self, features: Sequence[str] | None = None) -> pd.DataFrame:
+        """The lowest and the highest value of each measurement, and the samples they are in.
+
+        One row per fault, operating condition and measurement, over the successful
+        simulations: `minimum`, `minimum_sample`, `maximum`, `maximum_sample`. These are
+        the extremes of the circuits that were simulated. Over the corners of a
+        tolerance band they are the worst case of the band only where the measurement
+        is monotonic in each parameter (see `corners`); over a random sample they are
+        what happened to be drawn. In neither case are they a proven worst case.
+        """
+        rows = []
+        usable = self.samples[self.ok]
+        for (fault_id, condition), group in usable.groupby(["fault_id", "condition"], sort=False):
+            for feature in features or self.features:
+                values = group[feature].dropna()
+                if values.empty:
+                    continue
+                low, high = values.idxmin(), values.idxmax()
+                rows.append({
+                    "fault_id": fault_id, "condition": condition, "measurement": feature,
+                    "minimum": float(values[low]), "minimum_sample": int(group["sample_id"][low]),
+                    "maximum": float(values[high]), "maximum_sample": int(group["sample_id"][high]),
+                })  # fmt: skip
+        return pd.DataFrame(rows).set_index(["fault_id", "condition", "measurement"])
+
     def statistics(
         self,
         features: Sequence[str] | None = None,
@@ -650,6 +675,7 @@ class Dataset:
         """
         from ..reliability import ReliabilityAnalysis
 
+        self._require_random("a reliability analysis")
         samples, default = self.samples, self.features
         if by_case:
             samples, default, _ = self._cases(None, False)

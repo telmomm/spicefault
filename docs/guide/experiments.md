@@ -121,6 +121,43 @@ result = experiment.evaluate({("R1", "value"): 10.1e3, ("C1", "value"): 95e-9})
 result["bench"].measurements["gain"]
 ```
 
+## Designed samples and corners
+
+The circuits of an experiment are drawn from its variations. They can instead be
+chosen: a `Design` is a table of parameter values, one row per circuit, run by the same
+engine, so a corner study is resumable, keeps its failed simulations and ends in a
+dataset.
+
+```python
+from spicefault import Campaign, corners
+from spicefault.variation import tolerances
+
+design = corners(tolerances(circuit, {"R": 0.01, "C": 0.05}), circuit)   # 2^n corners, and the nominal
+campaign = Campaign(circuit, out_dir="data/corners", design=design, measurements=[...])
+campaign.run()
+campaign.dataset().extremes()     # lowest and highest value of each measurement, and where
+```
+
+- `corners` takes the band of each variation (a tolerance, a range, a truncated normal)
+  and refuses more corners than its `limit`, 1024 by default: the count doubles with
+  every parameter.
+- `Design.from_table(frame)` takes any table of values, such as the points another
+  tool computed. The columns are `component`, `component.parameter` or a pair.
+- Faults and operating conditions combine with a design as with drawn circuits: each
+  fault is injected into every row.
+- The row of each sample is recorded in the column `design_point`, and the design in
+  the metadata of the dataset.
+
+Two limits are part of the interface, not footnotes:
+
+- **Corners bound a response only where it is monotonic.** The extremes over the
+  corners are the extremes over the band if the measurement rises or falls with each
+  parameter throughout the band. A response with a maximum or a minimum inside it, such
+  as a resonance, a notch or an error that two parameters compensate, has its worst case
+  where no corner is.
+- **Chosen circuits are not a random sample.** `statistics`, `yield_report` and
+  `analysis` refuse a designed dataset: a proportion over corners is not a probability.
+
 ## Fault campaign
 
 `FaultCampaign` takes the same definitions as `Experiment` and writes the results to
