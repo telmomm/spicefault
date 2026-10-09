@@ -345,8 +345,8 @@ class Experiment:
         error is defined. With `fault`, a fault or the identifier of one of the
         experiment, it is the nominal circuit with that fault.
 
-        Returns {condition name: SampleResult}, with the measurements and the complete
-        simulation result. These are not samples of the plan: `sample_id` and
+        Returns {condition name: SampleResult}, with the measurements of the condition
+        and the complete simulation result. These are not samples of the plan: `sample_id` and
         `replica` are -1. As in a run, a simulation that fails is returned with its
         status, not raised.
         """
@@ -364,6 +364,8 @@ class Experiment:
             condition.apply(netlist)
             result = self.simulator.run(str(netlist), self.config_for(condition_index))
             result, measurements = self._measured(result, condition_index)
+            own = self.columns_for(condition_index)  # not the columns of the other conditions
+            measurements = {name: measurements[name] for name in own if name in measurements}
             results[condition.name] = SampleResult(
                 sample=Sample(-1, fault_index, -1, condition_index),
                 fault_id=fault.fault_id if fault else HEALTHY_ID,

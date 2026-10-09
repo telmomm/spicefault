@@ -306,6 +306,12 @@ def test_nominal_circuit_is_simulated_and_measured_under_each_condition(tmp_path
     assert shorted.measurements["vout"] == pytest.approx(0.5 / 10001, rel=1e-3)
     other = e.nominal(ParametricFault("R2", deviation=-0.5))["nominal"]
     assert other.sample.fault_index == -1 and other.measurements["vout"] == pytest.approx(1 / 3)
+    # each condition gives its own measurements, not the empty columns of the others
+    bench = OperatingCondition("bench", measurements=(Measurement.final("v(out)", name="end"),))
+    mixed = campaign(tmp_path / "mixed", conditions=[OperatingCondition(), bench]).experiment
+    assert {name: list(r.measurements) for name, r in mixed.nominal().items()} == {
+        "nominal": ["vout", "final_v(out)"], "bench": ["end"],
+    }
     # a simulation that fails is returned with its status
     failed = e.nominal("R2:open")["nominal"]
     assert failed.result.status.value == "CONVERGENCE_ERROR" and failed.measurements == {}
