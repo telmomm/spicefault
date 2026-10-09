@@ -14,6 +14,7 @@ import pandas as pd
 from ..circuit import Circuit
 from ..conditions import OperatingCondition
 from ..faults import FaultSet
+from ..measurements import Instrument
 from ..variation import VariationSet
 from .manifest import Manifest, file_record
 from .specification import Specification
@@ -346,8 +347,8 @@ class Dataset:
         cases, _, waveforms = self._cases(waveform_from, self.waveforms is not None)
         return cases, waveforms
 
-    def _cases(self, waveform_from: str | None, with_waveforms: bool):
-        df, measured = self.samples, self._measured()
+    def _cases(self, waveform_from: str | None, with_waveforms: bool, samples=None):
+        df, measured = self.samples if samples is None else samples, self._measured()
         names = list(measured)
         if not names:
             raise ValueError("the metadata of this dataset does not describe its conditions")
@@ -393,6 +394,25 @@ class Dataset:
 
     # --- statistics of the population ---------------------------------------------------
 
+    def observe(self, instrument: Instrument, seed: int = 0) -> pd.DataFrame:
+        """The samples as an instrument reads their measurements: with its noise,
+        resolution and range (see `Instrument`).
+
+        Nothing is simulated and the dataset is not modified: the stored values stay
+        noise-free, and the same dataset serves any instrument. `statistics`,
+        `yield_report` and `analysis` take the instrument directly.
+        """
+        unknown = [name for name in instrument.readings if name not in self.features]
+        if unknown:
+            raise KeyError(f"not measurements of this dataset: {unknown}")
+        return instrument.observe(self.samples, seed)
+
+    def _observed(self, instrument: Instrument | None, seed: int):
+        """(samples, record): the samples as read, and what to record with a result."""
+        if instrument is None:
+            return self.samples, None
+        return self.observe(instrument, seed), {"readings": instrument.metadata(), "seed": seed}
+
     def _require_random(self, what: str) -> None:
         """Probabilities are estimated from circuits drawn at random, not chosen."""
         design = self.metadata.get("design")
@@ -433,6 +453,8 @@ class Dataset:
         quantiles: Sequence[float] = (0.01, 0.5, 0.99),
         confidence: float = 0.95,
         by_case: bool = False,
+        instrument: Instrument | None = None,
+        seed: int = 0,
     ) -> pd.DataFrame:
         """The distribution of each measurement: one row per fault, operating condition
         and measurement, with the mean, the spread, the quantiles and their intervals
@@ -441,16 +463,23 @@ class Dataset:
         With `by_case` the rows are per fault, over one row per drawn circuit (see
         `cases`), which a dataset whose conditions measure different things needs for
         the count of failed simulations to be that of the circuits.
+
+        With `instrument`, the measurements are those it reads, with the noise drawn
+        from `seed`; the instrument is recorded in the `attrs` of the result.
         """
         from ..statistics import describe
 
         self._require_random("the distribution of a measurement")
+        samples, record = self._observed(instrument, seed)
         if by_case:
-            cases, case_features, _ = self._cases(None, False)
-            return describe(cases, features or case_features, ("fault_id",), "sim_ok",
-                            quantiles, confidence)  # fmt: skip
-        return describe(self.samples, features or self.features, ("fault_id", "condition"),
-                        "sim_ok", quantiles, confidence)  # fmt: skip
+            cases, case_features, _ = self._cases(None, False, samples)
+            table = describe(cases, features or case_features, ("fault_id",), "sim_ok",
+                             quantiles, confidence)  # fmt: skip
+        else:
+            table = describe(samples, features or self.features, ("fault_id", "condition"),
+                             "sim_ok", quantiles, confidence)  # fmt: skip
+        table.attrs["instrument"] = record
+        return table
 
     def yield_report(
         self,
@@ -458,6 +487,8 @@ class Dataset:
         fault_id: str = HEALTHY_ID,
         confidence: float = 0.95,
         interval: str = "wilson",
+        instrument: Instrument | None = None,
+        seed: int = 0,
     ) -> pd.DataFrame:
         """Yield of the fault-free circuits: the fraction that meets each specification
         and all of them, with intervals, bounds for the failed simulations and the
@@ -466,7 +497,9 @@ class Dataset:
         `specifications` default to those the dataset was labelled with; others can be
         given, and nothing is simulated or written. The yield is computed per drawn
         circuit, each quantity read in the operating condition that measures it. With
-        `fault_id` it is the same report for the circuits with that fault.
+        `fault_id` it is the same report for the circuits with that fault. With
+        `instrument` it is the yield that a test with that instrument would find,
+        which differs from the true one by its false rejects and its escapes.
         """
         from ..statistics import yield_report
 
@@ -474,7 +507,8 @@ class Dataset:
         specifications = list(self.specifications if specifications is None else specifications)
         if not specifications:
             raise ValueError("no specifications: pass them, or label the dataset first")
-        cases, _, _ = self._cases(None, False)
+        samples, record = self._observed(instrument, seed)
+        cases, _, _ = self._cases(None, False, samples)
         missing = [s.name for s in specifications if s.name not in cases]
         if missing:
             raise KeyError(
@@ -484,9 +518,11 @@ class Dataset:
         chosen = cases[(cases["fault_id"] == fault_id).to_numpy()]
         if chosen.empty:
             raise KeyError(f"the dataset has no circuit with fault {fault_id!r}")
-        return yield_report(
+        report = yield_report(
             chosen, specifications, chosen["sim_ok"].to_numpy(dtype=bool), confidence, interval
         )
+        report.attrs["instrument"] = record
+        return report
 
     # --- traceability -------------------------------------------------------------------
 
@@ -667,18 +703,35 @@ class Dataset:
         y = target(samples) if callable(target) else samples[target].to_numpy()
         return x, np.asarray(y)
 
-    def analysis(self, features: Sequence[str] | None = None, by_case: bool = False, **kwargs):
+    def analysis(
+        self,
+        features: Sequence[str] | None = None,
+        by_case: bool = False,
+        instrument: Instrument | None = None,
+        seed: int = 0,
+        **kwargs,
+    ):
         """A `ReliabilityAnalysis` of the dataset.
 
         With `by_case` it is made on one row per drawn circuit (see `cases`), which a
-        dataset whose operating conditions measure different things needs.
+        dataset whose operating conditions measure different things needs. With
+        `instrument`, detection works on the measurements as it reads them, and the
+        uncertainty of its readings is the `noise_floor` of the analysis unless one is
+        given; the instrument is kept as `analysis.instrument`.
         """
         from ..reliability import ReliabilityAnalysis
 
         self._require_random("a reliability analysis")
-        samples, default = self.samples, self.features
+        samples, record = self._observed(instrument, seed)
+        default = self.features
         if by_case:
-            samples, default, _ = self._cases(None, False)
-        return ReliabilityAnalysis(
-            samples, features or default, faults=self.metadata["faults"], **kwargs
+            samples, default, _ = self._cases(None, False, samples)
+        chosen = list(features or default)
+        if instrument is not None and "noise_floor" not in kwargs:
+            floor = instrument.noise_floor()
+            kwargs["noise_floor"] = {name: floor.get(name, 0.0) for name in chosen}
+        analysis = ReliabilityAnalysis(
+            samples, chosen, faults=self.metadata["faults"], **kwargs
         )
+        analysis.instrument = record
+        return analysis

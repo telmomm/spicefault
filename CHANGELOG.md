@@ -35,6 +35,9 @@ public interface may change between minor versions.
   drawn ones, with the same engine and dataset. `Dataset.extremes` gives the lowest and
   highest value of each measurement and the samples they are in. `Variation.bounds`.
   The statistics, the yield and the reliability analysis refuse a designed dataset.
+- `Instrument` and `Reading`: noise, resolution and range applied to the stored
+  measurements after the simulation. `Dataset.observe`, and `instrument=` in
+  `Dataset.statistics`, `Dataset.yield_report` and `Dataset.analysis`.
 - Page *Scope of the library*: the criterion for what belongs in it, and recipes for what
   is left to pandas, SciPy, SALib and scikit-learn.
 

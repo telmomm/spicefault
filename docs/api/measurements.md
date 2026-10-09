@@ -4,4 +4,6 @@
 
 ::: spicefault.measurements.response
 
+::: spicefault.measurements.instrument
+
 ::: spicefault.measurements.acquisition

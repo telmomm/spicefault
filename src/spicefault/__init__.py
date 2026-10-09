@@ -14,7 +14,7 @@ from .experiments import (  # noqa: E402
     corners,
 )
 from .faults import Fault  # noqa: E402
-from .measurements import Measurement, Waveform  # noqa: E402
+from .measurements import Instrument, Measurement, Reading, Waveform  # noqa: E402
 from .simulation import (  # noqa: E402
     SimulationConfig,
     SimulationResult,
@@ -33,8 +33,10 @@ __all__ = [
     "ExperimentResult",
     "Fault",
     "FaultCampaign",
+    "Instrument",
     "Measurement",
     "OperatingCondition",
+    "Reading",
     "SimulationConfig",
     "SimulationResult",
     "SimulationStatus",

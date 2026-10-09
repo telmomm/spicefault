@@ -69,6 +69,31 @@ violation. A specification belongs to the drawn circuit: with several operating
 conditions, the rows of one circuit get the same labels, read in the conditions that
 measure each quantity.
 
+## The instrument
+
+The stored measurements are those of the simulator: noise-free. What an instrument
+would read is computed from them afterwards, so its noise, resolution and range are
+parameters of a study that need no new simulation.
+
+```python
+from spicefault import Instrument, Reading
+
+instrument = Instrument({"gain_db": Reading(noise=0.02, resolution=0.01, limits=(0, 40))})
+
+observed = dataset.observe(instrument, seed=7)         # a table; the dataset is not modified
+dataset.statistics(instrument=instrument)
+dataset.yield_report(limits, instrument=instrument)     # the yield a test with it would find
+dataset.analysis(instrument=instrument)                 # detection on what it reads
+```
+
+A `Reading` adds Gaussian noise, rounds to the resolution and clips to the limits, in
+that order; each is optional. The noise of a value depends only on the seed, the
+measurement and the sample, so the observed table is the same for any order or subset
+of the rows. The instrument is recorded with each result (`attrs["instrument"]`,
+`analysis.instrument`), and in a reliability analysis the uncertainty of its readings is
+the noise floor. One dataset then gives, for instance, the detectability of a fault
+against the noise of the instrument.
+
 ## One row per drawn circuit
 
 When operating conditions have their own measurements, the table has one row per
