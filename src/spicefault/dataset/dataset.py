@@ -16,6 +16,7 @@ from ..conditions import OperatingCondition
 from ..faults import FaultSet
 from ..variation import VariationSet
 from .manifest import Manifest, file_record
+from .specification import Specification
 from .store import SAMPLES, WAVEFORMS, load_metadata
 
 CIRCUIT_FILE = "circuit.cir"
@@ -201,6 +202,10 @@ class Dataset:
 
     def update_columns(self, frame: pd.DataFrame, note: str = "") -> None:
         """Add or replace derived label columns without invalidating dataset integrity."""
+        self._check_derived(frame)
+        self._store_columns(frame, {"type": "derived_columns", "note": note})
+
+    def _check_derived(self, frame: pd.DataFrame) -> None:
         if frame.empty or len(frame.columns) == 0:
             raise ValueError("frame must contain at least one derived column")
         if not frame.index.equals(self.samples.index):
@@ -221,27 +226,162 @@ class Dataset:
         if conflicts:
             raise ValueError(f"columns are not derived labels: {sorted(conflicts)}")
 
-        updated = self.samples.copy()
+    def _store_columns(self, frame: pd.DataFrame, entry: dict, drop: Sequence[str] = ()) -> None:
+        """Write label columns to the table, with its fingerprint and an entry in the history."""
+        updated = self.samples.drop(columns=list(drop))
         for column in frame.columns:
-            updated[column] = frame[column]
+            updated[column] = frame[column].to_numpy()
         path = self.path / SAMPLES
         temporary = path.with_suffix(".tmp")
         updated.to_parquet(temporary, index=False)
         temporary.replace(path)
         self.samples = updated
-        self.labels = list(dict.fromkeys([*self.labels, *frame.columns]))
+        kept = [label for label in self.labels if label not in drop]
+        self.labels = list(dict.fromkeys([*kept, *frame.columns]))
         columns = self.manifest.summary.setdefault("columns", {})
         columns["labels"] = list(self.labels)
         self.manifest.summary.setdefault("history", []).append(
             {
-                "type": "derived_columns",
+                "type": entry["type"],
                 "updated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                 "columns": list(frame.columns),
-                "note": note,
+                **{key: value for key, value in entry.items() if key != "type"},
             }
         )
         self.manifest.files[SAMPLES] = file_record(path)
         self.manifest.write(self.path)
+
+    # --- specifications -----------------------------------------------------------------
+
+    @property
+    def specifications(self) -> list[Specification]:
+        """The specifications the dataset was last labelled with."""
+        records = self.manifest.summary.get("specifications", [])
+        return [Specification.from_metadata(record) for record in records]
+
+    def label(self, specifications: Sequence[Specification], note: str = "") -> pd.DataFrame:
+        """Label every sample as meeting its specifications or not, and keep the limits.
+
+        It writes `ok_<name>` for each specification, `compliant` (all of them are
+        met) and `violated` (the names of those that are not, separated by commas),
+        stores the limits in the manifest and appends to its history. Calling it again
+        with other limits relabels the dataset; nothing is simulated.
+
+        A specification is a property of the drawn circuit, so the rows of one circuit
+        under its operating conditions get the same labels: the value is read in the
+        conditions that measure it. A value that could not be computed, also because
+        the simulation failed, is a violation. Returns the labels written.
+        """
+        specifications = list(specifications)
+        names = [specification.name for specification in specifications]
+        if not names or len(set(names)) != len(names):
+            raise ValueError("label needs specifications with different names")
+        unknown = [name for name in names if name not in self.samples]
+        if unknown:
+            raise KeyError(f"no column for the specifications {unknown}")
+
+        circuit = self._case_index()
+        n_circuits = int(circuit.max()) + 1 if len(circuit) else 0
+        measured = self._measured()
+        condition = self.samples["condition"].to_numpy()
+        labels = {}
+        for specification in specifications:
+            met = specification.met(self.samples[specification.name])
+            measures = np.ones(len(self), dtype=bool)
+            if specification.name in self.features:
+                # a condition the metadata does not describe is taken to measure it
+                name = specification.name
+                measures = np.array([name in measured.get(c, (name,)) for c in condition])
+            violated = np.bincount(circuit, measures & ~met, n_circuits) > 0
+            evaluated = np.bincount(circuit, measures, n_circuits) > 0
+            labels[specification.column] = (evaluated & ~violated)[circuit]
+        frame = pd.DataFrame(labels, index=self.samples.index)
+        frame["compliant"] = frame.all(axis=1)
+        failed = ~frame[[s.column for s in specifications]].to_numpy()
+        frame["violated"] = [",".join(n for n, bad in zip(names, row, strict=True) if bad)
+                             for row in failed]  # fmt: skip
+
+        self._check_derived(frame)
+        records = [specification.metadata() for specification in specifications]
+        previous = {s.column for s in self.specifications}
+        self.manifest.summary["specifications"] = records
+        self._store_columns(
+            frame,
+            {"type": "specifications", "specifications": records, "note": note},
+            drop=sorted(previous - set(frame.columns)),
+        )
+        return frame
+
+    def _case_index(self) -> np.ndarray:
+        """For each row, the number of its drawn circuit: one per (fault, replica)."""
+        keys = self.samples[["fault_index", "replica"]]
+        return keys.groupby(["fault_index", "replica"], sort=False).ngroup().to_numpy()
+
+    # --- one row per drawn circuit ------------------------------------------------------
+
+    def cases(self, waveform_from: str | None = None) -> tuple[pd.DataFrame, np.ndarray | None]:
+        """(cases, waveforms): one row per drawn circuit, across its operating conditions.
+
+        The table of samples has one row per simulation, so a circuit drawn once and
+        simulated under several conditions is several rows, each with the measurements
+        of its condition. Here they are joined: the definition of the circuit, its
+        labels and its realised parameters once, then the measurements of every
+        condition side by side. A measurement that several conditions make gets one
+        column per condition, `<name>_<condition>`. `sim_ok` is true only if every
+        condition succeeded, and `cases.attrs["features"]` lists the measurement
+        columns. Labels are read from the row of the first condition.
+
+        `waveforms` are those of the condition `waveform_from`, aligned with the cases;
+        it may be omitted when a single condition stores them. None if the dataset
+        has no waveforms.
+        """
+        cases, _, waveforms = self._cases(waveform_from, self.waveforms is not None)
+        return cases, waveforms
+
+    def _cases(self, waveform_from: str | None, with_waveforms: bool):
+        df, measured = self.samples, self._measured()
+        names = list(measured)
+        if not names:
+            raise ValueError("the metadata of this dataset does not describe its conditions")
+        keys = ["fault_index", "replica"]
+        per_row = {*self.features, "sample_id", "condition", "status", "message", "sim_ok",
+                   "elapsed_s"}  # fmt: skip
+        rows = {name: df[(df["condition"] == name).to_numpy()] for name in names}
+        cases = rows[names[0]][[c for c in df.columns if c not in per_row]].reset_index(drop=True)
+        makers = pd.Series([column for name in names for column in measured[name]]).value_counts()
+        ok = np.ones(len(cases), dtype=bool)
+        values, features = {}, []
+        for name in names:
+            if not np.array_equal(rows[name][keys].to_numpy(), cases[keys].to_numpy()):
+                raise ValueError(f"condition {name!r} does not have the circuits of the others")
+            ok &= rows[name]["sim_ok"].to_numpy(dtype=bool)
+            for column in measured[name]:
+                target = column if makers[column] == 1 else f"{column}_{name}"
+                values[target] = rows[name][column].to_numpy()
+                features.append(target)
+        clash = set(values).intersection(cases.columns) or len(set(features)) != len(features)
+        if clash:
+            raise ValueError(f"case columns are not unique: {clash}")
+        cases.insert(list(cases.columns).index("seed_key") + 1, "sim_ok", ok)
+        cases = pd.concat([cases, pd.DataFrame(values, index=cases.index)], axis=1)
+        cases.attrs["features"] = features
+
+        waveforms = None
+        if with_waveforms:
+            if self.waveforms is None:
+                raise ValueError("this dataset has no waveforms")
+            stores = self._stores_waveform()
+            storing = [name for name in names if stores[(df["condition"] == name).to_numpy()].any()]
+            if waveform_from is None and len(storing) != 1:
+                raise ValueError(
+                    f"the conditions {storing} store a waveform; choose one with waveform_from"
+                )
+            chosen = storing[0] if waveform_from is None else waveform_from
+            if chosen not in storing:
+                raise ValueError(f"condition {chosen!r} stores no waveform; those that do: "
+                                 f"{storing}")  # fmt: skip
+            waveforms = np.asarray(self.waveforms[(df["condition"] == chosen).to_numpy()])
+        return cases, features, waveforms
 
     # --- traceability -------------------------------------------------------------------
 
@@ -384,6 +524,8 @@ class Dataset:
         features: Sequence[str] | None = None,
         waveforms: bool = False,
         drop_failed: bool = True,
+        by_case: bool = False,
+        waveform_from: str | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         """(X, y) for a statistical or machine-learning model.
 
@@ -392,7 +534,21 @@ class Dataset:
         of the samples, by default the fault identifier (`fault_type` and
         `fault_location` are the usual alternatives), or the result
         of a function of the samples. The library does not depend on any ML framework.
+
+        With `by_case` there is one row per drawn circuit instead of one per
+        simulation, with the measurements of all its operating conditions and the
+        waveform of the condition `waveform_from` (see `cases`).
         """
+        if by_case:
+            samples, case_features, stored = self._cases(waveform_from, waveforms)
+            keep = samples["sim_ok"].to_numpy(dtype=bool) if drop_failed else slice(None)
+            samples = samples[keep]
+            if waveforms:
+                x = stored[keep]
+            else:
+                x = samples[list(features or case_features)].to_numpy(dtype=float)
+            y = target(samples) if callable(target) else samples[target].to_numpy()
+            return x, np.asarray(y)
         keep = self.ok if drop_failed else np.ones(len(self), dtype=bool)
         if waveforms:
             if self.waveforms is None:
@@ -406,10 +562,17 @@ class Dataset:
         y = target(samples) if callable(target) else samples[target].to_numpy()
         return x, np.asarray(y)
 
-    def analysis(self, features: Sequence[str] | None = None, **kwargs):
-        """A `ReliabilityAnalysis` of the dataset."""
+    def analysis(self, features: Sequence[str] | None = None, by_case: bool = False, **kwargs):
+        """A `ReliabilityAnalysis` of the dataset.
+
+        With `by_case` it is made on one row per drawn circuit (see `cases`), which a
+        dataset whose operating conditions measure different things needs.
+        """
         from ..reliability import ReliabilityAnalysis
 
+        samples, default = self.samples, self.features
+        if by_case:
+            samples, default, _ = self._cases(None, False)
         return ReliabilityAnalysis(
-            self.samples, features or self.features, faults=self.metadata["faults"], **kwargs
+            samples, features or default, faults=self.metadata["faults"], **kwargs
         )

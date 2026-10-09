@@ -14,6 +14,7 @@ from spicefault import (
     OperatingCondition,
     SimulationConfig,
     Simulator,
+    Specification,
     VariationSet,
     Waveform,
     split_by_magnitude,
@@ -260,6 +261,118 @@ def test_waveform_is_stored_for_the_conditions_that_declare_one(tmp_path):
         Experiment(CIRCUIT, conditions=[with_one, other])
     with pytest.raises(ValueError, match="False for none"):
         OperatingCondition("x", waveform=True)
+
+
+def test_specifications_label_each_drawn_circuit_and_are_kept_with_the_dataset(setups, tmp_path):
+    import shutil
+
+    copy = tmp_path / "labelled"
+    shutil.copytree(setups.out_dir, copy)
+    dataset = Dataset(copy)
+    df = dataset.samples
+    # `vout` is measured in service (0.5 V nominal) and `offset` on the bench (0.5 V nominal)
+    limits = [Specification("vout", minimum=0.499, maximum=0.501), Specification("offset", 0.4)]
+    written = dataset.label(limits, note="first limits")
+    assert list(written.columns) == ["ok_vout", "ok_offset", "compliant", "violated"]
+    assert dataset.labels == ["ok_vout", "ok_offset", "compliant", "violated"]
+    assert dataset.verify() == [] and dataset.specifications == limits
+    labelled = Dataset(copy).samples
+    assert labelled[written.columns].equals(written.reset_index(drop=True))
+
+    # the two rows of a drawn circuit carry the same labels, read where each is measured
+    service = labelled[labelled["condition"] == "service"].reset_index(drop=True)
+    bench = labelled[labelled["condition"] == "bench"].reset_index(drop=True)
+    assert service[list(written.columns)].equals(bench[list(written.columns)])
+    expected_vout = service["vout"].between(0.499, 0.501)  # NaN, a failed simulation, is False
+    expected_offset = bench["offset"] >= 0.4
+    assert service["ok_vout"].tolist() == expected_vout.tolist() and expected_vout.any()
+    assert service["ok_offset"].tolist() == expected_offset.tolist() and expected_offset.any()
+    assert service["compliant"].tolist() == (expected_vout & expected_offset).tolist()
+    assert set(service["violated"]) == {"", "vout", "vout,offset"}
+    assert (service.loc[service["fault_id"] == "R2:open", "violated"] == "vout,offset").all()
+    assert not service.loc[~service["sim_ok"], "compliant"].any()
+    assert df.columns.tolist() == [c for c in labelled.columns if c not in written.columns]
+
+    # other limits relabel without simulating: the column of a dropped one goes away
+    wide = [Specification("vout", maximum=0.6)]
+    dataset.label(wide, note="relaxed")
+    again = Dataset(copy)
+    assert again.labels == ["ok_vout", "compliant", "violated"] and again.verify() == []
+    assert "ok_offset" not in again.samples and again.specifications == wide
+    assert again.samples["compliant"].sum() > labelled["compliant"].sum()
+    history = again.manifest.summary["history"]
+    assert [entry["type"] for entry in history] == ["specifications", "specifications"]
+    assert history[0]["specifications"][1] == {"name": "offset", "minimum": 0.4, "maximum": None}
+    assert history[1]["note"] == "relaxed" and history[1]["columns"][0] == "ok_vout"
+    assert again.manifest.summary["specifications"] == [
+        {"name": "vout", "minimum": None, "maximum": 0.6}
+    ]
+    analysis = again.analysis(features=["vout"], by_case=True, compliant="compliant",
+                              healthy_split=None)  # fmt: skip
+    assert analysis.compliant_column == "compliant"
+
+    with pytest.raises(KeyError, match="no column for the specifications \\['gain'\\]"):
+        dataset.label([Specification("gain", 1.0)])
+    with pytest.raises(ValueError, match="different names"):
+        dataset.label([Specification("vout", 0.0), Specification("vout", maximum=1.0)])
+    with pytest.raises(ValueError, match="needs a minimum or a maximum"):
+        Specification("vout")
+    with pytest.raises(ValueError, match="is above its maximum"):
+        Specification("vout", 1.0, 0.0)
+    assert Specification("x", 1.0, 2.0).met([0.5, 1.0, 2.0, 2.5, np.nan, np.inf]).tolist() == [
+        False, True, True, False, False, False,
+    ]  # fmt: skip
+
+
+def test_cases_join_the_conditions_of_each_drawn_circuit(setups, run):
+    dataset = setups.dataset()
+    df = dataset.samples
+    cases, waveforms = dataset.cases()
+    assert waveforms is None and len(cases) == len(df) // 2 == 4 + 4 * 3
+    assert cases.attrs["features"] == ["vout", "offset"]
+    assert list(cases.columns) == [
+        "fault_index", "fault_id", "fault_type", "fault_location", "fault_magnitude",
+        "fault_severity", "replica", "seed_key", "sim_ok", "p_R1_value", "p_R2_value",
+        "vout", "offset",
+    ]  # fmt: skip
+    service, bench = (df[df["condition"] == name].reset_index(drop=True)
+                      for name in ("service", "bench"))  # fmt: skip
+    assert cases["vout"].equals(service["vout"]) and cases["offset"].equals(bench["offset"])
+    assert cases["sim_ok"].tolist() == (service["sim_ok"] & bench["sim_ok"]).tolist()
+    assert cases[["fault_id", "replica", "seed_key", "p_R1_value"]].equals(
+        bench[["fault_id", "replica", "seed_key", "p_R1_value"]]
+    )
+    # the same drawn circuit under 1 V and under 2 V: the bench reads twice the output
+    ok = cases[cases["sim_ok"]]
+    assert np.allclose(ok["offset"] + 0.5, 2 * ok["vout"]) and len(ok) > 4
+
+    x, y = dataset.to_ml(by_case=True)
+    assert x.shape == (len(ok), 2) and np.isfinite(x).all() and list(y) == list(ok["fault_id"])
+    x, y = dataset.to_ml(by_case=True, features=["offset"], drop_failed=False)
+    assert x.shape == (len(cases), 1) and len(y) == len(cases)
+    analysis = dataset.analysis(by_case=True, healthy_split=None)
+    assert analysis.features == ["vout", "offset"]
+    assert analysis.counts().loc["healthy", "n"] == 4
+    with pytest.raises(ValueError, match="not finite"):
+        dataset.analysis(healthy_split=None)  # by row, each row lacks the other measurement
+    with pytest.raises(ValueError, match="no waveforms"):
+        dataset.to_ml(by_case=True, waveforms=True)
+
+    # two conditions that measure the same thing and both store the waveform
+    both = run.dataset()
+    with pytest.raises(ValueError, match="choose one with waveform_from"):
+        both.cases()
+    cases, waveforms = both.cases(waveform_from="low")
+    low = (both.samples["condition"] == "low").to_numpy()
+    assert cases.attrs["features"] == [
+        "vout_nominal", "final_v(out)_nominal", "vout_low", "final_v(out)_low",
+    ]
+    assert len(cases) == 40 and np.array_equal(waveforms, both.waveforms[low], equal_nan=True)
+    assert np.allclose(cases["vout_low"].dropna(), 0.5 * cases["vout_nominal"].dropna())
+    x, y = both.to_ml(by_case=True, waveforms=True, waveform_from="nominal")
+    assert x.shape == (int(cases["sim_ok"].sum()), 10) and np.isfinite(x).all()
+    with pytest.raises(ValueError, match="stores no waveform"):
+        both.cases(waveform_from="bench")
 
 
 def test_update_derived_columns_keeps_dataset_verifiable(run, tmp_path):
