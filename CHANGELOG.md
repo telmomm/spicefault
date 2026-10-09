@@ -7,6 +7,10 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-09
+
+Version bump to match the v0.2.0 release tag.
+
 ## [0.1.0] - 2026-10-04
 
 First version.
@@ -30,5 +34,6 @@ First version.
   probability, diagnostic coverage, severity response, robustness against tolerance,
   dependence on operating conditions, separability and ambiguity.
 
-[Unreleased]: https://github.com/telmomm/spicefault/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/telmomm/spicefault/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/telmomm/spicefault/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/telmomm/spicefault/releases/tag/v0.1.0
