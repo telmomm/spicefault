@@ -391,6 +391,78 @@ class Dataset:
             waveforms = np.asarray(self.waveforms[(df["condition"] == chosen).to_numpy()])
         return cases, features, waveforms
 
+    # --- statistics of the population ---------------------------------------------------
+
+    def _require_random(self, what: str) -> None:
+        """Probabilities are estimated from circuits drawn at random, not chosen."""
+        design = self.metadata.get("design")
+        if design:
+            raise ValueError(
+                f"{what} is a probability over randomly drawn circuits; the samples of this "
+                f"dataset were designed ({design.get('kind', 'design')})"
+            )
+
+    def statistics(
+        self,
+        features: Sequence[str] | None = None,
+        quantiles: Sequence[float] = (0.01, 0.5, 0.99),
+        confidence: float = 0.95,
+        by_case: bool = False,
+    ) -> pd.DataFrame:
+        """The distribution of each measurement: one row per fault, operating condition
+        and measurement, with the mean, the spread, the quantiles and their intervals
+        (see `spicefault.statistics.describe`), and the failed simulations counted.
+
+        With `by_case` the rows are per fault, over one row per drawn circuit (see
+        `cases`), which a dataset whose conditions measure different things needs for
+        the count of failed simulations to be that of the circuits.
+        """
+        from ..statistics import describe
+
+        self._require_random("the distribution of a measurement")
+        if by_case:
+            cases, case_features, _ = self._cases(None, False)
+            return describe(cases, features or case_features, ("fault_id",), "sim_ok",
+                            quantiles, confidence)  # fmt: skip
+        return describe(self.samples, features or self.features, ("fault_id", "condition"),
+                        "sim_ok", quantiles, confidence)  # fmt: skip
+
+    def yield_report(
+        self,
+        specifications: Sequence[Specification] | None = None,
+        fault_id: str = HEALTHY_ID,
+        confidence: float = 0.95,
+        interval: str = "wilson",
+    ) -> pd.DataFrame:
+        """Yield of the fault-free circuits: the fraction that meets each specification
+        and all of them, with intervals, bounds for the failed simulations and the
+        margin to each limit (see `spicefault.statistics.yield_report`).
+
+        `specifications` default to those the dataset was labelled with; others can be
+        given, and nothing is simulated or written. The yield is computed per drawn
+        circuit, each quantity read in the operating condition that measures it. With
+        `fault_id` it is the same report for the circuits with that fault.
+        """
+        from ..statistics import yield_report
+
+        self._require_random("a yield")
+        specifications = list(self.specifications if specifications is None else specifications)
+        if not specifications:
+            raise ValueError("no specifications: pass them, or label the dataset first")
+        cases, _, _ = self._cases(None, False)
+        missing = [s.name for s in specifications if s.name not in cases]
+        if missing:
+            raise KeyError(
+                f"no column of the drawn circuits for the specifications {missing}; a "
+                f"measurement made under several conditions is `<name>_<condition>`"
+            )
+        chosen = cases[(cases["fault_id"] == fault_id).to_numpy()]
+        if chosen.empty:
+            raise KeyError(f"the dataset has no circuit with fault {fault_id!r}")
+        return yield_report(
+            chosen, specifications, chosen["sim_ok"].to_numpy(dtype=bool), confidence, interval
+        )
+
     # --- traceability -------------------------------------------------------------------
 
     def _row(self, sample_id: int) -> pd.Series:

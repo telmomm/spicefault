@@ -44,10 +44,12 @@ nav:
       - Experiments: api/experiments.md
       - Measurements: api/measurements.md
       - Dataset: api/dataset.md
+      - Statistics: api/statistics.md
       - Reliability: api/reliability.md
   - Definitions:
       - Fault model: FAULT_MODEL.md
       - Reliability metrics: RELIABILITY_METRICS.md
+      - Statistics of a population: STATISTICS.md
   - Project:
       - Scope of the library: scope.md
       - Scientific scope: SCIENTIFIC_SCOPE.md

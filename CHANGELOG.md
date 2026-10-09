@@ -9,6 +9,16 @@ public interface may change between minor versions.
 
 ### Added
 
+- `Campaign`: the neutral name of a campaign, with `samples=`. Without faults it is a
+  Monte Carlo study of the healthy population. `FaultCampaign` and `samples_per_fault`
+  remain.
+- `Dataset.statistics` and `spicefault.statistics.describe`: mean, spread and quantiles
+  of each measurement, with a distribution-free interval for the quantiles; a quantile
+  the sample cannot support is reported as missing. `ecdf` and `quantile_interval`.
+- `Dataset.yield_report` and `spicefault.statistics.yield_report`: yield per
+  specification and overall with binomial intervals, bounds for the failed simulations
+  and the margin to each limit. `samples_for_half_width` and `zero_failure_bound`.
+- Page *Statistics of a population*, with the definitions and estimators.
 - Page *Scope of the library*: the criterion for what belongs in it, and recipes for what
   is left to pandas, SciPy, SALib and scikit-learn.
 
