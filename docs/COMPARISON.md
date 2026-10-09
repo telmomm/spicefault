@@ -1,6 +1,6 @@
 # Comparison with existing approaches
 
-Status: second version. spicelib, the closest open library, was read and run. PySpice was only inspected. The throughput comparison with a direct script still needs the scalability benchmark on an idle machine ([RUNBOOK.md](RUNBOOK.md)).
+Status: third version. spicelib, the closest open library, was read and run, in versions 1.6.3 and 1.6.4 with the same result. PySpice was run. The throughput comparison with a direct script still needs the scalability benchmark on an idle machine ([RUNBOOK.md](RUNBOOK.md)).
 
 This is a comparison of scope. With any of these tools one can write what is missing; the direct script of §4 is exactly that exercise.
 
@@ -9,7 +9,7 @@ This is a comparison of scope. With any of these tools one can write what is mis
 | Approach | Version | How it was examined |
 |---|---|---|
 | spicelib | 1.6.3, GPL-3.0 | Its README (1,395 lines, shipped with the package) was read. Its source was read where the README was silent. It was run with ngspice 44.2 on the Sallen–Key filter of `validation/`: `scripts/spicelib_probe.py` repeats the checks |
-| PySpice | 1.5 | Installed; its modules listed and searched for tolerance, fault and campaign functions. Not run, documentation not read |
+| PySpice | 1.5, GPL-3.0 | Installed; its 53 modules listed and their source searched for tolerance, fault and campaign functions; run with ngspice 44.2 on a divider with and without a solution. Documentation not read |
 | Direct script against ngspice | `validation/direct/sallen_key_direct.py` | Written for the Sallen–Key campaign; tested to give the same measurements as `spicefault` for every fault |
 | `spicefault` | this repository | Its tests |
 
@@ -111,12 +111,12 @@ The script does not resume, keeps only "ok or not" per simulation, records no de
 
 ## 6. PySpice
 
-An interface to ngspice and Xyce in which the circuit is built in Python. In version 1.5 no module for tolerance analysis, faults or campaigns was found by listing and searching its modules. It was not run and its documentation was not read, so this says only that nothing of the kind is exposed under an obvious name.
+An interface to ngspice and Xyce in which the circuit is built in Python. In version 1.5 no module for tolerance analysis, faults or campaigns was found by listing its modules and searching their source; the one related thing is a wrapper of the random voltage source of ngspice (`TRRANDOM`). Run with ngspice 44.2: its subprocess interface could not read the output of that version ("Expected label Circuit instead of Note"); its shared-library interface ran once given the path of `libngspice`. A circuit without a solution raises an exception (`NgSpiceCommandError`), so a failed analysis is not taken for a success, and recording it is left to the caller. Its documentation was not read.
 
 ## 7. Still to do
 
-1. Send the two findings about spicelib (unseeded Monte Carlo, failed ngspice analyses counted as successful) to its maintainer, and note the answer.
+1. Send the two findings about spicelib (unseeded Monte Carlo, failed ngspice analyses counted as successful) to its maintainer, and note the answer. A message is drafted with the manuscript; it has not been sent.
 2. Decide the licence, then write the optional spicelib backend.
 3. Implement the Sallen–Key task with spicelib's own Monte Carlo and compare effort and throughput, as for the direct script.
-4. Read the documentation of PySpice, and repeat the check of spicelib on a newer version before submission.
+4. Read the documentation of PySpice. The check of spicelib was repeated on 1.6.4, released on 4 October 2026; repeat it again if a newer version appears before submission.
 5. Run the scalability benchmark on an idle machine.

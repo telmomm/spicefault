@@ -1,6 +1,6 @@
 # Experiment plan
 
-Status: revised for validation on generic circuits. The instruments exist (campaign engine, metrics, benchmarks); the validation circuits and the runs on them do not yet.
+Status: revised for validation on generic circuits. The instruments and the validation circuits exist. The runs stored in `results/` and `benchmarks/results/` were made with version 0.1.0, on a machine that was not idle, and with earlier netlists of the biquad and the regulator: none of them is to be reported, and all are to be run again with the frozen release.
 
 This document fixes the protocol of the experiments that the manuscript will report: design, outputs, acceptance criteria and numerical tolerances. Research questions are those of [SCIENTIFIC_SCOPE.md](SCIENTIFIC_SCOPE.md) §4, validation circuits those of its §8, metrics those of [RELIABILITY_METRICS.md](RELIABILITY_METRICS.md).
 
@@ -15,7 +15,7 @@ Thresholds marked *proposed* are starting values. They are to be confirmed or re
 | Four-op-amp biquad high-pass filter | A, C, D, E, G | Larger benchmark; workload of the scalability measurements; ambiguity analysis |
 | Linear voltage regulator | A, D, E, F | Device-level models; operating conditions, temperature included |
 
-Every circuit comes with its netlist, its fault rules, its measurements and its specification limits, in `validation/`. The specification limits of the two filters are the range of the central 99 % of healthy circuits at the declared tolerances: with the tolerances of the literature these filters have no tight specification to meet (the peak gain of healthy Sallen–Key circuits goes from 1 to 23). The limits of the regulator are engineering limits. All were fixed before any fault campaign.
+Every circuit comes with its netlist, its fault rules, its measurements and its specification limits, in `validation/`. The Sallen–Key filter is the circuit of Aminian and Aminian (2000, doi:10.1109/82.823545, Fig. 3) and the biquad that of Aminian, Aminian and Collins (2002, doi:10.1109/TIM.2002.1017726, Fig. 2), with their component values and designators; the regulator has the SPICE models published by the manufacturer of its devices, named in its netlist. The specification limits of the two filters are the range of the central 99 % of healthy circuits at the declared tolerances: with the tolerances of the literature these filters have no tight specification to meet (the peak gain of healthy Sallen–Key circuits goes from 1 to 23). The limits of the regulator are engineering limits. All were fixed before any fault campaign.
 
 The reference for what the framework costs is a script written directly against ngspice for the same task (Experiment C and the comparison of SCIENTIFIC_SCOPE.md §7). It is written once, frozen, and kept in the repository.
 
@@ -70,11 +70,13 @@ Timing: fixed workload; at least 5 repetitions per configuration; report median 
 - **Design:** for each validation circuit, a set of decks covering every fault type is run directly with `ngspice -b` and through `spicefault`. For the closed-form circuits, results are also compared with theory.
 - **Output:** maximum absolute and relative difference per vector.
 - **Acceptance:** §3, first two rows.
-- **State:** the unit tests do this for the closed-form circuits; the validation circuits are pending.
+- **State:** the unit tests do this for the closed-form circuits. For the validation circuits it is automated as `python -m benchmarks.correctness.run`: the healthy circuit and every fault are simulated through `spicefault` and with `ngspice -b` launched apart, and the vectors are compared bit by bit with a raw-file reader of its own. A first run with version 0.4.0 gave 219 decks and 408,938 values, all identical; it is to be run again with the frozen release.
 
 ### B. Reproducibility
 
 Automated as `python -m benchmarks.reproducibility.run`.
+
+Two things the runs made so far do not cover: L3 has not been measured, and every sample of both campaigns ended with `SUCCESS`, so the reproducibility of the failure statuses is not exercised by the validation circuits. A workload with faults that do not converge is needed for the second.
 
 - **Question:** are results independent of parallelism and repeatable? (RQ3)
 - **Design:** the same campaign with a fixed seed run with 1 worker and with the maximum available; run twice with the same worker count; with another chunk size; interrupted and resumed; then samples simulated again from the dataset folder. A subset rerun on a second platform for L3.
@@ -94,6 +96,7 @@ Automated as `python -m benchmarks.scalability.run`.
 - **Output:** wall time, simulations per second, $S(N) = T_1 / T_N$, $E(N) = S(N)/N$, peak memory, bytes written, and a breakdown of the time of one sample into netlist generation, simulator process, output parsing, measurement and storage.
 - **Acceptance:** none on speed-up, which is reported as measured. *Proposed* for overhead: `spicefault` throughput at least 0.95 of the direct script at equal worker count.
 - **Caveat:** the development machine has 4 performance and 4 efficiency cores, so efficiency beyond 4 workers falls for hardware reasons. For the paper the curve should be measured on a machine with homogeneous cores.
+- **Found so far** (version 0.1.0, development machine, not to be reported): throughput relative to the direct script of 0.995, 0.954, 0.972 and 0.977 at 1, 2, 4 and 8 workers in one run and 1.059, 0.959, 1.055 and 0.938 in another, so the proposed 0.95 was met in seven of eight configurations; the simulator process is 92 to 93 % of the time of a sample. The direct script exists for the Sallen–Key campaign only, so the comparison cannot be made on the biquad without writing another.
 
 Recovery time, listed in the project specification, is measured as the time to launch again a campaign whose chunks are complete, and the number of completed simulations that are repeated (none: an interruption loses at most the chunk in progress).
 
@@ -105,6 +108,7 @@ Automated as `python -m benchmarks.fault_coverage.run`.
 - **Design:** generate the fault universe of each validation circuit from its rules; build the campaign; produce the coverage matrix and the exclusion list.
 - **Output:** coverage matrix per circuit; counts of components × fault types × magnitudes × operating conditions; structural coverage (M10); components outside the fault model; parametric faults partly inside the tolerance band.
 - **Acceptance:** every pair in the universe is simulated or excluded with a reason.
+- **Gap:** no fault is excluded in any validation circuit, so the exclusion record is shown only by the unit tests. One justified exclusion in a validation circuit would show it in the evaluation.
 
 ### E. Impact of variability
 
@@ -141,11 +145,11 @@ Automated as `python -m benchmarks.fault_coverage.run`.
 | Step | Content | Long runs |
 |---|---|---|
 | 1 | Literature search and positioning: first version in RELATED_WORK.md; full texts pending | None |
-| 2 | The three validation circuits: done, in `validation/`; schematics and device models to be taken from cited sources | Short checks only |
+| 2 | The three validation circuits: done, in `validation/`, with the schematics of the two filters and the device models of the regulator taken from cited sources | Short checks only |
 | 3 | The direct ngspice script for the comparison task: done, `validation/direct/` | Short checks only |
 | 4 | Scripts of Experiments E, F and G: done, `validation/experiments/` | Short checks only |
 | 5 | All campaigns and benchmarks, launched together on an idle machine: commands in RUNBOOK.md | A, B, C, D, E, F, G |
-| 6 | State-of-the-art comparison table: first version in COMPARISON.md; the libraries still to be run | None |
+| 6 | State-of-the-art comparison table: in COMPARISON.md; spicelib and PySpice run | None |
 | 7 | Release: licence, citation file, documentation, archive with DOI | None |
 | 8 | Manuscript | None |
 
@@ -156,7 +160,7 @@ Steps 1 to 4 need no long simulation and can be done in any order; the methods s
 | Threat | Mitigation |
 |---|---|
 | Results specific to one ngspice version | Record the version; L3 comparison on a second version |
-| Fidelity of the device models | Declared; vendor or published model parameters with their source |
+| Fidelity of the device models | Declared; manufacturer models with their source. The zener model alone drifts +3.13 mV/K where its data sheet gives -3.5 to +0.2 mV/K, so the netlist adds a declared correction that brings it to the middle of that range; the temperature behaviour of the two transistor models is not checked against their data sheets |
 | Open and short resistances chosen arbitrarily | Recorded; sensitivity of the results to `r_open` checked on one circuit |
 | Detectability depends on the feature set and the decision rule | Both reported with every figure; at least two rules compared |
 | Equal weights across fault conditions | Stated; weighted variant if failure-mode data with a source are available |

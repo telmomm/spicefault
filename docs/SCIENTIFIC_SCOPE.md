@@ -4,7 +4,7 @@ Status: revised. The first version took an ECG front-end as its main case study;
 
 Companion documents: [FAULT_MODEL.md](FAULT_MODEL.md), [RELIABILITY_METRICS.md](RELIABILITY_METRICS.md), [EXPERIMENT_PLAN.md](EXPERIMENT_PLAN.md), [RELATED_WORK.md](RELATED_WORK.md).
 
-This document fixes what `spicefault` is meant to demonstrate, in terms precise enough that the work can be checked against it. The target venue is *IEEE Transactions on Reliability*, so the contribution is a reliability methodology; the software is the instrument that makes it reproducible.
+This document fixes what `spicefault` is meant to demonstrate, in terms precise enough that the work can be checked against it. The work is now planned as two articles: one on the framework, for *IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems*, which reports Experiments A to D, and one on the reliability methodology, for *IEEE Transactions on Reliability*, which reports E to G. This document was written for the second and its research questions are numbered differently from those of the first.
 
 ## 1. Problem statement
 
@@ -123,7 +123,7 @@ A first literature search is in [RELATED_WORK.md](RELATED_WORK.md). Its main con
 
 ## 8. Validation circuits
 
-The circuits are generic and of increasing size. None belongs to a particular application domain. The two filters are the benchmarks of the fault-diagnosis literature (RELATED_WORK.md §2.4: named in 85 and 45 of 137 abstracts); a regulator is part of a published analog test benchmark (§2.1). They are implemented in `validation/`. Their exact schematics and values are still to be taken from a cited source (open decision 1).
+The circuits are generic and of increasing size. None belongs to a particular application domain. The two filters are the benchmarks of the fault-diagnosis literature (RELATED_WORK.md §2.4: named in 85 and 45 of 137 abstracts); a regulator is part of a published analog test benchmark (§2.1). They are implemented in `validation/`. The Sallen–Key filter is the 25 kHz circuit of Aminian and Aminian (2000, doi:10.1109/82.823545) and the biquad the 10 kHz circuit of Aminian, Aminian and Collins (2002, doi:10.1109/TIM.2002.1017726); the regulator uses the SPICE models published by the manufacturer of its devices.
 
 | Circuit | Role | Why |
 |---|---|---|
@@ -150,7 +150,7 @@ Dependence on an external simulator and its version; convergence failures under 
 
 ## 11. Open decisions
 
-1. **Validation circuits** (§8): align the schematics and values of the two filters with a cited source, and replace the device models of the regulator by vendor models with their source.
+1. **Validation circuits** (§8): done for the schematics of the two filters and for the device models of the regulator. The manufacturer models are copied intact under their own notice, which is not the licence of the repository. Open: the temperature drift of the reference is a declared correction to the middle of the data-sheet range, not that of a measured part, and the temperature behaviour of the two transistor models is not checked against their data sheets; both matter for Experiment F.
 2. **Sharper criterion for RQ6** (§4).
 3. **Literature**: the follow-up of RELATED_WORK.md §4 (full texts, software documentation, citation chaining, a second database).
 4. **Licence**: MIT or BSD-3-Clause.

@@ -94,6 +94,18 @@ The effect of tolerance on parametric fault detection is established, and two re
 
 So the observation that a parametric fault inside the tolerance band cannot be detected, and the idea of a minimum detectable deviation, are not new. What `spicefault` adds is a way to compute them for any circuit and fault list, as a report of the campaign (`tolerance_overlap`, `minimum_detectable`, `robustness`), with intervals. The manuscript must cite the 2003 result when it presents these.
 
+### 2.6 Where the two benchmark filters come from
+
+Read in the full texts.
+
+- The Sallen–Key band-pass filter, with 5 % resistors, 10 % capacitors, faults of ±50 % and a single 5 V pulse of 10 µs as stimulus, is in *Neural-network based analog-circuit fault diagnosis using wavelet transform as preprocessor* (Aminian and Aminian, IEEE Trans. Circuits Syst. II, 2000, doi:10.1109/82.823545), which takes its circuits from *Linear circuit fault diagnosis using neuromorphic analyzers* (Spina and Upadhyaya, same journal, 1997, doi:10.1109/82.558453; not read). Its values are R1 = 5.18 kΩ, R2 = 1 kΩ, R3 = 2 kΩ, R4 = R5 = 4 kΩ, C1 = C2 = 5 nF, for a centre frequency of 25 kHz. Each fault is simulated with the other components varying within tolerance. Its second circuit is not the biquad used later: it is a two-stage low-pass filter with 26 resistors.
+- The four-op-amp biquad high-pass filter, with a cut-off of 10 kHz, is in *Analog fault diagnosis of actual circuits using neural networks* (Aminian, Aminian and Collins, IEEE Trans. Instrum. Meas., 2002, doi:10.1109/TIM.2002.1017726). That paper uses another Sallen–Key filter, with R1 = 1 kΩ and R2 = 3 kΩ, which it calls a 160 kHz filter; with those values and the same topology the centre frequency computes to about 26 kHz, so the figure may be in rad/s. This has not been confirmed.
+- So two Sallen–Key circuits go by the name of the benchmark. *Application of DBN and GWO-SVM in analog circuit fault diagnosis* (Sci. Rep. 2021, doi:10.1038/s41598-021-86916-6) uses the one of 2002; *Enhanced analog circuit fault diagnosis via continuous wavelet transform and dual-stream convolutional fusion* (Sci. Rep. 2025, doi:10.1038/s41598-025-02596-6) prints R4 = 2.8 kΩ, which is in neither. `validation/` has the Sallen–Key filter of 2000 and the biquad of 2002.
+- How those two recent studies generate their data: the first with PSpice, of unstated version, by a Monte Carlo analysis of 240 instances per fault class; the second with Multisim 14.0.593 and 200 Monte Carlo runs. Neither states a seed or what was done with simulations that did not converge; their data are said to be in the article and available on request.
+- The paper of 2002 compares simulation with hardware: features measured on the built circuits lie closer together and overlap more across fault classes than simulated ones, which it attributes to simulations not covering the tolerance of every component, and it cannot separate the fault-free class from one of the faults (R2 high) within tolerances. This is evidence for the study of tolerance and detectability.
+
+IEEE Std 2427-2025 was published on 9 January 2026: it is a standard, no longer a draft.
+
 ## 3. Positioning
 
 What the search supports, and what it does not:
@@ -114,5 +126,5 @@ The contribution to defend is therefore methodological and practical, not a new 
 1. Read the full text of the works of §2.1 and §2.2, in particular the 2023 systematic review, the IEEE standard and the two tools, to confirm what they do about reproducibility, failed simulations and provenance.
 2. Establish what PySpice and spicelib provide, from their documentation and by running them, for the comparison table.
 3. Follow citations from the 2023 review and from the two ITC papers.
-4. Take the schematics and component values of the two benchmark filters from a cited source. The values used so far in `validation/` are stated there with their origin.
+4. Done: the schematics and component values of the two benchmark filters are those of their sources (§2.6).
 5. Repeat the search in Scopus or Web of Science before submission.
