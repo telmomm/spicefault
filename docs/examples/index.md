@@ -21,6 +21,7 @@ python examples/01_quickstart.py
 | [Reliability analysis](reliability.md) | `05_reliability.py` | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F05_reliability.ipynb) | Detection probability with its interval, the smallest detectable deviation, the faults that look alike, and detection against the tolerance scale. |
 | [Operating conditions](conditions.md) | `06_operating_conditions.py` | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F06_operating_conditions.ipynb) | The same drawn circuits under three operating conditions, and the detection of each fault under each. |
 | [Custom variation and measurement](custom.md) | `07_custom.py` | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F07_custom.ipynb) | Two resistors drawn together with a recorded label, and a measurement defined by a function. |
+| [Monte Carlo and yield](monte-carlo.md) | `08_monte_carlo.py` | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F08_monte_carlo.ipynb) | A campaign without faults: the distribution of each measurement with the intervals of its quantiles, and the yield against limits that can be changed without simulating again. |
 
 They share one study, defined in `examples/rc_study.py`: an RC low-pass filter with a
 resistive load, 18 faults, 1 % resistors and 5 % capacitors.

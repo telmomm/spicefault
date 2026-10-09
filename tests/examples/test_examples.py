@@ -23,6 +23,12 @@ EXPECTED = {
     "05_reliability.py": ["smallest deviation detected", "critical_tolerance"],
     "06_operating_conditions.py": ["detection probability of each fault under each condition"],
     "07_custom.py": ["resistor_grade", "spread of the DC gain"],
+    "08_monte_carlo.py": [
+        "problems found by verify(): []",
+        "yield per specification and of all of them",
+        "the failure probability is below 0.0030, not zero",
+        "circuits for a yield near 0.95 within +-0.005: 7299",
+    ],
 }
 
 
@@ -34,9 +40,9 @@ def test_binder_notebooks_match_the_documentation_scripts():
     root = EXAMPLES.parent
     notebook_dir = root / "binder" / "notebooks"
     script_stems = {Path(name).stem for name in SCRIPTS}
-    notebook_stems = {path.stem for path in notebook_dir.glob("0[1-7]_*.ipynb")}
+    notebook_stems = {path.stem for path in notebook_dir.glob("0[1-9]_*.ipynb")}
     assert notebook_stems == script_stems
-    for path in notebook_dir.glob("0[1-7]_*.ipynb"):
+    for path in notebook_dir.glob("0[1-9]_*.ipynb"):
         notebook = nbformat.read(path, as_version=4)
         nbformat.validate(notebook)
         assert notebook.metadata["kernelspec"]["name"] == "python3"

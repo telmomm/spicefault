@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / "examples"
 NOTEBOOKS = ROOT / "binder" / "notebooks"
 PAIR_FORMATS = "ipynb,../../examples//py:percent"
-SCRIPTS = sorted(EXAMPLES.glob("0[1-7]_*.py"))
+SCRIPTS = sorted(EXAMPLES.glob("0[1-9]_*.py"))
 
 
 def _script_notebook(path: Path):

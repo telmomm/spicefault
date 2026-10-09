@@ -24,6 +24,7 @@ nav:
       - Normal variation: guide/variation.md
       - Experiments and campaigns: guide/experiments.md
       - From a schematic: guide/from-schematic.md
+      - Monte Carlo and yield: guide/monte-carlo.md
       - Datasets: guide/datasets.md
       - Reliability analysis: guide/reliability.md
   - Examples:
@@ -35,6 +36,7 @@ nav:
       - Reliability analysis: examples/reliability.md
       - Operating conditions: examples/conditions.md
       - Custom variation and measurement: examples/custom.md
+      - Monte Carlo and yield: examples/monte-carlo.md
   - API reference:
       - Circuit: api/circuit.md
       - Faults: api/faults.md

@@ -11,7 +11,7 @@ public interface may change between minor versions.
 
 - `Campaign`: the neutral name of a campaign, with `samples=`. Without faults it is a
   Monte Carlo study of the healthy population. `FaultCampaign` and `samples_per_fault`
-  remain.
+  remain. Guide and example *Monte Carlo and yield*, with its Binder notebook.
 - `Dataset.statistics` and `spicefault.statistics.describe`: mean, spread and quantiles
   of each measurement, with a distribution-free interval for the quantiles; a quantile
   the sample cannot support is reported as missing. `ecdf` and `quantile_interval`.

@@ -115,7 +115,8 @@ experiment.nominal(fault="R1:open")           # the nominal circuit with one fau
 ## Fault campaign
 
 `FaultCampaign` takes the same definitions as `Experiment` and writes the results to
-a dataset folder. A long campaign can be interrupted and launched again: it continues
+a dataset folder. It is the class `Campaign`: without faults, the same campaign is a
+[Monte Carlo study](monte-carlo.md) of the healthy population. A long campaign can be interrupted and launched again: it continues
 after the last complete chunk.
 
 ```python
