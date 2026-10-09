@@ -949,7 +949,7 @@ Example:
   "fault_severity": 1.0,
   "simulator": "ngspice",
   "simulator_version": "43",
-  "spicefault_version": "0.2.0"
+  "spicefault_version": "0.2.1"
 }
 ```
 

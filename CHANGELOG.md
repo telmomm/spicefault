@@ -7,6 +7,17 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-09
+
+### Changed
+
+- The Binder examples are split into guided notebook steps, stored with their outputs.
+
+### Fixed
+
+- ngspice is found in the common installation folders when it is not on `PATH`.
+- The banner of the README is shown on PyPI.
+
 ## [0.2.0] - 2026-10-09
 
 ### Added
@@ -33,10 +44,6 @@ public interface may change between minor versions.
 - Binder notebooks for the examples, paired with the `.py` sources through Jupytext.
 - Guide *From a schematic*, and the spicefault brand in the README and the documentation.
 
-### Fixed
-
-- ngspice is found in the common installation folders when it is not on `PATH`.
-
 ## [0.1.0] - 2026-10-04
 
 First version.
@@ -60,6 +67,7 @@ First version.
   probability, diagnostic coverage, severity response, robustness against tolerance,
   dependence on operating conditions, separability and ambiguity.
 
-[Unreleased]: https://github.com/telmomm/spicefault/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/telmomm/spicefault/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/telmomm/spicefault/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/telmomm/spicefault/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/telmomm/spicefault/releases/tag/v0.1.0

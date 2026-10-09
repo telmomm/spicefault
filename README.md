@@ -1,7 +1,7 @@
 # spicefault
 
 <p align="center">
-  <img src="docs/assets/branding/github-banner.png" alt="spicefault: reproducible fault injection for electronic circuits" width="100%">
+  <img src="https://raw.githubusercontent.com/telmomm/spicefault/main/docs/assets/branding/github-banner.png" alt="spicefault: reproducible fault injection for electronic circuits" width="100%">
 </p>
 
 [![PyPI](https://img.shields.io/pypi/v/spicefault)](https://pypi.org/project/spicefault/)
