@@ -8,7 +8,7 @@ authors:
 repository-code: "https://github.com/telmomm/spicefault"
 url: "https://spicefault.readthedocs.io"
 license: MIT
-version: 0.2.1
+version: 0.3.0
 date-released: "2026-10-09"
 keywords:
   - SPICE
