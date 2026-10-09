@@ -118,7 +118,9 @@ class FaultCampaign:
     It takes the arguments of `Experiment` (with `samples_per_fault` for `samples`), or
     an experiment already built through `from_experiment`. The results go to
     `out_dir` as a dataset: `samples.parquet`, `waveforms.npy` if a waveform is
-    declared, and `manifest.json`.
+    declared, and `manifest.json`. `waveforms.npy` has one row per sample of the
+    conditions that store a waveform; the manifest names them under
+    `waveform_conditions` when they are not all of them.
     """
 
     def __init__(
@@ -271,8 +273,10 @@ class FaultCampaign:
             report = self.validate()
             if not report.ok:
                 raise ValueError(f"the campaign is not valid:\n{report}")
+        plan = e.plan()
+        stores = [e.waveform_for(sample.condition_index) is not None for sample in plan]
         return run_campaign(
-            e.plan(),
+            plan,
             _simulate_with_tags,
             (e, self.tag_columns),
             self.out_dir,
@@ -284,6 +288,8 @@ class FaultCampaign:
             summary=self._summary,
             files={CIRCUIT_FILE: e.circuit.to_netlist()},
             user_metadata=self.user_metadata,
+            # the file holds no row for the conditions that store no waveform
+            waveform_rows=None if all(stores) else stores,
         )
 
     def _summary(self, df: pd.DataFrame) -> dict:
@@ -294,7 +300,16 @@ class FaultCampaign:
         measurements = list(e.measurement_columns)
         parameters = {f"p_{c}_{p}": [c, p] for c, p in targets}
         known = {*DEFINITION_COLUMNS, *parameters, *measurements}
+        storing = [
+            condition.name
+            for index, condition in enumerate(e.conditions)
+            if e.waveform_for(index) is not None
+        ]
+        partial = {} if len(storing) in (0, len(e.conditions)) else {
+            "waveform_conditions": storing
+        }
         return {
+            **partial,
             "n_completed": int(df["sim_ok"].sum()),
             "n_failed": int((~df["sim_ok"]).sum()),
             "status_counts": {k: int(v) for k, v in sorted(status.items())},

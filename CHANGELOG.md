@@ -7,6 +7,15 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+### Changed
+
+- `waveforms.npy` holds only the rows of the samples whose operating condition stores a
+  waveform, and the manifest names those conditions under `waveform_conditions`.
+  `Dataset.waveforms` reads as before, aligned with the samples and with `NaN` where
+  nothing is stored, through `StoredWaveforms`, which also gives the array of the file
+  (`stored`) and the sample of each of its rows (`rows`). Datasets in which every
+  condition stores the waveform, and those written by earlier versions, are unchanged.
+
 ## [0.3.0] - 2026-10-09
 
 ### Added

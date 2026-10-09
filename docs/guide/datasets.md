@@ -5,7 +5,7 @@ A campaign writes a folder that stands on its own:
 | File | Content |
 |---|---|
 | `samples.parquet` | One row per simulation: what was injected, its status, the realised component values, the measurements |
-| `waveforms.npy` | float32 `[samples, points]`, aligned with the table row by row (if a waveform was declared); `NaN` for a failed simulation and for a condition that stores none |
+| `waveforms.npy` | float32 `[stored samples, points]` (if a waveform was declared): one row per sample of the conditions that store one, in sample order; `NaN` for a failed simulation. `Dataset.waveforms` reads it aligned with the table, with `NaN` for the conditions that store none |
 | `metadata.json` | The definition of the experiment: faults, variations, conditions, analyses, measurements, seed |
 | `circuit.cir` | The source netlist |
 | `manifest.json` | The record of the run: versions, platform, workers, counts by status, the git commit of the project that ran it (`source`), and the size and SHA-256 of every file |

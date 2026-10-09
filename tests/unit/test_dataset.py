@@ -129,6 +129,10 @@ def test_samples_carry_what_was_injected(run):
 
 def test_manifest_is_a_typed_record(run):
     manifest = run.dataset().manifest
+    # every condition stores the waveform: one row per sample, and nothing to say about it
+    assert "waveform_conditions" not in manifest.summary
+    assert np.load(run.out_dir / "waveforms.npy").shape == (80, 10)
+    assert isinstance(run.dataset().waveforms, np.memmap)
     assert manifest.schema_version == 1 and manifest.n_samples == 80 and manifest.workers == 2
     assert manifest.spicefault_version and manifest.python and manifest.platform
     assert manifest.elapsed_total_s >= 0 and manifest.resumed is False
@@ -248,6 +252,33 @@ def test_waveform_is_stored_for_the_conditions_that_declare_one(tmp_path):
     assert record[0]["waveform"]["n_points"] == 10 and "waveform" not in record[1]
     rebuilt = dataset.experiment(simulator=SIMULATOR, conditions=conditions)
     assert dataset.reproduce(n=12, experiment=rebuilt)["waveform_abs_diff"].dropna().max() == 0.0
+
+    # the file holds only the rows of the condition that stores the waveform
+    stored_rows = np.load(c.out_dir / "waveforms.npy")
+    assert stored_rows.shape == (in_service.sum(), 10) and len(stored_rows) == len(dataset) // 2
+    assert dataset.manifest.summary["waveform_conditions"] == ["service"]
+    assert dataset.waveforms.stored.shape == stored_rows.shape
+    assert dataset.waveforms.rows.tolist() == np.flatnonzero(in_service).tolist()
+    assert np.array_equal(dataset.waveforms[in_service], stored_rows, equal_nan=True)
+    full = np.asarray(dataset.waveforms)
+    assert full.shape == (len(dataset), 10) and full.dtype == np.float32
+    assert np.array_equal(dataset.waveforms[4], full[4], equal_nan=True)
+    assert np.isnan(dataset.waveforms[5]).all() and dataset.waveforms[4:8, :3].shape == (4, 3)
+    assert np.array_equal(dataset.waveforms[[6, 1, 0]], full[[6, 1, 0]], equal_nan=True)
+    loaded, waves, _ = c.load(drop_failed=False)
+    assert np.array_equal(waves, full, equal_nan=True) and len(loaded) == len(waves)
+    assert len(c.load()[1]) == dataset.ok.sum()
+    cases, of_cases = dataset.cases()
+    assert np.array_equal(of_cases, stored_rows, equal_nan=True) and len(cases) == len(of_cases)
+
+    # a file that lost rows is found
+    import shutil
+
+    short = tmp_path / "short"
+    shutil.copytree(c.out_dir, short)
+    np.save(short / "waveforms.npy", stored_rows[:-1])
+    problems = Dataset(short).verify()
+    assert "waveforms and samples have different lengths" in problems
 
     # the waveform of the experiment is the default, and a condition can decline it
     silent = OperatingCondition("bench", settings={("V1", "dc"): 2.0}, waveform=False)

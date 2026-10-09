@@ -17,7 +17,7 @@ from ..faults import FaultSet
 from ..variation import VariationSet
 from .manifest import Manifest, file_record
 from .specification import Specification
-from .store import SAMPLES, WAVEFORMS, load_metadata
+from .store import SAMPLES, WAVEFORMS, load_metadata, read_waveforms
 
 CIRCUIT_FILE = "circuit.cir"
 HEALTHY_ID = "healthy"
@@ -55,8 +55,10 @@ class Dataset:
 
     `samples` has one row per simulation, failed ones included; `waveforms`, if any,
     is aligned with it row by row, with NaN where a simulation failed or its
-    operating condition stores no waveform. `metadata` is the definition of the experiment and
-    `manifest` the record of the run.
+    operating condition stores no waveform. The file holds no row for those
+    conditions: `waveforms` is then a `StoredWaveforms`, which reads like the full
+    array and gives the array of the file as `waveforms.stored`. `metadata` is the
+    definition of the experiment and `manifest` the record of the run.
     """
 
     def __init__(self, path: str | Path):
@@ -64,8 +66,12 @@ class Dataset:
         self.manifest = Manifest.read(self.path)
         self.metadata = load_metadata(self.path)
         self.samples = pd.read_parquet(self.path / SAMPLES)
-        file = self.path / WAVEFORMS
-        self.waveforms = np.load(file, mmap_mode="r") if file.exists() else None
+        try:
+            self.waveforms = read_waveforms(
+                self.path, self.samples, self.manifest.summary, mmap=True
+            )
+        except ValueError:  # the file does not have the rows the manifest says: see verify
+            self.waveforms = None
         columns = self.manifest.summary.get("columns", {})
         self.features: list[str] = list(columns.get("measurements", []))
         self.labels: list[str] = list(columns.get("labels", []))
@@ -154,6 +160,8 @@ class Dataset:
                 )
             if (~np.isnan(values))[~ok].any():
                 problems.append("a failed sample has a measurement")
+        if self.waveforms is None and (self.path / WAVEFORMS).exists():
+            problems.append("waveforms and samples have different lengths")
         if self.waveforms is not None:
             if len(self.waveforms) != len(df):
                 problems.append("waveforms and samples have different lengths")

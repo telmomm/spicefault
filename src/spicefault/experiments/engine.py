@@ -159,6 +159,7 @@ def run_campaign(
     summary: Callable[[pd.DataFrame], dict] | None = None,
     files: dict[str, str] | None = None,
     user_metadata: dict | None = None,
+    waveform_rows: Sequence[bool] | None = None,
 ) -> Path:
     """Simulate every task and write the dataset to `out_dir`.
 
@@ -166,7 +167,9 @@ def run_campaign(
     written to `metadata.json`. If a previous run on the same folder and configuration
     was interrupted, it resumes after the last complete chunk. `summary` adds
     application counts, computed from the samples, to the manifest. `files` are text
-    files to keep with the dataset, by name, such as the source netlist.
+    files to keep with the dataset, by name, such as the source netlist. With
+    `waveform_rows`, one flag per task, only the waveforms of the flagged tasks are
+    kept in `waveforms.npy`.
     """
     out_dir = Path(out_dir)
     parts_dir = out_dir / "parts"
@@ -187,7 +190,7 @@ def run_campaign(
         stems = run_chunks(tasks, worker, context, parts_dir, n_points, workers, chunk, progress)
     finally:
         lock.unlink(missing_ok=True)
-    df, waveforms = assemble(stems, out_dir)
+    df, waveforms = assemble(stems, out_dir, waveform_rows)
     (out_dir / METADATA).write_text(json.dumps(config, indent=2))
     for name, text in (files or {}).items():
         (out_dir / name).write_text(text)
