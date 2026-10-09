@@ -24,6 +24,9 @@ public interface may change between minor versions.
 - `Variation.quantile`: the value at a given probability, for the tolerance, uniform,
   normal, log-normal, log-uniform and fixed variations. The default sampling is
   unchanged, so earlier datasets reproduce exactly.
+- `CorrelatedVariation`: variations that keep their distributions and are joined by a
+  Gaussian copula with a stated correlation. `LotVariation`: components that share the
+  deviation of their manufacturing lot. Both are rebuilt from the record of a dataset.
 - Page *Scope of the library*: the criterion for what belongs in it, and recipes for what
   is left to pandas, SciPy, SALib and scikit-learn.
 

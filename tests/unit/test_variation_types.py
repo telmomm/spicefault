@@ -8,12 +8,14 @@ from spicefault.experiments import sample_stream
 from spicefault.netlist import Netlist
 from spicefault.variation import (
     CatalogueVariation,
+    CorrelatedVariation,
     CustomVariation,
     Draw,
     FixedVariation,
     JointVariation,
     LogNormalVariation,
     LogUniformVariation,
+    LotVariation,
     NormalVariation,
     ToleranceVariation,
     UniformVariation,
@@ -359,3 +361,109 @@ def test_variations_that_hold_a_function_or_a_choice_have_no_quantile():
     for variation in (JOINT, CustomVariation("R1", lambda rng, nominal: nominal), ELECTRODE):
         with pytest.raises(NotImplementedError, match="has no quantile function"):
             variation.quantile(0.5, 1.0)
+
+
+# --- populations whose parameters are not independent ---------------------------------
+
+PAIR = "pair\nV1 in 0 dc 1\nR1 in out 10k\nR2 out 0 10k\nR3 out 0 20k\n.end\n"
+
+
+def joint_draws(variation, n=N):
+    net = Netlist(PAIR)
+    return [variation.draw(sample_stream(0, r), net) for r in range(n)]
+
+
+def test_correlated_variation_keeps_its_marginals_and_joins_them():
+    tracked = CorrelatedVariation(
+        [ToleranceVariation("R1", 0.01), LogNormalVariation("R2", None, 0.05)], correlation=0.8
+    )
+    assert tracked.targets() == (("R1", "value"), ("R2", "value"))
+    drawn = np.array([list(d.values.values()) for d in joint_draws(tracked)])
+    r1, r2 = drawn[:, 0] / 1e4, drawn[:, 1] / 1e4
+    # each marginal is the one declared: uniform within 1 %, and log-normal with sigma 0.05
+    assert 0.99 <= r1.min() < 0.9901 and 1.0099 < r1.max() <= 1.01
+    assert r1.std() == pytest.approx(0.01 / 3**0.5, rel=0.02)
+    assert np.log(r2).std() == pytest.approx(0.05, rel=0.02)
+    assert np.log(r2).mean() == pytest.approx(0.0, abs=0.002)
+    # the rank correlation of a Gaussian copula: (6 / pi) asin(rho / 2)
+    ranks = np.argsort(np.argsort(drawn, axis=0), axis=0)
+    spearman = np.corrcoef(ranks.T)[0, 1]
+    assert spearman == pytest.approx(6 / np.pi * np.arcsin(0.4), abs=0.01)
+    independent = CorrelatedVariation(tracked.variations, correlation=0.0)
+    loose = np.array([list(d.values.values()) for d in joint_draws(independent, 5000)])
+    assert abs(np.corrcoef(loose.T)[0, 1]) < 0.04
+
+
+def test_ratio_of_two_tracked_resistors_matches_its_closed_form():
+    """Two log-normal resistors with sigma s and correlation rho are jointly log-normal:
+    the logarithm of their ratio is normal with sigma s sqrt(2 (1 - rho)).
+    """
+    for rho in (0.0, 0.9, 0.99):
+        pair = CorrelatedVariation(
+            [LogNormalVariation("R1", None, 0.05), LogNormalVariation("R2", None, 0.05)], rho
+        )
+        drawn = np.array([list(d.values.values()) for d in joint_draws(pair)])
+        ratio = np.log(drawn[:, 0] / drawn[:, 1])
+        assert ratio.std() == pytest.approx(0.05 * (2 * (1 - rho)) ** 0.5, rel=0.03)
+        assert np.log(drawn[:, 0] / 1e4).std() == pytest.approx(0.05, rel=0.03)
+
+    matrix = [[1.0, 0.5, 0.0], [0.5, 1.0, 0.0], [0.0, 0.0, 1.0]]
+    three = CorrelatedVariation(
+        [NormalVariation(name, None, 100.0) for name in ("R1", "R2", "R3")], matrix
+    )
+    values = np.array([list(d.values.values()) for d in joint_draws(three)])
+    assert np.corrcoef(values.T) == pytest.approx(np.array(matrix), abs=0.02)
+
+
+def test_lot_variation_shares_one_deviation_between_its_components():
+    lot = LotVariation(("R1", "R2", "R3"), lot=0.04, within=0.01)
+    drawn = joint_draws(lot)
+    values = np.array([list(d.values.values()) for d in drawn]) / np.array([1e4, 1e4, 2e4])
+    shared = np.array([d.labels["lot"] for d in drawn])
+    assert lot.targets() == (("R1", "value"), ("R2", "value"), ("R3", "value"))
+    assert np.abs(shared).max() <= 0.04 and np.abs(values - 1 - shared[:, None]).max() <= 0.01
+    # each value spreads by both, sqrt(lot^2 + within^2) / sqrt(3); a ratio by `within` alone
+    assert values.std(axis=0) == pytest.approx((0.04**2 + 0.01**2) ** 0.5 / 3**0.5, rel=0.02)
+    assert (values[:, 0] - values[:, 1]).std() == pytest.approx(0.01 * (2 / 3) ** 0.5, rel=0.02)
+    correlation = np.corrcoef(values.T)[0, 2]
+    assert correlation == pytest.approx(0.04**2 / (0.04**2 + 0.01**2), abs=0.01)
+
+
+def test_correlated_and_lot_variations_are_recorded_scaled_and_rebuilt():
+    tracked = CorrelatedVariation(
+        [ToleranceVariation("R1", 0.01), NormalVariation("R2", None, 50.0, truncate=3.0)], 0.7
+    )
+    lot = LotVariation(("R1", "R2"), 0.04, 0.01, "truncnorm", name="reel")
+    for variation in (tracked, lot):
+        record = json.loads(json.dumps(variation.metadata()))
+        assert variation_from_metadata(record) == variation
+        net, half = Netlist(PAIR), variation.scaled(0.5)
+        for seed in range(20):  # the same random numbers: half the deviation
+            full = variation.draw(sample_stream(seed), net).values
+            scaled = half.draw(sample_stream(seed), net).values
+            for key, value in full.items():
+                assert scaled[key] - 1e4 == pytest.approx(0.5 * (value - 1e4), abs=1e-6)
+    assert [r["type"] for r in VariationSet([lot]).metadata()] == ["lot"]
+
+    circuit = Circuit(PAIR, "pair")
+    population = [tracked, ToleranceVariation("R3", 0.05)]
+    experiment = Experiment(circuit, variations=population, samples=3)
+    rebuilt = Experiment.from_metadata(experiment.metadata(), circuit.to_netlist())
+    assert [rebuilt.realise(s).netlist for s in rebuilt.plan()] == [
+        experiment.realise(s).netlist for s in experiment.plan()
+    ]
+    assert Experiment(circuit, variations=[lot]).realise(Experiment(circuit).plan()[0]).labels
+
+    with pytest.raises(ValueError, match="has no quantile function"):
+        CorrelatedVariation([ToleranceVariation("R1", 0.01), JOINT], 0.5)
+    with pytest.raises(ValueError, match="not positive definite"):
+        CorrelatedVariation([ToleranceVariation(n, 0.01) for n in ("R1", "R2", "R3")], -0.9)
+    with pytest.raises(ValueError, match="symmetric 2 x 2"):
+        CorrelatedVariation([ToleranceVariation("R1", 0.01), ToleranceVariation("R2", 0.01)],
+                            [[1.0, 0.2, 0.0], [0.2, 1.0, 0.0], [0.0, 0.0, 1.0]])  # fmt: skip
+    with pytest.raises(ValueError, match="at least two"):
+        CorrelatedVariation([ToleranceVariation("R1", 0.01)], 0.5)
+    with pytest.raises(ValueError, match="more than one variation"):
+        VariationSet([tracked, ToleranceVariation("R1", 0.05)])
+    with pytest.raises(ValueError, match="at least two different components"):
+        LotVariation(("R1", "r1"), 0.04, 0.01)

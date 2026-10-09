@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, replace
+from statistics import NormalDist
 
 import numpy as np
 
@@ -378,8 +379,161 @@ class CatalogueVariation(Variation):
         }
 
 
+def _correlation_matrix(correlation, n: int) -> np.ndarray:
+    """The matrix of a correlation given as one number for every pair, or in full."""
+    if np.ndim(correlation) != 0:
+        return np.asarray(correlation, dtype=float)
+    matrix = np.full((n, n), float(correlation))
+    np.fill_diagonal(matrix, 1.0)
+    return matrix
+
+
+@dataclass(frozen=True)
+class CorrelatedVariation(Variation):
+    """Parameters that keep their own distributions and vary together.
+
+    `variations` are the marginals: each parameter is distributed as its variation
+    says, whatever the correlation. They are joined by a Gaussian copula: correlated
+    standard normals are drawn, each is turned into a probability, and each variation
+    gives the value at that probability, so every one of them needs a quantile
+    function.
+
+    `correlation` is one number for every pair, or the full matrix. It is the
+    correlation of the underlying normals. The correlation of the values equals it
+    only for normal marginals; their rank correlation is (6 / pi) asin(correlation / 2)
+    for any marginals.
+
+    Two resistors from the same reel, or a ratio that is tighter than its parts:
+
+        CorrelatedVariation([ToleranceVariation("R1", 0.01), ToleranceVariation("R2", 0.01)],
+                            correlation=0.9)
+    """
+
+    variations: Sequence[Variation]
+    correlation: float | Sequence[Sequence[float]]
+
+    def __post_init__(self):
+        variations = tuple(
+            v if isinstance(v, Variation) else variation_from_metadata(v) for v in self.variations
+        )
+        if len(variations) < 2:
+            raise ValueError("a correlated variation joins at least two variations")
+        for variation in variations:
+            if type(variation).quantile is Variation.quantile:
+                raise ValueError(
+                    f"the {type(variation).__name__} of a correlated variation has no "
+                    "quantile function"
+                )
+        n = len(variations)
+        matrix = _correlation_matrix(self.correlation, n)
+        scalar = np.ndim(self.correlation) == 0
+        correlation = float(self.correlation) if scalar else matrix.tolist()
+        if matrix.shape != (n, n) or not np.allclose(matrix, matrix.T):
+            raise ValueError(f"the correlation is a number or a symmetric {n} x {n} matrix")
+        if not np.allclose(np.diag(matrix), 1.0) or np.abs(matrix).max() > 1.0:
+            raise ValueError("a correlation matrix has ones on its diagonal and values in [-1, 1]")
+        try:
+            np.linalg.cholesky(matrix)
+        except np.linalg.LinAlgError:
+            raise ValueError("the correlation matrix is not positive definite") from None
+        object.__setattr__(self, "variations", variations)
+        object.__setattr__(self, "correlation", correlation)
+
+    @property
+    def name(self) -> str:
+        return "+".join(f"{c}.{p}" for c, p in self.targets())
+
+    def targets(self):
+        return tuple(target for variation in self.variations for target in variation.targets())
+
+    def sample(self, rng, nominal):
+        raise TypeError("a correlated variation is drawn as a whole")
+
+    def draw(self, rng, netlist):
+        n = len(self.variations)
+        matrix = _correlation_matrix(self.correlation, n)
+        normals = np.linalg.cholesky(matrix) @ rng.standard_normal(n)
+        values = {}
+        for variation, z in zip(self.variations, normals, strict=True):
+            u = min(max(NormalDist().cdf(float(z)), 1e-15), 1.0 - 1e-15)
+            values[variation.targets()[0]] = variation.quantile(u, variation.nominal(netlist))
+        return Draw(values)
+
+    def scaled(self, factor):
+        return replace(self, variations=tuple(v.scaled(factor) for v in self.variations))
+
+    def metadata(self):
+        return {
+            "type": "correlated",
+            "variations": [variation.metadata() for variation in self.variations],
+            "correlation": self.correlation,
+        }
+
+
+@dataclass(frozen=True)
+class LotVariation(Variation):
+    """Components that share the deviation of their manufacturing lot.
+
+    value = nominal * (1 + lot * d0 + within * d_i): `d0` is one deviation for the
+    whole group, drawn once per circuit, and `d_i` one of each component, all in
+    [-1, 1] with the given `distribution`. The components then track each other: their
+    ratios spread by `within` alone, while each value spreads by both.
+
+    The deviation of the lot, `lot * d0`, is recorded as a label under `name`.
+    """
+
+    components: Sequence[str]
+    lot: float
+    within: float
+    distribution: str = "uniform"
+    parameter: str = "value"
+    name: str = "lot"
+
+    def __post_init__(self):
+        components = tuple(self.components)
+        if len(components) < 2 or len({c.lower() for c in components}) != len(components):
+            raise ValueError("a lot has at least two different components")
+        if self.lot < 0 or self.within < 0:
+            raise ValueError("lot and within are tolerances: not negative")
+        if self.distribution not in DISTRIBUTIONS:
+            raise ValueError(f"unknown tolerance distribution: {self.distribution}")
+        object.__setattr__(self, "components", components)
+
+    def targets(self):
+        return tuple((component, self.parameter) for component in self.components)
+
+    def sample(self, rng, nominal):
+        raise TypeError("a lot variation is drawn as a whole")
+
+    def draw(self, rng, netlist):
+        shared = self.lot * unit_deviation(rng, self.distribution)
+        values = {}
+        for component in self.components:
+            own = self.within * unit_deviation(rng, self.distribution)
+            values[component, self.parameter] = netlist.value(component, self.parameter) * (
+                1.0 + shared + own
+            )
+        return Draw(values, {self.name: shared})
+
+    def scaled(self, factor):
+        return replace(self, lot=self.lot * factor, within=self.within * factor)
+
+    def metadata(self):
+        return {
+            "type": "lot",
+            "components": list(self.components),
+            "lot": self.lot,
+            "within": self.within,
+            "distribution": self.distribution,
+            "parameter": self.parameter,
+            "name": self.name,
+        }
+
+
 _REBUILDABLE = {
     "catalogue": CatalogueVariation,
+    "correlated": CorrelatedVariation,
+    "lot": LotVariation,
     "fixed": FixedVariation,
     "tolerance": ToleranceVariation,
     "uniform": UniformVariation,
