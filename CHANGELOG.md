@@ -18,7 +18,9 @@ public interface may change between minor versions.
 - `Dataset.yield_report` and `spicefault.statistics.yield_report`: yield per
   specification and overall with binomial intervals, bounds for the failed simulations
   and the margin to each limit. `samples_for_half_width` and `zero_failure_bound`.
-- Page *Statistics of a population*, with the definitions and estimators.
+- Page *Statistics of a population*, with the definitions and estimators, and page
+  *Validation of the statistics*: the estimates against two circuits whose distribution
+  has a closed form (`validation/statistical.py`).
 - Page *Scope of the library*: the criterion for what belongs in it, and recipes for what
   is left to pandas, SciPy, SALib and scikit-learn.
 
