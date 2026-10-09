@@ -66,6 +66,34 @@ def run(tmp_path_factory):
     return c
 
 
+def half_supply(result):
+    return float(result.plot("Operating Point")["v(out)"][0].real) - 0.5
+
+
+def two_setups(out_dir, **kwargs) -> FaultCampaign:
+    """`service` and `bench` simulate the same drawn circuits and measure different things."""
+    conditions = [
+        OperatingCondition("service", measurements=(Measurement.value("v(out)", name="vout"),)),
+        OperatingCondition(
+            "bench",
+            settings={("V1", "dc"): 2.0},
+            measurements=(Measurement.custom_result("offset", half_supply),),
+        ),
+    ]
+    defaults = {
+        "samples_per_fault": 3, "healthy_samples": 4, "conditions": conditions,
+        "measurements": (), "waveform": None,
+    }  # fmt: skip
+    return campaign(out_dir, **{**defaults, **kwargs})
+
+
+@pytest.fixture(scope="module")
+def setups(tmp_path_factory):
+    c = two_setups(tmp_path_factory.mktemp("setups") / "data")
+    c.run(progress=False)
+    return c
+
+
 def test_dataset_knows_the_role_of_its_columns(run):
     dataset = run.dataset()
     assert len(dataset) == (20 + 4 * 5) * 2
@@ -136,6 +164,34 @@ def test_verify_detects_altered_files(run, tmp_path):
     assert "waveforms and samples have different lengths" in problems
     (copy / "waveforms.npy").unlink()
     assert "waveforms.npy: missing" in Dataset(copy).verify()
+
+
+def test_verify_expects_only_the_measurements_of_each_condition(setups, tmp_path):
+    import shutil
+
+    dataset = setups.dataset()
+    service = (dataset.samples["condition"] == "service").to_numpy()
+    assert dataset.ok[service].any() and dataset.ok[~service].any()
+    assert dataset.samples.loc[dataset.ok & service, "offset"].isna().all()
+    assert dataset.samples.loc[dataset.ok & ~service, "offset"].notna().all()
+    assert dataset.verify() == []
+
+    def altered(name, column, row, value):
+        copy = tmp_path / name
+        shutil.copytree(setups.out_dir, copy)
+        df = pd.read_parquet(copy / "samples.parquet")
+        df.loc[row, column] = value
+        df.to_parquet(copy / "samples.parquet", index=False)
+        return Dataset(copy).verify()[1:]  # after the fingerprint of the table
+
+    first_service, first_bench = (int(np.flatnonzero(dataset.ok & rows)[0])
+                                  for rows in (service, ~service))  # fmt: skip
+    assert altered("lost", "offset", first_bench, np.nan) == [
+        "a successful sample has a measurement that is not finite"
+    ]
+    assert altered("extra", "offset", first_service, 1.0) == [
+        "a sample has a measurement that its operating condition does not declare"
+    ]
 
 
 def test_update_derived_columns_keeps_dataset_verifiable(run, tmp_path):
@@ -239,6 +295,14 @@ def test_netlist_of_every_sample_is_rebuilt_from_the_stored_values(run):
     shorted = int(np.flatnonzero(dataset.samples["fault_id"] == "R2:short")[0])
     assert "Rpar_R2" in dataset.netlist(shorted)
     assert ".options temp=85.0" in dataset.netlist(1)  # the second condition of the first draw
+
+
+def test_netlist_of_a_sample_does_not_need_the_measurements_of_its_condition(setups):
+    dataset, experiment = setups.dataset(), setups.experiment
+    assert dataset.samples.loc[1, "condition"] == "bench"  # measured by a function
+    for sample in experiment.plan():
+        assert dataset.netlist(sample.sample_id) == experiment.realise(sample).netlist
+    assert "dc 2" in dataset.netlist(1) and "dc 1" in dataset.netlist(0)
 
 
 # --- reproducibility --------------------------------------------------------------------

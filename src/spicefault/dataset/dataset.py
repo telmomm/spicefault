@@ -141,16 +141,49 @@ class Dataset:
         if unknown:
             problems.append(f"faults not defined in the metadata: {sorted(unknown)}")
         ok = self.ok
-        if self.features and not np.isfinite(df.loc[ok, self.features].to_numpy(float)).all():
-            problems.append("a successful sample has a measurement that is not finite")
-        if self.features and df.loc[~ok, self.features].notna().any().any():
-            problems.append("a failed sample has a measurement")
+        if self.features:
+            values = df[self.features].to_numpy(float)
+            expected = self._expected_measurements()
+            if (expected & ~np.isfinite(values))[ok].any():
+                problems.append("a successful sample has a measurement that is not finite")
+            if (~expected & ~np.isnan(values))[ok].any():
+                problems.append(
+                    "a sample has a measurement that its operating condition does not declare"
+                )
+            if (~np.isnan(values))[~ok].any():
+                problems.append("a failed sample has a measurement")
         if self.waveforms is not None:
             if len(self.waveforms) != len(df):
                 problems.append("waveforms and samples have different lengths")
             elif np.isnan(self.waveforms[ok]).any() or not np.isnan(self.waveforms[~ok]).all():
                 problems.append("waveforms do not match the status of the samples")
         return problems
+
+    def _measured(self) -> dict[str, list[str]]:
+        """Operating condition -> the measurement columns it fills.
+
+        A condition that declares its own measurements fills only those; the columns
+        of the other conditions hold NaN in its rows.
+        """
+        default = self.metadata.get("measurements", [])
+        return {
+            condition["name"]: [
+                column
+                for measurement in condition.get("measurements", default)
+                for column in measurement.get("names", [measurement["name"]])
+            ]
+            for condition in self.metadata.get("conditions", [])
+        }
+
+    def _expected_measurements(self) -> np.ndarray:
+        """[samples, features]: True where the condition of the row fills the column."""
+        measured = self._measured()
+        condition = self.samples["condition"].to_numpy()
+        expected = np.ones((len(self.samples), len(self.features)), dtype=bool)
+        for name, columns in measured.items():
+            rows = condition == name
+            expected[rows] = [feature in columns for feature in self.features]
+        return expected
 
     def update_columns(self, frame: pd.DataFrame, note: str = "") -> None:
         """Add or replace derived label columns without invalidating dataset integrity."""
@@ -245,8 +278,13 @@ class Dataset:
         VariationSet.apply(netlist, {target: float(v) for target, v in values.items()})
         if row["fault_id"] != HEALTHY_ID:
             self.faults[row["fault_id"]].apply(netlist)
+        # only the settings and the temperature change the netlist: the measurements of
+        # the condition are not rebuilt, since a custom one holds a function
         conditions = {c["name"]: c for c in self.metadata["conditions"]}
-        OperatingCondition.from_metadata(conditions[row["condition"]]).apply(netlist)
+        record = conditions[row["condition"]]
+        OperatingCondition.from_metadata(
+            {key: record[key] for key in ("name", "temperature", "settings")}
+        ).apply(netlist)
         return str(netlist)
 
     # --- reproducibility ----------------------------------------------------------------
