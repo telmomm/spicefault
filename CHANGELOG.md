@@ -7,6 +7,8 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-09
+
 ### Added
 
 - `Campaign`: the neutral name of a campaign, with `samples=`. Without faults it is a
@@ -151,7 +153,8 @@ First version.
   probability, diagnostic coverage, severity response, robustness against tolerance,
   dependence on operating conditions, separability and ambiguity.
 
-[Unreleased]: https://github.com/telmomm/spicefault/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/telmomm/spicefault/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/telmomm/spicefault/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/telmomm/spicefault/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/telmomm/spicefault/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/telmomm/spicefault/releases/tag/v0.1.0
