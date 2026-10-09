@@ -57,6 +57,7 @@ Each prints a summary and writes JSON and CSV under `results/`.
 ## 4. Benchmarks (about 1 h 30 min; the machine must be idle)
 
 ```bash
+python -m benchmarks.correctness.run
 python -m benchmarks.scalability.run --workload sallen_key --workers 1 2 4 8
 python -m benchmarks.scalability.run --workload biquad --workers 1 2 4 8
 python -m benchmarks.reproducibility.run --workload biquad --workers 8

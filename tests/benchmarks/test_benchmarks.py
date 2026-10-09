@@ -4,11 +4,13 @@ import json
 import sys
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # the repository root
 
 from benchmarks import common  # noqa: E402
+from benchmarks.correctness import run as correctness  # noqa: E402
 from benchmarks.fault_coverage import run as fault_coverage  # noqa: E402
 from benchmarks.reproducibility import run as reproducibility  # noqa: E402
 from benchmarks.sampling import run as sampling  # noqa: E402
@@ -51,6 +53,30 @@ def test_fault_coverage(results):
     regulator = result["circuits"]["regulator"]
     assert {"Vin", "Iout", "RL"} <= set(regulator["components_without_faults"])
     assert regulator["coverage_matrix_universe"]["XQ1"] == {"transistor": 6}
+
+
+@pytest.mark.ngspice
+def test_correctness_against_ngspice_run_directly(results):
+    result = correctness.run(("rc",))
+    rc = result["circuits"]["rc"]
+    assert (rc["n_components"], rc["n_faults"], rc["total"]["decks"]) == (4, 30, 31)
+    assert set(rc["by_fault_type"]) == {"healthy", "open_circuit", "short_circuit", "parametric"}
+    assert rc["by_fault_type"]["parametric"]["status"] == {"SUCCESS": 24}
+    assert rc["total"]["values"] == rc["total"]["values_bit_identical"] > 1000
+    assert result["verdict"] == {
+        "decks": 31, "values": rc["total"]["values"], "bit_identical": True, "max_abs_diff": 0.0,
+    }
+    assert "31 decks" in correctness.report(result) and "NOT" not in correctness.report(result)
+    saved = json.loads(common.save("correctness", result, "test").read_text())
+    assert saved["benchmark"] == "correctness" and saved["protocol"]["seed"] == 42
+
+
+def test_correctness_counts_values_by_their_bits():
+    a = np.array([1 + 2j, 3 + 4j, 5 + 6j])
+    assert correctness.identical_values(a, a.copy()) == 3
+    assert correctness.identical_values(a, np.array([1 + 2j, 3 + 5j, 5 + 6j])) == 2
+    assert correctness.identical_values(np.array([0.1 + 0.2]), np.array([0.3])) == 0
+    assert correctness.identical_values(np.array([np.nan]), np.array([np.nan])) == 1
 
 
 @pytest.mark.ngspice

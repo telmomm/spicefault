@@ -7,6 +7,7 @@ Each one prints a summary and writes its full result as JSON under
 Run them from the repository root:
 
 ```bash
+python -m benchmarks.correctness.run
 python -m benchmarks.scalability.run --workload sallen_key --workers 1 2 4 8
 python -m benchmarks.reproducibility.run --workload biquad --workers 8
 python -m benchmarks.fault_coverage.run
@@ -15,6 +16,7 @@ python -m benchmarks.sampling.run --sizes 64 256 --repetitions 16 --workers 8
 
 | Benchmark | Experiment | What it measures |
 |---|---|---|
+| `correctness` | A | For each validation circuit, the healthy circuit and every fault, simulated through `spicefault` and with `ngspice -b` launched apart and read by a raw-file reader of its own: are the vectors identical bit by bit? |
 | `scalability` | C | Wall time and simulations per second for each number of workers, speed-up and efficiency; time of one sample by phase; peak memory; bytes written; cost of resuming |
 | `reproducibility` | B | The same campaign with 1 and with several workers, repeated, with another chunk size, and interrupted and resumed: are the sample definitions identical (L1), and how much do the outputs differ (L2)? Then samples simulated again from the dataset folder |
 | `fault_coverage` | D | For each circuit: components, fault types, magnitudes, fault conditions, the coverage matrix, exclusions, components outside the fault model, and faults partly inside the tolerance band |
@@ -45,6 +47,11 @@ idle machine the benchmark can collect. Timings taken
 while anything else is running must not be kept.
 
 ## Reading the results
+
+- **Correctness** compares the execution and the reading of the output on the deck the
+  library built, one sample per fault. It does not check that the netlist of a fault
+  is the right one: `tests/validation/test_direct_script.py` does, against the direct
+  script. It is not a timing: it needs no idle machine and takes seconds.
 
 - **Range** is the difference between the slowest and the fastest repetition, relative
   to the median. It is the evidence that the machine was undisturbed: a few per cent
