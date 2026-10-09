@@ -14,6 +14,7 @@ this population.
 | `FixedVariation` | A set value, no spread |
 | `CustomVariation` | Any function of the random stream and the nominal value |
 | `JointVariation` | Several parameters drawn together, when they depend on each other |
+| `CatalogueVariation` | The type of a part, then its parameters around the medians of that type |
 
 ```python
 from spicefault.variation import NormalVariation, VariationSet, tolerances
@@ -21,6 +22,15 @@ from spicefault.variation import NormalVariation, VariationSet, tolerances
 population = tolerances(circuit, {"R": 0.01, "C": 0.05})   # by component kind
 population = VariationSet([NormalVariation("R1", 10000, 500), NormalVariation("R2", 10000, 500)])
 tighter = population.scaled(0.2)   # same random numbers, a fifth of the spread
+```
+
+`instance_tolerances` gives every instance of a subcircuit the same spread in its
+parameters, relative or, for a parameter that is nominally zero, absolute:
+
+```python
+from spicefault.variation import instance_tolerances
+
+amplifiers = instance_tolerances(circuit, "opamp", {"vos": (0.5e-3, "absolute"), "aol": 0.5})
 ```
 
 A normal variation is not a fault: variations describe the healthy population, and a
@@ -34,6 +44,21 @@ tolerance compares the same circuits at each tolerance level.
 type is drawn first, two resistors from the same reel, or a netlist parameter computed
 from two drawn quantities. It can also record labels, such as the type that was drawn.
 See the [custom example](../examples/custom.md).
+
+When the dependence is a part that comes in several types, `CatalogueVariation` needs
+no function: the type is drawn first, with the given weights, and each parameter is
+the median of that type times a factor between 1/spread and spread. The type is
+recorded as a label, and the variation is rebuilt from the record of a dataset.
+
+```python
+from spicefault.variation import CatalogueVariation
+
+CatalogueVariation(
+    "Xelectrode",
+    options={"gel": {"r": 2e3, "c": 50e-9}, "steel": {"r": 2e5, "c": 5e-9}},
+    weights=(3, 1), spread=2.0, label="electrode_kind",
+)
+```
 
 Functions given to `CustomVariation` and `JointVariation` must be defined at module
 level, so that worker processes can import them. A record cannot store a function: a

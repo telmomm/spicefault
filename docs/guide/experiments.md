@@ -73,9 +73,44 @@ SimulationConfig(
 )
 ```
 
-An `OperatingCondition` can override `config` and `measurements`; measurements not declared
-for a condition are stored as `NaN` in their dataset columns. See
+An `OperatingCondition` can override `config`, `measurements` and `waveform`; measurements
+not declared for a condition are stored as `NaN` in their dataset columns. See
 [From a schematic](from-schematic.md) for imported netlists.
+
+```python
+OperatingCondition("service", config=..., measurements=..., waveform=Waveform("v(out)", 1e3, 1.0))
+OperatingCondition("bench", config=..., measurements=...)        # stores no waveform
+```
+
+The waveform of the experiment is the default of the conditions that do not give one;
+`waveform=False` declines it. The rows of a condition without waveform hold `NaN`, and
+every stored waveform has the same number of points. `Dataset.cases` joins the rows of
+one drawn circuit across its conditions (see [Datasets](datasets.md)).
+
+When several values come out of one evaluation, a group computes them in one call and
+gives each a column:
+
+```python
+def specifications(result):          # at module level
+    ...
+    return {"spec_gain_error": gain_error, "spec_cmrr_db": cmrr}
+
+Measurement.group(("spec_gain_error", "spec_cmrr_db"), specifications)
+```
+
+## The nominal circuit
+
+`experiment.nominal()` simulates the circuit with the values of its netlist, with no
+variation drawn, under each operating condition, and returns `{condition: SampleResult}`:
+the reference against which an error is defined, or the response to draw next to the
+Monte Carlo band.
+
+```python
+nominal = experiment.nominal()
+nominal["bench"].measurements["gain"]
+nominal["bench"].result                       # the complete simulation result
+experiment.nominal(fault="R1:open")           # the nominal circuit with one fault
+```
 
 ## Fault campaign
 
@@ -127,7 +162,9 @@ What the engine guarantees:
 - a partial run is never mixed with a campaign whose definitions differ;
 - the folder holds the complete definition of the experiment and its source netlist,
   the simulator and package versions, the number of workers, whether the run was
-  resumed and the time spent over all its runs.
+  resumed and the time spent over all its runs;
+- when the campaign is run from inside a git repository, the manifest records its
+  commit and whether its tracked files had uncommitted changes, under `source`.
 
 Functions passed to custom or joint variations and to custom measurements must be
 defined at module level, so that worker processes can receive them.

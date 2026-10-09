@@ -73,4 +73,23 @@ faults = universe.selected()
 faults.tolerance_overlap(experiment.variations)   # parametric faults inside the tolerance band
 ```
 
+A rule selects components by element letter (`kinds`), by name (`components`) and by
+the subcircuit of an instance or the model of a device (`models`, compared with
+`Component.model`). It can tag its faults, with a dictionary or a function of the
+component, and a parametric rule takes relative deviations, factors or absolute
+values, reported under the fault type given:
+
+```python
+rules = [
+    parametric_rule(kinds="X", models=("opamp",), parameter="vos", fault_values=(20e-3,),
+                    fault_type="offset", tags=lambda c: {"part": c.name, "origin": "amplifier"}),
+    parametric_rule(kinds="X", models=("opamp",), parameter="aol", factors=(0.01,),
+                    fault_type="gain_loss"),
+    open_rule("R", tags={"origin": "assembly"}),
+]
+```
+
+With `tag_columns=("part", "origin")`, a campaign writes these tags as columns of the
+dataset.
+
 The definitions behind this page are in the [fault model](../FAULT_MODEL.md).

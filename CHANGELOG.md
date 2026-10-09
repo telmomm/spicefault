@@ -7,6 +7,45 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+### Added
+
+- `Measurement.group`: several named values from one function, called once per
+  simulation, one column per name.
+- `waveform` on `OperatingCondition`: the waveform is stored only in the conditions that
+  declare one, or in all but those that decline it with `waveform=False`; the rows of
+  the others hold `NaN`. `Experiment.waveform_for` and `Experiment.waveform_points`.
+- `Specification` and `Dataset.label`: pass/fail labels (`ok_<name>`, `compliant`,
+  `violated`) from limits that are kept in the manifest and can be changed without
+  simulating again. `Dataset.specifications` reads them back.
+- `Dataset.cases`: one row per drawn circuit across its operating conditions, with the
+  waveform of the condition chosen. `Dataset.to_ml` and `Dataset.analysis` take
+  `by_case=True`.
+- `Experiment.nominal`: the nominal circuit, simulated and measured under each
+  operating condition, optionally with one fault.
+- Fault rules: `tags=` on every rule (a dictionary or a function of the component),
+  `models=` to select instances by subcircuit or device model, and `factors=`,
+  `fault_values=` and `fault_type=` in `parametric_rule`. `Component.model`,
+  `Netlist.model` and `Fault.with_tags`.
+- `instance_tolerances`: the same tolerances, relative or absolute, for the parameters of
+  every instance of a subcircuit. `CatalogueVariation`: a part whose type is drawn
+  first and its parameters around the medians of that type, with the type as a label.
+- The manifest records under `source` the git commit of the project that ran the
+  campaign and whether its tracked files had uncommitted changes (`git_source`).
+
+### Changed
+
+- `Dataset.to_ml(waveforms=True)` returns only the samples of the conditions that store
+  a waveform.
+- `parametric_rule` names its rule after `fault_type`, and its `deviations` are optional.
+
+### Fixed
+
+- `Dataset.verify()` no longer reports a problem when operating conditions have their
+  own measurements: it expects in each row only the measurements of its condition, and
+  reports a value in a column the condition does not declare.
+- `Dataset.netlist()` works for a condition with custom measurements: it no longer
+  rebuilds them to write the netlist.
+
 ## [0.2.1] - 2026-10-09
 
 ### Changed
@@ -29,10 +68,12 @@ public interface may change between minor versions.
   spectrum or the integrated-noise plot.
 - An `OperatingCondition` can override the simulation `config` and the `measurements`;
   measurements not declared for a condition are stored as `NaN`.
-- `FaultCampaign.from_experiment`, and user metadata labels recorded in the manifest.
+- `FaultCampaign.from_experiment`. `tag_columns` on `FaultCampaign` turns fault tags into
+  label columns, and `metadata` is recorded under `user` in the manifest.
 - `SeriesResistanceFault`, a graded series resistance, with `series_rule` for the
   `FaultUniverse` and `FaultSeverity.log_series_resistance`.
-- Source functions (`PULSE`, `SIN`, ...) in netlists can be addressed as parameters.
+- Source parameters in `Netlist.set_parameter` and in operating conditions: `ac`, and
+  the arguments of source functions as `pulse.*` and `sin.*`.
 - `Dataset.update_columns`: derived columns, with the sample fingerprint updated and the
   operation appended to the manifest history.
 - `split_by_replica` and `split_by_magnitude`: train/test splits without leakage between

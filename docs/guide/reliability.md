@@ -61,14 +61,15 @@ Three rules are applied throughout:
 ## Specifications
 
 Failure probability and diagnostic coverage need to know whether a circuit meets its
-specification. That is the application's knowledge: add a boolean column to the
-samples and name it.
+specification. That is the application's knowledge: give the limits to the dataset,
+which labels every sample and keeps them (see [Datasets](datasets.md)), and name the
+column.
 
 ```python
-samples = dataset.samples
-samples["compliant"] = samples["gain_1k"].between(0.14, 0.17)
-analysis = ReliabilityAnalysis(samples, dataset.features, compliant="compliant",
-                               faults=dataset.metadata["faults"])
+from spicefault import Specification
+
+dataset.label([Specification("gain_1k", minimum=0.14, maximum=0.17)])
+analysis = dataset.analysis(compliant="compliant")
 analysis.failure_probability()      # per fault, and the yield of the healthy circuits
 analysis.diagnostic_coverage()      # of the circuits that fail, the fraction detected
 ```
