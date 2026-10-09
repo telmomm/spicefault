@@ -7,6 +7,11 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+### Added
+
+- Page *Scope of the library*: the criterion for what belongs in it, and recipes for what
+  is left to pandas, SciPy, SALib and scikit-learn.
+
 ### Changed
 
 - `waveforms.npy` holds only the rows of the samples whose operating condition stores a

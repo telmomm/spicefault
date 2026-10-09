@@ -3,6 +3,9 @@
 Thank you for considering a contribution. Bug reports, questions, documentation fixes
 and code are all welcome.
 
+Before proposing a feature, see [what belongs in the library](docs/scope.md) and what is
+left to other tools.
+
 ## Reporting a problem
 
 Open an [issue](https://github.com/telmomm/spicefault/issues) with:

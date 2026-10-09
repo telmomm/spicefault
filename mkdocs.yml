@@ -49,6 +49,7 @@ nav:
       - Fault model: FAULT_MODEL.md
       - Reliability metrics: RELIABILITY_METRICS.md
   - Project:
+      - Scope of the library: scope.md
       - Scientific scope: SCIENTIFIC_SCOPE.md
       - Experiment plan: EXPERIMENT_PLAN.md
       - Related work: RELATED_WORK.md

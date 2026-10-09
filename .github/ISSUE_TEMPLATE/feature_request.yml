@@ -6,7 +6,9 @@ body:
     id: problem
     attributes:
       label: What you are trying to do
-      description: The study or circuit that needs it, and what is in the way today.
+      description: >
+        The study or circuit that needs it, and what is in the way today. The scope of
+        the library is at https://spicefault.readthedocs.io/en/latest/scope/
     validations:
       required: true
   - type: textarea
