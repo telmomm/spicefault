@@ -319,21 +319,67 @@ class Experiment:
             values.update(measurement.values(result))
         return values
 
+    def _measured(
+        self, result: SimulationResult, condition_index: int
+    ) -> tuple[SimulationResult, dict[str, float]]:
+        """The result and its measurements; a result that cannot be measured is invalid."""
+        if not result.ok:
+            return result, {}
+        try:
+            measurements = dict.fromkeys(self.measurement_columns, float("nan"))
+            measurements.update(self.measure(result, condition_index))
+        except Exception as exc:  # the simulation ran but its output cannot be used
+            measurements = {}
+            result = replace(
+                result,
+                status=SimulationStatus.INVALID_OUTPUT,
+                message=f"measurement failed: {type(exc).__name__}: {exc}",
+            )
+        return result, measurements
+
+    def nominal(self, fault: Fault | str | None = None) -> dict[str, SampleResult]:
+        """The nominal circuit, simulated and measured under each operating condition.
+
+        No variation is drawn: the circuit has the values of its netlist. It is the
+        reference of an experiment, such as the nominal gain against which a gain
+        error is defined. With `fault`, a fault or the identifier of one of the
+        experiment, it is the nominal circuit with that fault.
+
+        Returns {condition name: SampleResult}, with the measurements and the complete
+        simulation result. These are not samples of the plan: `sample_id` and
+        `replica` are -1. As in a run, a simulation that fails is returned with its
+        status, not raised.
+        """
+        if isinstance(fault, str):
+            fault = FaultSet(self.faults)[fault]
+        if fault is None:
+            fault_index = 0
+        else:
+            fault_index = self.faults.index(fault) + 1 if fault in self.faults else -1
+        results = {}
+        for condition_index, condition in enumerate(self.conditions):
+            netlist = self.circuit.netlist()
+            if fault is not None:
+                fault.apply(netlist)
+            condition.apply(netlist)
+            result = self.simulator.run(str(netlist), self.config_for(condition_index))
+            result, measurements = self._measured(result, condition_index)
+            results[condition.name] = SampleResult(
+                sample=Sample(-1, fault_index, -1, condition_index),
+                fault_id=fault.fault_id if fault else HEALTHY_ID,
+                condition=condition.name,
+                seed_key=(),
+                parameters={},
+                labels={},
+                result=result,
+                measurements=measurements,
+            )
+        return results
+
     def run_sample(self, sample: Sample) -> SampleResult:
         realised = self.realise(sample)
         result = self.simulator.run(realised.netlist, self.config_for(sample.condition_index))
-        measurements = {}
-        if result.ok:
-            try:
-                measurements = dict.fromkeys(self.measurement_columns, float("nan"))
-                measurements.update(self.measure(result, sample.condition_index))
-            except Exception as exc:  # the simulation ran but its output cannot be used
-                measurements = {}
-                result = replace(
-                    result,
-                    status=SimulationStatus.INVALID_OUTPUT,
-                    message=f"measurement failed: {type(exc).__name__}: {exc}",
-                )
+        result, measurements = self._measured(result, sample.condition_index)
         return SampleResult(
             sample=sample,
             fault_id=self.fault_id(sample),

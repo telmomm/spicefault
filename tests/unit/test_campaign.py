@@ -288,6 +288,31 @@ def test_group_measurement_fills_one_column_per_name(tmp_path):
         ])  # fmt: skip
 
 
+def test_nominal_circuit_is_simulated_and_measured_under_each_condition(tmp_path):
+    e = campaign(tmp_path / "data").experiment
+    nominal = e.nominal()
+    assert list(nominal) == ["nominal", "low"]
+    assert nominal["nominal"].measurements == {"vout": 0.5, "final_v(out)": 0.5}
+    assert nominal["low"].measurements["vout"] == 0.25  # no variation: exactly half of 0.5 V
+    reference = nominal["nominal"]
+    assert reference.fault_id == "healthy" and reference.parameters == {} and reference.result.ok
+    assert reference.sample.sample_id == -1 and reference.sample.condition_index == 0
+    assert reference.result.plot("Transient Analysis")["v(out)"][-1] == 0.5
+
+    # with a fault: 10k in series with 12k, and a divider shorted by 1 ohm
+    high = e.nominal("R1:parametric:+0.2")["nominal"]
+    assert high.measurements["vout"] == pytest.approx(10 / 22) and high.sample.fault_index == 3
+    shorted = e.nominal(ShortCircuit("R2", r_short=1.0))["low"]
+    assert shorted.measurements["vout"] == pytest.approx(0.5 / 10001, rel=1e-3)
+    other = e.nominal(ParametricFault("R2", deviation=-0.5))["nominal"]
+    assert other.sample.fault_index == -1 and other.measurements["vout"] == pytest.approx(1 / 3)
+    # a simulation that fails is returned with its status
+    failed = e.nominal("R2:open")["nominal"]
+    assert failed.result.status.value == "CONVERGENCE_ERROR" and failed.measurements == {}
+    with pytest.raises(KeyError):
+        e.nominal("R9:open")
+
+
 def test_fault_tags_become_label_columns_and_user_metadata_is_recorded(tmp_path):
     faults = [
         OpenCircuit("R2", tags={"origin": "electrode", "part": "lead"}),
