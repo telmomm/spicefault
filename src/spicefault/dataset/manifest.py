@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from dataclasses import asdict, dataclass, field, fields
 from pathlib import Path
 
@@ -20,13 +21,36 @@ def file_record(path: Path) -> dict:
     return {"bytes": path.stat().st_size, "sha256": digest.hexdigest()}
 
 
+def git_source(folder: str | Path | None = None) -> dict:
+    """The commit of the git repository that holds `folder`, by default the working
+    directory, and whether its tracked files had uncommitted changes.
+
+    This is the version of the project that ran the campaign, not of the library.
+    An empty record outside a repository, or where `git` is not available.
+    """
+
+    def git(*arguments: str) -> str:
+        done = subprocess.run(
+            ["git", *arguments], cwd=folder, capture_output=True, text=True, timeout=30, check=True
+        )
+        return done.stdout.strip()
+
+    try:
+        commit = git("rev-parse", "HEAD")
+        return {"commit": commit, "dirty": bool(git("status", "--porcelain", "-uno"))}
+    except (OSError, subprocess.SubprocessError):
+        return {}
+
+
 @dataclass
 class Manifest:
     """How and with what a dataset was produced, and the fingerprint of its files.
 
     `summary` holds the counts the application adds (completed, failed, status
-    counts); in the file they are written next to the other fields. The manifest is
-    written last: its presence marks a complete dataset.
+    counts); in the file they are written next to the other fields. `user` is what
+    the application passed as metadata, and `source` the git commit of the project
+    that ran the campaign (see `git_source`), absent if there was none. The manifest
+    is written last: its presence marks a complete dataset.
     """
 
     created: str
@@ -46,9 +70,12 @@ class Manifest:
     summary: dict = field(default_factory=dict)
     schema_version: int = SCHEMA_VERSION
     user: dict = field(default_factory=dict)
+    source: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         record = asdict(self)
+        if not record["source"]:
+            del record["source"]
         return {**{k: v for k, v in record.items() if k != "summary"}, **record["summary"]}
 
     @classmethod

@@ -19,7 +19,7 @@ from spicefault import (
     split_by_magnitude,
     split_by_replica,
 )
-from spicefault.dataset import Manifest
+from spicefault.dataset import Manifest, git_source
 from spicefault.experiments import run_chunks, simulate_sample
 from spicefault.faults import LeakageFault, OpenCircuit, ParametricFault, ShortCircuit
 from spicefault.variation import (
@@ -141,6 +141,38 @@ def test_manifest_is_a_typed_record(run):
     assert record["n_completed"] == manifest.summary["n_completed"]  # written flat
     with pytest.raises(ValueError, match="unsupported manifest schema version"):
         Manifest.from_dict({**record, "schema_version": 99})
+
+
+def test_manifest_records_the_commit_of_the_project_that_ran_the_campaign(run, tmp_path):
+    import shutil
+    import subprocess
+
+    # the tests run from the repository of the library, or from a copy without one
+    here = git_source()
+    assert run.dataset().manifest.source == here
+    record = json.loads((run.out_dir / "manifest.json").read_text())
+    assert record.get("source", {}) == here and Manifest.from_dict(record).source == here
+
+    assert git_source(tmp_path) == {}  # not a repository
+    if shutil.which("git") is None:
+        pytest.skip("git not installed")
+
+    def git(*arguments):
+        identity = ["-c", "user.name=test", "-c", "user.email=test@example.org"]
+        subprocess.run(["git", *identity, *arguments], cwd=tmp_path, check=True,
+                       capture_output=True)  # fmt: skip
+
+    git("init")
+    (tmp_path / "study.py").write_text("seed = 1\n")
+    git("add", "study.py")
+    git("commit", "-m", "study")
+    commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=tmp_path, capture_output=True,
+                            text=True, check=True).stdout.strip()  # fmt: skip
+    (tmp_path / "data").mkdir()
+    (tmp_path / "data" / "samples.parquet").write_text("")  # what a campaign writes is untracked
+    assert git_source(tmp_path / "data") == {"commit": commit, "dirty": False}
+    (tmp_path / "study.py").write_text("seed = 2\n")
+    assert git_source(tmp_path) == {"commit": commit, "dirty": True}
 
 
 def test_verify_detects_altered_files(run, tmp_path):

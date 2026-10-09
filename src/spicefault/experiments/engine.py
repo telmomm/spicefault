@@ -25,7 +25,7 @@ import numpy as np
 import pandas as pd
 
 from .. import __version__
-from ..dataset.manifest import Manifest, file_record
+from ..dataset.manifest import Manifest, file_record, git_source
 from ..dataset.store import METADATA, assemble
 from ..simulation.ngspice import ngspice_version
 
@@ -208,6 +208,7 @@ def run_campaign(
         elapsed_total_s=round(elapsed_so_far(parts_dir), 1),
         files={name: file_record(out_dir / name) for name in [*written, METADATA, *(files or {})]},
         user=dict(user_metadata or {}),
+        source=git_source(),
         summary=summary(df) if summary is not None else {},
     )
     manifest.write(out_dir)  # last: its presence marks a complete dataset
