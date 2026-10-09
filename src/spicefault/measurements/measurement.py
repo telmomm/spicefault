@@ -328,6 +328,7 @@ class Waveform:
         return round(self.duration * self.fs)
 
     def times(self) -> np.ndarray:
+        """The instants of the stored points, in seconds from t = 0."""
         return np.arange(self.n_points) / self.fs
 
     def __call__(self, result: SimulationResult) -> np.ndarray:

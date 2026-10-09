@@ -70,6 +70,7 @@ class ExperimentResult:
         return iter(self.samples)
 
     def status_counts(self) -> dict[str, int]:
+        """How many samples ended with each simulation status."""
         return dict(Counter(s.result.status.value for s in self.samples))
 
     def to_frame(self) -> pd.DataFrame:
@@ -201,20 +202,25 @@ class Experiment:
     # --- definition -------------------------------------------------------------------
 
     def fault(self, sample: Sample) -> Fault | None:
+        """The fault of a sample; None for the fault-free circuit."""
         return self.faults[sample.fault_index - 1] if sample.fault_index else None
 
     def fault_id(self, sample: Sample) -> str:
+        """The identifier of the fault of a sample; `healthy` for the fault-free circuit."""
         fault = self.fault(sample)
         return fault.fault_id if fault else HEALTHY_ID
 
     def seed_key(self, sample: Sample) -> tuple[int, ...]:
+        """The key of the random stream of a sample, under the seeding scheme of the experiment."""
         return seed_key(self.seeding, sample.fault_index, self.fault_id(sample), sample.replica)
 
     def config_for(self, condition_index: int) -> SimulationConfig:
+        """The simulation configuration of a condition: its own, or that of the experiment."""
         condition = self.conditions[condition_index]
         return condition.config or self.config
 
     def measurements_for(self, condition_index: int) -> tuple[Measurement, ...]:
+        """The measurements of a condition: its own, or those of the experiment."""
         condition = self.conditions[condition_index]
         return condition.measurements if condition.measurements is not None else self.measurements
 
@@ -485,6 +491,7 @@ class Experiment:
         return results
 
     def run_sample(self, sample: Sample) -> SampleResult:
+        """Realise, simulate and measure one sample of the plan."""
         realised = self.realise(sample)
         result = self.simulator.run(realised.netlist, self.config_for(sample.condition_index))
         result, measurements = self._measured(result, sample.condition_index)

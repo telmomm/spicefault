@@ -34,8 +34,9 @@ is documented here as a recipe. The library has no dependency on any of them.
 | Statistics | Statistics, quantiles, yield and margins of a fault-free population |
 | Reliability | Detectability, failure probability, diagnostic coverage, separability and ambiguity |
 
-Some of these are planned and not yet released: the
-[roadmap](https://github.com/telmomm/spicefault/issues/33) tracks them.
+All of these are in the library since version 0.4.0. The issue that decided this scope,
+with what was left out and why, is the
+[roadmap](https://github.com/telmomm/spicefault/issues/33).
 
 ## Outside, with a recipe
 

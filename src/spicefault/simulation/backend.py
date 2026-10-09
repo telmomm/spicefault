@@ -283,6 +283,9 @@ class Simulator:
         self.backend = backend
 
     def run(self, netlist: str, config: SimulationConfig | None = None) -> SimulationResult:
+        """Simulate a netlist with the backend. A simulation that fails is returned with its
+        status and message, not raised.
+        """
         return self.backend.run(str(netlist), config or SimulationConfig())
 
     def metadata(self) -> dict:

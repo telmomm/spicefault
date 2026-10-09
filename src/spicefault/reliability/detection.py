@@ -33,6 +33,9 @@ class LimitTest:
     high: np.ndarray = field(default=None, repr=False)
 
     def fit(self, healthy: np.ndarray) -> LimitTest:
+        """Set the limits of each feature at the quantiles of the healthy samples that leave
+        the false-alarm rate `alpha`, shared equally between the features and their two sides.
+        """
         tail = self.alpha / (2 * healthy.shape[1])
         self.low = np.quantile(healthy, tail, axis=0)
         self.high = np.quantile(healthy, 1.0 - tail, axis=0)

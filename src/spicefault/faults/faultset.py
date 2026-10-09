@@ -55,6 +55,7 @@ class FaultSet(Sequence):
         return f"FaultSet({len(self)} faults)"
 
     def ids(self) -> list[str]:
+        """The identifiers of the faults, in order."""
         return list(self._by_id)
 
     def select(self, ids: Iterable[str]) -> FaultSet:
@@ -90,6 +91,7 @@ class FaultSet(Sequence):
         return cls(Fault.from_metadata(record) for record in records)
 
     def to_json(self, path: str | Path) -> None:
+        """Write the records of the faults to a file; `from_json` reads them back."""
         Path(path).write_text(json.dumps(self.metadata(), indent=2))
 
     @classmethod

@@ -89,9 +89,10 @@ vout = [s.result.plot("op")["v(out)"][0] for s in result]
 
 | | |
 |---|---|
-| **Faults as objects** | Open, short, leakage, parametric and composite faults, each a recorded change of the netlist with a physical interpretation |
+| **Faults as objects** | Open, short, leakage, series-resistance, parametric and composite faults, each a recorded change of the netlist with a physical interpretation |
 | **An auditable fault list** | A fault universe generated from rules, a coverage matrix, and a reason for every fault left out |
-| **A healthy population** | Tolerance, normal, log-normal, uniform and joint distributions, kept apart from the faults |
+| **A healthy population** | Tolerance, normal, log-normal, uniform, correlated and lot-level distributions, kept apart from the faults |
+| **Statistics without faults** | The same campaign as a Monte Carlo study: quantiles and yield with their intervals, tolerance corners, Latin hypercube and Sobol sampling, and the effect of the instrument that reads the measurements |
 | **Reproducible campaigns** | To disk in chunks, resumable; the same samples for any number of workers; five explicit simulation statuses |
 | **Datasets that stand on their own** | Integrity check, provenance of each sample, the netlist that was simulated for it, and simulation again from the folder |
 | **Reliability metrics with intervals** | Detection probability, diagnostic coverage, minimum detectable deviation, robustness against tolerance, ambiguity groups |

@@ -64,6 +64,7 @@ def open_rule(kinds: str = "RCL", r_open: float = 1e9, **kwargs) -> FaultRule:
 
 
 def short_rule(kinds: str = "RCL", r_short: float = 1.0, **kwargs) -> FaultRule:
+    """A short between the first two terminals of every component of these kinds."""
     return FaultRule("short", lambda c: [ShortCircuit(c.name, r_short=r_short)], kinds, **kwargs)
 
 
@@ -130,6 +131,14 @@ def series_rule(resistances: Sequence[float], kinds: str = "RCL", **kwargs) -> F
 
 
 class FaultUniverse:
+    """Every fault that the rules give on the components of a circuit, and the record of
+    which are simulated.
+
+    The universe is generated once, in netlist order and, for each component, in the order
+    of the rules. `exclude` leaves faults out with a reason; `selected` is what a campaign
+    simulates. `coverage_matrix`, `coverage`, `exclusions` and `metadata` are the record
+    that makes the coverage of the campaign auditable.
+    """
     def __init__(self, circuit: Circuit, rules: Sequence[FaultRule]):
         names = [rule.name for rule in rules]
         if len(names) != len(set(names)):
@@ -172,6 +181,7 @@ class FaultUniverse:
         return FaultSet(f for f in self.faults if f.fault_id not in self._excluded)
 
     def exclusions(self) -> pd.DataFrame:
+        """The faults left out, one row each, with the reason given."""
         return pd.DataFrame(
             [{"fault_id": i, "reason": reason} for i, reason in self._excluded.items()],
             columns=["fault_id", "reason"],

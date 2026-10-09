@@ -100,3 +100,22 @@ analysis.detectability(alpha=0.01).table
 
 The [examples](examples/index.md) do all of this on a real circuit and can be run as
 they are.
+
+## Without faults
+
+The same campaign with no faults is a Monte Carlo study of the circuit itself: how its
+tolerances spread each measurement, and how many circuits meet their specifications.
+
+```python
+from spicefault import Campaign, Specification
+
+campaign = Campaign(circuit, out_dir="data/rc_mc", samples=5000, variations=population,
+                    config=config, measurements=measurements, seed=1)
+campaign.run(workers=8)
+
+dataset = campaign.dataset()
+dataset.statistics()                                         # mean, spread, quantiles
+dataset.yield_report([Specification("gain_1k", minimum=0.146)])
+```
+
+See [Monte Carlo and yield](guide/monte-carlo.md).

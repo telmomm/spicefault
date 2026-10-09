@@ -7,6 +7,12 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+### Changed
+
+- Documentation: docstrings for the public methods that had none, API pages for the
+  dataset splits and the variation distributions, and the guides, the README and the
+  comparison brought up to 0.4.0.
+
 ## [0.4.0] - 2026-10-09
 
 ### Added

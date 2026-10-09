@@ -52,13 +52,16 @@ Go on with [Getting started](getting-started.md), or run the
 
 ## What it gives you
 
-- **Faults as objects.** Open, short, leakage, parametric and composite faults, each a
+- **Faults as objects.** Open, short, leakage, series-resistance, parametric and composite faults, each a
   recorded change of the netlist with a physical interpretation.
   [Faults](guide/faults.md)
 - **An auditable fault list.** A fault universe generated from rules, with a coverage
   matrix and a reason for every fault left out.
-- **A healthy population.** Tolerance, normal, log-normal and joint distributions,
-  kept apart from the faults. [Normal variation](guide/variation.md)
+- **A healthy population.** Tolerance, normal, log-normal, correlated and lot-level
+  distributions, kept apart from the faults. [Normal variation](guide/variation.md)
+- **Statistics without faults.** The same campaign as a Monte Carlo study: quantiles
+  and yield with their intervals, tolerance corners, and the effect of the instrument
+  that reads the measurements. [Monte Carlo and yield](guide/monte-carlo.md)
 - **Reproducible campaigns.** The same samples on any number of workers; resumable;
   every failed simulation kept with its status. [Experiments](guide/experiments.md)
 - **Datasets that stand on their own.** Integrity checks, the provenance of each

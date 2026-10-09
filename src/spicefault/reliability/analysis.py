@@ -177,6 +177,9 @@ class ReliabilityAnalysis:
         return table.loc[[self.healthy_id, *self.fault_ids]]
 
     def response(self, fault_id: str) -> FaultResponse:
+        """The samples of one fault: its values of the features, how many simulations failed,
+        and its record.
+        """
         rows = self._rows.get(fault_id, np.array([], dtype=int))
         return FaultResponse(
             fault_id,

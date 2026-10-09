@@ -10,7 +10,9 @@ and each is an object:
 | `Fault` | A defect, as a recorded change of the netlist |
 | `OperatingCondition` | Supply, load, temperature: what the circuit is used under |
 
-An `Experiment` puts them together with a simulator and a seed.
+An `Experiment` puts them together with a simulator and a seed. Faults are optional:
+without them the experiment is a Monte Carlo study of the healthy population (see
+[Monte Carlo and yield](monte-carlo.md)).
 
 ## How a sample is built
 

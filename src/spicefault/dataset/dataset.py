@@ -553,6 +553,10 @@ class Dataset:
         return row
 
     def provenance(self, sample_id: int) -> Provenance:
+        """Everything that identifies one sample and what produced it: the fault, the
+        operating condition, the seed and the key of its random stream, the values it was
+        drawn with, its status, and the versions of the simulator and of the library.
+        """
         row, meta = self._row(sample_id), self.metadata
 
         def number(value) -> float | None:

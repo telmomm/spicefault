@@ -16,6 +16,7 @@ There are three primitives, and nothing else changes a netlist:
 | `OpenCircuit` | Broken connection | A large resistance in series with one terminal |
 | `ShortCircuit` | Bridge or breakdown across a component | A small resistance between two terminals |
 | `LeakageFault` | Finite parasitic conduction | A graded resistance between two terminals |
+| `SeriesResistanceFault` | Increased resistance in a conducting path: a degraded joint, the series resistance of an ageing capacitor | A graded resistance in series with one terminal |
 | `ParametricFault` | A parameter outside its tolerance band | The parameter is moved relative to its realised value, or set to a value |
 | `CompositeFault` | One mechanism with several electrical consequences | The changes of its parts, in order |
 
@@ -72,6 +73,9 @@ universe.coverage()          # 11 of 12 conditions
 faults = universe.selected()
 faults.tolerance_overlap(experiment.variations)   # parametric faults inside the tolerance band
 ```
+
+The rules are `open_rule`, `short_rule`, `parametric_rule`, `leakage_rule` and
+`series_rule`; a `FaultRule` with a function of its own covers what they do not.
 
 A rule selects components by element letter (`kinds`), by name (`components`) and by
 the subcircuit of an instance or the model of a device (`models`, compared with

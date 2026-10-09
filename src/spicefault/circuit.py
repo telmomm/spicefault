@@ -146,6 +146,7 @@ class Circuit:
         return None if match is None else f"{match.group(1).lower()}{match.group(2)}".rstrip()
 
     def to_netlist(self) -> str:
+        """The netlist as text, with its includes resolved and its dot analyses removed."""
         return self._text
 
     @property
@@ -158,6 +159,7 @@ class Circuit:
         return Netlist(self._text)
 
     def components(self) -> list[Component]:
+        """The top-level elements, in netlist order."""
         net = self.netlist()
         found = []
         for name in net.components():
@@ -171,12 +173,14 @@ class Circuit:
         return found
 
     def component(self, name: str) -> Component:
+        """One top-level element, by name (case does not matter)."""
         for component in self.components():
             if component.name.lower() == name.lower():
                 return component
         raise KeyError(f"no component named {name!r}")
 
     def nodes(self) -> list[str]:
+        """The nodes that the top-level elements connect to, sorted."""
         return sorted({node for c in self.components() for node in c.nodes})
 
     def parameters(self) -> dict[tuple[str, str], float]:
