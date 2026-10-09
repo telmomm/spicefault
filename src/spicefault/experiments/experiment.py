@@ -136,7 +136,15 @@ class Experiment:
         for label, names in (
             ("fault", [HEALTHY_ID, *(f.fault_id for f in self.faults)]),
             ("operating condition", [c.name for c in self.conditions]),
-            ("measurement", [m.name for m in self.measurements]),
+            ("measurement", [name for m in self.measurements for name in m.columns]),
+            *(
+                (
+                    f"measurement of condition {c.name}",
+                    [name for m in c.measurements for name in m.columns],
+                )
+                for c in self.conditions
+                if c.measurements is not None
+            ),
         ):
             repeated = [name for name, n in Counter(names).items() if n > 1]
             if repeated:
@@ -164,11 +172,20 @@ class Experiment:
 
     @property
     def measurement_columns(self) -> tuple[str, ...]:
+        """The measurement columns of the table: those of every condition, once each."""
         return tuple(dict.fromkeys(
-            measurement.name
+            column
             for index in range(len(self.conditions))
-            for measurement in self.measurements_for(index)
+            for column in self.columns_for(index)
         ))
+
+    def columns_for(self, condition_index: int) -> tuple[str, ...]:
+        """The measurement columns that a condition fills."""
+        return tuple(
+            column
+            for measurement in self.measurements_for(condition_index)
+            for column in measurement.columns
+        )
 
     def plan(self) -> list[Sample]:
         """Every sample, in a fixed order: by fault (healthy first), replica and condition."""
@@ -277,7 +294,10 @@ class Experiment:
         measurements = self.measurements if condition_index is None else self.measurements_for(
             condition_index
         )
-        return {measurement.name: measurement(result) for measurement in measurements}
+        values: dict[str, float] = {}
+        for measurement in measurements:
+            values.update(measurement.values(result))
+        return values
 
     def run_sample(self, sample: Sample) -> SampleResult:
         realised = self.realise(sample)

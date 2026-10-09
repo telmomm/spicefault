@@ -251,6 +251,43 @@ def test_condition_can_override_config_and_measurements(tmp_path):
     assert rebuilt.conditions[1] == bench
 
 
+def divider_values(result):
+    """Two values from one reading of the output; the second is undefined below 0.497 V."""
+    out = float(result.plot("Operating Point")["v(out)"][0].real)
+    return {"vout": out, "margin": out - 0.497 if out >= 0.497 else float("nan")}
+
+
+def test_group_measurement_fills_one_column_per_name(tmp_path):
+    c = campaign(
+        tmp_path / "data",
+        conditions=[OperatingCondition()],
+        measurements=[Measurement.group(("vout", "margin"), divider_values, name="divider"),
+                      Measurement.final("v(out)")],
+        waveform=None,
+    )  # fmt: skip
+    assert c.experiment.measurement_columns == ("vout", "margin", "final_v(out)")
+    c.run(progress=False)
+    dataset = c.dataset()
+    assert dataset.features == ["vout", "margin", "final_v(out)"] and dataset.verify() == []
+    df = dataset.samples
+    ok = df[df["sim_ok"]]
+    assert np.allclose(ok["margin"], ok["vout"] - 0.497) and len(ok) >= 5
+    # a value of the group that is not finite fails the sample, and none of them is kept:
+    # every divider with R1 20 % high gives 0.4545 V
+    low = df[df["fault_id"] == "R1:parametric:+0.2"]
+    assert set(low["status"]) == {"INVALID_OUTPUT"} and low["vout"].isna().all()
+    assert low["message"].str.contains("a measurement is not finite").sum() >= 4
+    assert load_metadata(c.out_dir)["measurements"][0] == {
+        "name": "divider", "kind": "group", "vector": "", "analysis": 0, "parameters": {},
+        "function": "divider_values", "names": ["vout", "margin"],
+    }
+    with pytest.raises(ValueError, match="repeated measurement identifiers: \\['vout'\\]"):
+        campaign(tmp_path / "twice", measurements=[
+            Measurement.group(("vout", "margin"), divider_values),
+            Measurement.value("v(out)", name="vout"),
+        ])  # fmt: skip
+
+
 def test_fault_tags_become_label_columns_and_user_metadata_is_recorded(tmp_path):
     faults = [
         OpenCircuit("R2", tags={"origin": "electrode", "part": "lead"}),

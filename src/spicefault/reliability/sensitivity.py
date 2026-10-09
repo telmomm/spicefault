@@ -42,7 +42,10 @@ def local_sensitivity(
             raise RuntimeError(
                 f"{component}.{parameter} x {factor}: {result.status.value}: {result.message}"
             )
-        return pd.Series({m.name: m(result) for m in measurements})
+        values: dict[str, float] = {}
+        for measurement in measurements:
+            values.update(measurement.values(result))
+        return pd.Series(values)
 
     columns = {}
     for component, parameter in parameters:

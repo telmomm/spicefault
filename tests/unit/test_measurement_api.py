@@ -115,6 +115,38 @@ def test_waveform_is_resampled_on_a_uniform_grid():
     assert waveform.metadata()["n_points"] == 50
 
 
+# --- several values from one function -------------------------------------------------
+
+
+def test_group_gives_several_named_values_from_one_call():
+    calls = []
+
+    def specifications(result):
+        calls.append(result)
+        dc = float(result.plot("Operating Point")["v(out)"][0].real)
+        return {"dc": dc, "ratio": dc / float(result.plot("Operating Point")["v(in)"][0].real),
+                "unused": 0.0}  # fmt: skip
+
+    group = Measurement.group(("dc", "ratio"), specifications)
+    assert group.columns == ("dc", "ratio")
+    assert Measurement.value("v(out)").columns == ("value_v(out)",)
+    assert group.values(RESULT) == {"dc": 0.5, "ratio": 0.5} and len(calls) == 1
+    assert Measurement.value("v(out)", name="dc").values(RESULT) == {"dc": 0.5}
+    record = json.loads(json.dumps(group.metadata()))
+    assert record["kind"] == "group" and record["names"] == ["dc", "ratio"]
+    assert record["name"] == "dc+ratio" and record["function"].endswith("specifications")
+    with pytest.raises(NotImplementedError, match="holds a function"):
+        Measurement.from_metadata(record)
+    with pytest.raises(TypeError, match="use values"):
+        group(RESULT)
+    with pytest.raises(KeyError, match="did not return \\['gain'\\]"):
+        Measurement.group(("dc", "gain"), specifications).values(RESULT)
+    with pytest.raises(TypeError, match="must return a dictionary"):
+        Measurement.group(("dc",), lambda result: 0.5).values(RESULT)
+    with pytest.raises(ValueError, match="unique, non-empty names"):
+        Measurement.group(("dc", "dc"), specifications)
+
+
 # --- commands between analyses --------------------------------------------------------
 
 DECK = "rc\nV1 in 0 dc 1 ac 0\nR1 in out 10k\nC1 out 0 100n\n.end\n"

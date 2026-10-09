@@ -7,7 +7,7 @@ samples is not the average of the signal.
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -130,6 +130,9 @@ class Measurement:
 
     `analysis` says which plot to read: `op`, `ac`, `tran` or `dc` for the first of
     that kind, or the position of the analysis in the simulation configuration.
+
+    A `group` is the exception to "one number": one function gives several named
+    values, each a column of its own. `columns` and `values` treat both alike.
     """
 
     name: str
@@ -138,8 +141,28 @@ class Measurement:
     analysis: str | int
     parameters: dict = field(default_factory=dict)
     function: Callable[[Plot | SimulationResult], float] | None = field(default=None, compare=False)
+    names: tuple[str, ...] = ()  # the values of a group
+
+    @property
+    def columns(self) -> tuple[str, ...]:
+        """The names of the values it gives: its own, or those of a group."""
+        return self.names if self.kind == "group" else (self.name,)
+
+    def values(self, result: SimulationResult) -> dict[str, float]:
+        """The values by name: one, or those of a group from one call of its function."""
+        if self.kind != "group":
+            return {self.name: self(result)}
+        found = self.function(result)
+        if not isinstance(found, Mapping):
+            raise TypeError(f"the function of the group {self.name!r} must return a dictionary")
+        missing = [name for name in self.names if name not in found]
+        if missing:
+            raise KeyError(f"the group {self.name!r} did not return {missing}")
+        return {name: float(found[name]) for name in self.names}
 
     def __call__(self, result: SimulationResult) -> float:
+        if self.kind == "group":
+            raise TypeError(f"the group {self.name!r} gives several values; use values()")
         if self.kind == "custom_result":
             return float(self.function(result))
         plot = select_plot(result, self.analysis)
@@ -160,6 +183,8 @@ class Measurement:
             record["function"] = getattr(
                 self.function, "__qualname__", type(self.function).__qualname__
             )
+        if self.kind == "group":
+            record["names"] = list(self.names)
         return record
 
     @classmethod
@@ -264,6 +289,27 @@ class Measurement:
     ) -> Measurement:
         """`function(result)` on the complete simulation result."""
         return cls(name, "custom_result", "", 0, {}, function)
+
+    @classmethod
+    def group(
+        cls,
+        names: Sequence[str],
+        function: Callable[[SimulationResult], Mapping[str, float]],
+        name: str = "",
+    ) -> Measurement:
+        """Several values from one evaluation: `function(result)` returns {name: value}.
+
+        The function is called once per simulation and each of `names` becomes a
+        column. A name it does not return, or a value that is not finite, makes the
+        sample `INVALID_OUTPUT`, as for any measurement. `name` identifies the group
+        in the provenance, with the names and the name of the function.
+        """
+        names = tuple(names)
+        if not names or len(set(names)) != len(names) or not all(
+            isinstance(n, str) and n for n in names
+        ):
+            raise ValueError("a group needs unique, non-empty names")
+        return cls(name or "+".join(names), "group", "", 0, {}, function, names)
 
 
 @dataclass(frozen=True)

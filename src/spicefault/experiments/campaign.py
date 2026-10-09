@@ -73,8 +73,8 @@ def simulate_sample(sample: Sample, experiment: Experiment) -> tuple[dict, np.nd
             measurements.update(experiment.measure(result, sample.condition_index))
             if experiment.waveform is not None:
                 waveform = experiment.waveform(result)
-            active = experiment.measurements_for(sample.condition_index)
-            if not all(math.isfinite(measurements[m.name]) for m in active):
+            active = experiment.columns_for(sample.condition_index)
+            if not all(math.isfinite(measurements[column]) for column in active):
                 raise ValueError("a measurement is not finite")
             row["sim_ok"] = True
         except Exception as exc:  # the simulation ran but its output cannot be used
@@ -216,11 +216,14 @@ class FaultCampaign:
                     f"{result.status.value}: {result.message}"
                 )
                 continue
-            measurements = e.measurements_for(condition_index)
-            for item in (*measurements, *([e.waveform] if e.waveform else [])):
-                label = getattr(item, "name", "waveform")
+            checks = [(m.name, m.values) for m in e.measurements_for(condition_index)]
+            if e.waveform is not None:
+                checks.append(("waveform", e.waveform))
+            for label, read in checks:
                 try:
-                    if not np.all(np.isfinite(item(result))):
+                    found = read(result)
+                    values = list(found.values()) if isinstance(found, dict) else found
+                    if not np.all(np.isfinite(values)):
                         raise ValueError("not finite")
                 except Exception as exc:
                     report.errors.append(
