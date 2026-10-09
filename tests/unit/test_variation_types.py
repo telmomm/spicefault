@@ -7,6 +7,7 @@ from spicefault import Circuit, Experiment, VariationSet
 from spicefault.experiments import sample_stream
 from spicefault.netlist import Netlist
 from spicefault.variation import (
+    CatalogueVariation,
     CustomVariation,
     Draw,
     FixedVariation,
@@ -16,7 +17,9 @@ from spicefault.variation import (
     NormalVariation,
     ToleranceVariation,
     UniformVariation,
+    instance_tolerances,
     tolerances,
+    variation_from_metadata,
 )
 
 TEXT = (
@@ -203,3 +206,97 @@ def test_tolerances_by_component_kind():
     ]
     assert [v.component for v in tolerances(circuit, {"R": 0.01}, components=["R2"])] == ["R2"]
     assert len(tolerances(circuit, {"X": 0.1})) == 0  # an instance has no value
+
+
+def test_instance_tolerances_cover_every_instance_of_a_subcircuit():
+    circuit = Circuit(
+        "amplifiers\nV1 in 0 dc 1\nXU1 in a opamp vos=0.0 aol=200000.0\nXB1 a b buffer gain=1.0\n"
+        "XU2 b out OPAMP vos=0.0 aol=100000.0\n.end\n",
+        "amplifiers",
+    )
+    built = instance_tolerances(circuit, "opamp", {"vos": (0.5e-3, "absolute"), "aol": 0.5})
+    assert built.variations == (
+        ToleranceVariation("XU1", 0.5e-3, "uniform", "vos", relative=False),
+        ToleranceVariation("XU1", 0.5, "uniform", "aol"),
+        ToleranceVariation("XU2", 0.5e-3, "uniform", "vos", relative=False),
+        ToleranceVariation("XU2", 0.5, "uniform", "aol"),
+    )
+    drawn = np.array([list(built.sample(sample_stream(0, r), circuit.netlist()).values.values())
+                      for r in range(2000)])  # fmt: skip
+    assert np.abs(drawn[:, [0, 2]]).max() == pytest.approx(0.5e-3, rel=0.01)
+    assert drawn[:, 1].min() == pytest.approx(1e5, rel=0.01)  # 200000 within 50 %
+    assert drawn[:, 3].max() == pytest.approx(1.5e5, rel=0.01)  # each around its own nominal
+    assert instance_tolerances(circuit, "buffer", {"gain": (0.01, "relative")}, "truncnorm")\
+        .variations == (ToleranceVariation("XB1", 0.01, "truncnorm", "gain"),)
+    with pytest.raises(ValueError, match="no instance of 'comparator'"):
+        instance_tolerances(circuit, "comparator", {"vos": 0.1})
+    with pytest.raises(ValueError, match="XU1 does not state the parameter 'gbw'"):
+        instance_tolerances(circuit, "opamp", {"gbw": 0.1})
+    with pytest.raises(ValueError, match="relative or absolute, not 'percent'"):
+        instance_tolerances(circuit, "opamp", {"vos": (1.0, "percent")})
+
+
+ELECTRODE = CatalogueVariation(
+    "XE1",
+    options={"gel": {"r": 2e3, "c": 50e-9}, "steel": {"r": 2e5, "c": 5e-9}, "textile": {"r": 1e6,
+             "c": 1e-9}},  # fmt: skip
+    weights=(2.0, 1.0, 1.0),
+    spread=2.0,
+    label="electrode_kind",
+)
+ELECTRODES = "skin\nV1 in 0 dc 1\nXE1 in out electrode r=1.0 c=1.0\nR1 out 0 10k\n.end\n"
+
+
+def test_catalogue_draws_the_type_then_its_parameters():
+    net = Netlist(ELECTRODES)
+    drawn = [ELECTRODE.draw(sample_stream(0, r), net) for r in range(4000)]
+    kinds = [d.labels["electrode_kind"] for d in drawn]
+    share = {kind: kinds.count(kind) / len(kinds) for kind in ELECTRODE.options}
+    assert share == pytest.approx({"gel": 0.5, "steel": 0.25, "textile": 0.25}, abs=0.03)
+    assert ELECTRODE.targets() == (("XE1", "r"), ("XE1", "c"))
+    for kind, medians in ELECTRODE.options.items():
+        for parameter, median in medians.items():
+            factor = np.array([d.values["XE1", parameter] for d in drawn
+                               if d.labels["electrode_kind"] == kind]) / median  # fmt: skip
+            assert 0.5 <= factor.min() < 0.52 and 1.95 < factor.max() <= 2.0
+            assert np.log(factor).mean() == pytest.approx(0.0, abs=0.05)  # median, not mean
+    # the two parameters of a part are drawn independently around their medians
+    gel = np.log([[d.values["XE1", "r"] / 2e3, d.values["XE1", "c"] / 50e-9] for d in drawn
+                  if d.labels["electrode_kind"] == "gel"])  # fmt: skip
+    assert abs(np.corrcoef(gel.T)[0, 1]) < 0.06
+
+    exact = CatalogueVariation("XE1", {"gel": {"r": 2e3}, "steel": {"r": 2e5}})
+    assert exact.label == "XE1_kind" and exact.spread == 1.0
+    values = {exact.draw(sample_stream(1, r), net).values["XE1", "r"] for r in range(50)}
+    assert values == {2e3, 2e5}
+
+
+def test_catalogue_is_rebuilt_from_its_record_scaled_and_recorded():
+    record = json.loads(json.dumps(ELECTRODE.metadata()))
+    assert record["type"] == "catalogue" and record["weights"] == [2.0, 1.0, 1.0]
+    assert variation_from_metadata(record) == ELECTRODE
+    net, half = Netlist(ELECTRODES), ELECTRODE.scaled(0.5)
+    assert half.spread == pytest.approx(2**0.5)
+    for seed in range(30):  # the same type, and half the deviation in logarithm
+        full, scaled = ELECTRODE.draw(sample_stream(seed), net), half.draw(sample_stream(seed), net)
+        kind = full.labels["electrode_kind"]
+        assert scaled.labels == full.labels
+        for (target, value), (_, other) in zip(full.values.items(), scaled.values.items(),
+                                               strict=True):  # fmt: skip
+            median = ELECTRODE.options[kind][target[1]]
+            assert np.log(other / median) == pytest.approx(0.5 * np.log(value / median))
+
+    experiment = Experiment(Circuit(ELECTRODES, "skin"), variations=[ELECTRODE], samples=4)
+    realised = [experiment.realise(sample) for sample in experiment.plan()]
+    assert all(r.labels["electrode_kind"] in ELECTRODE.options for r in realised)
+    assert f"r={realised[0].parameters['XE1', 'r']!r}" in realised[0].netlist
+    assert experiment.metadata()["variations"] == [ELECTRODE.metadata()]
+
+    with pytest.raises(ValueError, match="the same parameters"):
+        CatalogueVariation("XE1", {"gel": {"r": 1.0}, "steel": {"c": 1.0}})
+    with pytest.raises(ValueError, match="weights: one per type"):
+        CatalogueVariation("XE1", {"gel": {"r": 1.0}, "steel": {"r": 2.0}}, weights=(1.0,))
+    with pytest.raises(ValueError, match="at least 1"):
+        CatalogueVariation("XE1", {"gel": {"r": 1.0}}, spread=0.5)
+    with pytest.raises(TypeError, match="drawn as a whole"):
+        ELECTRODE.sample(sample_stream(0), 1.0)

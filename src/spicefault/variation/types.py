@@ -6,7 +6,7 @@ else, in a fixed number and order (the truncated ones redraw until in range).
 
 from __future__ import annotations
 
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, replace
 
 import numpy as np
@@ -273,7 +273,83 @@ class JointVariation(Variation):
         }
 
 
+@dataclass(frozen=True)
+class CatalogueVariation(Variation):
+    """A part that is one of several types: the type is drawn first, then its parameters.
+
+    `options` maps each type to the medians of the parameters of `component`, for
+    example `{"gel": {"r": 2e3, "c": 50e-9}, "steel": {"r": 2e5, "c": 5e-9}}`; every
+    type gives the same parameters. The type is drawn with probabilities proportional
+    to `weights` (equal by default), and each parameter is its median times a factor
+    drawn log-uniformly between 1 / `spread` and `spread`, as in
+    `LogUniformVariation`. The drawn type is recorded under `label`, by default
+    `<component>_kind`, and becomes a column of the dataset.
+
+    It uses the same random numbers whatever type is drawn, and it is rebuilt from
+    its record, since it holds no function.
+    """
+
+    component: str
+    options: Mapping[str, Mapping[str, float]]
+    weights: Sequence[float] | None = None
+    spread: float = 1.0
+    label: str = ""
+
+    def __post_init__(self):
+        options = {str(kind): dict(medians) for kind, medians in self.options.items()}
+        if not options:
+            raise ValueError("a catalogue needs at least one type")
+        parameters = [tuple(medians) for medians in options.values()]
+        if not parameters[0] or any(set(p) != set(parameters[0]) for p in parameters):
+            raise ValueError("every type of a catalogue gives the same parameters")
+        if self.spread < 1:
+            raise ValueError("spread is a factor of at least 1")
+        if self.weights is not None:
+            weights = [float(w) for w in self.weights]
+            if len(weights) != len(options) or min(weights) < 0 or not sum(weights) > 0:
+                raise ValueError("weights: one per type, not negative, not all zero")
+            object.__setattr__(self, "weights", weights)
+        object.__setattr__(self, "options", options)
+        object.__setattr__(self, "label", self.label or f"{self.component}_kind")
+
+    @property
+    def parameters(self) -> tuple[str, ...]:
+        return tuple(next(iter(self.options.values())))
+
+    def targets(self):
+        return tuple((self.component, parameter) for parameter in self.parameters)
+
+    def sample(self, rng, nominal):
+        raise TypeError("a catalogue variation is drawn as a whole")
+
+    def draw(self, rng, netlist):
+        kinds = list(self.options)
+        weights = np.asarray(self.weights or [1.0] * len(kinds), dtype=float)
+        edges = np.cumsum(weights) / weights.sum()
+        index = min(int(np.searchsorted(edges, rng.random(), side="right")), len(kinds) - 1)
+        medians = self.options[kinds[index]]
+        values = {
+            (self.component, parameter): medians[parameter] * log_uniform_factor(rng, self.spread)
+            for parameter in self.parameters
+        }
+        return Draw(values, {self.label: kinds[index]})
+
+    def scaled(self, factor):
+        return replace(self, spread=self.spread**factor)
+
+    def metadata(self):
+        return {
+            "type": "catalogue",
+            "component": self.component,
+            "options": {kind: dict(medians) for kind, medians in self.options.items()},
+            "weights": None if self.weights is None else list(self.weights),
+            "spread": self.spread,
+            "label": self.label,
+        }
+
+
 _REBUILDABLE = {
+    "catalogue": CatalogueVariation,
     "fixed": FixedVariation,
     "tolerance": ToleranceVariation,
     "uniform": UniformVariation,
@@ -321,4 +397,44 @@ def tolerances(
         tolerance = overrides.get(name, by_kind.get(component.kind))
         if tolerance is not None and "value" in component.parameters:
             found.append(ToleranceVariation(component.name, tolerance, distribution))
+    return VariationSet(found)
+
+
+def instance_tolerances(
+    circuit: Circuit,
+    model: str,
+    parameters: Mapping[str, float | tuple[float, str]],
+    distribution: str = "uniform",
+) -> VariationSet:
+    """The same tolerances for the parameters of every instance of a subcircuit or model.
+
+    `model` is the subcircuit of the X instances, or the model of the devices, to
+    vary (`Component.model`). `parameters` maps each instance parameter to its
+    tolerance: a number for a relative one, or `(tolerance, "relative")` or
+    `(tolerance, "absolute")`, the second for a parameter that is nominally zero:
+
+        instance_tolerances(circuit, "opamp", {"vos": (0.5e-3, "absolute"), "aol": 0.5})
+
+    The variations come in netlist order, instance by instance. A parameter must be
+    written on every instance, since only what the netlist states can be varied.
+    """
+    kinds = {"relative": True, "absolute": False}
+    wanted = []
+    for parameter, tolerance in parameters.items():
+        tolerance, kind = tolerance if isinstance(tolerance, tuple) else (tolerance, "relative")
+        if kind not in kinds:
+            raise ValueError(f"{parameter}: a tolerance is relative or absolute, not {kind!r}")
+        wanted.append((parameter, float(tolerance), kinds[kind]))
+    instances = [c for c in circuit.components() if c.model.lower() == model.lower()]
+    if not instances:
+        raise ValueError(f"the circuit has no instance of {model!r}")
+    found = []
+    for component in instances:
+        written = {name.lower() for name in component.parameters}
+        for parameter, tolerance, relative in wanted:
+            if parameter.lower() not in written:
+                raise ValueError(f"{component.name} does not state the parameter {parameter!r}")
+            found.append(
+                ToleranceVariation(component.name, tolerance, distribution, parameter, relative)
+            )
     return VariationSet(found)
