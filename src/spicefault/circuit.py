@@ -16,6 +16,7 @@ class Component:
     kind: str  # SPICE element letter: R, C, L, V, X, ...
     nodes: tuple[str, ...]  # empty if the terminals of this element type are not known
     parameters: dict[str, float]  # numeric ones only: `value`, `dc`, instance parameters
+    model: str = ""  # subcircuit of an X instance, model of a device; empty otherwise
 
 
 class Circuit:
@@ -164,7 +165,9 @@ class Circuit:
                 nodes = tuple(net.nodes(name))
             except NotImplementedError:
                 nodes = ()
-            found.append(Component(name, name[0].upper(), nodes, net.parameters(name)))
+            found.append(
+                Component(name, name[0].upper(), nodes, net.parameters(name), net.model(name))
+            )
         return found
 
     def component(self, name: str) -> Component:

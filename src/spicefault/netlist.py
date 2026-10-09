@@ -40,6 +40,7 @@ _SUFFIX = {
     "f": 1e-15,
 }
 _NUMBER = re.compile(r"([+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?)(meg|mil|[tgkmunpf])?[a-z]*", re.I)
+_PLAIN_NUMBER = re.compile(r"[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?", re.I)
 _PARAM_ASSIGNMENT = re.compile(r"([A-Za-z_]\w*)\s*=\s*([^\s,]+)")
 _SOURCE_FUNCTIONS = {
     "pulse": ("v1", "v2", "td", "tr", "tf", "pw", "per"),
@@ -149,17 +150,39 @@ class Netlist:
         if kind in _TERMINALS:
             return spans[1 : 1 + _TERMINALS[kind]]
         if kind == "x":
-            first_param = next(
-                (
-                    k
-                    for k, span in enumerate(spans)
-                    if "=" in self._text(span)
-                    or (k + 1 < len(spans) and self._text(spans[k + 1]) == "=")
-                ),
-                len(spans),
-            )
-            return spans[1 : first_param - 1]  # the last one is the subcircuit name
+            return spans[1 : self._first_parameter(spans) - 1]  # the last is the subcircuit
         raise NotImplementedError(f"terminals of {component!r}: element type not supported")
+
+    def _first_parameter(self, spans: list[tuple[int, int, int]]) -> int:
+        """Position of the first `name=value` token of an element; their number if none."""
+        return next(
+            (
+                k
+                for k, span in enumerate(spans)
+                if "=" in self._text(span)
+                or (k + 1 < len(spans) and self._text(spans[k + 1]) == "=")
+            ),
+            len(spans),
+        )
+
+    def model(self, component: str) -> str:
+        """The subcircuit of an X instance or the model of a device (D, Q, J, M), as written.
+
+        Empty for the other elements. A bipolar transistor may have a substrate node
+        before its model and an area after it; a plain number after the model is
+        taken as the area.
+        """
+        _, spans = self._tokens(component)
+        kind = component[0].lower()
+        words = [self._text(span) for span in spans[1 : self._first_parameter(spans)]]
+        if kind == "x":
+            return words[-1] if words else ""
+        if kind not in "dqjm":
+            return ""
+        rest = words[_TERMINALS[kind] :]
+        if kind == "q" and len(rest) > 1 and not _PLAIN_NUMBER.fullmatch(rest[1]):
+            return rest[1]  # the first one is the substrate node
+        return rest[0] if rest else ""
 
     def nodes(self, component: str) -> list[str]:
         """Nodes of the terminals of a component, in netlist order."""

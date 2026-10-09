@@ -22,21 +22,40 @@ from .types import LeakageFault, OpenCircuit, ParametricFault, SeriesResistanceF
 @dataclass(frozen=True)
 class FaultRule:
     """Faults of one type (`name`, a column of the coverage matrix) on the components
-    it applies to: those whose element letter is in `kinds` (any, if empty) and, if
-    `components` is given, whose name is listed.
+    it applies to: those whose element letter is in `kinds` (any, if empty), whose
+    name is listed if `components` is given, and whose subcircuit or device model
+    (`Component.model`) is listed if `models` is given.
+
+    `tags` are added to every fault of the rule: a dictionary, or a function of the
+    component that returns one, for labels that depend on where the fault is (the
+    part to locate, the origin of the defect).
     """
 
     name: str
     make: Callable[[Component], Sequence[Fault]]
     kinds: str = ""
     components: tuple[str, ...] | None = None
+    models: tuple[str, ...] | None = None
+    tags: dict[str, str] | Callable[[Component], dict[str, str]] | None = None
 
     def applies(self, component: Component) -> bool:
         if self.kinds and component.kind not in self.kinds.upper():
             return False
+        if self.models is not None and component.model.lower() not in (
+            model.lower() for model in self.models
+        ):
+            return False
         if self.components is None:
             return True
         return component.name.lower() in (name.lower() for name in self.components)
+
+    def faults(self, component: Component) -> list[Fault]:
+        """The faults of the rule on a component, with the tags of the rule."""
+        made = list(self.make(component))
+        if self.tags is None:
+            return made
+        tags = self.tags(component) if callable(self.tags) else self.tags
+        return [fault.with_tags(tags) for fault in made]
 
 
 def open_rule(kinds: str = "RCL", r_open: float = 1e9, **kwargs) -> FaultRule:
@@ -49,15 +68,44 @@ def short_rule(kinds: str = "RCL", r_short: float = 1.0, **kwargs) -> FaultRule:
 
 
 def parametric_rule(
-    deviations: Sequence[float], kinds: str = "RCL", parameter: str = "value", **kwargs
+    deviations: Sequence[float] = (),
+    kinds: str = "RCL",
+    parameter: str = "value",
+    *,
+    factors: Sequence[float] = (),
+    fault_values: Sequence[float] = (),
+    fault_type: str = "parametric",
+    **kwargs,
 ) -> FaultRule:
-    """One fault per relative deviation of `parameter`."""
-    return FaultRule(
-        "parametric",
-        lambda c: [ParametricFault(c.name, parameter, deviation=d) for d in deviations],
-        kinds,
-        **kwargs,
-    )
+    """One fault of `parameter` per relative deviation, per factor and per absolute value.
+
+    `deviations` and `factors` act on the value the component has after its normal
+    variation; `fault_values` replace it (see `ParametricFault`), with a severity
+    relative to the nominal value when that is not zero. `fault_type` is the type the
+    faults are reported under and the name of the rule, so that several parametric
+    rules (an offset, a gain) can share a universe.
+    """
+    if not (len(deviations) or len(factors) or len(fault_values)):
+        raise ValueError("a parametric rule needs deviations, factors or fault_values")
+
+    def make(component: Component) -> list[Fault]:
+        nominal = {name.lower(): v for name, v in component.parameters.items()}.get(
+            parameter.lower()
+        )
+        common = {"fault_type": fault_type}
+        return [
+            *(ParametricFault(component.name, parameter, deviation=d, **common)
+              for d in deviations),
+            *(ParametricFault(component.name, parameter, factor=f, **common) for f in factors),
+            *(
+                ParametricFault(
+                    component.name, parameter, fault_value=v, nominal_value=nominal, **common
+                )
+                for v in fault_values
+            ),
+        ]  # fmt: skip
+
+    return FaultRule(fault_type, make, kinds, **kwargs)
 
 
 def leakage_rule(resistances: Sequence[float], kinds: str = "C", **kwargs) -> FaultRule:
@@ -93,7 +141,7 @@ class FaultUniverse:
         for component in circuit.components():
             for rule in self.rules:
                 if rule.applies(component):
-                    made = list(rule.make(component))
+                    made = rule.faults(component)
                     self._cells[component.name, rule.name] = [f.fault_id for f in made]
                     faults += made
         self.faults = FaultSet(faults)

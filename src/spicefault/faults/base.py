@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 from dataclasses import asdict, dataclass, field
 
 from ..netlist import RULES, Netlist
@@ -113,6 +114,12 @@ class Fault:
     def components(self) -> tuple[str, ...]:
         """Components the fault acts on, in order of first appearance."""
         return tuple(dict.fromkeys(p.component for p in self.primitives))
+
+    def with_tags(self, tags: dict[str, str]) -> Fault:
+        """The same fault with `tags` added to its own; a tag of the same name is replaced."""
+        tagged = copy.copy(self)
+        object.__setattr__(tagged, "tags", {**self.tags, **tags})
+        return tagged
 
     def apply(self, netlist: Netlist) -> None:
         """Inject the fault into an already realised netlist, primitive by primitive."""

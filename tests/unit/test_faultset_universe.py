@@ -157,6 +157,68 @@ def test_rules_can_be_restricted_to_named_components():
     assert universe.faults.ids() == ["C1:open", "C1:short", "R2:open"]
 
 
+AMPLIFIERS = Circuit(
+    "front end\nV1 in 0 dc 1\nR1 in a 10k\n"
+    "XU1 a b out1 opamp vos=0.0 aol=200000.0\nXU2 out1 c out opamp vos=0.0 aol=200000.0\n"
+    "XB1 out 0 buffer gain=1.0\nD1 out 0 1N4148\nQ1 c b 0 2N2222 2\nQ2 c b 0 sub BC547\n"
+    "M1 d g 0 0 nch W=1u L=1u\n.end\n",
+    "front_end",
+)
+
+
+def test_components_know_their_subcircuit_or_model():
+    models = {c.name: c.model for c in AMPLIFIERS.components()}
+    assert models == {
+        "V1": "", "R1": "", "XU1": "opamp", "XU2": "opamp", "XB1": "buffer", "D1": "1N4148",
+        "Q1": "2N2222", "Q2": "BC547", "M1": "nch",
+    }  # fmt: skip
+
+
+def test_rules_select_by_model_tag_their_faults_and_take_absolute_values_or_factors():
+    rules = [
+        parametric_rule(
+            kinds="X", parameter="vos", models=("OpAmp",), fault_values=(0.02, -0.02),
+            fault_type="offset", tags=lambda c: {"part": c.name, "origin": "amplifier"},
+        ),
+        parametric_rule(kinds="X", parameter="aol", models=("opamp",), factors=(0.01,),
+                        fault_type="gain_loss", tags={"origin": "amplifier"}),
+        parametric_rule([0.2], "R", fault_values=(47e3,)),
+        open_rule("R", tags={"origin": "assembly"}),
+    ]  # fmt: skip
+    universe = FaultUniverse(AMPLIFIERS, rules)
+    assert universe.faults.ids() == [
+        "R1:parametric:+0.2", "R1:parametric:=47000", "R1:open",
+        "XU1.vos:parametric:=0.02", "XU1.vos:parametric:=-0.02", "XU1.aol:parametric:x0.01",
+        "XU2.vos:parametric:=0.02", "XU2.vos:parametric:=-0.02", "XU2.aol:parametric:x0.01",
+    ]  # the buffer is an X instance of another subcircuit
+    matrix = universe.coverage_matrix()
+    assert list(matrix.columns) == ["offset", "gain_loss", "parametric", "open"]
+    assert matrix.loc["XU2"].tolist()[:2] == [2, 1] and "XB1" not in matrix.index
+
+    offset = universe.faults["XU2.vos:parametric:=0.02"]
+    assert offset.fault_type == "offset" and offset.tags == {"part": "XU2", "origin": "amplifier"}
+    assert offset.severity is None  # nominally zero: no reference to measure it against
+    gain = universe.faults["XU1.aol:parametric:x0.01"]
+    assert gain.fault_type == "gain_loss" and gain.tags == {"origin": "amplifier"}
+    assert gain.severity.value == pytest.approx(0.99)
+    assert universe.faults["R1:open"].tags == {"origin": "assembly"}
+    assert universe.faults["R1:parametric:+0.2"].tags == {}
+    # an absolute value is measured against the nominal one: |47k - 10k| / 10k
+    assert universe.faults["R1:parametric:=47000"].severity.value == pytest.approx(3.7)
+
+    netlist = AMPLIFIERS.netlist()
+    offset.apply(netlist)
+    gain.apply(netlist)
+    assert netlist.value("XU2", "vos") == 0.02 and netlist.value("XU1", "aol") == 2000.0
+    # a tagged fault is the same fault, and is rebuilt from its record with its tags
+    rebuilt = FaultSet.from_metadata(json.loads(json.dumps(universe.faults.metadata())))
+    assert rebuilt == universe.faults and isinstance(rebuilt[3], ParametricFault)
+    plain = ParametricFault("R1", deviation=0.2)
+    assert plain.with_tags({"a": "b"}).tags == {"a": "b"} and plain.tags == {}
+    with pytest.raises(ValueError, match="needs deviations, factors or fault_values"):
+        parametric_rule()
+
+
 def test_series_resistance_rule():
     universe = FaultUniverse(CIRCUIT, [series_rule([1.0, 100.0], kinds="C")])
     assert [fault.fault_id for fault in universe.faults] == [
