@@ -1,9 +1,12 @@
 """Sallen-Key band-pass filter: the small benchmark of the fault-diagnosis literature.
 
-The values are those commonly given for this benchmark (centre frequency 25 kHz),
-written from memory of that literature: they must be checked against a cited source.
-The excitation, a 5 V pulse of 10 us, and the tolerances, 5 % for resistors and 10 %
-for capacitors, are the ones of the DiffDA-Net datasets (docs/RELATED_WORK.md).
+The circuit, its component values and its designators are those of Fig. 3 of
+M. Aminian and F. Aminian, "Neural-network based analog-circuit fault diagnosis using
+wavelet transform as preprocessor", IEEE Trans. Circuits Syst. II, vol. 47, no. 2,
+pp. 151-156, 2000 (doi:10.1109/82.823545): centre frequency 25 kHz. So are the
+excitation, a single 5 V pulse of 10 us, and the tolerances, 5 % for resistors and 10 %
+for capacitors. A later paper of the same authors (IEEE Trans. Instrum. Meas., 2002)
+uses a Sallen-Key filter with other resistor values; this is the one of 2000.
 """
 
 from __future__ import annotations

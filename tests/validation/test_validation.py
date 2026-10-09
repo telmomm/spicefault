@@ -13,7 +13,7 @@ from spicefault import Simulator  # noqa: E402
 
 pytestmark = pytest.mark.ngspice
 
-N_FAULTS = {"sallen_key": 58, "biquad": 96, "regulator": 54}
+N_FAULTS = {"sallen_key": 58, "biquad": 104, "regulator": 54}
 
 
 @pytest.fixture(scope="module", params=sorted(validation.STUDIES))
@@ -51,11 +51,11 @@ def test_sallen_key_matches_the_ideal_transfer_function():
     r1, r2, r3, r4, r5, c1, c2 = 5.18e3, 1e3, 2e3, 4e3, 4e3, 5e-9, 5e-9
     s = 2j * np.pi * f
     gain = 1 + r5 / r4
-    # node a: (vin - va) / r1 + (vo - va) / r2 = va s c1 + (va - vb) s c2
-    # node b: (va - vb) s c2 = vb / r3, and vo = gain * vb
-    va_over_vb = 1 + 1 / (s * c2 * r3)
+    # node a: (vin - va) / r1 + (vo - va) / r2 = va s c2 + (va - vb) s c1
+    # node b: (va - vb) s c1 = vb / r3, and vo = gain * vb
+    va_over_vb = 1 + 1 / (s * c1 * r3)
     admittance = 1 / r1 + 1 / r2 + s * c1 + s * c2
-    ideal = gain / r1 / (va_over_vb * admittance - s * c2 - gain / r2)
+    ideal = gain / r1 / (va_over_vb * admittance - s * c1 - gain / r2)
     simulated = result.plot("ac")["v(out)"]
     band = f < 100e3  # above, the finite bandwidth of the amplifier shows
     assert np.allclose(np.abs(simulated[band]), np.abs(ideal[band]), rtol=0.03)
@@ -69,7 +69,9 @@ def test_biquad_matches_the_ideal_transfer_function():
     study = validation.get("biquad")
     result = Simulator().run(study.circuit.to_netlist(), study.config)
     f = result.plot("ac")["frequency"].real
-    tau, q = 6.2e3 * 5e-9, 1.0  # q = (1 + r4 / r5) / 3
+    r1, r2, r4, c1, c2 = 6.2e3, 6.2e3, 1.6e3, 5e-9, 5e-9  # with r3 = r2 and r5 = r6
+    tau = np.sqrt(r2 * r4 * c1 * c2)  # a cut-off of 10.1 kHz
+    q = r1 * c1 / tau  # 1.97
     s = 2j * np.pi * f
     ideal = (s * tau) ** 2 / ((s * tau) ** 2 + s * tau / q + 1)
     band = f < 50e3
@@ -93,6 +95,9 @@ def test_regulator_follows_its_reference_and_temperature():
     assert nominal["output_voltage"] == pytest.approx(expected, rel=0.01)
     out = {name: values["output_voltage"] for name, values in by_condition.items()}
     assert out["cold"] > out["nominal"] > out["hot"] and out["cold"] - out["hot"] > 0.2
+    # the reference drifts within the range of the data sheet, -3.5 to +0.2 mV/K
+    reference = {name: values["reference_voltage"] for name, values in by_condition.items()}
+    assert -3.5e-3 < (reference["hot"] - reference["cold"]) / 105.0 < 0.2e-3
     assert out["low_line"] < out["nominal"] < out["high_line"]
     assert out["heavy_load"] < out["nominal"] < out["light_load"]
     assert len(study.conditions["corners"]) == 9

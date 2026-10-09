@@ -1,5 +1,9 @@
 Sallen-Key band-pass filter
-* One operational amplifier, five resistors, two capacitors; centre frequency about 25 kHz.
+* The circuit of Fig. 3 of M. Aminian and F. Aminian, "Neural-network based analog-circuit
+* fault diagnosis using wavelet transform as preprocessor", IEEE Trans. Circuits Syst. II,
+* vol. 47, no. 2, pp. 151-156, 2000, doi:10.1109/82.823545, with its component values
+* and designators. One operational amplifier, five resistors, two capacitors; centre
+* frequency 25 kHz.
 .include opamp.lib
 Vin in 0 dc 0 ac 1 pulse(0 5 10u 1u 1u 10u 1)
 R1 in a 5.18k
@@ -7,7 +11,7 @@ R2 a out 1k
 R3 b 0 2k
 R4 fb 0 4k
 R5 out fb 4k
-C1 a 0 5n
-C2 a b 5n
+C1 a b 5n
+C2 a 0 5n
 XU1 b fb out opamp aol=200000.0 gbw=10000000.0
 .end

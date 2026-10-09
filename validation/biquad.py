@@ -1,9 +1,12 @@
 """Four-op-amp biquad high-pass filter: the larger benchmark of the diagnosis literature.
 
-This is a circuit of that class, designed here: a summer, two integrators and an
-output stage, with a corner at about 5.1 kHz, quality factor 1 and unity gain. It is
-not the schematic of a cited paper, and must be aligned with one before publication.
-Excitation and tolerances as in the Sallen-Key study.
+The circuit of Fig. 2 of F. Aminian, M. Aminian and H. W. Collins, "Analog fault
+diagnosis of actual circuits using neural networks", IEEE Trans. Instrum. Meas.,
+vol. 51, no. 3, pp. 544-550, 2002 (doi:10.1109/TIM.2002.1017726): a lossy integrator,
+an integrator, an inverter and an output summer, with a cut-off at 10 kHz, a quality
+factor of about 2 and unity gain in the pass band. R1 to R4, C1 and C2 are named as in
+that paper; its figure repeats two labels on the other six resistors, which are R5 to
+R10 here. Excitation and tolerances as in the Sallen-Key study, and as in that paper.
 """
 
 from __future__ import annotations
@@ -24,10 +27,10 @@ def study() -> Study:
         Measurement.custom("corner_frequency", functions.corner_frequency, analysis="ac"),
         Measurement.custom("passband_gain", functions.passband_gain, analysis="ac"),
         Measurement.custom("peak_gain", functions.peak_gain, analysis="ac"),
-        Measurement.magnitude("v(out)", 1.7e3, name="gain_1k7"),
-        Measurement.magnitude("v(out)", 5.1e3, name="gain_5k1"),
-        Measurement.magnitude("v(out)", 15e3, name="gain_15k"),
-        Measurement.phase("v(out)", 5.1e3, name="phase_5k1"),
+        Measurement.magnitude("v(out)", 3.3e3, name="gain_3k3"),
+        Measurement.magnitude("v(out)", 10e3, name="gain_10k"),
+        Measurement.magnitude("v(out)", 30e3, name="gain_30k"),
+        Measurement.phase("v(out)", 10e3, name="phase_10k"),
         Measurement.peak("v(out)", name="pulse_peak"),
         Measurement.minimum("v(out)", name="pulse_minimum"),
         Measurement.rms("v(out)", name="pulse_rms"),
@@ -50,21 +53,23 @@ def study() -> Study:
 
 # Declared limits: as for the Sallen-Key study, the range that held the central 99 % of
 # 600 healthy circuits at the declared tolerances (seed 7), rounded outwards, around
-# nominal values of 4.03 kHz, 1.00 and 1.158. Fixed before any fault campaign was run.
+# nominal values of 6.80 kHz, 1.00 and 2.05. The corner frequency is where the response
+# is 3 dB below the pass band; with a quality factor of 2 it lies below the 10 kHz
+# cut-off of the design. Fixed before any fault campaign was run on this circuit.
 SPECIFICATIONS = {
-    "corner_frequency": (3.5e3, 4.7e3),
-    "passband_gain": (0.85, 1.15),
-    "peak_gain": (0.97, 1.38),
+    "corner_frequency": (5.7e3, 8.0e3),
+    "passband_gain": (0.91, 1.09),
+    "peak_gain": (1.75, 2.45),
 }
 NOISE = {
-    "corner_frequency": 4.0,
+    "corner_frequency": 7.0,
     "passband_gain": 0.002,
-    "peak_gain": 0.0023,
-    "gain_1k7": 0.0002,
-    "gain_5k1": 0.002,
-    "gain_15k": 0.002,
-    "phase_5k1": 0.2,
-    "pulse_peak": 0.01,
-    "pulse_minimum": 0.0035,
+    "peak_gain": 0.004,
+    "gain_3k3": 0.0002,
+    "gain_10k": 0.004,
+    "gain_30k": 0.002,
+    "phase_10k": 0.2,
+    "pulse_peak": 0.0055,
+    "pulse_minimum": 0.01,
     "pulse_rms": 0.001,
 }

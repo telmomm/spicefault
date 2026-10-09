@@ -47,10 +47,10 @@ def test_fault_coverage(results):
     assert json.loads(path.read_text())["benchmark"] == "fault_coverage"
     assert "30 fault conditions" in fault_coverage.report(result)
     counts = {name: c["n_fault_conditions"] for name, c in result["circuits"].items()}
-    assert counts == {"rc": 30, "biquad": 96, "regulator": 54, "sallen_key": 58}
+    assert counts == {"rc": 30, "biquad": 104, "regulator": 54, "sallen_key": 58}
     regulator = result["circuits"]["regulator"]
     assert {"Vin", "Iout", "RL"} <= set(regulator["components_without_faults"])
-    assert regulator["coverage_matrix_universe"]["Q1"] == {"transistor": 6}
+    assert regulator["coverage_matrix_universe"]["XQ1"] == {"transistor": 6}
 
 
 @pytest.mark.ngspice

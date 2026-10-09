@@ -1,21 +1,27 @@
 Four-op-amp biquad high-pass filter
-* A summer, two integrators and an output stage; nine resistors, two capacitors.
-* Corner frequency about 5.1 kHz, quality factor 1, unity gain in the pass band.
+* The circuit of Fig. 2 of F. Aminian, M. Aminian and H. W. Collins, "Analog fault
+* diagnosis of actual circuits using neural networks", IEEE Trans. Instrum. Meas.,
+* vol. 51, no. 3, pp. 544-550, 2002, doi:10.1109/TIM.2002.1017726.
+* A lossy integrator, an integrator, an inverter and an output summer; ten resistors,
+* two capacitors. Cut-off frequency 10 kHz.
+* R1 to R4, C1 and C2 are named as in that figure and its Table I. The figure repeats
+* the labels R5 and R6 on its other six resistors; here they are R5 to R10.
 .include opamp.lib
 Vin in 0 dc 0 ac 1 pulse(0 5 10u 1u 1u 10u 1)
-R1 in s 10k
-R2 lp s 10k
-R3 hp s 10k
-R4 bp q 20k
-R5 q 0 10k
-R6 hp i1 6.2k
-R7 bp i2 6.2k
-R8 hp g 10k
-R9 g out 10k
-C1 i1 bp 5n
-C2 i2 lp 5n
-XU1 q s hp opamp aol=200000.0 gbw=10000000.0
-XU2 0 i1 bp opamp aol=200000.0 gbw=10000000.0
-XU3 0 i2 lp opamp aol=200000.0 gbw=10000000.0
+R1 n1 bp 6.2k
+R2 inv n1 6.2k
+R3 in n1 6.2k
+R4 bp n2 1.6k
+R5 lp n3 5.1k
+R6 n3 inv 5.1k
+R7 bp g 10k
+R8 in g 10k
+R9 inv g 10k
+R10 g out 10k
+C1 n1 bp 5n
+C2 n2 lp 5n
+XU1 0 n1 bp opamp aol=200000.0 gbw=10000000.0
+XU2 0 n2 lp opamp aol=200000.0 gbw=10000000.0
+XU3 0 n3 inv opamp aol=200000.0 gbw=10000000.0
 XU4 0 g out opamp aol=200000.0 gbw=10000000.0
 .end

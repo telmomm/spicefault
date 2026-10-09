@@ -193,3 +193,9 @@ If you use `spicefault` in your work, please cite it. The citation data are in
 ## Licence
 
 [MIT](https://github.com/telmomm/spicefault/blob/main/LICENSE).
+
+One exception, in the repository and not in the package: the device models of the
+regulator of the validation suite (`validation/netlists/regulator.cir`) are SPICE models
+of Diodes Incorporated. They are not under the MIT licence: they are copied intact under
+the notice of their manufacturer, reproduced in that file, which allows their use for
+research and design only.

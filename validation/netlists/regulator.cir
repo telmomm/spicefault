@@ -1,15 +1,72 @@
 Discrete series voltage regulator
 * A series pass transistor, a one-transistor error amplifier and a zener reference.
 * Nominal: 15 V in, about 10 V out, 100 ohm load.
-* The device models are generic small-signal parameter sets, without a cited source:
-* they must be replaced by vendor models before any result is published.
-.model QPASS NPN(Is=14.34f Xti=3 Eg=1.11 Vaf=74.03 Bf=255.9 Ne=1.307 Ise=14.34f Ikf=.2847
-+ Xtb=1.5 Br=6.092 Nc=2 Isc=0 Ikr=0 Rc=1 Cjc=7.306p Mjc=.3416 Vjc=.75 Fc=.5 Cje=22.01p
-+ Mje=.377 Vje=.75 Tr=46.91n Tf=411.1p Itf=.6 Vtf=1.7 Xtf=3 Rb=10)
-.model QERR NPN(Is=6.734f Xti=3 Eg=1.11 Vaf=74.03 Bf=416.4 Ne=1.259 Ise=6.734f Ikf=66.78m
-+ Xtb=1.5 Br=.7371 Nc=2 Isc=0 Ikr=0 Rc=1 Cjc=3.638p Mjc=.3085 Vjc=.75 Fc=.5 Cje=4.493p
-+ Mje=.2593 Vje=.75 Tr=239.5n Tf=301.2p Itf=.4 Vtf=4 Xtf=2 Rb=10)
-.model DREF D(Is=1e-14 N=1 Rs=5 Bv=4.7 Ibv=5m Tbv1=-5e-4)
+*
+* Device models: SPICE models published by Diodes Incorporated, retrieved on
+* 2026-10-09 from https://www.diodes.com/assets/Spice-Models/Discrete-Prodcut-Groups/
+* (Darlington-Transistors.txt, Matched-Pairs.txt and Zener-Diodes.txt), copied intact.
+* - FZT603: NPN Darlington transistor, 80 V, 2 A, SOT-223; a subcircuit with pins
+*   collector, base, emitter ("ZETEX FZT603 Spice Model v1.0 Last Revised 1/7/03").
+* - DI_DMMT3904W: one transistor of the DMMT3904W matched NPN pair (40 V, 0.2 A).
+* - DI_BZX84C4V7: BZX84C4V7 zener diode, 4.7 V, 0.35 W; a subcircuit with pins anode,
+*   cathode.
+* They hold no thermal model: self-heating is not simulated.
+*
+* These models are not under the licence of this repository. The files they come from
+* carry the notice below (Darlington-Transistors.txt; Zener-Diodes.txt has it with
+* "Zetex" for "Diodes" and the address of Diodes Zetex Semiconductors Ltd, Oldham;
+* Matched-Pairs.txt has none, and its model is kept under the same terms here):
+*
+*                (c)  2008 Diodes Incorporated
+*
+*   The copyright in these models  and  the designs embodied belong
+*   to Diodes Incorporated (" Diodes ").  They  are  supplied
+*   free of charge by Diodes for the purpose of research and design
+*   and may be used or copied intact  (including this notice)  for
+*   that purpose only.  All other rights are reserved. The models
+*   are believed accurate but  no condition  or warranty  as to their
+*   merchantability or fitness for purpose is given and no liability
+*   in respect of any use is accepted by Diodes Incorporated, its distributors
+*   or agents.
+*
+*   Diodes Incorporated, 1566 N. Dallas Parkway, Suite 850, Dallas, TX 75248, USA
+*
+.SUBCKT FZT603 1 2 3
+*              C B E
+Q1 1 2 4 SUB603
+Q2 1 4 3 SUB603 3.46
+*
+.MODEL SUB603 NPN IS=1E-13 BF=130 VAF=200 NF=1 IKF=0.45 ISE=1.8E-13
++NE=1.5 BR=20 VAR=30 NR=1 IKR=0.45 ISC=7E-13 NC=1.2 RB=0.3 RE=0.3
++RC=0.5  CJE=115E-12 CJC=11E-12 VJC=0.85 MJC=0.41 TF=1E-9 TR=250E-9
++XTB=1.5
+.ENDS
+.MODEL DI_DMMT3904W  NPN (IS=20.3f NF=1.00 BF=274 VAF=114
++ IKF=36.4m ISE=6.99p NE=2.00 BR=4.00 NR=1.00
++ VAR=24.0 IKR=90.0m RE=0.657 RB=2.63 RC=0.263
++ XTB=1.5 CJE=8.29p VJE=1.10 MJE=0.500 CJC=7.10p VJC=0.300
++ MJC=0.300 TF=426p TR=71.3n EG=1.12 )
+.SUBCKT DI_BZX84C4V7  1 2
+*        Terminals    A   K
+D1 1 2 DF
+DZ 3 1 DR
+VZ 2 3 2.25
+.MODEL DF D ( IS=30.7p RS=34.2 N=1.10
++ CJO=74.9p VJ=0.750 M=0.330 TT=50.1n )
+.MODEL DR D ( IS=6.14f RS=64.5 N=3.00 )
+.ENDS
+*
+* Temperature correction of the reference. This part is of this repository, not of the
+* manufacturer. The zener model above has a temperature coefficient of +3.13 mV/K at
+* its test current of 5 mA (simulated, -20 to 85 C), where the data sheet of the
+* BZX84C4V7 (Diodes Incorporated, DS18001 Rev. 33-2) gives -3.5 to +0.2 mV/K. A source
+* in series, zero at 27 C, brings it to the middle of that range, -1.65 mV/K. It leaves
+* the model untouched and does nothing at the nominal temperature.
+.SUBCKT BZX84C4V7_TC 1 2
+*                    A K
+XD 1 3 DI_BZX84C4V7
+BTC 2 3 V = -4.78m * (temper - 27)
+.ENDS
 Vin in 0 dc 15 ac 1
 Iout out 0 dc 0 ac 0
 R1 in nb 1k tc1=1e-4
@@ -18,7 +75,7 @@ R3 out nd 1k tc1=1e-4
 R4 nd 0 1.2k tc1=1e-4
 C1 out 0 10u
 RL out 0 100
-Q1 in nb out QPASS
-Q2 nb nd nz QERR
-D1 0 nz DREF
+XQ1 in nb out FZT603
+Q2 nb nd nz DI_DMMT3904W
+XD1 0 nz BZX84C4V7_TC
 .end
