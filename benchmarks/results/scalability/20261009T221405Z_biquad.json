@@ -1,0 +1,324 @@
+{
+  "benchmark": "scalability",
+  "environment": {
+    "date": "2026-10-09T22:07:42+00:00",
+    "host": "MacBook-Air-de-Telmo.local",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "cpu": {
+      "model": "Apple M2",
+      "logical_cores": 8,
+      "physical_cores": 8,
+      "performance_cores": 4,
+      "efficiency_cores": 4
+    },
+    "python": "3.14.5",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "spicefault_version": "0.4.0",
+    "spicefault_commit": "7a189f0d9bb9aafa62cbc82072d72d5c23e010c9",
+    "uncommitted_changes": false,
+    "simulator": "ngspice-44.2",
+    "load_average_1min_at_start": 3.1103515625
+  },
+  "machine_before_start": {
+    "waited_s": 205.3,
+    "load_average_1min": 3.1103515625,
+    "quiet_below": 3.2,
+    "quiet": true
+  },
+  "protocol": {
+    "workload": "biquad",
+    "n_samples": 2000,
+    "workers": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "repetitions": 5,
+    "chunk": 500,
+    "warm_up": "one discarded run of each implementation"
+  },
+  "runs": [
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 0,
+      "load_average_before": 3.1103515625,
+      "wall_s": 34.761228666000534,
+      "sims_per_s": 57.535365599898135,
+      "bytes_written": 2957712
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 0,
+      "load_average_before": 3.3017578125,
+      "wall_s": 19.623589541006368,
+      "sims_per_s": 101.9181529363273,
+      "bytes_written": 2957902
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 0,
+      "load_average_before": 4.47412109375,
+      "wall_s": 11.376692667021416,
+      "sims_per_s": 175.79801604358792,
+      "bytes_written": 2958352
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 0,
+      "load_average_before": 4.85546875,
+      "wall_s": 8.57019387499895,
+      "sims_per_s": 233.36694935623555,
+      "bytes_written": 2959586
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 1,
+      "load_average_before": 6.25439453125,
+      "wall_s": 34.905409750004765,
+      "sims_per_s": 57.29770870258089,
+      "bytes_written": 2957528
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 1,
+      "load_average_before": 5.02685546875,
+      "wall_s": 19.522115500003565,
+      "sims_per_s": 102.44791349583167,
+      "bytes_written": 2958074
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 1,
+      "load_average_before": 4.89453125,
+      "wall_s": 11.40959674998885,
+      "sims_per_s": 175.29103296327756,
+      "bytes_written": 2958615
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 1,
+      "load_average_before": 5.35888671875,
+      "wall_s": 8.56741429201793,
+      "sims_per_s": 233.4426621417568,
+      "bytes_written": 2959533
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 2,
+      "load_average_before": 7.62890625,
+      "wall_s": 34.76548391702818,
+      "sims_per_s": 57.52832334430408,
+      "bytes_written": 2957748
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 2,
+      "load_average_before": 5.712890625,
+      "wall_s": 19.457525875011925,
+      "sims_per_s": 102.78799128148528,
+      "bytes_written": 2958297
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 2,
+      "load_average_before": 5.79296875,
+      "wall_s": 11.467757791979238,
+      "sims_per_s": 174.4020092052203,
+      "bytes_written": 2958517
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 2,
+      "load_average_before": 5.75048828125,
+      "wall_s": 8.527891541016288,
+      "sims_per_s": 234.52455866501973,
+      "bytes_written": 2959488
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 3,
+      "load_average_before": 6.79052734375,
+      "wall_s": 34.999272499990184,
+      "sims_per_s": 57.144044922664065,
+      "bytes_written": 2958159
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 3,
+      "load_average_before": 5.0234375,
+      "wall_s": 19.630532082985155,
+      "sims_per_s": 101.88210852081326,
+      "bytes_written": 2958279
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 3,
+      "load_average_before": 4.79345703125,
+      "wall_s": 11.536302875028923,
+      "sims_per_s": 173.3657673230069,
+      "bytes_written": 2958525
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 3,
+      "load_average_before": 5.42041015625,
+      "wall_s": 8.491039000044111,
+      "sims_per_s": 235.54243479385855,
+      "bytes_written": 2959515
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 1,
+      "repetition": 4,
+      "load_average_before": 7.23583984375,
+      "wall_s": 34.870209874992725,
+      "sims_per_s": 57.355548107391975,
+      "bytes_written": 2957785
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 2,
+      "repetition": 4,
+      "load_average_before": 5.45751953125,
+      "wall_s": 19.360394624993205,
+      "sims_per_s": 103.3036794311057,
+      "bytes_written": 2958058
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 4,
+      "repetition": 4,
+      "load_average_before": 4.9248046875,
+      "wall_s": 11.460206917021424,
+      "sims_per_s": 174.51691880270275,
+      "bytes_written": 2958618
+    },
+    {
+      "implementation": "spicefault",
+      "workers": 8,
+      "repetition": 4,
+      "load_average_before": 4.93505859375,
+      "wall_s": 8.558410875033587,
+      "sims_per_s": 233.6882429697734,
+      "bytes_written": 2959543
+    }
+  ],
+  "summary": {
+    "spicefault": {
+      "1": {
+        "wall_s": {
+          "median": 34.870209874992725,
+          "min": 34.761228666000534,
+          "max": 34.999272499990184,
+          "n": 5
+        },
+        "relative_range": 0.0068265672860307,
+        "sims_per_s": {
+          "median": 57.355548107391975,
+          "min": 57.144044922664065,
+          "max": 57.535365599898135,
+          "n": 5
+        },
+        "speedup": 1.0,
+        "efficiency": 1.0
+      },
+      "2": {
+        "wall_s": {
+          "median": 19.522115500003565,
+          "min": 19.360394624993205,
+          "max": 19.630532082985155,
+          "n": 5
+        },
+        "relative_range": 0.01383750946417159,
+        "sims_per_s": {
+          "median": 102.44791349583167,
+          "min": 101.88210852081326,
+          "max": 103.3036794311057,
+          "n": 5
+        },
+        "speedup": 1.786190122427375,
+        "efficiency": 0.8930950612136875
+      },
+      "4": {
+        "wall_s": {
+          "median": 11.460206917021424,
+          "min": 11.376692667021416,
+          "max": 11.536302875028923,
+          "n": 5
+        },
+        "relative_range": 0.013927340855464298,
+        "sims_per_s": {
+          "median": 174.51691880270275,
+          "min": 173.3657673230069,
+          "max": 175.79801604358792,
+          "n": 5
+        },
+        "speedup": 3.0427207926936544,
+        "efficiency": 0.7606801981734136
+      },
+      "8": {
+        "wall_s": {
+          "median": 8.558410875033587,
+          "min": 8.491039000044111,
+          "max": 8.57019387499895,
+          "n": 5
+        },
+        "relative_range": 0.009248781825344143,
+        "sims_per_s": {
+          "median": 233.6882429697734,
+          "min": 233.36694935623555,
+          "max": 235.54243479385855,
+          "n": 5
+        },
+        "speedup": 4.074379038837146,
+        "efficiency": 0.5092973798546433
+      }
+    }
+  },
+  "bytes_written": 2959543,
+  "bytes_per_sample": 1479.7715,
+  "phase_breakdown": {
+    "n_samples": 100,
+    "ms_per_sample": {
+      "netlist_generation": 0.2903850103029981,
+      "simulator_process": 15.85598579258658,
+      "output_parsing": 0.2827316854381934,
+      "measurement": 0.42750790307763964,
+      "storage": 0.021751670283265412
+    },
+    "fraction": {
+      "netlist_generation": 0.01720457288697036,
+      "simulator_process": 0.9394268078048441,
+      "output_parsing": 0.01675113286495681,
+      "measurement": 0.02532875533272377,
+      "storage": 0.0012887311105049943
+    }
+  },
+  "resume_overhead": {
+    "seconds": 0.041028665960766375,
+    "simulations_repeated": 0,
+    "max_lost_on_interruption": 500
+  },
+  "peak_memory": {
+    "parent_mb": 102.3,
+    "largest_child_mb": 103.4
+  }
+}

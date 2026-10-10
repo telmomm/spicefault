@@ -99,15 +99,15 @@
       "false_reject_rate": 0.652394366197183
     },
     "0.2": {
-      "false_alarm": 0.0184,
+      "false_alarm": 0.0104,
       "false_alarm_interval": [
-        0.013823219582781987,
-        0.02445454695992688
+        0.007107118738004984,
+        0.0151951954216924
       ],
       "n_healthy_for_false_alarm": 2500,
       "yield": 1.0,
-      "mean_failure_probability_of_faults": 0.59,
-      "mean_detection_probability": 0.9862931034482758,
+      "mean_failure_probability_of_faults": 0.5903448275862069,
+      "mean_detection_probability": 0.9854310344827586,
       "faults_detected": 57,
       "faults_simulated": 58,
       "failed_simulations": 0,
@@ -117,28 +117,28 @@
         1.0
       ],
       "escape_rate": 0.0,
-      "false_reject_rate": 0.6398842337375965
+      "false_reject_rate": 0.6355488141202427
     },
     "1": {
-      "false_alarm": 0.0152,
+      "false_alarm": 0.0104,
       "false_alarm_interval": [
-        0.011094154017347745,
-        0.02079343157215653
+        0.007107118738004984,
+        0.0151951954216924
       ],
       "n_healthy_for_false_alarm": 2500,
-      "yield": 0.989,
-      "mean_failure_probability_of_faults": 0.6112931034482758,
-      "mean_detection_probability": 0.752844827586207,
-      "faults_detected": 34,
+      "yield": 0.9898,
+      "mean_failure_probability_of_faults": 0.6126724137931036,
+      "mean_detection_probability": 0.7499137931034483,
+      "faults_detected": 35,
       "faults_simulated": 58,
       "failed_simulations": 0,
-      "diagnostic_coverage": 0.9840643068678602,
+      "diagnostic_coverage": 0.9786126354298578,
       "diagnostic_coverage_interval": [
-        0.9810256594857492,
-        0.9865115280393517
+        0.9754511611399227,
+        0.9816815555452287
       ],
-      "escape_rate": 0.015935693132139828,
-      "false_reject_rate": 0.25412068224165113
+      "escape_rate": 0.02138736457014223,
+      "false_reject_rate": 0.2525847214244687
     },
     "2": {
       "false_alarm": 0.0168,
@@ -147,23 +147,23 @@
         0.022629713014667666
       ],
       "n_healthy_for_false_alarm": 2500,
-      "yield": 0.6772,
-      "mean_failure_probability_of_faults": 0.7012068965517242,
-      "mean_detection_probability": 0.5474137931034483,
+      "yield": 0.6824,
+      "mean_failure_probability_of_faults": 0.701551724137931,
+      "mean_detection_probability": 0.5356896551724138,
       "faults_detected": 22,
       "faults_simulated": 58,
       "failed_simulations": 0,
-      "diagnostic_coverage": 0.7306368330464715,
+      "diagnostic_coverage": 0.7074219710002458,
       "diagnostic_coverage_interval": [
-        0.7232704961108853,
-        0.7380177856271707
+        0.699614884639795,
+        0.714664177467336
       ],
-      "escape_rate": 0.26936316695352847,
-      "false_reject_rate": 0.08062645011600927
+      "escape_rate": 0.29257802899975416,
+      "false_reject_rate": 0.0907861695962913
     }
   },
   "faults_lost_between_smallest_and_largest_scale": {
-    "R1:parametric:-0.25": 0.2,
+    "R1:parametric:-0.25": 1.0,
     "R1:parametric:-0.1": 0.2,
     "R1:parametric:+0.1": 0.2,
     "R1:parametric:+0.25": 0.2,
@@ -188,12 +188,12 @@
     "R5:parametric:+0.1": 0.2,
     "R5:parametric:+0.25": 0.2,
     "R5:parametric:+0.5": 1.0,
-    "C1:parametric:-0.25": 1.0,
+    "C1:parametric:-0.25": 0.2,
     "C1:parametric:-0.1": 0.2,
     "C1:parametric:+0.1": 0.2,
     "C1:parametric:+0.25": 0.2,
     "C1:parametric:+0.5": 1.0,
-    "C2:parametric:-0.25": 0.2,
+    "C2:parametric:-0.25": 1.0,
     "C2:parametric:-0.1": 0.2,
     "C2:parametric:+0.1": 0.2,
     "C2:parametric:+0.25": 0.2,

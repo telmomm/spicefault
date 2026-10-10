@@ -1,0 +1,275 @@
+{
+  "benchmark": "correctness",
+  "environment": {
+    "date": "2026-10-09T22:14:13+00:00",
+    "host": "MacBook-Air-de-Telmo.local",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "cpu": {
+      "model": "Apple M2",
+      "logical_cores": 8,
+      "physical_cores": 8,
+      "performance_cores": 4,
+      "efficiency_cores": 4
+    },
+    "python": "3.14.5",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "spicefault_version": "0.4.0",
+    "spicefault_commit": "7a189f0d9bb9aafa62cbc82072d72d5c23e010c9",
+    "uncommitted_changes": false,
+    "simulator": "ngspice-44.2",
+    "load_average_1min_at_start": 5.14697265625
+  },
+  "protocol": {
+    "seed": 42,
+    "seeding": "content",
+    "tolerance_scale": 1.0,
+    "samples_per_fault": 1,
+    "healthy_samples": 1
+  },
+  "circuits": {
+    "biquad": {
+      "n_components": 17,
+      "n_faults": 104,
+      "total": {
+        "decks": 105,
+        "vectors": 420,
+        "values": 246864,
+        "values_bit_identical": 246864,
+        "plot_mismatch": 0,
+        "direct_without_output": 0,
+        "max_abs_diff": 0.0
+      },
+      "by_fault_type": {
+        "healthy": {
+          "decks": 1,
+          "status": {
+            "SUCCESS": 1
+          },
+          "vectors": 4,
+          "values": 2128,
+          "values_bit_identical": 2128,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "open_circuit": {
+          "decks": 12,
+          "status": {
+            "SUCCESS": 12
+          },
+          "vectors": 48,
+          "values": 29200,
+          "values_bit_identical": 29200,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "short_circuit": {
+          "decks": 12,
+          "status": {
+            "SUCCESS": 12
+          },
+          "vectors": 48,
+          "values": 45256,
+          "values_bit_identical": 45256,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "parametric": {
+          "decks": 72,
+          "status": {
+            "SUCCESS": 72
+          },
+          "vectors": 288,
+          "values": 153254,
+          "values_bit_identical": 153254,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "gain_loss": {
+          "decks": 4,
+          "status": {
+            "SUCCESS": 4
+          },
+          "vectors": 16,
+          "values": 8512,
+          "values_bit_identical": 8512,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "bandwidth_loss": {
+          "decks": 4,
+          "status": {
+            "SUCCESS": 4
+          },
+          "vectors": 16,
+          "values": 8514,
+          "values_bit_identical": 8514,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        }
+      }
+    },
+    "regulator": {
+      "n_components": 11,
+      "n_faults": 54,
+      "total": {
+        "decks": 55,
+        "vectors": 990,
+        "values": 27390,
+        "values_bit_identical": 27390,
+        "plot_mismatch": 0,
+        "direct_without_output": 0,
+        "max_abs_diff": 0.0
+      },
+      "by_fault_type": {
+        "healthy": {
+          "decks": 1,
+          "status": {
+            "SUCCESS": 1
+          },
+          "vectors": 18,
+          "values": 498,
+          "values_bit_identical": 498,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "open_circuit": {
+          "decks": 12,
+          "status": {
+            "SUCCESS": 12
+          },
+          "vectors": 216,
+          "values": 5976,
+          "values_bit_identical": 5976,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "short_circuit": {
+          "decks": 12,
+          "status": {
+            "SUCCESS": 12
+          },
+          "vectors": 216,
+          "values": 5976,
+          "values_bit_identical": 5976,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "parametric": {
+          "decks": 30,
+          "status": {
+            "SUCCESS": 30
+          },
+          "vectors": 540,
+          "values": 14940,
+          "values_bit_identical": 14940,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        }
+      }
+    },
+    "sallen_key": {
+      "n_components": 9,
+      "n_faults": 58,
+      "total": {
+        "decks": 59,
+        "vectors": 236,
+        "values": 134684,
+        "values_bit_identical": 134684,
+        "plot_mismatch": 0,
+        "direct_without_output": 0,
+        "max_abs_diff": 0.0
+      },
+      "by_fault_type": {
+        "healthy": {
+          "decks": 1,
+          "status": {
+            "SUCCESS": 1
+          },
+          "vectors": 4,
+          "values": 2254,
+          "values_bit_identical": 2254,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "open_circuit": {
+          "decks": 7,
+          "status": {
+            "SUCCESS": 7
+          },
+          "vectors": 28,
+          "values": 16626,
+          "values_bit_identical": 16626,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "short_circuit": {
+          "decks": 7,
+          "status": {
+            "SUCCESS": 7
+          },
+          "vectors": 28,
+          "values": 16628,
+          "values_bit_identical": 16628,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "parametric": {
+          "decks": 42,
+          "status": {
+            "SUCCESS": 42
+          },
+          "vectors": 168,
+          "values": 94668,
+          "values_bit_identical": 94668,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "gain_loss": {
+          "decks": 1,
+          "status": {
+            "SUCCESS": 1
+          },
+          "vectors": 4,
+          "values": 2254,
+          "values_bit_identical": 2254,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        },
+        "bandwidth_loss": {
+          "decks": 1,
+          "status": {
+            "SUCCESS": 1
+          },
+          "vectors": 4,
+          "values": 2254,
+          "values_bit_identical": 2254,
+          "max_abs_diff": 0.0,
+          "plot_mismatch": 0,
+          "direct_without_output": 0
+        }
+      }
+    }
+  },
+  "verdict": {
+    "decks": 219,
+    "values": 408938,
+    "bit_identical": true,
+    "max_abs_diff": 0.0
+  }
+}

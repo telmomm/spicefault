@@ -84,6 +84,14 @@
     },
     {
       "type": "tolerance",
+      "component": "R10",
+      "parameter": "value",
+      "tolerance": 0.05,
+      "distribution": "uniform",
+      "relative": true
+    },
+    {
+      "type": "tolerance",
       "component": "C1",
       "parameter": "value",
       "tolerance": 0.1,
@@ -131,7 +139,7 @@
       "relative": true
     }
   ],
-  "n_faults": 96,
+  "n_faults": 104,
   "per_scale": {
     "0": {
       "false_alarm": 0.0128,
@@ -141,10 +149,10 @@
       ],
       "n_healthy_for_false_alarm": 2500,
       "yield": 1.0,
-      "mean_failure_probability_of_faults": 0.5833333333333334,
-      "mean_detection_probability": 0.9921875,
-      "faults_detected": 94,
-      "faults_simulated": 96,
+      "mean_failure_probability_of_faults": 0.6153846153846154,
+      "mean_detection_probability": 1.0,
+      "faults_detected": 104,
+      "faults_simulated": 104,
       "failed_simulations": 0,
       "diagnostic_coverage": 1.0,
       "diagnostic_coverage_interval": [
@@ -152,20 +160,20 @@
         1.0
       ],
       "escape_rate": 0.0,
-      "false_reject_rate": 0.7506666666666667
+      "false_reject_rate": 0.7649523809523809
     },
     "0.2": {
-      "false_alarm": 0.0144,
+      "false_alarm": 0.0168,
       "false_alarm_interval": [
-        0.010419581229265507,
-        0.019870459121937616
+        0.012452963051438904,
+        0.022629713014667666
       ],
       "n_healthy_for_false_alarm": 2500,
       "yield": 1.0,
-      "mean_failure_probability_of_faults": 0.5764583333333334,
-      "mean_detection_probability": 0.9526041666666666,
-      "faults_detected": 89,
-      "faults_simulated": 96,
+      "mean_failure_probability_of_faults": 0.6129807692307693,
+      "mean_detection_probability": 0.948701923076923,
+      "faults_detected": 97,
+      "faults_simulated": 104,
       "failed_simulations": 0,
       "diagnostic_coverage": 1.0,
       "diagnostic_coverage_interval": [
@@ -173,101 +181,107 @@
         1.0
       ],
       "escape_rate": 0.0,
-      "false_reject_rate": 0.6826561324303988
+      "false_reject_rate": 0.6658767772511849
     },
     "1": {
-      "false_alarm": 0.0128,
+      "false_alarm": 0.016,
       "false_alarm_interval": [
-        0.00908144260706082,
-        0.01801350726754001
+        0.011772026357560073,
+        0.02171310447024535
       ],
       "n_healthy_for_false_alarm": 2500,
-      "yield": 0.9868,
-      "mean_failure_probability_of_faults": 0.6155208333333334,
-      "mean_detection_probability": 0.6471875,
-      "faults_detected": 47,
-      "faults_simulated": 96,
+      "yield": 0.961,
+      "mean_failure_probability_of_faults": 0.666826923076923,
+      "mean_detection_probability": 0.6652403846153846,
+      "faults_detected": 54,
+      "faults_simulated": 104,
       "failed_simulations": 0,
-      "diagnostic_coverage": 0.9810458622440346,
+      "diagnostic_coverage": 0.9484498918529203,
       "diagnostic_coverage_interval": [
-        0.9787725564803806,
-        0.98349713760626
+        0.9451472728391321,
+        0.9516722627588352
       ],
-      "escape_rate": 0.01895413775596544,
-      "false_reject_rate": 0.086135093956323
+      "escape_rate": 0.05155010814707972,
+      "false_reject_rate": 0.07428448922714118
     },
     "2": {
-      "false_alarm": 0.0124,
+      "false_alarm": 0.0156,
       "false_alarm_interval": [
-        0.008749436884091119,
-        0.017546740371359133
+        0.011432693131379339,
+        0.02125366507727551
       ],
       "n_healthy_for_false_alarm": 2500,
-      "yield": 0.5920000000000001,
-      "mean_failure_probability_of_faults": 0.75453125,
-      "mean_detection_probability": 0.46453125,
-      "faults_detected": 30,
-      "faults_simulated": 96,
+      "yield": 0.41180000000000005,
+      "mean_failure_probability_of_faults": 0.8372115384615385,
+      "mean_detection_probability": 0.47057692307692306,
+      "faults_detected": 31,
+      "faults_simulated": 104,
       "failed_simulations": 0,
-      "diagnostic_coverage": 0.6087526748119002,
+      "diagnostic_coverage": 0.5601240381302401,
       "diagnostic_coverage_interval": [
-        0.6030748591556574,
-        0.6142985601013862
+        0.5554236447883386,
+        0.5653197511958796
       ],
-      "escape_rate": 0.3912473251880998,
-      "false_reject_rate": 0.016100466913540494
+      "escape_rate": 0.43987596186975986,
+      "false_reject_rate": 0.0076853526220614825
     }
   },
   "faults_lost_between_smallest_and_largest_scale": {
-    "R1:parametric:-0.25": 1.0,
+    "R1:parametric:-0.5": 1.0,
+    "R1:parametric:-0.25": 0.2,
     "R1:parametric:-0.1": 0.2,
     "R1:parametric:+0.1": 0.2,
     "R1:parametric:+0.25": 0.2,
     "R1:parametric:+0.5": 1.0,
-    "R2:parametric:-0.5": 1.0,
-    "R2:parametric:-0.25": 0.2,
+    "R2:parametric:-0.25": 1.0,
     "R2:parametric:-0.1": 0.2,
     "R2:parametric:+0.1": 0.2,
-    "R2:parametric:+0.25": 0.2,
-    "R2:parametric:+0.5": 0.2,
+    "R2:parametric:+0.25": 1.0,
+    "R2:parametric:+0.5": 1.0,
     "R3:parametric:-0.25": 1.0,
     "R3:parametric:-0.1": 0.2,
     "R3:parametric:+0.1": 0.2,
-    "R3:parametric:+0.25": 1.0,
+    "R3:parametric:+0.25": 0.2,
     "R3:parametric:+0.5": 1.0,
     "R4:parametric:-0.5": 1.0,
     "R4:parametric:-0.25": 0.2,
     "R4:parametric:-0.1": 0.2,
-    "R4:parametric:+0.1": 0.0,
+    "R4:parametric:+0.1": 0.2,
     "R4:parametric:+0.25": 0.2,
     "R4:parametric:+0.5": 0.2,
     "R5:parametric:-0.5": 1.0,
     "R5:parametric:-0.25": 0.2,
     "R5:parametric:-0.1": 0.2,
-    "R5:parametric:+0.1": 0.0,
+    "R5:parametric:+0.1": 0.2,
     "R5:parametric:+0.25": 0.2,
     "R5:parametric:+0.5": 0.2,
-    "R6:parametric:-0.25": 1.0,
+    "R6:parametric:-0.5": 1.0,
+    "R6:parametric:-0.25": 0.2,
     "R6:parametric:-0.1": 0.2,
     "R6:parametric:+0.1": 0.2,
     "R6:parametric:+0.25": 0.2,
     "R6:parametric:+0.5": 1.0,
+    "R7:open": 0.2,
     "R7:parametric:-0.5": 1.0,
     "R7:parametric:-0.25": 0.2,
-    "R7:parametric:-0.1": 0.2,
-    "R7:parametric:+0.1": 0.2,
-    "R7:parametric:+0.25": 0.2,
+    "R7:parametric:-0.1": 0.0,
+    "R7:parametric:+0.1": 0.0,
+    "R7:parametric:+0.25": 0.0,
     "R7:parametric:+0.5": 0.2,
     "R8:parametric:-0.25": 1.0,
     "R8:parametric:-0.1": 0.2,
     "R8:parametric:+0.1": 0.2,
-    "R8:parametric:+0.25": 0.2,
-    "R8:parametric:+0.5": 1.0,
+    "R8:parametric:+0.25": 1.0,
     "R9:parametric:-0.25": 1.0,
     "R9:parametric:-0.1": 0.2,
     "R9:parametric:+0.1": 0.2,
     "R9:parametric:+0.25": 0.2,
     "R9:parametric:+0.5": 1.0,
+    "R10:parametric:-0.25": 1.0,
+    "R10:parametric:-0.1": 0.2,
+    "R10:parametric:+0.1": 0.2,
+    "R10:parametric:+0.25": 1.0,
+    "C1:parametric:-0.5": 1.0,
     "C1:parametric:-0.25": 0.2,
     "C1:parametric:-0.1": 0.2,
     "C1:parametric:+0.1": 0.2,
@@ -280,8 +294,11 @@
     "C2:parametric:+0.25": 0.2,
     "C2:parametric:+0.5": 0.2,
     "XU1.aol:parametric:x0.001": 0.0,
+    "XU1.gbw:parametric:x0.01": 1.0,
+    "XU2.aol:parametric:x0.001": 0.0,
     "XU2.gbw:parametric:x0.01": 0.2,
-    "XU3.gbw:parametric:x0.01": 0.0,
+    "XU3.aol:parametric:x0.001": 0.0,
+    "XU3.gbw:parametric:x0.01": 1.0,
     "XU4.aol:parametric:x0.001": 0.0
   }
 }
