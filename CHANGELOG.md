@@ -7,6 +7,11 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+### Changed
+
+- The DOI of the software on Zenodo (doi:10.5281/zenodo.23322209) in the README and in
+  `CITATION.cff`.
+
 ## [0.4.1] - 2026-10-12
 
 The library itself is unchanged: a dataset made with 0.4.0 reproduces exactly. This

@@ -13,8 +13,7 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=telmomm_spicefault&metric=coverage)](https://sonarcloud.io/summary/new_code?id=telmomm_spicefault)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F01_quickstart.ipynb)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-<!-- DOI: after the first release archived by Zenodo, add its badge here:
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX) -->
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23322209.svg)](https://doi.org/10.5281/zenodo.23322209)
 
 **Reproducible SPICE-based fault injection and reliability assessment of electronic
 circuits.**
@@ -189,6 +188,9 @@ the [code of conduct](https://github.com/telmomm/spicefault/blob/main/CODE_OF_CO
 
 If you use `spicefault` in your work, please cite it. The citation data are in
 [CITATION.cff](https://github.com/telmomm/spicefault/blob/main/CITATION.cff); GitHub shows them under "Cite this repository".
+Every release is archived on Zenodo: [doi:10.5281/zenodo.23322209](https://doi.org/10.5281/zenodo.23322209)
+resolves to the latest one, and version 0.4.1 is
+[doi:10.5281/zenodo.23322210](https://doi.org/10.5281/zenodo.23322210).
 
 ## Evaluation data
 
