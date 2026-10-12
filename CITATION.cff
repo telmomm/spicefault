@@ -8,8 +8,8 @@ authors:
 repository-code: "https://github.com/telmomm/spicefault"
 url: "https://spicefault.readthedocs.io"
 license: MIT
-version: 0.4.0
-date-released: "2026-10-09"
+version: 0.4.1
+date-released: "2026-10-12"
 keywords:
   - SPICE
   - ngspice
