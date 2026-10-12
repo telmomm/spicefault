@@ -82,4 +82,4 @@ python -m benchmarks.scalability.run --workload sallen_key --workers 2 4 --repet
 
 ## What to bring back
 
-The summaries printed by the analyses, or the files under `results/` and `benchmarks/results/`. The datasets under `data/` are large and stay out of the repository.
+The summaries printed by the analyses, or the files under `results/` and `benchmarks/results/`. The datasets under `data/` are large and stay out of the repository: those of the runs of 9 October 2026 (version 0.4.0) are archived on Zenodo, [doi:10.5281/zenodo.23322017](https://doi.org/10.5281/zenodo.23322017), built from the folder `zenodo/` (its `README.md` describes them).

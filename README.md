@@ -190,6 +190,14 @@ the [code of conduct](https://github.com/telmomm/spicefault/blob/main/CODE_OF_CO
 If you use `spicefault` in your work, please cite it. The citation data are in
 [CITATION.cff](https://github.com/telmomm/spicefault/blob/main/CITATION.cff); GitHub shows them under "Cite this repository".
 
+## Evaluation data
+
+The datasets of the campaigns on the validation circuits (`validation/`), with the
+results of the experiments and of the benchmarks, are archived on Zenodo:
+[doi:10.5281/zenodo.23322016](https://doi.org/10.5281/zenodo.23322016). That DOI
+resolves to the latest version; the version made with `spicefault` 0.4.0 is
+[doi:10.5281/zenodo.23322017](https://doi.org/10.5281/zenodo.23322017).
+
 ## Licence
 
 [MIT](https://github.com/telmomm/spicefault/blob/main/LICENSE).

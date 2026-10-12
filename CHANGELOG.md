@@ -7,11 +7,33 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-12
+
+The library itself is unchanged: a dataset made with 0.4.0 reproduces exactly. This
+version is the one archived with the validation circuits and the evaluation as they
+are reported.
+
+### Added
+
+- Benchmark `correctness` (experiment A): every fault of every validation circuit
+  simulated through `spicefault` and with `ngspice -b` launched apart, read by a
+  raw-file reader of its own, and compared bit by bit.
+- The evaluation data are archived on Zenodo (doi:10.5281/zenodo.23322016); the folder
+  `zenodo/` holds the description of the record and the checksums of its archives.
+
 ### Changed
 
+- Validation circuits. The Sallen-Key filter is checked against its source (Aminian
+  and Aminian, 2000): the designators C1 and C2 were swapped, so their faults exchange
+  identity. The biquad is now the circuit of Aminian, Aminian and Collins (2002), with
+  104 fault conditions. The regulator has the SPICE models of the manufacturer of its
+  devices, which are not under the MIT licence, and a declared temperature correction
+  of its reference; its limits are declared again for these models.
+- Every stored result of the experiments and of the benchmarks was produced again, with
+  version 0.4.0 of the library and these circuits.
 - Documentation: docstrings for the public methods that had none, API pages for the
   dataset splits and the variation distributions, and the guides, the README and the
-  comparison brought up to 0.4.0.
+  comparison brought up to 0.4.0; the state of the experiments and of the related work.
 
 ## [0.4.0] - 2026-10-09
 

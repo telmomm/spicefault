@@ -29,3 +29,6 @@ site/
 # Coverage
 .coverage
 coverage.xml
+
+# Archives for Zenodo (large; built from data/ and the results)
+zenodo/*.zip
