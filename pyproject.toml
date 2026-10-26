@@ -57,6 +57,7 @@ include = [
     "/src/spicefault",
     "/tests/unit",
     "/tests/conftest.py",
+    "/tests/data",
     "/examples/*.py",
     "/examples/filter",
     "/README.md",

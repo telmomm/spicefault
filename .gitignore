@@ -22,6 +22,8 @@ examples/**/output/
 
 # Datasets of the campaigns (large; regenerated with docs/RUNBOOK.md)
 data/
+# but the netlists of the tests are kept
+!tests/data/
 
 # Built documentation
 site/

@@ -1,0 +1,20 @@
+* Sallen-Key band-pass, 25 kHz (Aminian and Aminian, TCAS-II 2000, Fig. 3), for the test design tests.
+.subckt opamp inp inn out
+* Single-pole macromodel, uA741-like: A0 = 2e5, GBW = 1 MHz, Rin = 2 Mohm, Rout = 75 ohm
+Rin inp inn 2meg
+G1 0 p inp inn 1
+Rp p 0 2e5
+Cp p 0 31.83n
+E1 o 0 p 0 1
+Ro o out 75
+.ends opamp
+V1 in 0 dc 0 ac 1
+R1 in a 5.18k
+R2 a out 1k
+C1 a b 5n
+C2 a 0 5n
+R3 b 0 2k
+R4 n 0 4k
+R5 out n 4k
+X1 b n out opamp
+.end
