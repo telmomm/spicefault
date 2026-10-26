@@ -154,6 +154,22 @@ class TestRun:
         assert [s.parameters for s in one] == [s.parameters for s in three]
         assert [vout(s) for s in one] == [vout(s) for s in three]
 
+    def test_given_samples_do_not_depend_on_order_or_workers(self):
+        e = experiment()
+        whole = {s.sample: (s.parameters, vout(s)) for s in e.run()}
+        chosen = e.plan()[::-3]  # a subset of the plan, in reverse order
+        for workers in (1, 2):
+            part = e.run_samples(chosen, workers=workers)
+            assert part.metadata == e.metadata()
+            assert [s.sample for s in part] == chosen
+            assert {s.sample: (s.parameters, vout(s)) for s in part} == {
+                s: whole[s] for s in chosen
+            }
+        with e.pool(2) as pool:  # the same worker processes for several calls
+            first = e.run_samples(chosen[:3], pool=pool)
+            second = e.run_samples(chosen[3:], pool=pool)
+        assert [vout(s) for s in [*first, *second]] == [whole[s][1] for s in chosen]
+
     def test_frame_has_definitions_status_and_parameters(self):
         frame = experiment().run().to_frame()
         assert list(frame.columns) == [

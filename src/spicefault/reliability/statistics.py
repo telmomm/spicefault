@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable
+from functools import lru_cache
 from statistics import NormalDist
 
 import numpy as np
@@ -35,7 +36,15 @@ def _binomial_cdf(k: int, n: int, p: float) -> float:
 
 
 def clopper_pearson_interval(k: int, n: int, confidence: float = 0.95) -> tuple[float, float]:
-    """Exact (conservative) interval of a proportion k / n, by inverting the binomial tails."""
+    """Exact (conservative) interval of a proportion k / n, by inverting the binomial tails.
+
+    Results are cached: a study of sample sizes asks for the same counts many times.
+    """
+    return _clopper_pearson(int(k), int(n), float(confidence))
+
+
+@lru_cache(maxsize=2**18)
+def _clopper_pearson(k: int, n: int, confidence: float) -> tuple[float, float]:
     if n == 0:
         return math.nan, math.nan
     tail = (1.0 - confidence) / 2.0

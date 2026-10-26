@@ -511,16 +511,47 @@ class Experiment:
 
         A simulation that fails is recorded with its status; it does not stop the run.
         """
-        plan = self.plan()
-        if workers == 1:
-            results = [self.run_sample(sample) for sample in plan]
+        return self.run_samples(self.plan(), workers=workers)
+
+    def run_samples(
+        self,
+        samples: Sequence[Sample],
+        workers: int = 1,
+        pool: ProcessPoolExecutor | None = None,
+    ) -> ExperimentResult:
+        """Simulate the given samples of the plan, in the order given.
+
+        A sample is the same circuit whatever the other samples, their order and the
+        number of workers, since its draws depend only on the seed and its key. This is
+        what a rule that decides how many samples to read, after reading some, needs:
+        the samples it reads are those of the fixed plan.
+
+        `pool`, from `Experiment.pool`, keeps the worker processes between calls; it
+        must be the pool of this experiment. Without it, `workers` > 1 starts a pool
+        for this call only.
+        """
+        samples = list(samples)
+        if pool is None and workers == 1:
+            results = [self.run_sample(sample) for sample in samples]
         else:
-            self.check_picklable()
-            with ProcessPoolExecutor(
-                max_workers=workers, initializer=_init_worker, initargs=(self,)
-            ) as pool:
-                results = list(pool.map(_run_sample, plan, chunksize=16))
+            # up to 16 samples per task, fewer when a call has few samples to share out
+            chunksize = max(1, min(16, len(samples) // 32))
+            if pool is not None:
+                results = list(pool.map(_run_sample, samples, chunksize=chunksize))
+            else:
+                with self.pool(workers) as own:
+                    results = list(own.map(_run_sample, samples, chunksize=chunksize))
         return ExperimentResult(self.metadata(), results)
+
+    def pool(self, workers: int) -> ProcessPoolExecutor:
+        """Worker processes that each hold a copy of this experiment, for `run_samples`.
+
+        Use it as a context manager, or shut it down, when done.
+        """
+        self.check_picklable()
+        return ProcessPoolExecutor(
+            max_workers=workers, initializer=_init_worker, initargs=(self,)
+        )
 
 
 _EXPERIMENT: Experiment | None = None
