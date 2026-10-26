@@ -1,6 +1,6 @@
 """Reproducible SPICE-based fault injection and reliability assessment of electronic circuits."""
 
-__version__ = "0.4.1"
+__version__ = "0.5.0"
 
 from .circuit import Circuit, Component  # noqa: E402
 from .conditions import OperatingCondition  # noqa: E402
