@@ -73,6 +73,19 @@ $$\text{false-reject rate} = P(\text{detected} \mid c = 1).$$
 
 Default weights are equal, which makes DC a statement about the catalogue, not about field behaviour. If the user supplies failure-mode probabilities from a cited source, DC approximates the fraction of dangerous failures detected, in the sense used in functional safety. The weighting must be reported with the figure. The false-reject rate is computed over all compliant samples, faulty or not, and its composition must be stated: `diagnostic_coverage` returns how many of them are healthy. Healthy samples used to set the thresholds are left out. The interval of DC is a bootstrap over the samples of each fault.
 
+### M6 and the coverage metrics of `testdesign`
+
+`spicefault.testdesign.metrics` computes coverage metrics under similar names (DC_w, DC, SFF, SPFM and LFM; see [Test design: coverage metrics](guide/test-design-metrics.md)), which are not M6:
+
+| | M6, `ReliabilityAnalysis.diagnostic_coverage` | `testdesign.metrics.coverage` |
+|---|---|---|
+| Which circuits count | Only those that fail a specification, $c = 0$ | Every circuit with the fault, whether or not it violates a specification |
+| Weight of a fault | $w_k \pi_k$: its weight times its failure probability | $\lambda_k w_k$: its failure rate times its severity (DC_w), or its rate and its class, safe or dangerous (DC, SFF), single-point or multiple-point (SPFM, LFM) |
+| What it answers | Of the circuits that no longer meet their specification, what share is detected | Of the failures of the hardware, weighted by how often and how badly they happen, what share is detected, as IEC 61508-2 Annex C and ISO 26262-5 Annex C define it |
+| Interval | Bootstrap over the samples of each fault | One-sided bounds that hold for all faults at once (Clopper–Pearson with a Bonferroni correction, or Jeffreys) |
+
+The two coincide only when every fault violates a specification in every circuit and the weights agree. Under the standards a fault is dangerous or safe by its effect on the safety function, which the application decides and gives in the fault table; the specification limits of a dataset do not decide it.
+
 ### On `failure_rate()`
 
 The project specification lists `analysis.failure_rate()`. In reliability engineering a failure rate is an occurrence rate in time, which a fault-injection campaign cannot estimate. The method is implemented as `failure_probability()` and returns $\pi_k$; there is no `failure_rate()`. See open decision 1.

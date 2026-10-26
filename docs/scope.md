@@ -33,10 +33,23 @@ is documented here as a recipe. The library has no dependency on any of them.
 | Observation | The instrument model: noise, resolution and range applied after the simulation |
 | Statistics | Statistics, quantiles, yield and margins of a fault-free population |
 | Reliability | Detectability, failure probability, diagnostic coverage, separability and ambiguity |
+| Test design | Candidate tests (node × stimulus × feature); detection, false alarms and the coverage metrics of IEC 61508 and ISO 26262 with simultaneous bounds; stopping rules over a fixed plan; published test selection methods as reference implementations |
 
-All of these are in the library since version 0.4.0. The issue that decided this scope,
-with what was left out and why, is the
-[roadmap](https://github.com/telmomm/spicefault/issues/33).
+All of these but test design are in the library since version 0.4.0; test design since
+0.5.0. The issue that decided this scope, with what was left out and why, is the
+[roadmap](https://github.com/telmomm/spicefault/issues/33); the one that added test
+design is [#48](https://github.com/telmomm/spicefault/issues/48).
+
+### Sequential stopping over a fixed plan
+
+A stopping rule reads the samples of an experiment until a claim is decided, such as
+"the coverage is at least 99 %". It decides how many samples to read, never which
+samples exist: sample r of fault k is drawn from the stream that the experiment already
+gives it, `sample_stream(seed, k, r)`. Every sample is therefore the same whatever the
+order in which it is read, the number of workers or where a run stopped, and a run can
+be repeated or continued on the same circuits, as with any plan. `Experiment.run_samples` simulates a given list of
+samples of the plan for this. The rules are in `testdesign.metrics.adaptive`; see
+[stopping rules](guide/test-design-adaptive.md).
 
 ## Outside, with a recipe
 
@@ -106,8 +119,9 @@ OperatingCondition("hot", temperature=85)
 ## Outside
 
 - **Adaptive sampling and rare-event estimation.** Research methods whose samples
-  depend on earlier results, which conflicts with a plan that is fixed, resumable and
-  the same for any number of workers.
+  depend on earlier results (importance sampling, subset simulation, sampling guided by
+  a surrogate), which conflicts with a plan that is fixed, resumable and the same for
+  any number of workers. Stopping a fixed plan early is inside: see above.
 - **Ageing and time-dependent reliability.** They need failure models and field data
   that the library cannot validate. A drift of known size is already a parametric fault
   or a variation.

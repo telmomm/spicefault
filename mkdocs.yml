@@ -27,6 +27,10 @@ nav:
       - Monte Carlo and yield: guide/monte-carlo.md
       - Datasets: guide/datasets.md
       - Reliability analysis: guide/reliability.md
+      - "Test design: candidate tests": guide/test-design-candidates.md
+      - "Test design: coverage metrics": guide/test-design-metrics.md
+      - "Test design: stopping rules": guide/test-design-adaptive.md
+      - "Test design: test selection": guide/test-design-selection.md
   - Examples:
       - examples/index.md
       - Quickstart: examples/quickstart.md
@@ -37,6 +41,7 @@ nav:
       - Operating conditions: examples/conditions.md
       - Custom variation and measurement: examples/custom.md
       - Monte Carlo and yield: examples/monte-carlo.md
+      - Test design: examples/test-design.md
   - API reference:
       - Circuit: api/circuit.md
       - Faults: api/faults.md
@@ -48,6 +53,7 @@ nav:
       - Dataset: api/dataset.md
       - Statistics: api/statistics.md
       - Reliability: api/reliability.md
+      - Test design: api/testdesign.md
   - Definitions:
       - Fault model: FAULT_MODEL.md
       - Reliability metrics: RELIABILITY_METRICS.md

@@ -29,6 +29,12 @@ EXPECTED = {
         "the failure probability is below 0.0030, not zero",
         "circuits for a yield near 0.95 within +-0.005: 7299",
     ],
+    "09_test_design.py": [
+        "accessible nodes: ['a', 'b', 'n', 'out']",
+        "selected tests (2 of 52): ['step|a|peak', 'ac|a|phase@10000']",
+        "faults the tests mostly miss: ['C2:parametric:+0.5']",
+        "DC_w >= 0.9: certified after 50 faulty circuits",
+    ],
 }
 
 

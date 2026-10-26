@@ -7,8 +7,38 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+### Added
+
+- `spicefault.testdesign`, to design the self-test of an analog circuit (#48), from the
+  prototypes of the CERTA project:
+  - `testdesign.candidates`: candidate tests (node × stimulus × feature), with the
+    stimuli `ac_tones`, `step` and `dc_levels`, one operating condition per stimulus
+    (`conditions`) and the test matrix of an experiment (`matrix`).
+  - `testdesign.metrics`: per-fault detection and the false alarm rate with
+    Clopper–Pearson intervals (`detect`), the detector `GaussianLimits`, DC_w, DC, SFF,
+    SPFM and LFM with bounds that hold for all faults at once (`coverage`), the SIL and
+    ASIL reached (with the target tables from drafts, flagged as such), signatures,
+    ambiguity sets and the residual uncertainty H(F | Y).
+  - `testdesign.metrics.adaptive`: stopping rules that simulate until a coverage claim
+    is decided (`certify`, `certify_sampled`, `estimate`, `certify_false_alarm`), and
+    `SpiceSampler`.
+  - `testdesign.select.baselines`: published test selection methods as reference
+    implementations: the fault-pair Boolean table of Wang et al. (2025), Starzyk's
+    entropy, the genetic algorithm of Golonek and Rutkowski (2007), exhaustive minimum
+    sets and the greedy rule of Zilch et al. (2022).
+  - Guide pages, an API page and the example `09_test_design.py`, on a Sallen-Key
+    band-pass.
+- `Experiment.run_samples`: simulate a given list of samples of the plan, with the same
+  results for any order and number of workers; `Experiment.pool` keeps the worker
+  processes between calls. `run` is built on it.
+
 ### Changed
 
+- The scope admits sequential stopping over a fixed plan; rare-event estimation stays
+  outside.
+- `clopper_pearson_interval` caches its results.
+- *Reliability metrics* sets out how the coverage metrics of `testdesign` differ from
+  the diagnostic coverage of `ReliabilityAnalysis`.
 - The DOI of the software on Zenodo (doi:10.5281/zenodo.23322209) in the README and in
   `CITATION.cff`.
 
