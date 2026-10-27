@@ -69,6 +69,10 @@ Go on with [Getting started](getting-started.md), or run the
 - **Reliability metrics with intervals.** Detection probability, diagnostic coverage,
   minimum detectable deviation, robustness against tolerance, ambiguity groups.
   [Reliability analysis](guide/reliability.md)
+- **Test design.** Candidate tests for a self-test, the coverage metrics of IEC 61508
+  and ISO 26262 with bounds that hold for all faults at once, stopping rules that
+  simulate until a coverage claim is decided, and published test selection methods.
+  [Test design](guide/test-design-candidates.md)
 
 ## Limits
 

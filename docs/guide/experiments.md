@@ -36,6 +36,24 @@ vout = [s.result.plot("op")["v(out)"][0] for s in result]
 `experiment.metadata()` returns everything needed to regenerate the samples: circuit
 hash, fault records, variations, conditions, seed, simulator and package versions.
 
+### Part of the plan
+
+`experiment.plan()` lists every sample, by fault (fault-free first), replica and
+condition. `run_samples` simulates any of them, in the order given; `run` is
+`run_samples(plan())`. A sample is the same circuit whatever the other samples, their
+order and the number of workers, so a rule that decides how many samples to read after
+reading some reads those of the fixed plan:
+
+```python
+plan = experiment.plan()
+first = [s for s in plan if s.replica < 10]
+with experiment.pool(4) as pool:                 # worker processes kept between calls
+    result = experiment.run_samples(first, pool=pool)
+    more = experiment.run_samples([s for s in plan if 10 <= s.replica < 50], pool=pool)
+```
+
+The stopping rules of [test design](test-design-adaptive.md) are built on it.
+
 ## Measurements
 
 A measurement is a named number read from one simulation. Time-domain statistics are
