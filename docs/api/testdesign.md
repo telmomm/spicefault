@@ -10,4 +10,16 @@
 
 ::: spicefault.testdesign.metrics.adaptive
 
+::: spicefault.testdesign.metrics.formulation
+
+::: spicefault.testdesign.costmodel
+
+::: spicefault.testdesign.faultprior
+
 ::: spicefault.testdesign.select.baselines
+
+::: spicefault.testdesign.select.pareto
+
+::: spicefault.testdesign.select.ilp
+
+::: spicefault.testdesign.bounds

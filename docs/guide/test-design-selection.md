@@ -62,7 +62,7 @@ least `share` of the circuits with that fault. `zilch_greedy` repeatedly takes, 
 the tests that detect the hardest remaining fault, the one detecting most remaining
 faults.
 
-## What comes next
+## Under a hardware cost
 
-`select` is also where selection under a hardware cost, by a greedy rule and by an
-integer programme, will go.
+Selection under a hardware cost, by a greedy rule (`select.pareto`) and by an integer
+programme (`select.ilp`), is in [minimum-cost selection](test-design-minimum-cost.md).

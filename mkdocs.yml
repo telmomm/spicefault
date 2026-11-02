@@ -31,6 +31,11 @@ nav:
       - "Test design: coverage metrics": guide/test-design-metrics.md
       - "Test design: stopping rules": guide/test-design-adaptive.md
       - "Test design: test selection": guide/test-design-selection.md
+      - "Test design: cost model": guide/test-design-cost-model.md
+      - "Test design: fault priors": guide/test-design-fault-prior.md
+      - "Test design: scoring and certifying a plan": guide/test-design-formulation.md
+      - "Test design: minimum-cost selection": guide/test-design-minimum-cost.md
+      - "Test design: theoretical bounds": guide/test-design-bounds.md
   - Examples:
       - examples/index.md
       - Quickstart: examples/quickstart.md
@@ -42,6 +47,7 @@ nav:
       - Custom variation and measurement: examples/custom.md
       - Monte Carlo and yield: examples/monte-carlo.md
       - Test design: examples/test-design.md
+      - The cheapest certified plan: examples/minimum-cost-plan.md
   - API reference:
       - Circuit: api/circuit.md
       - Faults: api/faults.md

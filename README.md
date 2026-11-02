@@ -95,7 +95,7 @@ vout = [s.result.plot("op")["v(out)"][0] for s in result]
 | **Reproducible campaigns** | To disk in chunks, resumable; the same samples for any number of workers; five explicit simulation statuses |
 | **Datasets that stand on their own** | Integrity check, provenance of each sample, the netlist that was simulated for it, and simulation again from the folder |
 | **Reliability metrics with intervals** | Detection probability, diagnostic coverage, minimum detectable deviation, robustness against tolerance, ambiguity groups |
-| **Test design** | Candidate tests (node × stimulus × feature), the coverage metrics of IEC 61508 and ISO 26262 with bounds that hold for all faults at once, stopping rules that simulate until a coverage claim is decided, and published test selection methods |
+| **Test design** | Candidate tests (node × stimulus × feature), the coverage metrics of IEC 61508 and ISO 26262 with bounds that hold for all faults at once, stopping rules that simulate until a coverage claim is decided, published test selection methods, and the plan of least hardware cost for a coverage target, from a microcontroller cost and ADC model, fault rates of public handbooks, an exact integer programme and the bound of the ambiguity groups |
 
 ```python
 from spicefault import FaultCampaign, Dataset
@@ -147,6 +147,7 @@ for the same examples, paired to the `.py` sources that the documentation includ
 | 07 Custom variation | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F07_custom.ipynb) |
 | 08 Monte Carlo and yield | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F08_monte_carlo.ipynb) |
 | 09 Test design | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F09_test_design.ipynb) |
+| 10 The cheapest certified plan | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F10_minimum_cost_plan.ipynb) |
 
 ```bash
 git clone https://github.com/telmomm/spicefault.git && cd spicefault

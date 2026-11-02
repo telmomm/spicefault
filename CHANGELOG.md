@@ -7,6 +7,42 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+### Added
+
+- The plan of least hardware cost that reaches a coverage target, in
+  `spicefault.testdesign` (#49), from the WP3 prototypes of the CERTA project:
+  - `testdesign.costmodel`: the ADC and DAC of a microcontroller and the resources the
+    application leaves free (`Microcontroller`, with the STM32G474 as an example
+    instance), how the firmware acquires each feature (`Acquisition`), which tests the
+    board can run (`feasible`), which nodes need a buffer (`node_impedance`, `access`),
+    the test matrix as the ADC reads it (`amplitudes`, `observe`, with the per-row draws
+    public as `draws`), and what a plan adds to the board in euros and test time
+    (`prices`, `cost`).
+  - `testdesign.faultprior`: the rate of each fault, from the rate of its component
+    split over its failure modes and deviation levels, with the tables of MIL-HDBK-217F
+    Notice 2 and MIL-HDBK-338B as package data; the severity weight and the classes of
+    IEC 61508 and ISO 26262, as `metrics.fault_table` takes them (`prior`).
+  - `testdesign.metrics.formulation`: selection and evaluation halves of the replicas
+    (`part`), a plan scored with its bounds and H(F | Y) with the rates as prior
+    (`score`), `ConditionSampler` to certify on new circuits under any operating
+    conditions and through an instrument model, and one candidate test per condition
+    and measurement (`prefixed`).
+  - `testdesign.select.pareto`: the greedy that adds the test with the most coverage
+    per euro, with a test time limit, and the cost–coverage Pareto front.
+  - `testdesign.select.ilp`: the exact minimum-cost plan for a coverage target by
+    integer linear programming on a fixed detection matrix, with the false alarm rate
+    of the plan as a constraint; `Instance.subset` and `brute_force` for checks. It needs
+    the new extra `spicefault[ilp]` (PuLP and HiGHS).
+  - `testdesign.bounds`: the sensitivity matrix by central differences, the algebraic
+    and resolvable rank, canonical ambiguity groups by SVD, and what a plan leaves out
+    of the bound of all the tests (`gap`).
+  - Guide pages for each, API entries and the example `10_minimum_cost_plan.py`.
+
+### Changed
+
+- `metrics.adaptive._draw_weights` is public as `draw_weights`.
+- The examples are numbered with two digits beyond 09.
+
 ## [0.5.0] - 2026-10-26
 
 ### Added
