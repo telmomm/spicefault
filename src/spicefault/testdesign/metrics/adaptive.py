@@ -53,6 +53,7 @@ __all__ = [
     "certify",
     "certify_false_alarm",
     "certify_sampled",
+    "draw_weights",
     "estimate",
     "schedule",
 ]
@@ -179,9 +180,13 @@ def certify(
     return Certification(decision, metric, target, confidence, per_fault, pd.DataFrame(history))
 
 
-def _draw_weights(faults: pd.DataFrame, metric: str) -> tuple[pd.Series, pd.Series]:
-    """For `certify_sampled`: the probability of drawing each fault, and whether a draw of
-    it counts as a success without simulating it (a fault that cannot lower the metric).
+def draw_weights(faults: pd.DataFrame, metric: str) -> tuple[pd.Series, pd.Series]:
+    """The probability of drawing each fault, and whether a draw of it counts as a
+    success without simulating it (a fault that cannot lower the metric).
+
+    `metric` (dc_w, dc, sff or spfm) is then the mean over the faults with these
+    probabilities of P(alarm | fault), with P = 1 for the free faults. `certify_sampled`
+    draws with them, and `select.ilp` weights the faulty circuits with them.
     """
     rate = faults.rate.astype(float)
     free = pd.Series(False, index=faults.index)
@@ -223,7 +228,7 @@ def certify_sampled(
     `seed`, so the same call reads the same replicas.
     """
     sizes = list(sizes or schedule(50, 6400))
-    probability, free = _draw_weights(faults, metric)
+    probability, free = draw_weights(faults, metric)
     rng = np.random.default_rng(seed)
     draws = rng.choice(len(faults), size=sizes[-1], p=probability.to_numpy())
     one_sided = (1 - confidence) / (len(sizes) if correct_looks else 1)

@@ -1,0 +1,7 @@
+* RC divider: R1 from the source to a, R2 and C1 from a to ground, for the test design tests.
+* H = 1 / (1 + R1/R2 + j w R1 C1); |Z| at a = R1 || R2 || C1.
+V1 in 0 dc 1 ac 1
+R1 in a 1k
+R2 a 0 1k
+C1 a 0 100n
+.end
