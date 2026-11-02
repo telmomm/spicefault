@@ -10,7 +10,7 @@ import pytest
 from nbclient import NotebookClient
 
 EXAMPLES = Path(__file__).resolve().parents[2] / "examples"
-SCRIPTS = sorted(p.name for p in EXAMPLES.glob("0*.py"))
+SCRIPTS = sorted(p.name for p in EXAMPLES.glob("[0-9][0-9]_*.py"))
 
 EXPECTED = {
     "01_quickstart.py": ["R2:open: SUCCESS, vout = 1.0000 V", "same results when run again: True"],
@@ -35,6 +35,12 @@ EXPECTED = {
         "faults the tests mostly miss: ['C2:parametric:+0.5']",
         "DC_w >= 0.9: certified after 50 faulty circuits",
     ],
+    "10_minimum_cost_plan.py": [
+        "optimal plan: ('ac|out|gain_db@60000', 'ac|out|phase@60000')",
+        "0.40 EUR, 1.11 ms, DC_w 0.989",
+        "DC_w >= 0.97: certified after 400 faulty circuits",
+        "pool: rank 6, groups (('R4', 'R5'),)",
+    ],
 }
 
 
@@ -46,9 +52,10 @@ def test_binder_notebooks_match_the_documentation_scripts():
     root = EXAMPLES.parent
     notebook_dir = root / "binder" / "notebooks"
     script_stems = {Path(name).stem for name in SCRIPTS}
-    notebook_stems = {path.stem for path in notebook_dir.glob("0[1-9]_*.ipynb")}
-    assert notebook_stems == script_stems
-    for path in notebook_dir.glob("0[1-9]_*.ipynb"):
+    # 00 is the guide to the notebooks, not an example
+    notebooks = [p for p in notebook_dir.glob("[0-9][0-9]_*.ipynb") if not p.name.startswith("00_")]
+    assert {path.stem for path in notebooks} == script_stems
+    for path in notebooks:
         notebook = nbformat.read(path, as_version=4)
         nbformat.validate(notebook)
         assert notebook.metadata["kernelspec"]["name"] == "python3"

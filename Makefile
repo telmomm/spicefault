@@ -18,7 +18,7 @@ test-all:
 	$(PY) -m pytest
 
 examples:
-	for f in examples/0*.py; do echo "== $$f"; $(PY) $$f || exit 1; done
+	for f in examples/[0-9][0-9]_*.py; do echo "== $$f"; $(PY) $$f || exit 1; done
 
 docs:
 	$(PY) -m mkdocs build --strict
