@@ -1,0 +1,22 @@
+category,device,mode,alpha,fault_type
+resistor,"Resistor, Film",Open,0.59,open_circuit
+resistor,"Resistor, Film",Parameter Change,0.36,parametric
+resistor,"Resistor, Film",Short,0.05,short_circuit
+capacitor,"Capacitor, Ceramic",Short,0.49,short_circuit
+capacitor,"Capacitor, Ceramic",Change in Value,0.29,parametric
+capacitor,"Capacitor, Ceramic",Open,0.22,open_circuit
+zener,"Diode, Zener, Voltage Regulator",Open,0.45,open_circuit
+zener,"Diode, Zener, Voltage Regulator",Parameter Change,0.35,
+zener,"Diode, Zener, Voltage Regulator",Short,0.20,short_circuit
+fet,"Transistor, FET",Short,0.51,short_circuit
+fet,"Transistor, FET",Output Low,0.22,
+fet,"Transistor, FET",Parameter Change,0.17,
+fet,"Transistor, FET",Open,0.05,open_circuit
+fet,"Transistor, FET",Output High,0.05,
+fuse,Fuse,Fails to Open,0.49,
+fuse,Fuse,Slow to Open,0.43,
+fuse,Fuse,Premature Open,0.08,open_circuit
+transducer,Transducer,Out of Tolerance,0.68,parametric
+transducer,Transducer,False Response,0.15,
+transducer,Transducer,Open,0.12,open_circuit
+transducer,Transducer,Short,0.05,short_circuit

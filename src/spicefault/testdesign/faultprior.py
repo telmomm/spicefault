@@ -53,7 +53,7 @@ __all__ = [
     "rates",
 ]
 
-DATA = Path(__file__).parent / "data"
+DATA = Path(__file__).parent / "tables"
 RATES, MODES = DATA / "rates.csv", DATA / "modes.csv"
 ENVIRONMENTS = ("gb", "gf", "gm")
 

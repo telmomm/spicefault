@@ -1,0 +1,7 @@
+category,description,style,gb,gf,gm,pi_q,source
+resistor,"Resistor, film, chip",RM,0.0037,0.016,0.07,10,"MIL-HDBK-217F Notice 2, Appendix A, p. A-7; pi_Q Lower"
+thermistor,"Resistor, thermistor",RTH,0.0014,0.0058,0.023,10,"MIL-HDBK-217F Notice 2, Appendix A, p. A-7; pi_Q Lower"
+capacitor,"Capacitor, ceramic chip",CDR,0.0035,0.053,0.13,10,"MIL-HDBK-217F Notice 2, Appendix A, p. A-8; pi_Q Lower"
+zener,"Diode, voltage reference or regulator (avalanche and zener)",,0.0033,0.024,0.039,8,"MIL-HDBK-217F Notice 2, Appendix A, p. A-5; pi_Q Plastic, p. A-6"
+fet,"Transistor, Si FET (f <= 400 MHz)",,0.014,0.099,0.16,8,"MIL-HDBK-217F Notice 2, Appendix A, p. A-5; pi_Q Plastic, p. A-6"
+fuse,Fuse,,0.010,0.020,0.080,1,"MIL-HDBK-217F Notice 2, Appendix A, p. A-10; no quality factor"
