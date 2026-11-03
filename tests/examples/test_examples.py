@@ -41,6 +41,12 @@ EXPECTED = {
         "DC_w >= 0.97: certified after 400 faulty circuits",
         "pool: rank 6, groups (('R4', 'R5'),)",
     ],
+    "11_fmeda.py": [
+        "per mode: SPFM >= 0.97: certified after 2675 faulty circuits, lower bound 0.9739",
+        "the totals of the sheet are the claim: True",
+        "per metric: SPFM >= 0.97: certified after 132 faulty circuits",
+        "wrote sallen_key_fmeda.xlsx, ASIL reached by the sheet: C",
+    ],
 }
 
 
