@@ -33,6 +33,7 @@ from .detection import (
     circular_mean,
     detect,
     is_circular,
+    outside,
     split_healthy,
     values,
 )
@@ -58,6 +59,7 @@ __all__ = [
     "localisation",
     "metric_values",
     "metrics_array",
+    "outside",
     "signatures",
     "sil_reached",
     "split_healthy",

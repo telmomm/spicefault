@@ -1,0 +1,15 @@
+fault_id,component,part,fault_type,deviation,effect,severity
+R1:open,R1,resistor,open_circuit,,output stuck,3
+R1:short,R1,resistor,short_circuit,,output stuck,3
+R1:parametric:-0.5,R1,resistor,parametric,-0.5,gain error,3
+R1:parametric:-0.1,R1,resistor,parametric,-0.1,none,0
+R1:parametric:+0.1,R1,resistor,parametric,0.1,none,0
+R1:parametric:+0.5,R1,resistor,parametric,0.5,gain error,3
+C1:short,C1,capacitor,short_circuit,,output stuck,3
+C1:open,C1,capacitor,open_circuit,,noise,1
+C1:parametric:+0.5,C1,capacitor,parametric,0.5,none,0
+R2:open,R2,resistor,open_circuit,,self-test only,1
+R2:parametric:+0.1,R2,resistor,parametric,0.1,none,0
+Q1:short,Q1,switch,short_circuit,,cell not balanced,3
+Q1:open,Q1,switch,open_circuit,,self-test only,2
+F1:open,F1,fuse,open_circuit,,supply lost,2

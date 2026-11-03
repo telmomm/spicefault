@@ -13,10 +13,13 @@
   under a hardware cost and the Pareto front in `select.pareto`, and the exact
   minimum-cost plan in `select.ilp` (with the extra `spicefault[ilp]`);
 - `bounds`: the sensitivity matrix, testability and ambiguity groups: what any plan
-  can identify at best.
+  can identify at best;
+- `fmeda`: the FMEDA of a plan, one row per failure mode with its computed coverage and
+  bounds and the totals of IEC 61508 and ISO 26262, and its workbook (with the extra
+  `spicefault[fmeda]`).
 """
 
-from . import bounds, candidates, costmodel, faultprior, metrics, select
+from . import bounds, candidates, costmodel, faultprior, fmeda, metrics, select
 from .candidates import Feature, Stimulus, Test
 from .metrics import Detection, GaussianLimits
 
@@ -30,6 +33,7 @@ __all__ = [
     "candidates",
     "costmodel",
     "faultprior",
+    "fmeda",
     "metrics",
     "select",
 ]

@@ -35,7 +35,15 @@ from ...faults import Fault
 from ...variation import VariationSet
 from .. import candidates
 from .coverage import coverage, metric_values
-from .detection import HEALTHY, Detection, GaussianLimits, angles_of, detect, values
+from .detection import (
+    HEALTHY,
+    Detection,
+    GaussianLimits,
+    angles_of,
+    detect,
+    outside,
+    values,
+)
 from .localisation import localisation
 
 __all__ = ["ConditionSampler", "Score", "part", "prefixed", "score"]
@@ -125,7 +133,9 @@ class ConditionSampler:
     detector. The detector is fitted once on fault-free replicas 0..n_calibration-1, and
     fault-free replicas asked for afterwards start after them. Each replica is simulated
     once and kept; `simulated` counts the replicas simulated. A failed simulation counts
-    as undetected for a fault and as an alarm for a fault-free circuit.
+    as undetected for a fault and as an alarm for a fault-free circuit. With `record`,
+    `alarming` keeps, per fault, the tests that left their limits on any of its replicas,
+    as for `SpiceSampler`.
     """
 
     def __init__(
@@ -141,11 +151,13 @@ class ConditionSampler:
         seed: int = 0,
         transform: Callable[[pd.DataFrame], pd.DataFrame] | None = None,
         workers: int = 1,
+        record: bool = False,
         **experiment,
     ):
         self.ids = list(tests)
         self.n_calibration = n_calibration
         self.transform = transform
+        self.alarming: dict[str, set[str]] | None = {} if record else None
         self.experiment = Experiment(
             circuit,
             faults=list(faults),
@@ -166,6 +178,8 @@ class ConditionSampler:
         calibration = self._matrix(HEALTHY, range(n_calibration))
         self.angles = angles_of(calibration, calibration.index, self.ids)
         self.detector = detector.fit(values(calibration, self.ids, self.angles))
+        if record:  # fail now, not on the first fault, if the detector has no limits
+            outside(self.detector, np.empty((0, len(self.ids))))
 
     def _matrix(self, fault_id: str, replicas) -> pd.DataFrame:
         replicas = list(replicas)
@@ -183,11 +197,15 @@ class ConditionSampler:
         new = [r for r in replicas if (fault_id, r) not in self.cache]
         if new:
             m = self._matrix(fault_id, new).set_index("replica")
-            flags = self.detector.flag(values(m, self.ids, self.angles))
-            alarms = pd.Series(np.asarray(flags, dtype=bool), index=m.index)
+            x = values(m, self.ids, self.angles)
+            alarms = pd.Series(np.asarray(self.detector.flag(x), dtype=bool), index=m.index)
             failed_as = fault_id == HEALTHY
             for r, alarm in alarms.reindex(new, fill_value=failed_as).items():
                 self.cache[fault_id, r] = bool(alarm)
+            if self.alarming is not None and fault_id != HEALTHY:
+                alarming = self.alarming.setdefault(fault_id, set())
+                left = outside(self.detector, x)
+                alarming.update(t for t, o in zip(self.ids, left, strict=True) if o)
         return np.array([self.cache[fault_id, r] for r in replicas], dtype=bool)
 
     def close(self) -> None:

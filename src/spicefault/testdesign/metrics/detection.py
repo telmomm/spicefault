@@ -54,6 +54,17 @@ class GaussianLimits:
         return ((x < self.low) | (x > self.high)).any(axis=1)
 
 
+def outside(detector, x: np.ndarray) -> np.ndarray:
+    """True for the tests (columns of `x`) that leave the limits of `detector` on any row.
+
+    The detector has to keep its limits as `low` and `high`, as `GaussianLimits` and
+    `reliability.LimitTest` do.
+    """
+    if getattr(detector, "low", None) is None or getattr(detector, "high", None) is None:
+        raise TypeError(f"{type(detector).__name__} has no limits low and high per test")
+    return ((x < detector.low) | (x > detector.high)).any(axis=0)
+
+
 def split_healthy(matrix: pd.DataFrame, fraction: float = 0.5) -> tuple[pd.Index, pd.Index]:
     """Fault-free rows used to set the limits and rows kept to measure false alarms.
 
