@@ -72,7 +72,8 @@ Go on with [Getting started](getting-started.md), or run the
 - **Test design.** Candidate tests for a self-test, the coverage metrics of IEC 61508
   and ISO 26262 with bounds that hold for all faults at once, stopping rules that
   simulate until a coverage claim is decided, published test selection methods, and
-  the plan of least hardware cost that reaches a coverage target on a microcontroller.
+  the plan of least hardware cost that reaches a coverage target on a microcontroller,
+  and its FMEDA, with a computed coverage and bound for every failure mode.
   [Test design](guide/test-design-candidates.md)
 
 ## Limits

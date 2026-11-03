@@ -23,3 +23,5 @@
 ::: spicefault.testdesign.select.ilp
 
 ::: spicefault.testdesign.bounds
+
+::: spicefault.testdesign.fmeda

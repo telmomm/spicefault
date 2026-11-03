@@ -36,6 +36,7 @@ nav:
       - "Test design: scoring and certifying a plan": guide/test-design-formulation.md
       - "Test design: minimum-cost selection": guide/test-design-minimum-cost.md
       - "Test design: theoretical bounds": guide/test-design-bounds.md
+      - "Test design: FMEDA export": guide/test-design-fmeda.md
   - Examples:
       - examples/index.md
       - Quickstart: examples/quickstart.md
@@ -48,6 +49,7 @@ nav:
       - Monte Carlo and yield: examples/monte-carlo.md
       - Test design: examples/test-design.md
       - The cheapest certified plan: examples/minimum-cost-plan.md
+      - The FMEDA of a plan: examples/fmeda.md
   - API reference:
       - Circuit: api/circuit.md
       - Faults: api/faults.md

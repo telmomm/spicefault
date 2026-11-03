@@ -44,6 +44,9 @@ certifies with few circuits: in CERTA, SPFM ≥ 97 % on a battery cell chain too
 circuits, against 4 179 to bound each fault. See [stopping rules](test-design-adaptive.md);
 the weights it draws with are `adaptive.draw_weights(faults, metric)`.
 
+With `record=True`, `sampler.alarming` keeps the tests that alarm on each fault, the
+safety mechanism of its row in the [FMEDA](test-design-fmeda.md).
+
 ## Tests from operating conditions
 
 ```python

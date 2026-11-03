@@ -33,14 +33,15 @@ is documented here as a recipe. The library has no dependency on any of them.
 | Observation | The instrument model: noise, resolution and range applied after the simulation |
 | Statistics | Statistics, quantiles, yield and margins of a fault-free population |
 | Reliability | Detectability, failure probability, diagnostic coverage, separability and ambiguity |
-| Test design | Candidate tests (node × stimulus × feature); detection, false alarms and the coverage metrics of IEC 61508 and ISO 26262 with simultaneous bounds; stopping rules over a fixed plan; published test selection methods as reference implementations; the cost and ADC model of a microcontroller, fault priors from public handbooks, cost-constrained selection (greedy and exact integer programme) and theoretical bounds (sensitivity rank and ambiguity groups) |
+| Test design | Candidate tests (node × stimulus × feature); detection, false alarms and the coverage metrics of IEC 61508 and ISO 26262 with simultaneous bounds; stopping rules over a fixed plan; published test selection methods as reference implementations; the cost and ADC model of a microcontroller, fault priors from public handbooks, cost-constrained selection (greedy and exact integer programme), theoretical bounds (sensitivity rank and ambiguity groups) and the FMEDA export of a plan, with the coverage of each failure mode and its bounds |
 
 All of these but test design are in the library since version 0.4.0; test design since
-0.5.0, and its cost model, fault priors, cost-constrained selection and bounds since
-0.6.0. The issue that decided this scope, with what was left out and why, is the
+0.5.0, its cost model, fault priors, cost-constrained selection and bounds since
+0.6.0, and the FMEDA export since 0.7.0. The issue that decided this scope, with what was left out and why, is the
 [roadmap](https://github.com/telmomm/spicefault/issues/33); the ones that added test
-design are [#48](https://github.com/telmomm/spicefault/issues/48) and
-[#49](https://github.com/telmomm/spicefault/issues/49).
+design are [#48](https://github.com/telmomm/spicefault/issues/48),
+[#49](https://github.com/telmomm/spicefault/issues/49) and
+[#50](https://github.com/telmomm/spicefault/issues/50).
 
 ### Sequential stopping over a fixed plan
 

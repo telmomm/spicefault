@@ -95,7 +95,7 @@ vout = [s.result.plot("op")["v(out)"][0] for s in result]
 | **Reproducible campaigns** | To disk in chunks, resumable; the same samples for any number of workers; five explicit simulation statuses |
 | **Datasets that stand on their own** | Integrity check, provenance of each sample, the netlist that was simulated for it, and simulation again from the folder |
 | **Reliability metrics with intervals** | Detection probability, diagnostic coverage, minimum detectable deviation, robustness against tolerance, ambiguity groups |
-| **Test design** | Candidate tests (node × stimulus × feature), the coverage metrics of IEC 61508 and ISO 26262 with bounds that hold for all faults at once, stopping rules that simulate until a coverage claim is decided, published test selection methods, and the plan of least hardware cost for a coverage target, from a microcontroller cost and ADC model, fault rates of public handbooks, an exact integer programme and the bound of the ambiguity groups |
+| **Test design** | Candidate tests (node × stimulus × feature), the coverage metrics of IEC 61508 and ISO 26262 with bounds that hold for all faults at once, stopping rules that simulate until a coverage claim is decided, published test selection methods, and the plan of least hardware cost for a coverage target, from a microcontroller cost and ADC model, fault rates of public handbooks, an exact integer programme and the bound of the ambiguity groups, and the FMEDA of a plan as a workbook with a computed coverage for every failure mode |
 
 ```python
 from spicefault import FaultCampaign, Dataset
@@ -132,6 +132,8 @@ Runnable scripts in [examples/](https://github.com/telmomm/spicefault/tree/main/
 | `07_custom.py` | Your own distributions and measurements |
 | `08_monte_carlo.py` | A campaign without faults: quantiles and yield |
 | `09_test_design.py` | The self-test of a band-pass filter: tests, coverage, selection |
+| `10_minimum_cost_plan.py` | The cheapest plan on a microcontroller that reaches a certified coverage |
+| `11_fmeda.py` | That plan as an FMEDA workbook, with a coverage bound for every failure mode |
 
 Open the executable [Binder notebooks](https://github.com/telmomm/spicefault/tree/main/binder/notebooks)
 for the same examples, paired to the `.py` sources that the documentation includes, or launch one directly:
@@ -148,6 +150,7 @@ for the same examples, paired to the `.py` sources that the documentation includ
 | 08 Monte Carlo and yield | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F08_monte_carlo.ipynb) |
 | 09 Test design | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F09_test_design.ipynb) |
 | 10 The cheapest certified plan | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F10_minimum_cost_plan.ipynb) |
+| 11 The FMEDA of a plan | [Open](https://mybinder.org/v2/gh/telmomm/spicefault/main?labpath=binder%2Fnotebooks%2F11_fmeda.ipynb) |
 
 ```bash
 git clone https://github.com/telmomm/spicefault.git && cd spicefault
