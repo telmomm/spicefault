@@ -7,6 +7,36 @@ public interface may change between minor versions.
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-11-04
+
+### Added
+
+- The FMEDA of a self-test plan, `testdesign.fmeda` (#50), from the T6.1 prototype of
+  the CERTA project:
+  - `faults`: one row per fault with its failure mode of MIL-HDBK-338B, circuits,
+    alarms, estimate and one-sided Clopper–Pearson bounds, simultaneous for a claim per
+    mode (`claim="mode"`, or the bounds of `certify` when given) or per row for a claim
+    on the metric (`claim="metric"`, made by `certify_sampled`).
+  - `rows`: one row per component, failure mode, severity and class, with λ, mode and
+    class shares, effect, the tests that alarm, the DC estimate, lower, upper and
+    claimed, and the rates of IEC 61508 (λ_S, λ_DD, λ_DU) and ISO 26262 (λ_SPF, λ_RF,
+    λ_MPF,D, λ_MPF,L). The modes that no fault models are rows `not assessed`, with
+    DC 0, out of the totals.
+  - `metrics` and `summary`: DC_w, DC, SFF, SPFM and LFM from the rows, claimed,
+    estimated and bounded, and the worst case of the modes not assessed counted as
+    single point. With a claim per mode the totals are the `bonferroni` bound of
+    `metrics.coverage`, or the lower bound of `certify`.
+  - `write` and `template`: the `.xlsx` workbook (Cover, FMEDA, Faults, Summary,
+    Assumptions) with the λ columns and the claimed metrics as formulas and the SIL and
+    ASIL reached, and the same workbook empty for an FMEDA filled by hand. The same
+    content gives the same file. They need the new extra `spicefault[fmeda]` (openpyxl).
+- `record=True` in `metrics.adaptive.SpiceSampler` and
+  `metrics.formulation.ConditionSampler` keeps, per fault, the tests that left their
+  limits on any of its replicas (`alarming`), and `metrics.outside` gives them for a
+  detector with limits per test.
+- A guide page, the API entry and the example `11_fmeda.py`, which takes the plan of
+  `10_minimum_cost_plan.py` to a workbook.
+
 ## [0.6.0] - 2026-11-02
 
 ### Added
@@ -256,7 +286,8 @@ First version.
   probability, diagnostic coverage, severity response, robustness against tolerance,
   dependence on operating conditions, separability and ambiguity.
 
-[Unreleased]: https://github.com/telmomm/spicefault/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/telmomm/spicefault/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/telmomm/spicefault/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/telmomm/spicefault/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/telmomm/spicefault/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/telmomm/spicefault/compare/v0.4.0...v0.4.1

@@ -9,8 +9,8 @@ repository-code: "https://github.com/telmomm/spicefault"
 url: "https://spicefault.readthedocs.io"
 license: MIT
 doi: 10.5281/zenodo.23322209
-version: 0.6.0
-date-released: "2026-11-02"
+version: 0.7.0
+date-released: "2026-11-04"
 keywords:
   - SPICE
   - ngspice
@@ -21,3 +21,4 @@ keywords:
   - failure rates
   - integer linear programming
   - ambiguity groups
+  - FMEDA
